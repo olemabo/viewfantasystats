@@ -27,16 +27,16 @@ $(document).ready(function(){
         var end_gw = $("#end_gw2").val();
         var combinations = $("#combinations").val();
         if (combinations == "FDR") {
-            window.location.replace(" http://127.0.0.1:8000/fixture-planner/" + start_gw + "/" + end_gw + "/" + combinations);
+            window.location.replace(window.location.hostname + "/fixture-planner/" + start_gw + "/" + end_gw + "/" + combinations);
         }
         if (combinations == "FDR-best") {
             var min_num_fixtures = $("#min_num_fixtures").val();
-            window.location.replace(" http://127.0.0.1:8000/fixture-planner/" + start_gw + "/" + end_gw + "/" + combinations + "/" + min_num_fixtures);
+            window.location.replace(window.location.hostname + "/fixture-planner/" + start_gw + "/" + end_gw + "/" + combinations + "/" + min_num_fixtures);
         }
         if (combinations == "Rotation") {
             var teams_to_play =  $("#teams_to_play").val();
             var teams_to_check =  $("#teams_to_check").val();
-            window.location.replace(" http://127.0.0.1:8000/fixture-planner/" + start_gw + "/" + end_gw + "/" + combinations + "/" + teams_to_play + "/" + teams_to_check);
+            window.location.replace(window.location.hostname + "/fixture-planner/" + start_gw + "/" + end_gw + "/" + combinations + "/" + teams_to_play + "/" + teams_to_check);
         }
     });
 });</script>
