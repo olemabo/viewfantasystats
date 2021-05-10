@@ -399,10 +399,6 @@ def find_best_rotation_combos2(data, GW_start, GW_end, teams_to_check=5, teams_t
     # create fixture dataframe. Each element: ['ARS', 'H', 3]
     # df = create_data_frame()
     df, names, short_names, ids = return_fixture_names_shortnames()
-    print("DF: ", df)
-    print("names: ", names)
-    print("short_names: ", short_names)
-    print("ids: ", ids)
 
 
     # adjust the fixture difficulty
@@ -416,7 +412,6 @@ def find_best_rotation_combos2(data, GW_start, GW_end, teams_to_check=5, teams_t
 
     static, fixture = read_data.get_json()
     dict_with_team_name_to_team_ids = create_dict_with_team_name_to_team_ids(static['teams'])
-    print("Static teams: ", static['teams'])
 
     team_ids = []
     for team_name in team_names:
@@ -546,7 +541,6 @@ def find_best_rotation_combos2(data, GW_start, GW_end, teams_to_check=5, teams_t
 
             sorted_scores_new = np.array(sorted(GW_home_scores_new, key=lambda l: l[0], reverse=False))
             team_total_score_new += np.sum(sorted_scores_new[:teams_to_play, 0])
-            team_total_score_new += np.sum(sorted_scores_new[:teams_to_play, 0])
 
             #print(team_combos, team_total_score, home_games, GW_home_scores, teams_to_play)
             # if there are more good games than
@@ -575,10 +569,10 @@ def find_best_rotation_combos2(data, GW_start, GW_end, teams_to_check=5, teams_t
     #insertion_sort(combos_with_score, len(combos_with_score), element_to_sort=0, min_max="min")
     insertion_sort(combos_with_score_new, len(combos_with_score_new), element_to_sort=0, min_max="min")
 
-    print("\n\nRank \t Avg difficulty/game \t\t Teams")
-    for idx, i in enumerate(combos_with_score[:num_to_print]):
-        print(str(idx + 1) + "\t\t" + str(i[0]) + "\t\t" + str(', '.join(i[2])))
-    print("\n")
+    #print("\n\nRank \t Avg difficulty/game \t\t Teams")
+    #for idx, i in enumerate(combos_with_score[:num_to_print]):
+    #    print(str(idx + 1) + "\t\t" + str(i[0]) + "\t\t" + str(', '.join(i[2])))
+    #print("\n")
     #print(combos_with_score[0])
     #for GW in range(number_of_GW):
     #    for TEAM in range(teams_to_check):

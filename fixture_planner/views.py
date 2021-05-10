@@ -185,6 +185,7 @@ def fixture_planner(request, start_gw=get_current_gw(), end_gw=get_current_gw()+
         'min_num_fixtures': min_num_fixtures,
         'team_name_list': team_name_list,
     }
+
     # Render the HTML template index_catalog.html with the data in the context variable
     return render(request, 'fixture_planner.html', context=context)
 
