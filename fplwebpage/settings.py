@@ -56,8 +56,8 @@ MIDDLEWARE = [
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') ##specify static root
 
 SESSION_COOKIE_SECURE = False
-
-SECURE_SSL_REDIRECT = True
+CSRF_COOKIE_SECURE = False
+SECURE_SSL_REDIRECT = False
 
 ROOT_URLCONF = 'fplwebpage.urls'
 
