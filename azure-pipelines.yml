@@ -44,6 +44,7 @@ stages:
         python -m pip install --upgrade pip
         pip install setup
         pip install -r requirements.txt
+        python manage.py collectstatic
       workingDirectory: $(projectRoot)
       displayName: "Install requirements"
 
