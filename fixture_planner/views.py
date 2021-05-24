@@ -43,7 +43,7 @@ def get_current_gw():
         gw_i_date = date(int(dates[0]), int(dates[1]), int(dates[2]))
         if gw_i_date > today_date:
             return current_gw
-    return 0
+    return 1
 
 def get_max_gw():
     return 38
@@ -60,7 +60,6 @@ def fixture_planner(request, start_gw=get_current_gw(), end_gw=get_current_gw()+
     # Generate counts of some of the main objects
     if end_gw > get_max_gw():
         end_gw = get_max_gw()
-
     # collect data from database [[AddPlTeamsToDB], [AddPlTeamsToDB], ... ]
     fixture_list_db = AddPlTeamsToDB.objects.all()
     team_name_list = []
