@@ -24,6 +24,7 @@ def fixture_planner2(request):
         'teams': teams,
     }
     return render(request, 'fixture_planner.html', context=context)
+
 class team_info:
     def __init__(self, opponent_team_name, difficulty_score, H_A, team_name, FDR_score):
         ...
@@ -33,6 +34,8 @@ class team_info:
         self.team_name = team_name
         self.FDR_score = FDR_score
         self.Use_Not_Use = 0
+
+
 def get_current_gw():
     # find current gw
     today_date = date.today()
@@ -45,6 +48,7 @@ def get_current_gw():
             return current_gw
     return 1
 
+
 def get_max_gw():
     return 38
 
@@ -54,6 +58,7 @@ class which_team_to_check:
         self.team_name = team_name
         self.checked = checked
         self.checked_must_be_in_solution = checked_must_be_in_solution
+
 
 def fixture_planner(request, start_gw=get_current_gw(), end_gw=get_current_gw()+5, combinations="FDR", teams_to_check=2, teams_to_play=1, min_num_fixtures=4):
     """View function for home page of site."""
@@ -184,7 +189,6 @@ def fixture_planner(request, start_gw=get_current_gw(), end_gw=get_current_gw()+
         'min_num_fixtures': min_num_fixtures,
         'team_name_list': team_name_list,
     }
-
     # Render the HTML template index_catalog.html with the data in the context variable
     return render(request, 'fixture_planner.html', context=context)
 
