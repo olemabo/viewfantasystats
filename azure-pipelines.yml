@@ -11,19 +11,19 @@ variables:
   azureServiceConnectionId: 'cbaf90c0-1313-4f11-a001-503246aab1c5'
 
   # Web app name
-  webAppName: 'fpl-webpage-omb'
+  webAppName: 'fantasy-webpage'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
 
   # Environment name
-  environmentName: 'fpl-webpage-omb'
+  environmentName: 'fantasy-webpage'
 
   # Project root folder. Point to the folder containing manage.py file.
   projectRoot: $(System.DefaultWorkingDirectory)
 
-  # Python version: 3.7
-  pythonVersion: '3.7'
+  # Python version: 3.8
+  pythonVersion: '3.8'
 
 stages:
 - stage: Build
@@ -81,7 +81,7 @@ stages:
             displayName: 'Use Python version'
 
           - task: AzureWebApp@1
-            displayName: 'Deploy Azure Web App : fpl-webpage-omb'
+            displayName: 'Deploy Azure Web App : fantasy-webpage'
             inputs:
               azureSubscription: $(azureServiceConnectionId)
               appName: $(webAppName)
