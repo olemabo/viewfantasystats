@@ -341,7 +341,7 @@ class FDR_team:
         self.team_name = team_name
         self.opponent_team_name = opponent_team_name_short
         self.difficulty_score = int(FDR)
-        self.H_A = self.convert_H_A_to_String(H_A)
+        self.H_A = H_A
         self.Use_Not_Use = Use_Not_Use
 
     def convert_H_A_to_String(self, H_A):
