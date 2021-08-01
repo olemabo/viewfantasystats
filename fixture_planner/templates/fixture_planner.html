@@ -3,11 +3,11 @@
 {% block content %}
   {% load static %}
   <link rel="stylesheet" href="{% static 'css/fixture_planner.css' %}">
-<!--script type="text/javascript" src="{% static 'js/fixture_planner.js' %}"></script -->
 
 <h2>
     Fixture Difficult Rating
 </h2>
+
 
 <p>
     FDR key: &nbsp
@@ -59,40 +59,38 @@ function hide() {
 }
 </script>
 
-<script>
-function hide2() {
-  var x = document.getElementById("which_teams_to_check2");
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "none";
-  }
-}
-</script>
 
-
-
-<form class="text-center">
-    FDR:
+<form class="text-center" action="/fixture-planner/" method="post">
     {% if combinations == "FDR" %}
-    <input type="radio" checked onclick="if(this.checked){myFunction('FDR')}">
+    <input type="submit" class="category chosen-category" value="FDR" checked name="combination">
     {% else %}
-    <input type="radio" onclick="if(this.checked){myFunction('FDR')}">
+    <input type="submit" class="category" value="FDR" name="combination">
     {% endif %}
 
-    FDR-best:
     {% if combinations == "FDR-best" %}
-    <input type="radio" checked onclick="if(this.checked){myFunction('FDR-best')}">
+    <input type="submit" class="category chosen-category" value="FDR-best" name="combination">
     {% else %}
-    <input type="radio" onclick="if(this.checked){myFunction('FDR-best')}">
+    <input type="submit" class="category" value="FDR-best" name="combination">
     {% endif %}
 
-    Rotation:
     {% if combinations == "Rotation" %}
-    <input type="radio" checked onclick="if(this.checked){myFunction('Rotation')}">
+    <input type="submit" class="category chosen-category" value="Rotation" checked name="combination">
     {% else %}
-    <input type="radio" onclick="if(this.checked){myFunction('Rotation')}">
+    <input type="submit" class="category" value="Rotation" name="combination">
     {% endif %}
+            {% csrf_token %}
+    <input hidden class="box" type="number" min=1 max=38 value={{gw_start}} id="start_gw3" name="gw-info">
+    <input hidden class="box" type="number" min=1 max=38 value={{gw_end}} id="end_gw3" name="gw-info">
+    <input hidden type="text" value={{combinations}} id="combination2" name="combination">
+    <input hidden class="box" type="number" min=1 max={{gws}} value={{min_num_fixtures}} id="min_num_fixtures2" name="min_num_fixtures">
+    <input hidden type="number" min=1 max=5 value={{teams_to_check}} name="teams_to_check">
+    <input hidden type="number" min=1 max=5 value={{teams_to_play}} name="teams_to_play">
+    {% for team_name in team_name_list %}
+             {% if forloop.counter|divisibleby:3 %}
+                {% endif %}
+                <input hidden type="checkbox" id="{{team_name.team_name}}-2" value="{{team_name.team_name}}" name="fpl-teams" checked>
+
+            {% endfor %}
 </form>
 
 
@@ -142,8 +140,166 @@ function hide2() {
 </div>
 
 
+<div id="spinner-box" class="text-center mt-3">
+    <div class="spinner-border text-primary" role="status"></div>
+</div>
+
+<div id="data-box" class="text-center mt-3"></div>
+
+<script>
+    console.log("Hello world")
+    const spinnerBox = document.getElementById('spinner-box')
+    const dataBox = document.getElementById('data-box')
+    $.ajax({
+        type: 'GET',
+        url: '/',
+        success: function(res){
+            spinnerBox.classList.add('not-visible')
+            dataBox.innerHTML += `
+            {% if combinations == "FDR" or combinations == "FDR-best" %}
+                <div class="container-fdr">
+                    <div id="fdr-table" class="container-rotation">
+                        <div id="fdr-team-names">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td class="name-column min-width">
+                                            Name
+                                        </td>
+                                    </tr>
+                                    {% for team_fixture_info in fdr_fixture_data %}
+                                        {% for team in team_fixture_info %}
+                                            {% if forloop.counter == 1 %}
+                                                <tr>
+                                                    <td class="name-column min-width">
+                                                        {{ team.0.0.team_name }}
+                                                    </td>
+                                                </tr>
+                                              {% endif %}
+                                        {% endfor %}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div id="fdr-team-difficulty">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        {% for gw_number in gw_numbers %}
+                                        <th class="min-width"> GW {{ gw_number.gameweek }}
+                                            <div class="day_month">
+                                                {{ gw_number.day_month }}
+                                            </div>
+                                        </th>
+                                        {% endfor %}
+                                    </tr>
+
+                                    {% for team_fixture_info in fdr_fixture_data %}
+                                        <tr>
+                                            {% for teams in team_fixture_info %}
+                                                {% if teams|length == 1 %}
+                                                    <td scope="col" class=" min-width color-{{teams.0.0.difficulty_score}} double-border-{{teams.0.0.Use_Not_Use}}">
+                                                {% else %}
+                                                    <td scope="col" class=" min-width no-padding double-border-{{teams.0.0.Use_Not_Use}}">
+                                                {% endif %}
+
+                                                {% for team in teams %}
+                                                        <div class=" min-width color-{{team.0.difficulty_score}} multiple-fixtures height-{{ teams|length }}">
+                                                    {% if team.0.opponent_team_name == '-' %}
+                                                        Blank
+                                                    {% else %}
+                                                        {{  team.0.opponent_team_name }}&nbsp({{  team.0.H_A  }})
+                                                    {% endif %}
+                                                        </div>
+                                                {% endfor %}
+                                                </td>
+                                            {% endfor %}
+                                        </tr>
+                                     {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+                {% endif %}
 
 
+                {% if combinations == "Rotation" %}
+                    {% if rotation_data.0.0 != "Wrong input" %}
+                        <div class="big-container">
+                            <div class="container-rotation">
+                                <div>
+                                    <div>
+                                {% for data in rotation_data %}
+                                    <table class="rotation">
+                                        {% if forloop.counter != 1 %}
+                                        {% endif %}
+                                        <tbody>
+                                            <tr>
+                                                <th class="name-col-rotation"> Name </th>
+                                                {% for gw_number in gw_numbers %}
+                                                    <th class="min-width"> GW {{ gw_number.gameweek }}
+                                                    </th>
+                                                {% endfor %}
+                                            </tr>
+
+                                            {% for FDR_team in data.5 %}
+                                            <tr>
+                                                {% for teams in FDR_team %}
+                                                    {% if forloop.counter == 1 %}
+                                                        <td class="name-column min-width">
+                                                            {{ teams.0.team_name }}
+                                                        </td>
+                                                    {% endif %}
+                                                    {% if teams|length == 1 %}
+                                                        <td scope="col" class=" min-width color-{{teams.0.difficulty_score}} double-border-{{teams.0.Use_Not_Use}}">
+                                                    {% else %}
+                                                        <td scope="col" class=" min-width no-padding double-border-{{teams.0.Use_Not_Use}}">
+                                                    {% endif %}
+
+                                                    {% for team in teams %}
+                                                        <div class=" min-width color-{{team.difficulty_score}} multiple-fixtures height-{{ teams|length }}">
+                                                        {% if team.opponent_team_name == '-' %}
+                                                            Blank
+                                                        {% else %}
+                                                            {{  team.opponent_team_name }}&nbsp({{  team.H_A }})
+                                                        {% endif %}
+                                                        </div>
+                                                    {% endfor %}
+                                                    </td>
+                                                {% endfor %}
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    <p>
+                                        Avg. FDR score: <b>{{ data.0|floatformat:2 }}</b>
+                                    </p>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        </div>
+                        {% else %}
+                        <div style="text-align: center; font-weight: 800;">
+                            <br>
+                            Wrong Input
+                        </div>
+                    {% endif %}
+                {% endif %}
+                 `
+        },
+        error: function(error){
+            spinnerBox.classList.add('not-visible')
+            console.log(error)
+            dataBox.innerHTML += `<b>Error loading data</b><br><br>`
+        }
+    })
+</script>
+
+<!--
 {% if combinations == "FDR" or combinations == "FDR-best" %}
 <div class="container-fdr">
     <div id="fdr-table" class="container-rotation">
@@ -213,31 +369,26 @@ function hide2() {
         </div>
     </div>
 </div>
-{% endif %}
+{% endif %} -->
 
 
 
-{% if combinations == "Rotation" %}
+<!-- {% if combinations == "Rotation" %}
 {% if rotation_data.0.0 != "Wrong input" %}
 <div class="big-container">
     <div class="container-rotation">
         <div>
             <div>
             {% for data in rotation_data %}
-                <!--div> Score: {{ data.0 }} </div-->
                 <table class="rotation">
                     {% if forloop.counter != 1 %}
-                    {% endif %} <!-- remove this soon -->
+                    {% endif %}
 
                     <tbody>
-                          <!-- remove this soon -->
                             <tr>
                                 <th class="name-col-rotation"> Name </th>
                                 {% for gw_number in gw_numbers %}
                                     <th class="min-width"> GW {{ gw_number.gameweek }}
-                                        <!--div class="day_month">
-                                            {{ gw_number.day_month }}
-                                        </div -->
                                     </th>
                                 {% endfor %}
                             </tr>
@@ -294,253 +445,10 @@ function hide2() {
             Wrong Input
         </div>
             {% endif %}
-{% endif %}
-</div>
+{% endif %} -->
 
-
-{% endblock %}
-
-
-{% if combinations == "Rotation_not_blank_DWG_correct" %}
-{% if rotation_data.0.0 != "Wrong input" %}
-<div class="big-container">
-    <div class="container-rotation">
-        <div>
-            <div>
-            {% for data in rotation_data %}
-                <!--div> Score: {{ data.0 }} </div-->
-                <table class="rotation">
-                    {% if forloop.counter != 1 %}
-                    {% endif %} <!-- remove this soon -->
-
-                    <tbody>
-                          <!-- remove this soon -->
-                            <tr>
-                                <th class="name-col-rotation"> Name </th>
-                                {% for gw_number in gw_numbers %}
-                                    <th class="min-width"> GW {{ gw_number.gameweek }}
-                                        <!--div class="day_month">
-                                            {{ gw_number.day_month }}
-                                        </div -->
-                                    </th>
-                                {% endfor %}
-                            </tr>
-                            {% for FDR_team in data.5 %}
-                                     <tr>
-                                     {% for FDR_GW in FDR_team %}
-
-                                    {% if forloop.counter == 1 %}
-                                                <td class="name-column min-width">
-                                                {{ FDR_GW.team_name }}
-                                                </td>
-                                    {% endif %}
-                                         <script>
-                                        document.write("<td scope='col' class=' min-width double-border-{{ FDR_GW.Use_Not_Use }} color-{{FDR_GW.difficulty_score}}'>");
-                                        </script>
-                                        {{ FDR_GW.opponent_team_name }} ({{ FDR_GW.H_A }})
-                                    </td>
-                                        {% endfor %}
-                                        </tr>
-                                {% endfor %}
-                    </tbody>
-                </table>
-                <p>
-                    Avg. FDR score: <b>{{ data.0|floatformat:2 }}</b>
-                </p>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-     {% else %}
-        <div style="text-align: center; font-weight: 800;">
-            <br>
-            Wrong Input
-        </div>
-            {% endif %}
-{% endif %}
-</div>
+{% endblock content %}
 
 
 
-
-
-<!-- FDR section -->
-{% if combinations == "FDR_NORMAL" %}
-<div class="container-fdr">
-    <div id="garden">
-        <div id="names">
-            <table>
-                <tbody>
-                <tr>
-                    <td class="name-col2 min-width">
-                        Name
-                    </td>
-                </tr>
-                {% for team_fixture_info in list %}
-                 {% for team in team_fixture_info %}
-                     {% if forloop.counter == 1 %}
-                <tr>
-                        <td class="name-col2 min-width">
-                            {{ team.team_name }}
-                        </td>
-                    </tr>
-                     {% endif %}
-                             {% endfor %}
-                             {% endfor %}
-
-                </tbody>
-            </table>
-
-        </div>
-        <div id="innhold">
-            <table>
-                <tbody>
-            <tr>
-
-                    {% for gw_number in gw_numbers %}
-                        <th class="min-width"> GW {{ gw_number }} </th>
-                    {% endfor %}
-                </tr>
-            {% for team_fixture_info in list %}
-              <tr>
-                  {% for team in team_fixture_info %}
-                <script>
-                    document.write("<td scope='col' class=' min-width color-{{team.difficulty_score}}'>");
-                </script>
-                    {{  team.opponent_team_name }}&nbsp({{  team.H_A  }})
-                </td>
-                    {% endfor %}
-              </tr>
-             {% endfor %}
-            </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-{% endif %}
-
-
-{% if combinations == "DHDHDHDH" %}
-<div class="container">
-    <div class="container2">
-        {% if combinations == "FDR" %}
-        <table>
-            <!-- thead>
-                <tr>
-                    <th class="name-col"> Name</th>
-
-                    <th class="stygg-hack">GW 0</th -->
-                    <!--th class="score-col"> FDR </th-->
-                    <!-- {% for gw_number in gw_numbers %}
-                        <th class="min-width"> GW {{ gw_number }} </th>
-                    {% endfor %}
-                </tr>
-            </thead -->
-            <tbody>
-            <tr>
-                    <th class="name-col"> Name</th>
-
-                    <th class="stygg-hack">GW 0</th>
-                    <!--th class="score-col"> FDR </th-->
-                    {% for gw_number in gw_numbers %}
-                        <th class="min-width"> GW {{ gw_number }} </th>
-                    {% endfor %}
-                </tr>
-            {% for team_fixture_info in list %}
-              <tr>
-                  {% for team in team_fixture_info %}
-                     {% if forloop.counter == 1 %}
-                        <td class="name-col">
-                            {{ team.team_name }}
-                        </td>
-                     {% endif %}
-                    {% if forloop.counter == 1 %}
-                        <td class="stygg-hack">
-                            {{ team.team_name }}
-                        </td>
-                     {% endif %}
-                    <!--{% if forloop.counter == 1 %}
-                        <td class="score-col">
-                            {{ team.difficulty_score }}
-                        </td>
-                     {% endif %}-->
-                <script>
-                    document.write("<td scope='col'class=' min-width color-{{team.difficulty_score}}'>");
-                </script>
-                    {{  team.opponent_team_name }}&nbsp({{  team.H_A  }})
-                </td>
-                    {% endfor %}
-              </tr>
-             {% endfor %}
-            </tbody>
-        </table>
-        {% endif %}
-
-        {% if combinations == "Rotation" %}
-        <h1>
-            Not finished
-        </h1>
-        {% endif %}
-    </div>
-</div>
-{% endif %}
-
-
-
-
-
-<!--form action="/fixture-planner/" method="post">
-
-<div class="text-center">
-    <button class="margin-top-bottom" onclick="hide()">Include teams in solution &#x2193</button>
-    <div id="which_teams_to_check">
-        <div>
-        {% for team_name in team_name_list %}
-         {% if forloop.counter|divisibleby:3 %}
-            </div>
-            <div>
-            {% endif %}
-            <input type="checkbox" id="{{team_name}}" name="{{team_name}}" checked>
-            <label for="{{team_name}}">{{team_name}}</label>
-        {% endfor %}
-            </div>
-    </div>
-</div>
-<br>
-
-<!--form action="/fixture-planner/" method="post">
-    {% csrf_token %}
-    <div id="which_teams_to_check">
-        <div>
-        {% for team_name in team_name_list %}
-         {% if forloop.counter|divisibleby:3 %}
-            </div>
-            <div>
-            {% endif %}
-            <input type="checkbox" id="{{team_name}}" value="{{team_name}}" name="fpl-teams" checked>
-            <label for="{{team_name}}">{{team_name}}</label>
-        {% endfor %}
-            </div>
-    </div>
-    <input type="submit" value="OK">
-</form -->
-
-
-<!--
-<div class="text-center">
-    GW start: &nbsp<input type="number" min=1 max=38 value={{gw_start}} id="start_gw">
-    GW end: &nbsp<input type="number" min=1 max=38 value={{gw_end}} id="end_gw">
-    {% if combinations == "FDR-best" %}
-    <br>
-    Minimum fixtures: &nbsp<input type="number" min=1 max={{gws}} value={{min_num_fixtures}} id="min_num_fixtures">
-    {% endif %}
-    {% if combinations == "Rotation" %}
-    <br>
-     Teams to check: &nbsp<input type="number" min=1 max=5 value={{teams_to_check}} id="teams_to_check">
-    Teams to play: &nbsp<input type="number" min=1 max=5 value={{teams_to_play}} id="teams_to_play">
-    {% endif %}
-    <input hidden type="text" value={{combinations}} id="combinations">-->
-    <!--&nbsp<button type="button" id="button">Search</button>
-    <br
-</div>-->
 

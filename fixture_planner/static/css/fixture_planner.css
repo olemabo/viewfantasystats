@@ -1,5 +1,4 @@
 body {
-  background: #EEE;
   margin: 0;
   padding: 0;
 }
@@ -108,6 +107,25 @@ input[type=checkbox]:checked:before {
     text-align: center;
 }
 
+
+
+
+.category {
+    height: 30px;
+    width: 80px;
+    text-align: center;
+    border: 0.5px solid black;
+    border: none;
+    background: silver;
+    border-radius: 8px;
+}
+
+
+.chosen-category {
+    background: #5F9EA0;
+    border-radius: 8px;
+}
+
 .diff-introduction {
     margin: 0px;
     padding-top: 3px;
@@ -201,7 +219,7 @@ td {
 }
 
 .min-width {
-  min-width: 90px;
+  min-width: 100px;
 }
 
 .no-padding {
@@ -350,61 +368,12 @@ table.rotation {
 }
 
 
-
-
-/*
-#rotation-container {
-    display: grid;
-    grid-template-columns: 100%;
-    grid-template-rows: 100%;
-    height: 500px;
-    overflow: scroll;
-    background-color: white;
-    justify-content: center;
+.not-visible {
+    display: none;
 }
 
-.name-col {
-    background-color: #f4f7f8;
-    text-align: left;
-    min-width: 120px;
-    position: absolute;
-    margin-left: -2px;
-    margin-right: 2px;
-    margin-bottom: 6px;
-    height: 51px;
+.visible {
+    display: auto;
 }
 
-.score-col {
-    font-weight: bold;
-    position: absolute;
-    width: 40px;
-    height: 40px;
-    text-align: left;
-    margin-left: -43px;
-    background-color: #f4f7f8;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    left-border: 3px;
-    border-color: white;
-}
-
-.stygg-hack {
-    min-width: 120px;
-    color: white;
-    background-color: white;
-}
-
-.container2 {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-}
-
-th.score-col {
-    align-items: flex-start;
-}
-
-*/
 
