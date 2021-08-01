@@ -53,6 +53,17 @@ class AddPlTeamsToDB(models.Model):
         """String for representing the MyModelName object (in Admin site etc.)."""
         return f'{self.team_name}, {self.team_id}'
 
+    def as_json(self):
+        return dict(
+            team_name=self.team_name,
+            team_id=self.team_id,
+            team_short_name=self.team_short_name,
+            date=self.date,
+            oppTeamNameList=self.oppTeamNameList,
+            oppTeamHomeAwayList=self.oppTeamHomeAwayList,
+            oppTeamDifficultyScore=self.oppTeamDifficultyScore,
+            gw=self.gw,
+        )
 
 
 class KickOffTime(models.Model):

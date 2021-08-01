@@ -204,9 +204,6 @@ def find_best_rotation_combos(GW_start, GW_end, teams_to_check=5, teams_to_play=
     :param num_to_print: how many of the best results to print to screen
     :return: combos_with_score [[score, [team_ids], [team_names]], ... ]   ([22.2, [1, 4, 11], ['Arsenal', 'Burnley', 'Liverpool']])
     """
-    print("Teams to check: ", teams_to_check)
-    print("Teams to play: ", teams_to_play)
-    print("Double up from one team: ", one_double_up)
     if team_names[0] != -1:
         if teams_to_check > len(team_names):
             print("Teams to check must be >= to number of input teams")
@@ -349,6 +346,9 @@ class FDR_team:
             return 'H'
         return 'A'
 
+    def toJson(self):
+        return json.dumps(self, default=lambda o: o.__dict__)
+
 
 def two_D_list(row, col):
     twod_list = []
@@ -378,9 +378,6 @@ def find_best_rotation_combos2(data, GW_start, GW_end, teams_to_check=5, teams_t
     :return: combos_with_score [[score, [team_ids], [team_names]], ... ]   ([22.2, [1, 4, 11], ['Arsenal', 'Burnley', 'Liverpool']])
     """
 
-    print("Teams to check: ", teams_to_check)
-    print("Teams to play: ", teams_to_play)
-    print("Double up from one team: ", one_double_up)
     if team_names[0] != -1:
         if teams_to_check > len(team_names):
             print("Teams to check must be >= to number of input teams")
@@ -510,11 +507,11 @@ def find_best_rotation_combos2(data, GW_start, GW_end, teams_to_check=5, teams_t
                     for i in range(gws_this_round):
                         temp_score += data_gw[i][2]
                         team_object_new.append(FDR_team(team_name, data_gw[i][0].upper(),
-                                                        data_gw[i][2], data_gw[i][1], 0))
+                                                        data_gw[i][2], data_gw[i][1], 0).toJson())
                 else:
                     temp_score += data_gw[0][2]
                     team_object_new.append(FDR_team(team_name, data_gw[0][0].upper(),
-                                           data_gw[0][2], data_gw[0][1], 0))
+                                           data_gw[0][2], data_gw[0][1], 0).toJson())
                 temp_score = temp_score / gws_this_round ** 2
                 GW_scores_new.append(temp_score)
                 two_D_list_new[team_idx][GW_idx] = team_object_new
@@ -528,9 +525,10 @@ def find_best_rotation_combos2(data, GW_start, GW_end, teams_to_check=5, teams_t
 
             Use_Not_Use_idx = np.array(GW_scores_new).argsort()[:teams_to_play]
             for k in Use_Not_Use_idx:
-                two_D_list_new[k][GW_idx][0].Use_Not_Use = 1
-
-
+                load_json_temp = json.loads(two_D_list_new[k][GW_idx][0])
+                load_json_temp["Use_Not_Use"] = 1
+                two_D_list_new[k][GW_idx][0] = json.dumps(load_json_temp)
+                #two_D_list_new[k][GW_idx][0].Use_Not_Use = 1
 
             #print("Argsort: ", np.array(GW_scores).argsort()[:teams_to_play], GW_scores)
 
@@ -935,7 +933,7 @@ def compute_best_fixtures_one_team_db_data(data, GW_start, GW_end, team_idx, min
             good_gw = 1
         for gw_fixture in gw_fixtures:
             temp_list.append([FDR_team(data[team_idx - 1].team_name, gw_fixture[0].upper(),
-                                       gw_fixture[2], gw_fixture[1], good_gw)])
+                                       gw_fixture[2], gw_fixture[1], good_gw).toJson()])
         fixture_list.append(temp_list)
     return fixture_list
 
