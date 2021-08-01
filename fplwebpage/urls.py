@@ -32,6 +32,7 @@ from django.views.generic import RedirectView
 urlpatterns += [
     path('', RedirectView.as_view(url='home/', permanent=True)),
     path('fixture-planner/', include('fixture_planner.urls')),
+    path('fixture-planner-eliteserien/', include('fixture_planner_eliteserien.urls')),
 ]
 
 
