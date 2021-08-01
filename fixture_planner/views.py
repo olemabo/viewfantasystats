@@ -85,6 +85,8 @@ def fixture_planner(request, start_gw=get_current_gw(), end_gw=get_current_gw()+
         teams_to_check = int(request.POST.getlist('teams_to_check')[0])
         teams_to_play = int(request.POST.getlist('teams_to_play')[0])
 
+        teams_in_solution = request.POST.getlist('fpl-teams-in-solution')
+
     if end_gw < start_gw:
           end_gw = start_gw + 1
 
@@ -99,6 +101,11 @@ def fixture_planner(request, start_gw=get_current_gw(), end_gw=get_current_gw()+
 
         if temp_object.checked == 'checked':
             fixture_list.append(fixture_list_db[i])
+
+    for i in team_name_list:
+        if i.team_name in teams_in_solution:
+            i.checked_must_be_in_solution = 'checked'
+
     teams = len(fixture_list)
 
     context = {
@@ -115,6 +122,7 @@ def fixture_planner(request, start_gw=get_current_gw(), end_gw=get_current_gw()+
         'number_of_teams': number_of_teams,
         'fixture_list': fixture_list,
         'fpl_teams': json.dumps(fpl_teams),
+        'teams_in_solution': json.dumps(teams_in_solution),
     }
 
     return render(request, 'fixture_planner2.html', context=context)
@@ -227,6 +235,7 @@ def get_rotation_data(request):
     combinations = data['combinations']
     teams_to_check = data['teams_to_check']
     teams_to_play = data['teams_to_play']
+    teams_in_solution = data['teams_in_solution']
 
     fixture_list_db = AddPlTeamsToDB.objects.all()
     team_dict = {}
@@ -251,9 +260,6 @@ def get_rotation_data(request):
 
     rotation_data = []
     if combinations == 'Rotation':
-        teams_in_solution = []
-        if request.method == 'POST':
-            teams_in_solution = request.POST.getlist('fpl-teams-in-solution')
         remove_these_teams = []
         for team_sol in teams_in_solution:
             if team_sol not in fpl_teams:
