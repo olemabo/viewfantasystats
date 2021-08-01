@@ -58,6 +58,7 @@ def fixture_planner(request, start_gw=get_current_gw(), end_gw=get_current_gw()+
     # collect data from database [[AddPlTeamsToDB], [AddPlTeamsToDB], ... ]
     fixture_list_db = AddPlTeamsToDB.objects.all()
     team_name_list = []
+    teams_in_solution = []
     team_dict = {}
     number_of_teams = len(fixture_list_db)
     for i in range(number_of_teams):
