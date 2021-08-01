@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'home.apps.HomeConfig',
     'fixture_planner',
+    'fixture_planner_eliteserien',
 ]
 
 MIDDLEWARE = [

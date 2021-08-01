@@ -4,7 +4,7 @@
     --primary-color: #076585;
     --background-color: white;
     --size-of-scewY: 30px;
-    --size-of-top-bar: 180px;
+    --size-of-top-bar: 160px;
     --skew-Degrees: 2deg;
     --link-color: black;
     --title-color: white;
@@ -51,7 +51,44 @@ img {
 
 
 .navbar {
-    height: 100%;
+    height: 60%;
+}
+
+.top-navbar {
+    padding: 0 1rem;
+    height: 50px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+.circle-link {
+    display: block;
+    width: 30px;
+    height: 30px;
+    border-radius: 25px;
+    background-color: #0000ff;
+    margin: 1px 10px;
+}
+
+.eliteserien {
+    background: #2c3e50;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to left, #41D5F9, #2c3e50);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to left, #41D5F9, #2c3e50); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    position: relative;
+}
+
+.fpl {
+    background: #34e89e;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #0f3443, #34e89e);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #0f3443, #34e89e); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    position: relative;
+}
+
+
+.top-navbar-container {
+    margin-right: 40px;
+    display: flex;
 }
 
 .navbar ul {
@@ -103,7 +140,7 @@ a:hover {
 
     background: -webkit-linear-gradient(to right, #0f3443, #34e89e);  /* Chrome 10-25, Safari 5.1-6 */
     background: linear-gradient(to right, #0f3443, #34e89e); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-   position: relative;
+    position: relative;
 }
 
 .showcasesss {
