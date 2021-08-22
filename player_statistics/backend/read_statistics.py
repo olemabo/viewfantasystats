@@ -1,6 +1,8 @@
 import json
 import matplotlib.pyplot as plt
 from player_statistics.models import FPLPlayersModel
+import requests
+import time
 
 
 def read_data_from_json(name="Salah"):
@@ -9,9 +11,39 @@ def read_data_from_json(name="Salah"):
     return player_info
 
 
-def static_json():
-    with open('JSON_DATA/static.json', encoding='utf-8') as json_static:
-        static_info = json.load(json_static)
+def read_data_from_fpl_api(player_id):
+    web_page_individual_player = 'https://fantasy.premierleague.com/api/element-summary/X/'
+    r = requests.get(web_page_individual_player.replace('X', str(player_id)))
+    return r.json()
+
+
+def read_data_static_fpl_api():
+    web_page_static = 'https://fantasy.premierleague.com/api/bootstrap-static/'
+    r = requests.get(web_page_static)
+    return r.json()
+
+
+def get_ids(api_local):
+    if api_local == "local":
+        with open('JSON_DATA/static.json', encoding='utf-8') as json_static:
+            static_info = json.load(json_static)
+    if api_local == "api":
+        static_info = read_data_static_fpl_api()
+    static_info = static_info['elements']
+    ids = []
+    for info in static_info:
+        ids.append(info['id'])
+
+    return ids
+
+
+def static_json(api_local="local"):
+    if api_local == "local":
+        with open('JSON_DATA/static.json', encoding='utf-8') as json_static:
+            static_info = json.load(json_static)
+    if api_local == "api":
+        static_info = read_data_static_fpl_api()
+
     elements = static_info['elements']
     player_dict = dict()
     for player in elements:
@@ -56,15 +88,23 @@ def static_json():
 
 
 def fill_database_all_players():
-    salah_data = read_data_from_json()
-    static_data = static_json()
-    fill_database_for_one_player(salah_data, static_data)
+    static_data = static_json("api")
+    ids = get_ids("api")
+    for id in ids:
+        player_data = read_data_from_fpl_api(id)
+        Name = static_data[id][0] + " & " + static_data[id][1]
+        print("Filling db for player: ", Name, " with id: ", player_data['history'][0]['element'], "(", id, ")")
+        fill_database_for_one_player(player_data, static_data)
+        time.sleep(1)
+    #salah_data = read_data_from_json()
+    #static_data = static_json()
+    #fill_database_for_one_player(salah_data, static_data)
 
-    digne_data = read_data_from_json("Digne")
-    fill_database_for_one_player(digne_data, static_data)
+    #digne_data = read_data_from_json("Digne")
+    #fill_database_for_one_player(digne_data, static_data)
 
-    kane_data = read_data_from_json("Kane")
-    fill_database_for_one_player(kane_data, static_data)
+    #kane_data = read_data_from_json("Kane")
+    #fill_database_for_one_player(kane_data, static_data)
 
 
 def fill_database_for_one_player(player_data_json, static_data):
@@ -105,6 +145,7 @@ def fill_database_for_one_player(player_data_json, static_data):
     chance_of_playing = static_data[element_id][3]
     if chance_of_playing == None:
         chance_of_playing = "None"
+
     # fill in gw data
     player_all_current_gws_data = player_data_json['history']
     for gw_i_data in player_all_current_gws_data:
