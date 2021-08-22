@@ -6,7 +6,6 @@ from player_statistics.backend.read_statistics import fill_database_all_players
 from player_statistics.models import FPLPlayersModel
 import numpy as np
 from django.views.decorators.csrf import csrf_exempt
-import operator
 
 
 def fill_player_stat_db(request):
