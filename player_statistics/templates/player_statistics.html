@@ -1,0 +1,111 @@
+{% extends "_root.html" %}
+
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/player_statistics.css' %}">
+<script type="text/javascript" src="{% static 'js/fixture_planner.js' %}"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script type="text/javascript"></script>
+
+<h2>
+    Player Statistics
+</h2>
+
+<form class="text-center" action="/player-statistics/" method="post">
+    <select id="sort_players_dropdown" name="sort_players">
+        {% if sorting_keyword == "All" %}
+            <option selected value="All">All Players</option>
+        {% else %}
+            <option value="All">All Players</option>
+        {% endif %}
+
+        <option disabled style="font-weight:900;">By Position</option>
+
+        {% if sorting_keyword == "Goalkeepers" %}
+            <option selected value="Goalkeepers">Goalkeepers</option>
+        {% else %}
+            <option value="Goalkeepers">Goalkeepers</option>
+        {% endif %}
+        {% if sorting_keyword == "Defenders" %}
+            <option selected value="Defenders">Defenders</option>
+        {% else %}
+            <option value="Defenders">Defenders</option>
+        {% endif %}
+        {% if sorting_keyword == "Midfielders" %}
+            <option selected value="Midfielders">Midfielders</option>
+        {% else %}
+            <option value="Midfielders">Midfielders</option>
+        {% endif %}
+        {% if sorting_keyword == "Forwards" %}
+            <option selected value="Forwards">Forwards</option>
+        {% else %}
+            <option value="Forwards">Forwards</option>
+        {% endif %}
+
+        <option disabled style="font-weight:900;">By Team</option>
+
+        {% for team in teams %}
+            {% if sorting_keyword == team %}
+                <option selected value="{{team}}">{{ team }}</option>
+            {% else %}
+                <option value="{{team}}">{{ team }}</option>
+            {% endif %}
+        {% endfor %}
+    </select>
+
+    <select id="sort_on_dropdown" name="sort_on">
+        {% for sort in categories %}
+            {% if sort_on == sort %}
+                <option selected value="{{sort}}">{{ sort }}</option>
+            {% else %}
+                <option value="{{sort}}">{{ sort }}</option>
+            {% endif %}
+        {% endfor %}
+    </select>
+
+    <select id="last_x_dropdown" name="last_x">
+        {% for x in last_x_gws %}
+            {% if last_x_gw == x %}
+                <option selected value="{{x}}">{{ x }}</option>
+            {% else %}
+                <option value="{{x}}">{{ x }}</option>
+            {% endif %}
+        {% endfor %}
+    </select>
+
+    <input type="submit" class="category chosen-category" value="Search" checked name="combination">
+</form>
+
+<div class="container-player-stats">
+    <table>
+    <thead>
+        <tr>
+            {% for category in categories %}
+                {% if category == "Name" %}
+                    <th class="name-col">{{category}}</th>
+                {% else %}
+                    <th>{{category}}</th>
+                {% endif %}
+            {% endfor %}
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for player_i in player_info %}
+        <tr>
+            {% for attribute in player_i %}
+                {% if forloop.counter == 1 %}
+                    <td class="name-col"> {{ attribute }} </td>
+                {% else %}
+                    <td> {{ attribute }} </td>
+                 {% endif %}
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+
+
+
+{% endblock %}
