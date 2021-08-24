@@ -90,10 +90,11 @@ def static_json(api_local="local"):
 def fill_database_all_players():
     static_data = static_json("api")
     ids = get_ids("api")
-    for id in ids:
+    print(ids)
+    for idx, id in enumerate(ids):
         player_data = read_data_from_fpl_api(id)
         Name = static_data[id][0] + " & " + static_data[id][1]
-        print("Filling db for player: ", Name, " with id: ", player_data['history'][0]['element'], "(", id, ")")
+        print("Filling db for player: ", Name, " with id: ", player_data['history'][0]['element'], "(", id, ")", idx, "/", len(ids))
         fill_database_for_one_player(player_data, static_data)
         time.sleep(1)
     #salah_data = read_data_from_json()
