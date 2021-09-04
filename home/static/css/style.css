@@ -19,6 +19,10 @@
     margin: 0;
 }
 
+.max-width {
+    max-width: 800px;
+}
+
 body {
     font-family: 'Lato';
     background-color: var(--background-color);

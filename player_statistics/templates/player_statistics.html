@@ -109,7 +109,7 @@
         <tr>
             {% for attribute in player_i %}
                 {% if forloop.counter == 1 %}
-                    <td class="name-col"> {{ attribute }} </td>
+            <td class="name-col"> <div class="format-name-col">{{ attribute }}</div> </td>
                 {% else %}
                     <td> {{ attribute }} </td>
                  {% endif %}
