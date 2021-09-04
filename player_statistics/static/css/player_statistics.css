@@ -1,10 +1,10 @@
 :root {
     --col-1: 38%;
-    --col-2: 22%;
+    --col-2: 25%;
     --col-3: 22%;
     --col-4: 15%;
-    --margin-left: 1.5px;
-    --margin-right: 1.5px;
+    --margin-left: 1.25px;
+    --margin-right: 1.25px;
 }
 
 h1, h2, h3 {
@@ -13,7 +13,6 @@ h1, h2, h3 {
 }
 
 .container-player-stats {
-    max-width: 900px;
     margin: 5px auto;
     display: flex;
     background-color: #EEE;
@@ -72,6 +71,7 @@ tr:first-child {
 
 .player-input-box {
     width: var(--col-1);
+    margin-left: 0;
 }
 
 .category-input-box {
@@ -90,6 +90,7 @@ tr:first-child {
     */
     position: relative;
     color: white;
+    margin-right: 0;
 }
 
 .form-stuff {
@@ -105,8 +106,6 @@ tr:first-child {
 }
 
 .describe-boxes {
-    margin-left: var(--margin-left);
-    margin-right: var(--margin-right);
     text-align: left;
 }
 .one {
