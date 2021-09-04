@@ -78,7 +78,10 @@ def show_player_statistics(request, last_x_rounds=6, sorting_keyword="All", sort
         fpl_player_i_has_played_how_many_rounds = len(fpl_player_i.round_list) - 1
         max_gws = max(fpl_player_i_has_played_how_many_rounds, max_gws)
         num_rounds = min(fpl_player_i_has_played_how_many_rounds, last_x_rounds)
-        player_i.append(fpl_player_i.player_name.replace("&", ""))
+        #player_i.append(fpl_player_i.player_name.replace("&", ""))
+        #print(player_i, player_i[0].split(" "), fpl_player_i.player_name.split("&"))
+        name = fpl_player_i.player_name.split("&")
+        player_i.append(str(name[0][0]) + ". " + str(name[-1]))
         if last_x_gw == "All GWs":
             player_i.append(round(fpl_player_i.total_points_list[0], 2))
             player_i.append(round(fpl_player_i.bps_list[0], 2))
