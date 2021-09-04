@@ -90,7 +90,6 @@ def static_json(api_local="local"):
 def fill_database_all_players():
     static_data = static_json("api")
     ids = get_ids("api")
-    print(ids)
     for idx, id in enumerate(ids):
         player_data = read_data_from_fpl_api(id)
         Name = static_data[id][0] + " & " + static_data[id][1]

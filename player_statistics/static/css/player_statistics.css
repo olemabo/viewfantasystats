@@ -1,3 +1,11 @@
+:root {
+    --col-1: 38%;
+    --col-2: 22%;
+    --col-3: 22%;
+    --col-4: 15%;
+    --margin-left: 1.5px;
+    --margin-right: 1.5px;
+}
 
 h1, h2, h3 {
     text-align: center;
@@ -32,9 +40,10 @@ tbody tr {
 }
 
 table {
-    width: 550px;
+    width: 100%;
     border-collapse: collapse;
     background-color: white;
+    font-size: 14px;
 }
 
 tr {
@@ -52,4 +61,63 @@ tr:first-child {
     text-align: left;
     width: 170px;
     background-color: white;
+}
+
+.input-box {
+    height: 30px;
+    min-width: 70px;
+    margin-left: var(--margin-left);
+    margin-right: var(--margin-right);
+}
+
+.player-input-box {
+    width: var(--col-1);
+}
+
+.category-input-box {
+    width: var(--col-2);
+}
+
+.last-x-input-box {
+    width: var(--col-3);
+}
+
+.search-box {
+    width: var(--col-4);
+    background: #0f3443;  /* fallback for old browsers */
+    /*background: -webkit-linear-gradient(to right, #0f3443, #34e89e);
+    background: linear-gradient(to right, #0f3443, #34e89e);
+    */
+    position: relative;
+    color: white;
+}
+
+.form-stuff {
+    display: flex;
+    font-size: 14px;
+}
+
+.form-info {
+    display: flex;
+    font-size: 10px;
+    font-weight: 900;
+
+}
+
+.describe-boxes {
+    margin-left: var(--margin-left);
+    margin-right: var(--margin-right);
+    text-align: left;
+}
+.one {
+    width: var(--col-1);
+}
+.two {
+    width: var(--col-2);
+}
+.three {
+    width: var(--col-3);
+}
+.four {
+    width: var(--col-4);
 }

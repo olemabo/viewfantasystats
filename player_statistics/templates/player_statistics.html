@@ -11,10 +11,24 @@
     Player Statistics
 </h2>
 
-<form class="text-center" action="/player-statistics/" method="post">
-    <select id="sort_players_dropdown" name="sort_players">
+<div class="form-info">
+    <div class="describe-boxes one">
+        View
+    </div>
+    <div class="describe-boxes two">
+        Sorted by
+    </div>
+    <div class="describe-boxes three">
+        Last number of GWs
+    </div>
+</div>
+<form class="form-stuff text-center" action="/player-statistics/" method="post">
+    <select class="input-box player-input-box" id="sort_players_dropdown" name="sort_players">
+
         {% if sorting_keyword == "All" %}
-            <option selected value="All">All Players</option>
+            <option selected value="All">
+                All Players
+            </option>
         {% else %}
             <option value="All">All Players</option>
         {% endif %}
@@ -53,7 +67,7 @@
         {% endfor %}
     </select>
 
-    <select id="sort_on_dropdown" name="sort_on">
+    <select class="input-box category-input-box" id="sort_on_dropdown" name="sort_on">
         {% for sort in categories %}
             {% if sort_on == sort %}
                 <option selected value="{{sort}}">{{ sort }}</option>
@@ -63,7 +77,7 @@
         {% endfor %}
     </select>
 
-    <select id="last_x_dropdown" name="last_x">
+    <select class="input-box last-x-input-box" id="last_x_dropdown" name="last_x">
         {% for x in last_x_gws %}
             {% if last_x_gw == x %}
                 <option selected value="{{x}}">{{ x }}</option>
@@ -73,7 +87,7 @@
         {% endfor %}
     </select>
 
-    <input type="submit" class="category chosen-category" value="Search" checked name="combination">
+    <input type="submit" class="input-box search-box chosen-category" value="Search" checked name="combination">
 </form>
 
 <div class="container-player-stats">
