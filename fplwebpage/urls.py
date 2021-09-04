@@ -24,13 +24,13 @@ urlpatterns = [
 ]
 
 urlpatterns += [
-    path('home/', include('home.urls')),
+    path('home/', include('fixture_planner.urls')),
 ]
 
 #Add URL maps to redirect the base URL to our application
 from django.views.generic import RedirectView
 urlpatterns += [
-    path('', RedirectView.as_view(url='home/', permanent=True)),
+    path('', RedirectView.as_view(url='fixture-planner/', permanent=True)),
     path('fixture-planner/', include('fixture_planner.urls')),
     path('fixture-planner-eliteserien/', include('fixture_planner_eliteserien.urls')),
     path('player-statistics/', include('player_statistics.urls')),
