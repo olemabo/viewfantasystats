@@ -12,6 +12,11 @@ h1, h2, h3 {
     margin-top: 20px;
 }
 
+.format-name-col {
+    position: relative;
+    left: 5px;
+}
+
 .container-player-stats {
     margin: 5px auto;
     display: flex;
