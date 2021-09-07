@@ -198,7 +198,10 @@ table {
 }
 
 tbody th {
-    background: #88CCF1;
+    /*background: #88CCF1;*/
+
+    background-color: #0f3443;
+    color: #ffffff;
     text-transform: uppercase;
     font-size: 16px;
     letter-spacing: 0.5px;
@@ -220,6 +223,11 @@ td {
 
 .min-width {
   min-width: 100px;
+}
+
+#fdr-row-gws {
+  background-color: #0f3443;
+  color: #ffffff;
 }
 
 .no-padding {
