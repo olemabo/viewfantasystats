@@ -86,7 +86,7 @@ def return_fixture_names_shortnames():
 
 
 def create_data_frame_Eliteserien():
-    df = pd.read_excel(r'JSON_DATA/Eliteserien_fixtures.xlsx', engine='openpyxl')
+    df = pd.read_excel(r'stored_data/eliteserien/Eliteserien_fixtures.xlsx', engine='openpyxl')
     num_rows = len(df.index)
     num_cols = len(df.columns)
     data = []
@@ -105,7 +105,7 @@ def create_data_frame_Eliteserien():
 
 def return_fixture_names_shortnames_Eliteserien():
     df, data = create_data_frame_Eliteserien()
-    with open('JSON_DATA/staticEliteserien.json') as json_static:
+    with open('stored_data/staticEliteserien.json') as json_static:
         static = json.load(json_static)
     names = pd.DataFrame(static['teams'])['name']
     short_names = pd.DataFrame(static['teams'])['short_name']
@@ -634,7 +634,7 @@ def find_best_rotation_combosEliteserien(data, GW_start, GW_end, teams_to_check=
         l = 0
         #df = adjust_df_for_difficult_teams(df)
 
-    with open('JSON_DATA/staticEliteserien.json') as json_static:
+    with open('stored_data/staticEliteserien.json') as json_static:
         static = json.load(json_static)
 
     dict_with_team_name_to_team_ids = create_dict_with_team_name_to_team_ids(static['teams'])

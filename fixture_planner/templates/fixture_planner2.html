@@ -327,6 +327,9 @@ function hide2() {
                                     </th>
                                     {% for gw_number in gw_numbers %}
                                         <th class="min-width"> GW {{ gw_number.gameweek }}
+                                            <div class="day_month">
+                                                    {{ gw_number.day_month }}
+                                            </div>
                                         </th>
                                     {% endfor %}
                                 </tr>

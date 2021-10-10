@@ -4,8 +4,6 @@ import pandas as pd
 from itertools import combinations
 
 
-
-
 def create_dict_with_team_ids_to_team_name(fixtures, name_or_short_name="name"):
     # fpl_info = pd.DataFrame(DataFetch().get_current_fpl_info()['teams'])
     fpl_info = pd.DataFrame(fixtures)
@@ -18,9 +16,8 @@ def create_dict_with_team_name_to_team_ids(fixtures, name_or_short_name="name"):
     return dict(zip(fpl_info[name_or_short_name], fpl_info['id']))
 
 
-
 def create_data_frame_Eliteserien():
-    df = pd.read_excel(r'JSON_DATA/Eliteserien_fixtures.xlsx', engine='openpyxl')
+    df = pd.read_excel(r'stored_data/eliteserien/Eliteserien_fixtures.xlsx', engine='openpyxl')
     num_rows = len(df.index)
     num_cols = len(df.columns)
     data = []
@@ -126,13 +123,9 @@ class FDR_team:
         self.team_name = team_name
         self.opponent_team_name = opponent_team_name_short
         self.difficulty_score = int(FDR)
-        self.H_A = self.convert_H_A_to_String(H_A)
+        self.H_A = H_A
         self.Use_Not_Use = Use_Not_Use
 
-    def convert_H_A_to_String(self, H_A):
-        if H_A == 1:
-            return 'H'
-        return 'A'
 
 
 def two_D_list(row, col):

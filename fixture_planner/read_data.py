@@ -1,7 +1,7 @@
 import json
 import pandas as pd
 import math
-
+import requests
 
 class Team:
     """
@@ -118,14 +118,40 @@ class Players:
         return df
 
 
+def read_fixture_data_from_fpl_api():
+    web_page_fixture_data = 'https://fantasy.premierleague.com/api/fixtures/'
+    r = requests.get(web_page_fixture_data)
+    return r.json()
+
+
+def read_static_data_from_fpl_api():
+    web_page_static = 'https://fantasy.premierleague.com/api/bootstrap-static/'
+    r = requests.get(web_page_static)
+    return r.json()
+
+
+def get_json(api_local="api"):
+    if api_local == "local":
+        with open('stored_data/static.json', encoding='UTF-8') as json_static:
+            static_info = json.load(json_static)
+        with open('stored_data/fixture.json', encoding='UTF-8') as json_fixture:
+            fixture_info = json.load(json_fixture)
+        return static_info, fixture_info
+
+    if api_local == "api":
+        static_info = read_static_data_from_fpl_api()
+        fixture_info = read_fixture_data_from_fpl_api()
+
+    return static_info, fixture_info
+
+"""
 def get_json():
-    with open('JSON_DATA/static.json', encoding='UTF-8') as json_static:
-        print(json_static, "json")
+    with open('stored_data/static.json', encoding='UTF-8') as json_static:
         static = json.load(json_static)
-    with open('JSON_DATA/fixture.json', encoding='UTF-8') as json_fixture:
+    with open('stored_data/fixture.json', encoding='UTF-8') as json_fixture:
         fixture = json.load(json_fixture)
     return static, fixture
-
+"""
 
 def create_dict_with_team_ids_to_team_name(fixtures, name_or_short_name="name"):
     # fpl_info = pd.DataFrame(DataFetch().get_current_fpl_info()['teams'])
@@ -202,7 +228,7 @@ def return_fixture_names_shortnames():
 
 
 def return_kickofftime():
-    with open('JSON_DATA/static.json', encoding="UTF-8") as json_fixture:
+    with open('stored_data/static.json', encoding="UTF-8") as json_fixture:
         static = json.load(json_fixture)
     kickofftime_info = []
     number_of_gameweeks = len(static['events'])

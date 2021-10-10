@@ -54,7 +54,7 @@ class KickOffTimeGameweeks():
 
 
 def readEliteserienExcelToDBFormat():
-    df = pd.read_excel(r'JSON_DATA/Eliteserien_fixtures.xlsx', engine='openpyxl')
+    df = pd.read_excel(r'stored_data/eliteserien/Eliteserien_fixtures.xlsx', engine='openpyxl')
     objectList = []
     dates = df.loc[df[0] == 'Dato'].values.tolist()[0][1:]
 

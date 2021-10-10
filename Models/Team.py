@@ -6,7 +6,7 @@ class Team:
     def __init__(self, team_id, players_df, fixtures_df):
         """
             Initialize object
-        :param team_number: Based on alphabetical order -> Arsenal = 1, ..., Wolves = 20
+        :param team_id: Based on alphabetical order -> Arsenal = 1, ..., Wolves = 20
         :param players_df: DataFrame containing information about the players on the team
         :param fixtures_df: DataFrame providing information about gameweeks, opponents, difficulty and H/A.
         """

@@ -6,7 +6,7 @@ import time
 
 
 def read_data_from_json(name="Salah"):
-    with open('JSON_DATA/Element_Summary/' + str(name) + '.json') as json_static:
+    with open('stored_data/element_summary/' + str(name) + '.json') as json_static:
         player_info = json.load(json_static)
     return player_info
 
@@ -25,7 +25,7 @@ def read_data_static_fpl_api():
 
 def get_ids(api_local):
     if api_local == "local":
-        with open('JSON_DATA/static.json', encoding='utf-8') as json_static:
+        with open('stored_data/static.json', encoding='utf-8') as json_static:
             static_info = json.load(json_static)
     if api_local == "api":
         static_info = read_data_static_fpl_api()
@@ -39,7 +39,7 @@ def get_ids(api_local):
 
 def static_json(api_local="local"):
     if api_local == "local":
-        with open('JSON_DATA/static.json', encoding='utf-8') as json_static:
+        with open('stored_data/static.json', encoding='utf-8') as json_static:
             static_info = json.load(json_static)
     if api_local == "api":
         static_info = read_data_static_fpl_api()
@@ -217,7 +217,7 @@ def fill_database_for_one_player(player_data_json, static_data):
     return 0
 
 """
-with open('../JSON_DATA/Element_Summary/Salah.json') as player_info:
+with open('../stored_data/element_summary/Salah.json') as player_info:
     static = json.load(player_info)
 
 data = static_json()
@@ -230,7 +230,7 @@ fill_database_all_players()
 
 
 print(1/0)
-with open('../JSON_DATA/static.json') as json_fixture:
+with open('../stored_data/static.json') as json_fixture:
     static = json.load(json_fixture)
 
 players = static['elements']

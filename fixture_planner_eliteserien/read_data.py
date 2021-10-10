@@ -119,9 +119,9 @@ class Players:
 
 
 def get_json():
-    with open('JSON_DATA/static.json') as json_static:
+    with open('stored_data/static.json') as json_static:
         static = json.load(json_static)
-    with open('JSON_DATA/fixture.json') as json_fixture:
+    with open('stored_data/fixture.json') as json_fixture:
         fixture = json.load(json_fixture)
     return static, fixture
 
@@ -201,7 +201,7 @@ def return_fixture_names_shortnames():
 
 
 def return_kickofftime():
-    with open('JSON_DATA/static.json') as json_fixture:
+    with open('stored_data/static.json') as json_fixture:
         static = json.load(json_fixture)
     kickofftime_info = []
     number_of_gameweeks = len(static['events'])
