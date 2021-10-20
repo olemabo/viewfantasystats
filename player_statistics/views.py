@@ -2,9 +2,9 @@ from player_statistics.utility_functions.utility_functions_player_statistics imp
     get_dict_sort_on_short_name_to_sort_on_name, get_dict_sort_on_short_name_to_number
 from player_statistics.utility_functions.utility_functions_ownership_statistics import get_ownership_db_data
 from utils.utility_functions import convert_list_with_strings_to_floats, get_list_of_all_pl_team_names
-from player_statistics.backend.fill_db_player_statistics import fill_database_all_players
-from player_statistics.backend.fill_db_global_statistics import write_global_stats_to_db
-from player_statistics.backend.read_global_statistics import save_all_fpl_teams_stats
+#from player_statistics.backend.fill_db_player_statistics import fill_database_all_players
+#from player_statistics.backend.fill_db_global_statistics import write_global_stats_to_db
+#from player_statistics.backend.read_global_statistics import save_all_fpl_teams_stats
 from django.views.decorators.csrf import csrf_exempt
 from constants import total_number_of_gameweeks
 from django.http import HttpResponse
@@ -14,17 +14,17 @@ import numpy as np
 
 # DB functions. Should not be accessible in PRODUCTION
 def fill_db_global_stats(request):
-    write_global_stats_to_db()
+    #write_global_stats_to_db()
     return HttpResponse("Filled Database Global Data (GlobalOwnershipStatsXXXX)")
 
 
 def fill_txt_global_stats(request):
-    save_all_fpl_teams_stats()
+    #save_all_fpl_teams_stats()
     return HttpResponse("Filled Txt global stats")
 
 
 def fill_player_stat_db(request):
-    fill_database_all_players()
+    #fill_database_all_players()
     return HttpResponse("Filled Database Player Data (FPLPlayersModel)")
 
 
