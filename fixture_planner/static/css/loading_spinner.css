@@ -16,11 +16,13 @@
     animation: shadowScale 1s linear infinite;
   }
 }
+
 .gravity {
   width: 40px;
   height: 40px;
   animation: bounce 1s cubic-bezier(0.68, 0.35, 0.29, 0.54) infinite;
 }
+
 .ball {
   width: 40px;
   height: 40px;
@@ -33,11 +35,13 @@
   0% {}
   100% { transform: rotate(360deg) }
 }
+
 @keyframes bounce {
   0% {}
   50% { transform: translateY(100px) }
   100% {}
 }
+
 @keyframes shadowScale {
   0% {}
   50% { transform: scaleX(1); opacity: .8;}

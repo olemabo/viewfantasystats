@@ -1,17 +1,19 @@
-from django.db import models
-from django.urls import reverse
 from django_mysql.models import ListTextField
+from django.db import models
+from constants import total_number_of_gameweeks
+from django.urls import reverse
 
 
 class FPLPlayersModel(models.Model):
     """FPL Player model. Statistics relevant for each player in fpl."""
     # one stat for each gameweek + 1 total stat for all gws
-    number_of_gws = 38 + 1
+    number_of_gws = total_number_of_gameweeks + 1
     # Fields
     player_id = models.IntegerField(primary_key=True, help_text='Enter team id (1) ')
     player_team_id = models.IntegerField(help_text='Enter team id for this player (1)  ')
     player_position_id = models.IntegerField(help_text='Enter position id for this player (2) ')
-    player_name = models.CharField(max_length=40, help_text='Enter player name (Salah) ')
+    player_name = models.CharField(max_length=40, help_text='Enter player name (Bruno Miguel & Borges Fernandes) ')
+    player_web_name = models.CharField(max_length=40, help_text='Enter player web name (Fernandes) ')
     chance_of_playing = models.CharField(max_length=5, help_text='Enter chance of playing next round (75%) ')
 
     assists_list = ListTextField(

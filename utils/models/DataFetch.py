@@ -24,7 +24,7 @@ class DataFetch:
 
     def investigate_path(self):
         path = os.path.dirname(os.path.abspath(__file__))
-        if not path.split('\\')[-1] == "Models":
+        if not path.split('\\')[-1] == "models":
             print('cannot determine path')
             exit(1)
 

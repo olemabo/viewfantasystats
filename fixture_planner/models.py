@@ -1,12 +1,8 @@
-from django.db import models
-
-# Create your models here.
-
-from django.db import models
-from django.urls import reverse
-from datetime import date
+from constants import total_number_of_gameweeks
 from django_mysql.models import ListTextField
-import fixture_planner.read_data as read_data
+from django.urls import reverse
+from django.db import models
+from datetime import date
 
 
 class AddPlTeamsToDB(models.Model):
@@ -20,24 +16,23 @@ class AddPlTeamsToDB(models.Model):
 
     oppTeamNameList = ListTextField(
         base_field=models.CharField(max_length=3, help_text='Enter team name short (ARS)'),
-        size=38,  # Maximum of 100 ids in list
+        size=total_number_of_gameweeks,  # Maximum of 100 ids in list
     )
 
     oppTeamHomeAwayList = ListTextField(
         base_field=models.CharField(max_length=1, help_text='H/A'),
-        size=38,  # Maximum of 100 ids in list
+        size=total_number_of_gameweeks,  # Maximum of 100 ids in list
     )
 
     oppTeamDifficultyScore = ListTextField(
         base_field=models.IntegerField(help_text='1-5'),
-        size=38,  # Maximum of 100 ids in list
+        size=total_number_of_gameweeks,  # Maximum of 100 ids in list
     )
 
     gw = ListTextField(
         base_field=models.IntegerField(help_text='1-38'),
-        size=38,  # Maximum of 100 ids in list
+        size=total_number_of_gameweeks,  # Maximum of 100 ids in list
     )
-
 
     # Metadata
     class Meta:
@@ -47,7 +42,6 @@ class AddPlTeamsToDB(models.Model):
     def get_absolute_url(self):
         """Returns the url to access a particular instance of MyModelName."""
         return reverse('model-detail-view', args=[str(self.team_id)])
-
 
     def __str__(self):
         """String for representing the MyModelName object (in Admin site etc.)."""
@@ -78,7 +72,3 @@ class KickOffTime(models.Model):
         """String for representing the MyModelName object (in Admin site etc.)."""
         return f'{self.gameweek}, {self.kickoff_time}'
 
-
-
-def fill_database():
-    df, names, short_names = read_data.return_fixture_names_shortnames()

@@ -2,12 +2,14 @@
 
 {% block content %}
 {% load static %}
-<link rel="stylesheet" href="{% static 'css/player_statistics.css' %}">
+<link rel="stylesheet" href="{% static 'css/ownership_statistics.css' %}">
 
 <h2>
-    Player Statistics
+    Ownership Statistics
 </h2>
 
+
+<!--
 <div class="form-info">
     <div class="describe-boxes one">
         View
@@ -19,7 +21,7 @@
         Last number of GWs
     </div>
 </div>
-<form class="form-stuff text-center" action="/statistics/player/" method="post">
+<form class="form-stuff text-center" action="/player-statistics/" method="post">
     <select class="input-box player-input-box" id="sort_players_dropdown" name="sort_players">
 
         {% if sorting_keyword == "All" %}
@@ -116,7 +118,7 @@
     </tbody>
 </table>
 </div>
-
+-->
 
 
 {% endblock %}

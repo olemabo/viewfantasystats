@@ -16,8 +16,16 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+# Add URL maps to redirect the base URL to our application
+from django.views.generic import RedirectView
+
 # Use include() to add paths from the catalog application
 from django.urls import include
+
+# Use static() to add url mapping to serve static files during development (only)
+from django.conf import settings
+from django.conf.urls.static import static
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,18 +35,12 @@ urlpatterns += [
     path('home/', include('fixture_planner.urls')),
 ]
 
-#Add URL maps to redirect the base URL to our application
-from django.views.generic import RedirectView
 urlpatterns += [
     path('', RedirectView.as_view(url='fixture-planner/', permanent=True)),
     path('fixture-planner/', include('fixture_planner.urls')),
     path('fixture-planner-eliteserien/', include('fixture_planner_eliteserien.urls')),
-    path('player-statistics/', include('player_statistics.urls')),
+    path('statistics/', include('player_statistics.urls')),
 ]
 
-
-# Use static() to add url mapping to serve static files during development (only)
-from django.conf import settings
-from django.conf.urls.static import static
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

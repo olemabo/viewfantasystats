@@ -55,7 +55,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') ##specify static root
+# specify static root
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False

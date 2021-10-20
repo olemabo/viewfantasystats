@@ -1,26 +1,29 @@
+$(document).ready(function(){
+    $('#button').click(function(e) {
+        var start_gw = $("#start_gw2").val();
+        var end_gw = $("#end_gw2").val();
+        var combinations = $("#combinations").val();
+        if (combinations == "FDR") {
+            window.location.replace(window.location.hostname + "/fixture-planner/" + start_gw + "/" + end_gw + "/" + combinations);
+        }
+        if (combinations == "FDR-best") {
+            var min_num_fixtures = $("#min_num_fixtures").val();
+            window.location.replace(window.location.hostname + "/fixture-planner/" + start_gw + "/" + end_gw + "/" + combinations + "/" + min_num_fixtures);
+        }
+        if (combinations == "Rotation") {
+            var teams_to_play =  $("#teams_to_play").val();
+            var teams_to_check =  $("#teams_to_check").val();
+            window.location.replace(window.location.hostname + "/fixture-planner/" + start_gw + "/" + end_gw + "/" + combinations + "/" + teams_to_play + "/" + teams_to_check);
+        }
+    });
+});
 
-//const spinnerBox = document.getElementById('spinner-box')
-//const dataBox = document.getElementById('data-box')
 
-// console.log(spinnerBox)
-// console.log(dataBox)
-
-/* $.ajax({
-    type: 'GET',
-    url: 'post-json',
-    success: function(response){
-    setTimeout(()=>{
-         spinnerBox.classList.add('not-visible')
-         dataBox.classList.add('visible')
-         dataBox.classList.remove('not-visible')
-         console.log('response', response)
-         for (const item of response){
-            dataBox.innerHTML += `<b>${item.gameweek}</b>`
-         }
-    }, 2000)
-
-    },
-    error: function(error){
-        console.log(error)
-    }
-}) */
+function hide_include_teams_in_solution() {
+  var x = document.getElementById("which_teams_to_check");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
