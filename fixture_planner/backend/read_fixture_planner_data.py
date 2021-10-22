@@ -4,7 +4,7 @@ from utils.models.DataFetch import DataFetch
 import json
 
 
-def get_static_and_fixture_data(api_local="api"):
+def get_static_and_fixture_data(api_local="local"):
     if api_local == "local":
         with open('stored_data/static_json/static.json', encoding='UTF-8') as json_static:
             static_info = json.load(json_static)
