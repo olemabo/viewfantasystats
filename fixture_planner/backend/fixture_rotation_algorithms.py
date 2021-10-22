@@ -54,7 +54,7 @@ def find_best_rotation_combos(data, GW_start, GW_end, teams_to_check=5, teams_to
         l = 0
         #df = adjust_df_for_difficult_teams(df)
 
-    static, fixture = read_data.get_static_and_fixture_data()
+    static, fixture = read_data.get_static_and_fixture_data(api_local="local")
     dict_with_team_name_to_team_ids = create_dict_with_team_name_to_team_ids(static['teams'])
 
     team_ids = []

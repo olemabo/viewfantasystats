@@ -248,7 +248,6 @@ def get_rotation_data(request):
             rotation_data = [['Wrong input', [], [], 0, 0, [[]]]]
         else:
             rotation_data = rotation_data[:(min(len(rotation_data), 50))]
-
     data = {
         "fdr_fixture_data": rotation_data
     }
