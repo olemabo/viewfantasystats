@@ -172,7 +172,7 @@
 
                     for (const rows of result.fdr_fixture_data){
                         for (const col of rows){
-                            const myObj = JSON.parse(col);
+                            const myObj = JSON.parse(col[0]);
                             tbodyBox.innerHTML += `
                                 <tr>
                                     <td class="name-column min-width">
@@ -189,30 +189,30 @@
 
                     for (const rows of result.fdr_fixture_data){
                         for (const col of rows){
-                            const myObj2 = JSON.parse(col);
+                            const myObj2 = JSON.parse(col[0]);
                             var id_s = 'fdr-row-' + myObj2.team_name;
                             const ith_row = document.getElementById(id_s)
                             var html_string = "";
                             var num_teams = col.length;
-
                             if (num_teams == 1) {
                                 html_string += `<td scope="col" class=" min-width color-${myObj2.difficulty_score}
-                                  double-border-${myObj2.Use_Not_Use}"
+                                  double-border-${myObj2.Use_Not_Use}">
                                 `
                             }
                             else {
-                                html_string += `<td scope="col" class=" min-width no-padding double-border-${myObj2.Use_Not_Use}" `
+                                html_string += `<td scope="col" class=" min-width no-padding double-border-${myObj2.Use_Not_Use}"> `
                             }
 
                             for (const team in col){
-                                html_string += `<div class=" min-width color-${myObj2.difficulty_score}
+                                var currentTeam = JSON.parse(col[team]);
+                                html_string += `<div class=" min-width color-${currentTeam.difficulty_score}
                                 multiple-fixtures height-${num_teams}">`
 
-                                if (myObj2.opponent_team_name == '-') {
+                                if (currentTeam.opponent_team_name == '-') {
                                     html_string += `Blank`
                                 }
                                 else {
-                                    html_string += `${myObj2.opponent_team_name}&nbsp(${myObj2.H_A})`
+                                    html_string += `${currentTeam.opponent_team_name}&nbsp(${currentTeam.H_A})`
                                 }
                                 html_string += `</div>`
                             }
@@ -302,10 +302,10 @@
 
                                     for (const team of data_i){
 
-                                        var num_teams = team.length;
+                                        var num_teams = data_i.length;
                                         var json_team_data = JSON.parse(team);
                                         html_string += `
-                                            <div class" min-width color-${json_team_data.difficulty_score}
+                                            <div class=" min-width color-${json_team_data.difficulty_score}
                                              multiple-fixtures height-${num_teams}">
                                         `
 
