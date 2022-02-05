@@ -57,10 +57,10 @@ stages:
       displayName: "Npm install"
 
     - task: DeleteFiles@1
-        displayName: 'Remove node_modules'
-        inputs:
-          contents: |
-            **/node_modules/*
+      displayName: 'Remove node_modules'
+      inputs:
+        contents: |
+          **/node_modules/*
 
     - task: ArchiveFiles@2
       displayName: 'Archive files'
