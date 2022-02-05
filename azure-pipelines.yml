@@ -62,6 +62,12 @@ stages:
         contents: |
           **/node_modules/*
 
+    - script: |
+      cd frontend
+      DIR
+      workingDirectory: $(projectRoot)
+      displayName: "Check files"
+
     - task: ArchiveFiles@2
       displayName: 'Archive files'
       inputs:
