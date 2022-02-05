@@ -61,6 +61,18 @@ stages:
       inputs:
         contents: |
           **/node_modules*
+          frontend/src
+          frontend/tsconfig.json
+          frontend/webpack.config.js
+          frontend/package-lock.json
+          frontend/package.json
+          frontend/babel.config.json
+
+    - script: |
+      cd frontend
+      ls
+      workingDirectory: $(projectRoot)
+      displayName: "Check files"
 
     - task: ArchiveFiles@2
       displayName: 'Archive files'
