@@ -65,6 +65,8 @@ stages:
     - script: |
         cd frontend
         ls
+        rm -r node_modules
+        ls
       workingDirectory: $(projectRoot)
       displayName: "Check files"
 
