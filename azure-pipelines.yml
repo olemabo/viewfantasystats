@@ -47,11 +47,11 @@ stages:
         pip install setup
         pip install -r requirements.txt
         python manage.py collectstatic
-        echo "mkdir .\frontend\node_modules"
+        echo "RUN THIS: mkdir .\frontend\node_modules"
         mkdir .\frontend\node_modules
-        echo "npm install --prefix .\frontend package.json"
+        echo "RUN THIS: npm install --prefix .\frontend package.json"
         npm install --prefix .\frontend package.json
-        echo "npm install --prefix .\frontend package.json"
+        echo "RUN THIS: npm --prefix .\frontend run build"
         npm --prefix .\frontend run build
       workingDirectory: $(projectRoot)
       displayName: "Install requirements"
