@@ -47,18 +47,8 @@ stages:
         pip install setup
         pip install -r requirements.txt
         python manage.py collectstatic
-        cd frontend
-        npm install
-        npm run build
       workingDirectory: $(projectRoot)
       displayName: "Install requirements"
-
-    - script: |
-        cd frontend
-        npm install
-        npm run build
-      workingDirectory: $(projectRoot)
-      displayName: "Npm install"
 
     - task: ArchiveFiles@2
       displayName: 'Archive files'
