@@ -10,3 +10,4 @@ WhiteNoise
 django-mysql
 openpyxl
 requests
+rest_framework
