@@ -61,6 +61,8 @@ stages:
       inputs:
         contents: |
           **/node_modules/*
+          **/node_modules*
+          frontend/node_modules
 
     - script: |
         cd frontend
