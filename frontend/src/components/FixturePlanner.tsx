@@ -93,7 +93,7 @@ export const FixturePlanner = () => {
 
     return <>
      <div className='fixture-planner-container' id="fixture-planner-container">
-         <h1>FixturePlanner</h1>
+         <h1>Fixture Planner</h1>
         { fdrDataToShow.length > 0 && fdrDataToShow[0].team_name != "-" && kickOffTimes.length > 0 && kickOffTimes[0].gameweek != 0 && (
             <div>
                 <div className="container-fdr">
