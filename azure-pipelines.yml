@@ -54,7 +54,7 @@ stages:
         echo "RUN THIS: cd frontend"
         cd frontend
         echo "RUN THIS: npm run build"
-        npm i -g webpack-cli
+        npm install
         npm run build
       workingDirectory: $(projectRoot)
       displayName: "Install requirements"
