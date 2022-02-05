@@ -57,7 +57,7 @@ stages:
       displayName: "Npm install"
 
     - task: DeleteFiles@1
-      displayName: 'Remove node_modules'
+      displayName: 'Remove unnecessary files'
       inputs:
         contents: |
           **/node_modules*
@@ -67,12 +67,6 @@ stages:
           frontend/package-lock.json
           frontend/package.json
           frontend/babel.config.json
-
-    - script: |
-        cd frontend
-        ls
-      workingDirectory: $(projectRoot)
-      displayName: "Check files"
 
     - task: ArchiveFiles@2
       displayName: 'Archive files'
