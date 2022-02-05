@@ -46,9 +46,21 @@ stages:
         python -m pip install --upgrade pip
         pip install setup
         pip install -r requirements.txt
-        python manage.py collectstatic
       workingDirectory: $(projectRoot)
       displayName: "Install requirements"
+
+    - script: |
+        cd frontend
+        npm install
+        npm run build
+      workingDirectory: $(projectRoot)
+      displayName: "Npm install"
+
+    - task: DeleteFiles@1
+        displayName: 'Remove node_modules'
+        inputs:
+          contents: |
+            **/node_modules/*
 
     - task: ArchiveFiles@2
       displayName: 'Archive files'
