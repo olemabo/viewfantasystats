@@ -63,8 +63,8 @@ stages:
           **/node_modules/*
 
     - script: |
-      cd frontend
-      DIR
+        cd frontend
+        DIR
       workingDirectory: $(projectRoot)
       displayName: "Check files"
 
