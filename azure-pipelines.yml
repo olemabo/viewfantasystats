@@ -51,8 +51,10 @@ stages:
         mkdir .\frontend\node_modules
         echo "RUN THIS: npm install --prefix .\frontend package.json"
         npm install --prefix .\frontend package.json
-        echo "RUN THIS: npm --prefix .\frontend run build package.json"
-        npm --prefix .\frontend run build package.json
+        echo "RUN THIS: cd frontend"
+        cd frontend
+        echo "RUN THIS: npm run build"
+        npm run build
       workingDirectory: $(projectRoot)
       displayName: "Install requirements"
 
