@@ -7,12 +7,150 @@ from fixture_planner.backend.utility_functions import calc_score
 from fixture_planner.models import AddPlTeamsToDB, KickOffTime
 from utils.models.WhichTeamToCheck import WhichTeamToCheck
 from utils.models.FDR_team import FixtureDifficultyInfo
+from utils.models.KickOffTimeInfo import KickOffTimeInfo
 from django.views.decorators.csrf import csrf_exempt
 from utils.utility_functions import get_current_gw
 from django.http import JsonResponse
 from django.http import HttpResponse
 from django.shortcuts import render
 import json
+from rest_framework import generics, status
+from fixture_planner.models import AddPlTeamsToDB, KickOffTime
+from .serializers import AddPlTeamsToDBSerializer
+from .serializers import GetKickOffTimeSerializer
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from django.core import serializers
+
+
+class AddPlTeamsToDBView(generics.ListAPIView):
+    queryset = AddPlTeamsToDB.objects.all()
+    serializer_class = AddPlTeamsToDBSerializer
+
+
+class KickOffTimeView(generics.ListAPIView):
+    queryset = KickOffTime.objects.all()
+    serializer_class = GetKickOffTimeSerializer
+
+
+class GetKickOffTimes(APIView):
+    serializer_class = GetKickOffTimeSerializer
+
+    def get(self, request):
+        try:
+            kick_off_time_db = KickOffTime.objects.all()
+            temp_kick_off_time = []
+            for gw_i in range(len(kick_off_time_db)):
+                temp_kick_off_time.append(KickOffTimeInfo(
+                    kick_off_time_db[gw_i].gameweek,
+                    kick_off_time_db[gw_i].kickoff_time,
+                    kick_off_time_db[gw_i].day_month
+                ).toJson())
+            return JsonResponse(temp_kick_off_time, safe=False)
+
+        except:
+            return Response({'Bad Request': 'Something went wrong'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class PostFDRView(APIView):
+    serializer_class = AddPlTeamsToDBSerializer
+
+    def get(self, request, format=None):
+        kick_off_time_db = KickOffTime.objects.filter(gameweek__range=(0, 38))
+        print(len(kick_off_time_db), "kic")
+        for i in range(len(kick_off_time_db)):
+            current_gw = i + 1
+            dates = kick_off_time_db[i].kickoff_time.split("T")[0].split("-")
+            print(dates)
+        return JsonResponse(kick_off_time_db[0], safe=False)
+
+    def post(self, request, format=None):
+        try:
+            start_gw = int(request.data.get("start_gw"))
+            end_gw = int(request.data.get("end_gw"))
+            min_num_fixtures = int(request.data.get("min_num_fixtures"))
+            combinations = str(request.data.get("combinations"))
+            print(start_gw, end_gw, min_num_fixtures, combinations)
+
+            fdr_fixture_data = []
+
+            gws = end_gw - start_gw + 1
+            gw_numbers = [gw for gw in range(start_gw, end_gw + 1)]
+
+            fixture_list_db = AddPlTeamsToDB.objects.all()
+            team_dict = {}
+            number_of_teams = len(fixture_list_db)
+
+            fixture_list = [fixture_list_db[i] for i in range(0, number_of_teams)]
+
+            for i in range(number_of_teams):
+                team_dict[fixture_list[i].team_name] = WhichTeamToCheck(fixture_list[i].team_name, 'checked')
+            fixture_list_db = AddPlTeamsToDB.objects.all()
+
+            team_name_list = []
+            fixture_list = []
+
+            for i in range(number_of_teams):
+                temp_object = team_dict[fixture_list_db[i].team_name]
+                team_name_list.append(team_dict[fixture_list_db[i].team_name])
+                if temp_object.checked == 'checked':
+                    fixture_list.append(fixture_list_db[i])
+
+            teams = len(fixture_list)
+            if combinations == 'FDR':
+                fdr_fixture_data = []
+                FDR_scores = []
+                for idx, i in enumerate(fixture_list):
+                    fdr_dict = create_data_objects.create_FDR_dict(i)
+                    sum = calc_score(fdr_dict, start_gw, end_gw)
+                    FDR_scores.append([i, sum])
+                FDR_scores = sorted(FDR_scores, key=lambda x: x[1], reverse=False)
+
+                for i in range(teams):
+                    temp_list2 = [[] for i in range(gws)]
+                    team_i = FDR_scores[i][0]
+                    FDR_score = FDR_scores[i][1]
+                    temp_gws = team_i.gw
+                    for j in range(len(team_i.gw)):
+                        temp_gw = temp_gws[j]
+                        if temp_gw in gw_numbers:
+                            temp_list2[gw_numbers.index(temp_gw)].append([
+                                FixtureDifficultyInfo(team_name=team_i.team_name,
+                                                      opponent_team_name=team_i.oppTeamNameList[j],
+                                                      this_difficulty_score=team_i.oppTeamDifficultyScore[j],
+                                                      total_fdr_score=FDR_score,
+                                                      H_A=team_i.oppTeamHomeAwayList[j],
+                                                      Use_Not_Use=0).toJson()])
+
+                    for k in range(len(temp_list2)):
+                        if not temp_list2[k]:
+                            temp_list2[k] = [FixtureDifficultyInfo(opponent_team_name="-",
+                                                                   this_difficulty_score=0,
+                                                                   H_A=" ",
+                                                                   team_name=team_i.team_name,
+                                                                   total_fdr_score=0,
+                                                                   Use_Not_Use=0).toJson()]
+
+                    fdr_fixture_data.append(temp_list2)
+
+            if abs(min_num_fixtures) > (end_gw - start_gw):
+                min_num_fixtures = abs(end_gw - start_gw) + 1
+                if min_num_fixtures == 0:
+                    min_num_fixtures = 1
+                    end_gw = start_gw + 1
+
+            if combinations == 'FDR-best':
+                fdr_fixture_data = find_best_fixture_with_min_length_each_team(fixture_list,
+                                                                               GW_start=start_gw,
+                                                                               GW_end=end_gw,
+                                                                               min_length=min_num_fixtures)
+
+            return JsonResponse(fdr_fixture_data, safe=False)
+
+            # return HttpResponse(fdr_fixture_data, content_type="application/json", status=status.HTTP_200_OK)
+
+        except:
+            return Response({'Bad Request': 'Something went wrong'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 def fixture_planner(request, start_gw=get_current_gw(), end_gw=get_current_gw() + initial_extra_gameweeks, combinations="FDR", teams_to_check=2, teams_to_play=1, min_num_fixtures=4):

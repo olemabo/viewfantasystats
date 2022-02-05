@@ -46,6 +46,8 @@ stages:
         pip install setup
         pip install -r requirements.txt
         python manage.py collectstatic
+        npm install ./frontend
+        npm --prefix ./frontend run build
       workingDirectory: $(projectRoot)
       displayName: "Install requirements"
 

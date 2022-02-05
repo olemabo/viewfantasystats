@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'fixture_planner',
     'fixture_planner_eliteserien',
     'player_statistics',
+    'rest_framework',
+    'frontend.apps.FrontendConfig',
 ]
 
 MIDDLEWARE = [
