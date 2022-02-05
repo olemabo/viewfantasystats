@@ -64,7 +64,7 @@ stages:
 
     - script: |
         cd frontend
-        DIR
+        ls
       workingDirectory: $(projectRoot)
       displayName: "Check files"
 
