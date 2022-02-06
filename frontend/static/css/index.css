@@ -2,16 +2,25 @@
 
 :root {
     --primary-color: #076585;
-    --background-color: white;
+    --background-color: #FFFFFF;
+    --text-color: #333;
+    --fpl-linear-gradient-first-color: #0f3443;
+    --fpl-linear-gradient-second-color: #34e89e;
+    --eliteserien-linear-gradient-first-color: #41D5F9;
+    --eliteserien-linear-gradient-second-color: #2c3e50;
+    --height-the-gray-box-should-go-into-header: -25px;
+    --height-the-gray-box-should-go-away-from-header: 25px; /* Give this the same value as the var above only oppsotie sign */
     --size-of-scewY: 30px;
     --size-of-top-bar: 160px;
-    --skew-Degrees: 2deg;
+    --size-of-top-bar-mobile: 60px;
+    --skew-Degrees: 0deg;
     --link-color: black;
-    --title-color: white;
+    --title-color: #FFFFFF;
     --content-color: #E8E8E8;
     --border-radius-content: 10px;
     --content-width: 98%;
 }
+
 
 * {
     box-sizing: border-box;
@@ -19,14 +28,10 @@
     margin: 0;
 }
 
-.max-width {
-    max-width: 800px;
-}
-
 body {
     font-family: 'Lato';
     background-color: var(--background-color);
-    color: #333;
+    color: var(--text-color);
     line-height: 1.6;
 }
 
@@ -36,7 +41,7 @@ ul {
 
 a {
     text-decoration: none;
-    color: #333;
+    color: var(--text-color);
 }
 
 h1, h2 {
@@ -49,86 +54,13 @@ p {
     margin: 10px 0;
 }
 
-img {
-    width: 100%;
-}
 
-
-.navbar {
-    height: 60%;
-}
-
-.top-navbar {
-    padding: 0 1rem;
-    height: 50px;
-    display: flex;
-    justify-content: flex-end;
-    align-items: flex-end;
-}
-
-.circle-link {
-    display: block;
-    width: 30px;
-    height: 30px;
-    border-radius: 25px;
-    background-color: #0000ff;
-    margin: 1px 10px;
-}
-
-.eliteserien {
-    background: #2c3e50;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to left, #41D5F9, #2c3e50);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to left, #41D5F9, #2c3e50); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    position: relative;
-}
-
-.fpl {
-    background: #34e89e;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #0f3443, #34e89e);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #0f3443, #34e89e); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    position: relative;
-}
-
-
-.top-navbar-container {
-    margin-right: 40px;
-    display: flex;
-}
-
-.navbar ul {
-    display: flex;
-    font-size: 20px;
-    font-weight: 500;
-    margin: 10px 0;
-}
-
-.navbar a {
-    color: var(--link-color);
-    padding: 10px;
-}
-
-.logo {
-    color: var(--title-color);
+.max-width {
+    max-width: 800px;
 }
 
 a:hover {
     text-decoration: none;
-}
-
-.navbar a:hover {
-    border-bottom: 2px var(--link-color) solid;
-}
-
-.navbar .flex {
-    justify-content: space-between;
-}
-
-.container {
-    max-width: 1400px;
-    margin: 0 auto; /* top/bottum left/right */
-    transform: skewY(0deg); /* use negative degrees here to anti skrew text */
-    overflow: auto;
-    padding: 0 40px;
 }
 
 .flex {
@@ -138,14 +70,7 @@ a:hover {
     height: 100%;
 }
 
-.front-page-top-sky {
-    height: var(--size-of-top-bar);
-    background: #34e89e;  /* fallback for old browsers */
 
-    background: -webkit-linear-gradient(to right, #0f3443, #34e89e);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #0f3443, #34e89e); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    position: relative;
-}
 
 .showcasesss {
     height: 200px;
@@ -155,18 +80,6 @@ a:hover {
 }
 
 
-
-.front-page-top-sky::after {
-    content: '';
-    position: absolute;
-    z-index: 1;
-    height: 200px;
-    bottom: -200px;
-    right: 0;
-    left: 0;
-    background: var(--background-color);
-    transform: skewY(var(--skew-Degrees));
-}
 
 .start-container {
     display: flex;
@@ -185,7 +98,7 @@ a:hover {
     width: var(--content-width);
     align-items: center;
     border-radius: var(--border-radius-content);
-    top: -25px;
+    top: var(--height-the-gray-box-should-go-into-header);
     position: relative;
     text-align: center;
 }
@@ -219,14 +132,4 @@ a:hover {
     /*position: relative;
     top: -50px;*/
 }
-
-.footer {
-    position: relative;
-    display: flex;
-    width: 100%;
-    background-color: #0f3443;
-    color: white;
-    padding-top: 15px;
-    text-align: center;
- }
 

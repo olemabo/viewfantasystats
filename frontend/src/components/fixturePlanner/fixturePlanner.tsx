@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { FDRData } from "../models/fixturePlanner/FdrModel"
+import { FDRData } from "./FdrModel"
 import "./FixturePlanner.scss";
 
 axios.defaults.xsrfCookieName = 'csrftoken';
