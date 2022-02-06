@@ -6,11 +6,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import store from "../../store/index";
 import { useSelector } from 'react-redux'
 
-const mapStateToProps = (state: any) => {
-    return {
-        somethingFromStore: state.isMenuOpen
-    }
-}
 
 export const FPLLayout = () => {
     const [ isAnyMenuOpen, setIsMenuOpen ] = useState(false);
