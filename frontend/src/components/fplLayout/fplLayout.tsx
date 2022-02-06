@@ -1,11 +1,10 @@
 import React, { FunctionComponent, useEffect, useState } from "react"; // this must be here
 import TopMenu from "../topMenu/topMenu";
 import Footer from "../footer/footer";
-import FixturePlanner from "../fixturePlanner/FixturePlanner";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import store from "../../store/index";
 import { useSelector } from 'react-redux'
-
+import FixturePlanner from "../FixturePlanner/FixturePlanner";
 
 export const FPLLayout = () => {
     const [ isAnyMenuOpen, setIsMenuOpen ] = useState(false);
