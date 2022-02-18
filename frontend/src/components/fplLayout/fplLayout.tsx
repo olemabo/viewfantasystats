@@ -3,7 +3,7 @@ import TopMenu from "../topMenu/topMenu";
 import Footer from "../footer/footer";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import store from "../../store/index";
-import { useSelector } from 'react-redux'
+import { useSelector } from 'react-redux';
 import FixturePlanner from "../FixturePlanner/FixturePlanner";
 
 export const FPLLayout = () => {
