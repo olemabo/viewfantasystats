@@ -250,7 +250,6 @@ export const EliteserienFixturePlanner = () => {
             <div style={{ backgroundColor: "#E8E8E8"}}><Spinner /></div>
         }
 
-        <br ></br>
 
         { !loading && fdrDataToShow.length > 0 && fdrDataToShow[0].team_name != "-" && kickOffTimesToShow.length > 0 && kickOffTimesToShow[0].gameweek != 0 && (
             <div>

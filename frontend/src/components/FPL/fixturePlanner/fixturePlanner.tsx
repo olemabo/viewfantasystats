@@ -182,12 +182,6 @@ export const FixturePlanner = () => {
             </input>
         </form>
 
-        {/* { showTeamFilters ? (
-            <button onClick={() => setShowTeamFilters(false)}>Filter FPL teams</button>
-        ) : 
-            <button onClick={() => setShowTeamFilters(true)}>Filter FPL teams</button>
-        } */}
-
         <Button buttonText={'Filter teams'} 
                     icon_class={"fa fa-chevron-" + (showTeamFilters ? "up" : "down")} 
                     onclick={() => setShowTeamFilters(showTeamFilters ? false : true)} />
@@ -196,13 +190,8 @@ export const FixturePlanner = () => {
         { fdrDataToShow != null && fdrDataToShow.length > 0 && fdrDataToShow[0].team_name != "empty" && showTeamFilters &&
             <div className='filter-teams-container'>
                 <div className='filter-teams-list'>
-                { fdrDataToShow.map(team_name => 
-                    // <>
-                    //     <div className='filter-team'><input className='filter-check-box' onClick={(e) => toggleCheckbox(e)} type="checkbox" id={team_name.team_name} value={team_name.team_name} name="fpl-teams" checked={team_name.checked}></input>
-                    //     <label htmlFor={team_name.team_name}><p>{team_name.team_name}</p></label></div>
-                    // </>
+                { fdrDataToShow.map(team_name =>
                     <FilterButton fontColor={"1"} backgroundColor={"0"}  onclick={(e: any) => toggleCheckbox(e)} buttonText={team_name.team_name} checked={team_name.checked} />
-
                 )}
                 </div>
             </div>

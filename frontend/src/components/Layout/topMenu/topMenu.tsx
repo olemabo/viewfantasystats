@@ -10,11 +10,11 @@ import store from '../../../store/index';
 export const TopMenu = () => {
     const { height, width } = useWindowDimensions();
     const mobileMaxSize = 800;
-    const webpageTitle = "FPL Webpage";
     const fpl = "FPL";
     const eliteserien = "Eliteserien";
     const isMenuOpenFromRedux = useSelector((state: any) => state?.league_type);
     const [ leagueType, setLeagueType ] = useState("FPL");
+    const webpageTitle = leagueType;
 
     function updateSoccerLeague(soccer_league: string) {
         store.dispatch({type: "league_type", payload: soccer_league});
@@ -30,7 +30,7 @@ export const TopMenu = () => {
     
 
     return <>
-    <div className="top-menu">
+    <div className={"top-menu " + leagueType}>
         { width > mobileMaxSize && 
             <div className={"front-page-top-sky " + leagueType}>
                 <div className="top-navbar container">

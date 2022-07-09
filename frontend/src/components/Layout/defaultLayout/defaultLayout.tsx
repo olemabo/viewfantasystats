@@ -36,7 +36,7 @@ export const DefaultLayout = () => {
               <div className="content-container">
                   <div className="col-sm-10 max-width">
                         <Routes>
-                            <Route path="/" element={<p>Front Page</p>}></Route>
+                            <Route path="/" element={<FixturePlanner />}></Route>
                             <Route path="/fixture-planner/" element={<FixturePlanner />} />
                             <Route path="/fixture-planner/fdr-planner/" element={<FixturePlanner />} />
                             <Route path="/fixture-planner/periode-planner/" element={<PeriodePlanner />} />

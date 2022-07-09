@@ -322,8 +322,6 @@ export const EliteserienRotationPlanner = () => {
             <div style={{ backgroundColor: "#E8E8E8"}}><Spinner /></div>
         }
 
-        <br ></br>
-
         <div id="data-box" className="text-center mt-3">
             <div className="big-container">
                 <div className="container-rotation">
