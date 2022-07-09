@@ -249,7 +249,7 @@ th, td {
 /* table structure FDR */
 
 .container-fdr {
-    max-width: 900px;
+    max-width: 1200px;
     margin: 5px auto;
     display: flex;
 }

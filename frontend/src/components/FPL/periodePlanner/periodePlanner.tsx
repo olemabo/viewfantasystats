@@ -4,6 +4,7 @@ import "../fixturePlanner/fixturePlanner.scss";
 import axios from 'axios';
 import { FilterButton } from '../../Shared/FilterButton/FilterButton';
 import { Button } from '../../Shared/Button/Button';
+import { Spinner } from '../../Shared/Spinner/Spinner';
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -65,6 +66,7 @@ export const PeriodePlanner = () => {
     const [ gwStart, setGwStart ] = useState(min_gw);
     const [ gwEnd, setGwEnd ] = useState(max_gw);
     const [ showTeamFilters, setShowTeamFilters ] = useState(false);
+    const [ loading, setLoading ] = useState(false);
 
     useEffect(() => {
         // Get kickoff time data from the API
@@ -101,7 +103,7 @@ export const PeriodePlanner = () => {
     }
 
     function extractFDRData(body: any) {
-
+        setLoading(false);
         setKickOffTimesToShow(kickOffTimes.slice(gwStart - 1, gwEnd));
 
         // Get fdr data from api
@@ -133,6 +135,7 @@ export const PeriodePlanner = () => {
             setFdrDataAllTeamsNew(apiFDRList);
             setFdrDataToShow(apiFDRList);
             setTeamNames(tempTeamNames);
+            setLoading(true);
         })
     }
 
@@ -211,7 +214,11 @@ export const PeriodePlanner = () => {
             </div>
         }
 
-        { fdrDataToShow.length > 0 && fdrDataToShow[0].team_name != "-" && kickOffTimesToShow.length > 0 && kickOffTimesToShow[0].gameweek != 0 && (
+        { loading && 
+            <div style={{ backgroundColor: "#E8E8E8"}}><Spinner /></div>
+        }
+
+        { !loading && fdrDataToShow.length > 0 && fdrDataToShow[0].team_name != "-" && kickOffTimesToShow.length > 0 && kickOffTimesToShow[0].gameweek != 0 && (
             <div>
                 <div className="container-fdr">
                     <div id="fdr-table" className="container-rotation">

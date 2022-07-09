@@ -6,6 +6,7 @@ import store from '../../../store/index';
 import axios from 'axios';
 import { FilterButton } from '../../Shared/FilterButton/FilterButton';
 import { Button } from '../../Shared/Button/Button';
+import { Spinner } from '../../Shared/Spinner/Spinner';
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -67,6 +68,7 @@ export const EliteserienPeriodePlanner = () => {
     const [ maxGw, setMaxGw ] = useState(-1);
     const [ minNumFixtures, setMinNumFixtures ] = useState(1);
     const [ showTeamFilters, setShowTeamFilters ] = useState(false);
+    const [ loading, setLoading ] = useState(false);
 
     useEffect(() => {
         console.log(store.getState()?.league_type, store.getState()?.league_type != "Eliteserien");
@@ -104,6 +106,7 @@ export const EliteserienPeriodePlanner = () => {
 
     function extractFDRData(body: any) {
         // Get fdr data from api
+        setLoading(true);
         axios.post(fixture_planner_api_path, body).then((x: any) => {
             let apiFDRList: TeamData[] = [];
             let tempTeamNames: TeamName[] = [];
@@ -164,6 +167,7 @@ export const EliteserienPeriodePlanner = () => {
             setFdrDataAllTeamsNew(apiFDRList);
             setFdrDataToShow(apiFDRList);
             setTeamNames(tempTeamNames);
+            setLoading(false);
         })
     }
 
@@ -257,7 +261,13 @@ export const EliteserienPeriodePlanner = () => {
             </div>
         }
 
-        { fdrDataToShow.length > 0 && fdrDataToShow[0].team_name != "-" && kickOffTimesToShow.length > 0 && kickOffTimesToShow[0].gameweek != 0 && (
+        { loading && 
+            <div style={{ backgroundColor: "#E8E8E8"}}><Spinner /></div>
+        }
+
+        <br ></br>
+
+        { !loading && fdrDataToShow.length > 0 && fdrDataToShow[0].team_name != "-" && kickOffTimesToShow.length > 0 && kickOffTimesToShow[0].gameweek != 0 && (
             <div>
                 <div className="container-fdr">
                     <div id="fdr-table" className="container-rotation">
