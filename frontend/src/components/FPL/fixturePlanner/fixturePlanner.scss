@@ -1,12 +1,64 @@
 
 .content-container {
     min-height: 700px;
-
+    
+    
     .fixture-planner-container {
+        
+        form {
+        
+            input {
+                margin: 7px 5px 0 5px;
+                width: 40px;
+                font-size: 16px;
+                border-width: inherit;
+                line-height: 28px;
+                // padding: 2px 0;
+                padding-left: 4px
+            }
+
+            .submit {
+                width: fit-content;
+                cursor: pointer;
+                font-size: 15px;
+                padding: 1px 15px 2px 15px;
+                background-color: #D6CDCD;
+                border: none;
+            }
+        }
+        
+        .filter-teams-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px 0 10px 0;
+
+            .filter-teams-list {
+                max-width: 600px;
+                
+                .filter-check-box {
+                    margin-right: 3px;
+                    // position: relative;
+                    top: 1px;
+                    clip: rect(0px, 0px, 0px, 0px);
+                    position: absolute;
+                }
+
+                .filter-team {
+                    display: inline-block;
+                }
+                
+                p {
+                    display: inline;
+                    margin-right: 15px;
+                }
+            }
+        } 
 
         .container-fdr {
             max-width: 900px;
-            margin: 5px auto;
+            // margin: 5px auto;
+            margin: 5px 10px !important;
             display: flex;
 
             #fdr-table {
@@ -172,7 +224,7 @@ tbody td.color-0, tbody td.color-10, .color-0, .color-10, span.diff-introduction
     background-color: #EEE;
     border: 0px black solid;
     height: 1000px;
-    overflow-y: scroll;
+    overflow-y: auto !important;
     flex-wrap: wrap;
     justify-content: center;
 }

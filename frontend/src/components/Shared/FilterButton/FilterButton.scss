@@ -1,0 +1,39 @@
+
+.filter-team {
+    display: inline-block;
+    margin-bottom: 15px;
+    
+    input {
+        clip: rect(0px, 0px, 0px, 0px);
+        margin-right: 3px;
+        position: absolute;
+        top: 1px;
+    }
+
+    span {
+        background-color: white;
+        border-color: #acbbc6;
+        border-radius: 25px;
+        padding: 4px 20px 5px 20px;
+        cursor: pointer;
+        margin: 0 5px;
+        font-size: 14px;
+        font-weight: 500;
+
+        &.checked {
+            background-color: white;
+        }
+    }
+    
+    @media screen and (max-width: 400px) {
+        span {
+            padding: 5px 10px !important;
+        }   
+    }
+    
+    span:hover {
+        box-shadow: #1a1c1d 0px 0px 0px 1px inset;
+        background-color: rgb(234, 242, 247);
+    }
+}
+

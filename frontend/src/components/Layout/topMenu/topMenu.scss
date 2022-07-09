@@ -1,0 +1,171 @@
+
+.front-page-top-sky {
+    height: var(--size-of-top-bar);
+    position: relative;
+    
+    &.FPL {
+        background: var(--fpl-linear-gradient-second-color);  /* fallback for old browsers */
+        background: -webkit-linear-gradient(to right, var(--fpl-linear-gradient-first-color), var(--fpl-linear-gradient-second-color));  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to right, var(--fpl-linear-gradient-first-color), var(--fpl-linear-gradient-second-color)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    }
+
+    &.Eliteserien {
+        background: var(--eliteserien-linear-gradient-first-color);  /* fallback for old browsers */
+        background: -webkit-linear-gradient(to left, var(--eliteserien-linear-gradient-first-color), var(--eliteserien-linear-gradient-second-color));  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to left, var(--eliteserien-linear-gradient-first-color), var(--eliteserien-linear-gradient-second-color)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    }
+
+    .top-navbar {
+        display: flex;
+        justify-content: flex-end;
+        align-items: flex-end;
+        max-width: 1400px;
+        margin: 0 auto;
+        height: 50px;
+        padding: 0 40px;
+                
+        .top-navbar-container {
+            margin-right: 15px;
+            display: flex;
+
+
+            .circle-link {
+                display: block;
+                width: 30px;
+                height: 30px;
+                border-radius: 25px;
+                background-color: white; // default circle color
+                margin: 1px 10px;
+
+                &.fpl {
+                    background: var(--fpl-linear-gradient-second-color);  /* fallback for old browsers */
+                    background: -webkit-linear-gradient(to right, var(--fpl-linear-gradient-first-color), var(--fpl-linear-gradient-second-color));  /* Chrome 10-25, Safari 5.1-6 */
+                    background: linear-gradient(to right, var(--fpl-linear-gradient-first-color), var(--fpl-linear-gradient-second-color)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+                    position: relative;
+                }
+
+                &.eliteserien {
+                    background: var(--eliteserien-linear-gradient-first-color);  /* fallback for old browsers */
+                    background: -webkit-linear-gradient(to left, var(--eliteserien-linear-gradient-first-color), var(--eliteserien-linear-gradient-second-color));  /* Chrome 10-25, Safari 5.1-6 */
+                    background: linear-gradient(to left, var(--eliteserien-linear-gradient-first-color), var(--eliteserien-linear-gradient-second-color)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+                    position: relative;
+                }
+            }
+        }
+    }
+}
+
+.front-page-top-sky::after {
+    content: '';
+    position: absolute;
+    z-index: 1;
+    height: 200px;
+    bottom: -200px;
+    right: 0;
+    left: 0;
+    background: var(--background-color);
+    transform: skewY(var(--skew-Degrees));
+}
+
+
+
+.navbar {
+    height: 60%;
+
+    .nav-container {
+        display: flex;
+        align-items: center;
+        height: 100%;
+        max-width: 1400px;
+        margin: 0 auto; /* top/bottum left/right */
+        padding: 0 40px 0 40px;
+        justify-content: space-between;
+
+        .logo {
+            color: var(--title-color);
+            font-size: 30px;
+            margin-bottom: 30px;
+        }
+
+        nav {
+            margin-top: var(--height-the-gray-box-should-go-away-from-header);
+            
+            .dropdown {
+                position: relative;
+                display: inline-block;
+                
+                .dropbtn {
+                    background-color: transparent;
+                    cursor: pointer;
+                    // background-color: #31BA81;
+                    // background-color: #31BA81B2;
+                    // background-color: #379683;
+                    border-radius: 4px 4px 0px 0px;
+                    // border: 1px solid black;
+                    // padding: 12px 20px;
+                    padding: 15px 20px;
+
+                    border-top: 1px solid #030303;
+                    border-right: 1px solid #030303;
+                    border-left: 1px solid #030303;
+                    
+                    border-bottom: none;
+                    border: none;
+                    // text styling
+                    color: black;
+                    font-family: serif;
+                    font-size: 20px;
+                    font-style: normal;
+                    font-weight: 400;
+                    letter-spacing: 0em;
+                    margin-right: 5px;                }
+            }
+
+            .dropdown-content {
+                display: none;
+                position: absolute;
+                background-color: #94d8bc;
+                min-width: 175px;
+                box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+                z-index: 11;
+              }
+              
+              .dropdown-content a {
+                color: black;
+                font-size: 16px;
+                padding: 13px 20px;
+                text-decoration: none;
+                display: block;
+                z-index: 12;
+              }
+              
+              .dropdown-content a:hover {text-decoration: underline; text-underline-offset: 2px;}
+              
+              .dropdown:hover .dropdown-content {display: block;}
+              
+              .dropdown:hover .dropbtn {background-color: #94d8bc;}
+        }
+    }
+}
+
+
+.Eliteserien {
+
+    .dropbtn {
+        color: black !important;
+        // background-color: #5fb5f2 !important;               
+    }
+
+    .dropdown-content {
+        color: black !important;
+        background-color: #5fb5f2 !important;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    }
+        
+    .dropdown-content a {
+        color: black !important;
+    }
+    
+    // .dropdown:hover .dropbtn {background-color: #5fb5f2 !important;}
+    .dropdown:hover .dropbtn {background-color: #a4d2f3 !important;}
+}

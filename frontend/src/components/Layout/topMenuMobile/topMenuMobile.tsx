@@ -5,7 +5,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import HomeIcon from '@material-ui/icons/Home';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import SportsSoccerIcon from '@material-ui/icons/SportsSoccer';
-import store from "../../store/index";
+import store from '../../../store/index';
 
 interface TopMenyProps {
     title: string;
@@ -19,7 +19,7 @@ export const TopMenuMobile: React.FunctionComponent<TopMenyProps> = (props) => {
 
     function toggleMenu() {
         setMenuOpen(wasOpened => !wasOpened);
-        store.dispatch({type: "isMenuOpen", payload: {isMenuOpen: !MenuOpen}})
+        store.dispatch({type: "isMenuOpen", payload: !MenuOpen })
     }
 
     console.log(store.getState());

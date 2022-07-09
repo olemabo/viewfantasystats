@@ -34,15 +34,14 @@ urlpatterns = [
 urlpatterns += [
     #path('home/', include('fixture_planner.urls')),
 ]
-
 urlpatterns += [
+    path('fixture-planner-eliteserien/', include('fixture_planner_eliteserien.urls')),
+    path('fixture-planner/', include("fixture_planner.urls")),
+    path('', include("frontend.urls")),
     #path('', RedirectView.as_view(url='fixture-planner/', permanent=True)),
     #path('fixture-planner/', include('fixture_planner.urls')),
-    #path('fixture-planner-eliteserien/', include('fixture_planner_eliteserien.urls')),
     #path('statistics/', include('player_statistics.urls')),
-    path('', include("frontend.urls")),
     #path('', include("react.urls")),
-    path('fixture-planner/', include("fixture_planner.urls"))
 ]
 
 

@@ -1,0 +1,99 @@
+
+.checkbox-component {
+    display: inline-block;
+    margin-bottom: 15px;
+    
+    input {
+        margin-right: 3px;
+        top: 1px;
+        color: red;
+        
+    }
+    
+    .solution-box-checked:before {
+        background-color:red;
+    }
+
+    .hei {
+        color: red;
+    }
+
+
+    span {
+        background-color: white;
+        border-color: #acbbc6;
+        border-radius: 25px;
+        padding: 4px 20px 5px 20px;
+        cursor: pointer;
+        margin: 0 5px;
+        font-size: 14px;
+        font-weight: 500;
+
+        &.checked {
+            background-color: white;
+        }
+    }
+    
+    @media screen and (max-width: 400px) {
+        span {
+            padding: 5px 10px !important;
+        }   
+    }
+    
+    span:hover {
+        box-shadow: #1a1c1d 0px 0px 0px 1px inset;
+        background-color: rgb(234, 242, 247);
+    }
+    input[type=checkbox] {
+        position: relative;
+          cursor: pointer;
+    }
+    
+    input[type=checkbox]:before {
+        content: "";
+        display: block;
+        position: absolute;
+        width: 14px;
+        height: 14px;
+        top: 0;
+        left: 0;
+        background-color:none;
+    }
+    input[type=checkbox]:checked:before {
+        content: "";
+        display: block;
+        position: absolute;
+        width: 14px;
+        height: 14px;
+        top: 0;
+        left: 0;
+    }
+    
+    input.solution-box[type=checkbox]:checked:before {
+        background-color:red;
+    }
+    input[type=checkbox]:checked:before {
+        background-color:#1E80EF;
+    }
+    
+    
+    input[type=checkbox]:checked:after {
+        content: "";
+        display: block;
+        width: 4px;
+        height: 8px;
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        transform: rotate(45deg);
+        position: absolute;
+        top: 2px;
+        left: 5px;
+    }
+}
+
+::before,
+*::after {
+  box-sizing: border-box; // 1
+}

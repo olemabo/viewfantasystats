@@ -1,10 +1,15 @@
+from math import comb
 from fixture_planner.backend.fixture_planner_best_algorithms import find_best_fixture_with_min_length_each_team
+from fixture_planner.backend.fixture_rotation_algorithms_new import find_best_rotation_combos_new
+from fixture_planner.backend.fixture_rotation_algorithms import find_best_rotation_combos_json
 from fixture_planner.backend.fixture_rotation_algorithms import find_best_rotation_combos
 import fixture_planner.backend.create_data_objects as create_data_objects
 from constants import total_number_of_gameweeks, initial_extra_gameweeks
 import fixture_planner.backend.read_fixture_planner_data as read_data
 from fixture_planner.backend.utility_functions import calc_score
 from fixture_planner.models import AddPlTeamsToDB, KickOffTime
+from fixture_planner_eliteserien.backend.read_eliteserien_data import readEliteserienExcelFromDagFinnToDBFormat
+from fixture_planner_eliteserien.backend.read_eliteserien_data import readEliteserienExcelToDBFormat
 from utils.models.WhichTeamToCheck import WhichTeamToCheck
 from utils.models.FDR_team import FixtureDifficultyInfo
 from utils.models.KickOffTimeInfo import KickOffTimeInfo
@@ -57,11 +62,8 @@ class PostFDRView(APIView):
 
     def get(self, request, format=None):
         kick_off_time_db = KickOffTime.objects.filter(gameweek__range=(0, 38))
-        print(len(kick_off_time_db), "kic")
         for i in range(len(kick_off_time_db)):
-            current_gw = i + 1
             dates = kick_off_time_db[i].kickoff_time.split("T")[0].split("-")
-            print(dates)
         return JsonResponse(kick_off_time_db[0], safe=False)
 
     def post(self, request, format=None):
@@ -70,7 +72,6 @@ class PostFDRView(APIView):
             end_gw = int(request.data.get("end_gw"))
             min_num_fixtures = int(request.data.get("min_num_fixtures"))
             combinations = str(request.data.get("combinations"))
-            print(start_gw, end_gw, min_num_fixtures, combinations)
 
             fdr_fixture_data = []
 
@@ -78,6 +79,7 @@ class PostFDRView(APIView):
             gw_numbers = [gw for gw in range(start_gw, end_gw + 1)]
 
             fixture_list_db = AddPlTeamsToDB.objects.all()
+
             team_dict = {}
             number_of_teams = len(fixture_list_db)
 
@@ -85,8 +87,7 @@ class PostFDRView(APIView):
 
             for i in range(number_of_teams):
                 team_dict[fixture_list[i].team_name] = WhichTeamToCheck(fixture_list[i].team_name, 'checked')
-            fixture_list_db = AddPlTeamsToDB.objects.all()
-
+            
             team_name_list = []
             fixture_list = []
 
@@ -97,6 +98,7 @@ class PostFDRView(APIView):
                     fixture_list.append(fixture_list_db[i])
 
             teams = len(fixture_list)
+
             if combinations == 'FDR':
                 fdr_fixture_data = []
                 FDR_scores = []
@@ -124,15 +126,15 @@ class PostFDRView(APIView):
 
                     for k in range(len(temp_list2)):
                         if not temp_list2[k]:
-                            temp_list2[k] = [FixtureDifficultyInfo(opponent_team_name="-",
+                            temp_list2[k] = [[FixtureDifficultyInfo(opponent_team_name="-",
                                                                    this_difficulty_score=0,
                                                                    H_A=" ",
                                                                    team_name=team_i.team_name,
                                                                    total_fdr_score=0,
-                                                                   Use_Not_Use=0).toJson()]
+                                                                   Use_Not_Use=0).toJson()]]
 
                     fdr_fixture_data.append(temp_list2)
-
+            
             if abs(min_num_fixtures) > (end_gw - start_gw):
                 min_num_fixtures = abs(end_gw - start_gw) + 1
                 if min_num_fixtures == 0:
@@ -144,10 +146,67 @@ class PostFDRView(APIView):
                                                                                GW_start=start_gw,
                                                                                GW_end=end_gw,
                                                                                min_length=min_num_fixtures)
+           
+            if combinations == 'Rotation':
+                teams_to_check = int(request.data.get("teams_to_check"))
+                teams_to_play = int(request.data.get("teams_to_play"))
+                teams_in_solution = request.data.get("teams_in_solution")
+                fpl_teams = request.data.get("fpl_teams")
+                # print("teams_to_check: ", teams_to_check)
+                # print("teams_to_play: ", teams_to_play)
+                # print("teams_in_solution: ", teams_in_solution)
+                # print("fpl_teams: ", fpl_teams)
 
+                fdr_fixture_data = []
+
+                rotation_data = []
+                
+                remove_these_teams = []
+                for team_sol in teams_in_solution:
+                    if team_sol not in fpl_teams:
+                        remove_these_teams.append(team_sol)
+                for remove_team in remove_these_teams:
+                    teams_in_solution.remove(remove_team)
+                for i in team_name_list:
+                    if i.team_name in teams_in_solution:
+                        i.checked_must_be_in_solution = 'checked'
+                # print(" \n teams_in_solution after: ", teams_in_solution)
+                # print("fpl_teams after: ", fpl_teams, fixture_list_db)
+                # print("fixture_list_db: ", fixture_list_db)
+                # rotation_data = find_best_rotation_combos(fixture_list_db, start_gw, end_gw,
+                #                                             teams_to_check=teams_to_check, 
+                #                                             teams_to_play=teams_to_play,
+                #                                             team_names=fpl_teams, 
+                #                                             teams_in_solution=teams_in_solution,
+                #                                             teams_not_in_solution=[],
+                #                                             top_teams_adjustment=False, 
+                #                                             one_double_up=False,
+                #                                             home_away_adjustment=True, 
+                #                                             include_extra_good_games=False,
+                #                                             num_to_print=0)
+                rotation_data = find_best_rotation_combos_new(fixture_list_db, start_gw, end_gw,
+                                                            teams_to_check=teams_to_check, 
+                                                            teams_to_play=teams_to_play,
+                                                            team_names=fpl_teams, 
+                                                            teams_in_solution=teams_in_solution,
+                                                            teams_not_in_solution=[],
+                                                            top_teams_adjustment=False, 
+                                                            one_double_up=False,
+                                                            home_away_adjustment=True, 
+                                                            include_extra_good_games=False,
+                                                            )
+
+                if rotation_data == -1:
+                    rotation_data = [['Wrong input', [], [], 0, 0, [[]]]]
+                else:
+                    rotation_data = rotation_data[:(min(len(rotation_data), 50))]
+                
+                fdr_fixture_data = rotation_data 
+
+            print(fdr_fixture_data[0], "hhe")
             return JsonResponse(fdr_fixture_data, safe=False)
 
-            # return HttpResponse(fdr_fixture_data, content_type="application/json", status=status.HTTP_200_OK)
+            #return HttpResponse(fdr_fixture_data, content_type="application/json", status=status.HTTP_200_OK)
 
         except:
             return Response({'Bad Request': 'Something went wrong'}, status=status.HTTP_400_BAD_REQUEST)
@@ -334,7 +393,7 @@ def get_rotation_data(request):
         if request.method == 'POST':
             my_json = request.body.decode('utf8').replace("'", '"')
             data = json.loads(my_json)
-
+    print("\n \n DATA: ", request.is_ajax(), " \n \n")
     start_gw = data['start_gw']
     end_gw = data['end_gw']
     fpl_teams = data['fpl_teams']

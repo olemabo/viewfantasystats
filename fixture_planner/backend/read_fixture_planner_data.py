@@ -19,7 +19,7 @@ def get_static_and_fixture_data(api_local="local"):
 
 
 def return_kick_off_time():
-    static = get_static_json_data("api")
+    static = get_static_json_data("local")
     number_of_gws = len(static['events'])
     kick_off_time_info = []
     for gw in range(number_of_gws):

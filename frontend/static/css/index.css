@@ -4,14 +4,16 @@
     --primary-color: #076585;
     --background-color: #FFFFFF;
     --text-color: #333;
-    --fpl-linear-gradient-first-color: #0f3443;
-    --fpl-linear-gradient-second-color: #34e89e;
+    /* --fpl-linear-gradient-first-color: #0f3443;
+    --fpl-linear-gradient-second-color: #34e89e; */
+    --fpl-linear-gradient-first-color: #0F3443;
+    --fpl-linear-gradient-second-color: #8decc4;
     --eliteserien-linear-gradient-first-color: #41D5F9;
     --eliteserien-linear-gradient-second-color: #2c3e50;
-    --height-the-gray-box-should-go-into-header: -25px;
-    --height-the-gray-box-should-go-away-from-header: 25px; /* Give this the same value as the var above only oppsotie sign */
+    --height-the-gray-box-should-go-into-header: -10px;
+    --height-the-gray-box-should-go-away-from-header: 10px; /* Give this the same value as the var above only opposite sign */
     --size-of-scewY: 30px;
-    --size-of-top-bar: 160px;
+    --size-of-top-bar: 130px;
     --size-of-top-bar-mobile: 60px;
     --skew-Degrees: 0deg;
     --link-color: black;
@@ -47,7 +49,7 @@ a {
 h1, h2 {
     line-height: 1.2;
     font-weight: 300;
-    margin: 10px 0;
+    margin: 30px 0 10px 0;
 }
 
 p {
@@ -61,13 +63,6 @@ p {
 
 a:hover {
     text-decoration: none;
-}
-
-.flex {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
 }
 
 
@@ -96,7 +91,7 @@ a:hover {
     z-index: 1;
     background: var(--content-color);
     width: var(--content-width);
-    align-items: center;
+    /* align-items: center; */
     border-radius: var(--border-radius-content);
     top: var(--height-the-gray-box-should-go-into-header);
     position: relative;

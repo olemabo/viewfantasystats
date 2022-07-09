@@ -4,6 +4,8 @@ from constants import total_number_of_eliteserien_teams
 from utils.models.FDR_team import FixtureDifficultyInfo
 from itertools import combinations
 import numpy as np
+from utils.models.RotationPlannerTeamInfo import RotationPlannerTeamInfo
+import json
 
 
 def find_best_rotation_combosEliteserien(data, GW_start, GW_end, teams_to_check=5, teams_to_play=3, team_names=[-1],
@@ -38,22 +40,12 @@ def find_best_rotation_combosEliteserien(data, GW_start, GW_end, teams_to_check=
             print("Teams to check must be >= 1")
             return -1
 
-    # create fixture dataframe. Each element: ['ARS', 'H', 3]
-    # df = create_data_frame()
-
-    # adjust the fixture difficulty
-    #if home_away_adjustment > 0:
-        #df = adjust_df_for_home_away(df, home_advantage=home_away_adjustment)
-
-    #if top_teams_adjustment:
-        #df = adjust_df_for_difficult_teams(df)
-
     dict_with_team_name_to_team_ids = dict()
     for team in data:
         dict_with_team_name_to_team_ids[str(team.team_name)] = team.team_id
 
     team_ids = []
-
+    print(team_names, teams_in_solution)
     for team_name in team_names:
         if team_name == -1:
             number_of_teams = total_number_of_eliteserien_teams # originaly df.shape[0]
@@ -63,9 +55,10 @@ def find_best_rotation_combosEliteserien(data, GW_start, GW_end, teams_to_check=
         team_ids.append(team_id)
 
     number_of_GW = GW_end - GW_start + 1
-
+    
     dict_with_team_ids_to_team_name = dict()
     for team in data:
+        # print(team.team_id, data)
         dict_with_team_ids_to_team_name[team.team_id] = team.team_name
 
     # ids for the teams that must be in the solution
@@ -113,7 +106,6 @@ def find_best_rotation_combosEliteserien(data, GW_start, GW_end, teams_to_check=
             GW_scores_new = []
             for team_idx, team_id in enumerate(team_combos):
                 team_name = dict_with_team_ids_to_team_name[team_id]
-
                 temp_team_data_dict = create_FDR_dict(data[int(team_id - 1)], 10)
                 data_gw = temp_team_data_dict[GW + GW_start]
                 gws_this_round = len(data_gw)
@@ -126,28 +118,33 @@ def find_best_rotation_combosEliteserien(data, GW_start, GW_end, teams_to_check=
                                                                      opponent_team_name=data_gw[i][0].upper(),
                                                                      this_difficulty_score=data_gw[i][2],
                                                                      H_A=data_gw[i][1],
-                                                                     Use_Not_Use=0))
+                                                                     Use_Not_Use=0).toJson())
                 else:
                     temp_score += data_gw[0][2]
                     team_object_new.append(FixtureDifficultyInfo(team_name=team_name,
                                                                  opponent_team_name=data_gw[0][0].upper(),
                                                                  this_difficulty_score=data_gw[0][2],
                                                                  H_A=data_gw[0][1],
-                                                                 Use_Not_Use=0))
+                                                                 Use_Not_Use=0).toJson())
                 temp_score = temp_score / gws_this_round ** 2
                 GW_scores_new.append(temp_score)
                 two_D_list_new[team_idx][GW_idx] = team_object_new
                 H_A = 1
                 # fix this for later feature regarding h_a advantage
                 GW_home_scores_new.append([temp_score, H_A])
+            
+            
 
             Use_Not_Use_idx = np.array(GW_scores_new).argsort()[:teams_to_play]
             for k in Use_Not_Use_idx:
-                two_D_list_new[k][GW_idx][0].Use_Not_Use = 1
+                load_json_temp = json.loads(two_D_list_new[k][GW_idx][0])
+                load_json_temp["Use_Not_Use"] = 1
+                two_D_list_new[k][GW_idx][0] = json.dumps(load_json_temp)
+                # two_D_list_new[k][GW_idx][0].Use_Not_Use = 1
 
             sorted_scores_new = np.array(sorted(GW_home_scores_new, key=lambda l: l[0], reverse=False))
             team_total_score_new += np.sum(sorted_scores_new[:teams_to_play, 0])
-
+            
             # if there are more good games than
             if include_extra_good_games:
                 if teams_to_play < len(team_combos):
@@ -158,17 +155,26 @@ def find_best_rotation_combosEliteserien(data, GW_start, GW_end, teams_to_check=
                             extra_fixtures += 1
 
         combo_names = []
+
         for team_id in team_combos:
             combo_names.append(dict_with_team_ids_to_team_name[team_id])
-
+        
+        
         combos_with_score_new.append(
             [round(team_total_score_new / number_of_GW / teams_to_play, 4), team_combos, combo_names, extra_fixtures,
              home_games, two_D_list_new])
 
+
     # sort all the combos by the team_total_score. Best fixture will be first element and so on.
     insertion_sort(combos_with_score_new, len(combos_with_score_new), element_to_sort=0, min_max="min")
+    
+    combos_with_score_json = []
 
-    return combos_with_score_new
+    for team in combos_with_score_new:
+        team1 = [ str(i) for i in team[1]]
+        combos_with_score_json.append(RotationPlannerTeamInfo(team[0], team1, team[2], team[3], team[4], team[5]).toJson())
+
+    return combos_with_score_json
 
 
 def compute_best_fixtures_one_team(df, gw_start, gw_end, team_idx, min_length):
