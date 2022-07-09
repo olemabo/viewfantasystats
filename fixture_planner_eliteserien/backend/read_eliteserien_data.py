@@ -47,14 +47,14 @@ def readEliteserienExcelToDBFormat(path=r'stored_data/eliteserien/Eliteserien_fi
     return objectList, dates
 
 
-def readEliteserienExcelFromDagFinnToDBFormat(path=r'stored_data/eliteserien/R6-R15.xlsx'):
+def readEliteserienExcelFromDagFinnToDBFormat(path=r'stored_data/eliteserien/R6-R20.xlsx'):
     max_teams = 18
     max_games = 30
     wb = load_workbook(path, data_only=True)
     sheet_names = wb.sheetnames
     ws_fdr = wb[sheet_names[0]]
     sheet_owner = ws_fdr['A1']
-    #print("Owner: ", sheet_owner.value,  ws_fdr)
+    # print("Owner: ", sheet_owner.value,  ws_fdr)
 
     color_to_fdr_dict = get_fdr_colors_to_difficulty_rating_dict(ws_fdr)
     #print(color_to_fdr_dict)
