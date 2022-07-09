@@ -82,17 +82,15 @@ class GetAllEliteserienFDRData(APIView):
             gw_numbers = [gw for gw in range(start_gw, end_gw + 1)]
             
             # for i in fixture_list_db:
-                # print(i.team_id, i.team_name)
+            #    print(i.team_id, i.team_name)
             
             if combinations == 'FDR':
                 fdr_fixture_data = []
                 FDR_scores = []
                 for idx, i in enumerate(fixture_list):
-                    #print(idx, i, "idx, i")
                     fdr_dict = create_Elitserien_FDR_dict(i)
-                    #print(fdr_dict, "fdr_dict")
                     sum = calc_score(fdr_dict, start_gw, end_gw)
-                    #print(sum, "sum")
+                    # print(sum, "sum")
                     FDR_scores.append([i, sum])
                 FDR_scores = sorted(FDR_scores, key=lambda x: x[1], reverse=False)
 
@@ -130,7 +128,6 @@ class GetAllEliteserienFDRData(APIView):
                     min_num_fixtures = 1
                     end_gw = start_gw + 1
 
-            print(combinations)
 
             if combinations == 'FDR-best':
                 fdr_fixture_data = find_best_fixture_with_min_length_each_team_eliteserien(fixture_list,
@@ -145,13 +142,11 @@ class GetAllEliteserienFDRData(APIView):
                 fpl_teams = request.data.get("fpl_teams")
                 # print("Rotation", teams_to_check, teams_to_play, teams_in_solution)
                 fdr_fixture_data = []
-                print(fpl_teams, teams_in_solution, "here")
 
                 rotation_data = []
                 
                 remove_these_teams = []
                 for team_sol in teams_in_solution:
-                    print(team_sol, fpl_teams)
                     if team_sol not in fpl_teams:
                         remove_these_teams.append(team_sol)
                 for remove_team in remove_these_teams:
@@ -161,7 +156,6 @@ class GetAllEliteserienFDRData(APIView):
                         i.checked_must_be_in_solution = 'checked'
                 # for i in fixture_list_db:
                     # print(i.team_id)
-                print(fpl_teams, teams_in_solution, "here")
 
                 rotation_data = alg.find_best_rotation_combosEliteserien(fixture_list_db, start_gw, end_gw,
                                                             teams_to_check=teams_to_check, teams_to_play=teams_to_play,
