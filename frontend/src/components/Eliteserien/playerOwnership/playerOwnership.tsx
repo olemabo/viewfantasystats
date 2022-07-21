@@ -4,6 +4,7 @@ import store from '../../../store/index';
 import Pagination from 'rc-pagination';
 import './playerOwnership.scss';
 import axios from 'axios';
+import { Spinner } from '../../Shared/Spinner/Spinner';
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -43,6 +44,7 @@ export const PlayerOwnership = () => {
     const [ chipData, setChipData ] = useState([-1, -1, -1, -1, -1, -1, -1]);
     const [ chipDataAll, setChipDataAll ] = useState(emptyChipModelAll);
     const [ query, setQuery ] = useState("");
+    const [ isLoading, setIsLoading ] = useState(false);
 
     function getOwnershipDataForGW(data: any, gw: number) {
         if (gw == 1) return data.gw_1;
@@ -127,7 +129,12 @@ export const PlayerOwnership = () => {
         })
         setNumberOfHits(tempOwnershipModel.length);
         setOwnershipData(tempOwnershipModel.sort(compare));
-        setOwnershipDataToShow(tempOwnershipModel.sort(compare));
+        if (sorting_keyword != "All" || query != "") {
+            filterOnPositionAndTeam(sorting_keyword, query, tempOwnershipModel.sort(compare));
+        }
+        else {
+            setOwnershipDataToShow(tempOwnershipModel.sort(compare));
+        }
     }
 
     function updateOwnershipTopXData(top_x_players: number) {
@@ -135,6 +142,7 @@ export const PlayerOwnership = () => {
             top_x_players: top_x_players,
             current_gw: currentGw,
         };
+        setIsLoading(true);
         axios.post(player_ownership_api_path, body).then(x => {  
             let data = JSON.parse(x?.data);
             data?.chip_data?.map((x: ChipModel) => {
@@ -145,9 +153,7 @@ export const PlayerOwnership = () => {
             setChipDataAll(data?.chip_data);
             setAllOwnershipData(data.ownershipdata);
             initOwnershipData(data, data.newest_updated_gw);
-            if (sorting_keyword != "All" || query != "") {
-                filterOnPositionAndTeam(sorting_keyword, query);
-            }
+            setIsLoading(false);
         })
         setCurrentSorted("EO");
         setTopXPlayers(top_x_players);
@@ -186,8 +192,9 @@ export const PlayerOwnership = () => {
         return 0;
     }
 
-    function filterOnPositionAndTeam(keyword: string, query: string) {
-        let temp = ownershipData;
+    function filterOnPositionAndTeam(keyword: string, query: string, data?: PlayerOwnershipModel[]) {
+        let temp = data != null ? data : ownershipData;
+        
         let queryFilteredList: PlayerOwnershipModel[] = [];
         
         temp.map(x => {
@@ -278,6 +285,8 @@ export const PlayerOwnership = () => {
 
     const [ currentSorted, setCurrentSorted ] = useState("EO");
 
+    console.log(ownershipDataToShow[0], ownershipData[0], topXPlayers, sorting_keyword)
+
     return <>
      <div className='player-ownership-container' id="rotation-planner-container">
          <h1>Player Ownership</h1>
@@ -334,7 +343,7 @@ export const PlayerOwnership = () => {
 
         </form>
 
-        { ownershipDataToShow?.length > 0 && 
+        { !isLoading && ownershipDataToShow?.length > 0 && 
         <div className="container-player-stats">
             <table>
             <thead>
@@ -365,12 +374,16 @@ export const PlayerOwnership = () => {
         
         
         </div>}
-        { ownershipDataToShow.length > 0 && 
+        { !isLoading && ownershipDataToShow.length > 0 && 
             <Pagination 
                 className="ant-pagination" 
                 onChange={(number) => paginationUpdate(number)}
                 defaultCurrent={1}   
                 total={numberOfHits} />     
+        }
+
+        { isLoading && 
+            <Spinner />
         }
 
         { chipData?.length > 5 && chipData[0] != -1 && 
