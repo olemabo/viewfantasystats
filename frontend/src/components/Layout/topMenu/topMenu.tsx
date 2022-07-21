@@ -41,7 +41,7 @@ export const TopMenu = () => {
                 </div>
                 <div className="navbar">
                     <div className="nav-container">
-                        <h1 className="logo">{leagueType} Webpage</h1>
+                        <h1 className="logo">{leagueType}</h1>
                         { leagueType == fpl && 
                             <nav>
                                 {/* <div className="dropdown">
@@ -65,31 +65,20 @@ export const TopMenu = () => {
                         { leagueType == eliteserien && 
                             <nav>
                                 <div className="dropdown">
-                                    <a className="dropbtn" href="../../../fixture-planner-eliteserien/">FDR Planner</a>
-                                    {/* <button className="dropbtn">Fixture Planning</button>
+                                    <button className="dropbtn">Statistics</button>
                                     <div className="dropdown-content">
-                                        <a href="../../../fixture-planner-eliteserien/">FDR Planner</a>
-                                        <a href="../../../fixture-planner-eliteserien/rotation-planner/">Roation Planner</a>
-                                        <a href="../../../fixture-planner-eliteserien/periode-planner/">Period Planner</a>
-                                    </div> */}
+                                        <a className="dropbtn" href="../../../statistics/player-ownership/">Player Ownership</a>
+                                        {/* <a className="dropbtn" href="../../../fixture-planner-eliteserien/rotation-planner/">Roation Planner</a> */}
+                                        {/* <a className="dropbtn" href="../../../fixture-planner-eliteserien/periode-planner/">Period Planner</a> */}
+                                    </div>
                                 </div>
                                 <div className="dropdown">
-                                    {/* <button className="dropbtn">Fixture Planning</button>
+                                    <button className="dropbtn">Fixture Planning</button>
                                     <div className="dropdown-content">
-                                        <a href="../../../fixture-planner-eliteserien/">FDR Planner</a>
-                                        <a href="../../../fixture-planner-eliteserien/rotation-planner/">Roation Planner</a>
-                                        <a href="../../../fixture-planner-eliteserien/periode-planner/">Period Planner</a>
-                                    </div> */}
-                                    <a className="dropbtn" href="../../../fixture-planner-eliteserien/rotation-planner/">Roation Planner</a>
-                                </div>
-                                <div className="dropdown">
-                                    {/* <button className="dropbtn">Fixture Planning</button>
-                                    <div className="dropdown-content">
-                                        <a href="../../../fixture-planner-eliteserien/">FDR Planner</a>
-                                        <a href="../../../fixture-planner-eliteserien/rotation-planner/">Roation Planner</a>
-                                        <a href="../../../fixture-planner-eliteserien/periode-planner/">Period Planner</a>
-                                    </div> */}
-                                    <a className="dropbtn" href="../../../fixture-planner-eliteserien/periode-planner/">Period Planner</a>
+                                        <a className="dropbtn" href="../../../fixture-planner-eliteserien/">FDR Planner</a>
+                                        <a className="dropbtn" href="../../../fixture-planner-eliteserien/rotation-planner/">Roation Planner</a>
+                                        <a className="dropbtn" href="../../../fixture-planner-eliteserien/periode-planner/">Period Planner</a>
+                                    </div>
                                 </div>
                             </nav> 
                         }

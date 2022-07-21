@@ -1,23 +1,40 @@
 """Class used to read data from 'fantasy.premierleague.com', and return or save it """
-import json
 import requests
+import json
 import os
 
 
 # https://medium.com/@bram.vanherle1/fantasy-premier-league-api-authentication-guide-2f7aeb2382e4
+# eliteserien: https://fantasy.tv2.no
+# fpl: https://fantasy.premierleague.com
 
 class DataFetch:
-    def __init__(self) -> None:
-        self.web_page = 'https://fantasy.premierleague.com/api/bootstrap-static/'
-        self.web_page_fixtures = 'https://fantasy.premierleague.com/api/fixtures/'
-        self.web_page_gameweek = 'https://fantasy.premierleague.com/api/event/X/live/'
-        self.web_page_individual_player = 'https://fantasy.premierleague.com/api/element-summary/X/'
-        self.web_page_league = 'https://fantasy.premierleague.com/api/leagues-classic/X/standings/'
-        self.web_page_member_rank = 'https://fantasy.premierleague.com/api/entry/X/history/'
-        self.web_page_invidual_team = 'https://fantasy.premierleague.com/api/entry/X/event/Y/picks/'
-        self.web_page_cup = 'https://fantasy.premierleague.com/api/entry/X/cup/'
-        self.web_page_fpl_player = "https://fantasy.premierleague.com/api/entry/X/"
-        self.web_page_latest_transfers = "https://fantasy.premierleague.com/api/entry/X/transfers/"
+    # def __init__(self) -> None:
+    #     self.web_page = 'https://fantasy.premierleague.com/api/bootstrap-static/'
+    #     self.web_page_fixtures = 'https://fantasy.premierleague.com/api/fixtures/'
+    #     self.web_page_gameweek = 'https://fantasy.premierleague.com/api/event/X/live/'
+    #     self.web_page_individual_player = 'https://fantasy.premierleague.com/api/element-summary/X/'
+    #     self.web_page_league = 'https://fantasy.premierleague.com/api/leagues-classic/X/standings/'
+    #     self.web_page_member_rank = 'https://fantasy.premierleague.com/api/entry/X/history/'
+    #     self.web_page_invidual_team = 'https://fantasy.premierleague.com/api/entry/X/event/Y/picks/'
+    #     self.web_page_cup = 'https://fantasy.premierleague.com/api/entry/X/cup/'
+    #     self.web_page_fpl_player = "https://fantasy.premierleague.com/api/entry/X/"
+    #     self.web_page_latest_transfers = "https://fantasy.premierleague.com/api/entry/X/transfers/"
+    #     self.local_path = 'fpl.json'
+    #     self.global_path = ''
+    #     self.investigate_path()
+    
+    def __init__(self, league_url='https://fantasy.premierleague.com') -> None:
+        self.web_page = league_url + '/api/bootstrap-static/'
+        self.web_page_fixtures = league_url + '/api/fixtures/'
+        self.web_page_gameweek = league_url + '/api/event/X/live/'
+        self.web_page_individual_player = league_url + '/api/element-summary/X/'
+        self.web_page_league = league_url + '/api/leagues-classic/X/standings/'
+        self.web_page_member_rank = league_url + '/api/entry/X/history/'
+        self.web_page_invidual_team = league_url + '/api/entry/X/event/Y/picks/'
+        self.web_page_cup = league_url + '/api/entry/X/cup/'
+        self.web_page_fpl_player = league_url + '/api/entry/X/'
+        self.web_page_latest_transfers = league_url + '/api/entry/X/transfers/'
         self.local_path = 'fpl.json'
         self.global_path = ''
         self.investigate_path()

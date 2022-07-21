@@ -40,7 +40,7 @@ urlpatterns += [
     path('', include("frontend.urls")),
     #path('', RedirectView.as_view(url='fixture-planner/', permanent=True)),
     #path('fixture-planner/', include('fixture_planner.urls')),
-    #path('statistics/', include('player_statistics.urls')),
+    path('statistics/', include('player_statistics.urls')),
     #path('', include("react.urls")),
 ]
 

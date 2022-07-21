@@ -11,4 +11,5 @@ urlpatterns = [
     path('fixture-planner-eliteserien/rotation-planner/', index),
     path('fixture-planner-eliteserien/fdr-planner/', index),
     path('fixture-planner-eliteserien/periode-planner/', index),
+    path('statistics/player-ownership/', index),
 ]

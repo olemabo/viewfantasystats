@@ -10,6 +10,7 @@ import PeriodePlanner from "../../FPL/periodePlanner/periodePlanner";
 import EliteserienFixturePlanner from "../../Eliteserien/eliteserienFixturePlanner/eliteserienFixturePlanner";
 import EliteserienRotationPlanner from "../../Eliteserien/rotationPlanner/eliteserienRotationPlanner";
 import EliteserienPeriodePlanner from "../../Eliteserien/periodePlanner/eliteserienPeriodePlanner";
+import PlayerOwnership from "../../Eliteserien/playerOwnership/playerOwnership";
 
 export const DefaultLayout = () => {
     const [ isAnyMenuOpen, setIsMenuOpen ] = useState(false);
@@ -45,6 +46,7 @@ export const DefaultLayout = () => {
                             <Route path="/fixture-planner-eliteserien/fdr-planner/" element={<EliteserienFixturePlanner />} />
                             <Route path="/fixture-planner-eliteserien/rotation-planner/" element={<EliteserienRotationPlanner />} />
                             <Route path="/fixture-planner-eliteserien/periode-planner/" element={<EliteserienPeriodePlanner />} />
+                            <Route path="/statistics/player-ownership/" element={<PlayerOwnership />} />
                         </Routes>
                   </div>
               </div>

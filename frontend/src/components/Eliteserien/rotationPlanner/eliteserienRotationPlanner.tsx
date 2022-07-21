@@ -120,7 +120,6 @@ export const EliteserienRotationPlanner = () => {
         axios.post(fixture_planner_api_path, body).then(x => {
             let RotationPlannerTeamInfoList: RotationPlannerTeamInfo[] = [];
             let data = JSON.parse(x.data);
-
             if (maxGw < 0) { 
                 setMaxGw(data.gws_and_dates.length); 
                 setGwEnd(data.gws_and_dates.length); 

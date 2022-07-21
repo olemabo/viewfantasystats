@@ -118,14 +118,14 @@
                     font-style: normal;
                     font-weight: 400;
                     letter-spacing: 0em;
-                    margin-right: 5px;                }
+                    margin-right: 0px;                }
             }
 
             .dropdown-content {
                 display: none;
                 position: absolute;
                 background-color: #94d8bc;
-                min-width: 175px;
+                min-width: 200px;
                 box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
                 z-index: 11;
               }

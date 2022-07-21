@@ -1,7 +1,9 @@
-from player_statistics.db_models.ownership_statistics_model import ExtraInfoStatistics, GlobalOwnershipStats100, \
+from player_statistics.db_models.premier_league.ownership_statistics_model import ExtraInfoStatistics, GlobalOwnershipStats100, \
     GlobalOwnershipStats1000, GlobalOwnershipStats10000, GwsChecked
-from player_statistics.db_models.nationality_statistics_model import NationalityStatistics
-from player_statistics.db_models.player_statistics_model import FPLPlayersModel
+from player_statistics.db_models.premier_league.nationality_statistics_model import NationalityStatistics
+from player_statistics.db_models.eliteserien.nationality_statistics_model_eliteserien import EliteserienNationalityStatistics
+from player_statistics.db_models.premier_league.player_statistics_model import FPLPlayersModel
+from player_statistics.db_models.eliteserien.ownership_statistics_model_eliteserien import EliteserienGwsChecked, EliteserienGlobalOwnershipStats5000, EliteserienGlobalOwnershipStats1000, EliteserienGlobalOwnershipStats100, EliteserienChipsAndUserInfo
 from django.contrib import admin
 
 
@@ -12,3 +14,10 @@ admin.site.register(GlobalOwnershipStats10000)
 admin.site.register(ExtraInfoStatistics)
 admin.site.register(NationalityStatistics)
 admin.site.register(GwsChecked)
+
+admin.site.register(EliteserienGlobalOwnershipStats100)
+admin.site.register(EliteserienGlobalOwnershipStats1000)
+admin.site.register(EliteserienGlobalOwnershipStats5000)
+admin.site.register(EliteserienChipsAndUserInfo)
+admin.site.register(EliteserienNationalityStatistics)
+admin.site.register(EliteserienGwsChecked)

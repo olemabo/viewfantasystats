@@ -56,9 +56,16 @@ path_to_store_local_data = "C:\\Users\\ole.borge\\PycharmProjects\\FPL-webpage-a
 
 # link to global ranks
 web_global_league = 'https://fantasy.premierleague.com/api/leagues-classic/314/standings/?phase=1&page_new_entries=1&page_standings=X'
+web_global_league_eliteserien = 'https://fantasy.tv2.no/api/leagues-classic/325/standings/?phase=1&page_new_entries=1&page_standings=X'
+# folder names
+eliteserien_folder_name = "eliteserien"
+premier_league_folder_name = "premier_league"
+eliteserien_api_url = "https://fantasy.tv2.no"
+premier_league_api_url = "https://fantasy.premierleague.com"
+total_number_of_gameweeks_in_eliteserien = 30
 
 # store data from these top_x_players. Store for first player, top 10, top 100, top 1000 and top 10000
-all_top_x_players = [1, 10, 100, 1000, 10000]
+all_top_x_players = [1, 10, 100, 1000, 5000]
 time_to_sleep_for_each_iteration = 0.35
 name_of_ownership_file = "complete_ownership.txt"
 name_of_nationality_file = "country_population.txt"

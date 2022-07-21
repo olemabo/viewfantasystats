@@ -1,4 +1,4 @@
-from player_statistics.db_models.player_statistics_model import FPLPlayersModel
+from player_statistics.db_models.premier_league.player_statistics_model import FPLPlayersModel
 from fixture_planner.models import AddPlTeamsToDB
 
 

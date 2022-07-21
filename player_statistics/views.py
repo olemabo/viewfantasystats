@@ -1,3 +1,4 @@
+import re
 from player_statistics.utility_functions.utility_functions_player_statistics import get_player_statistics_from_db, \
     get_dict_sort_on_short_name_to_sort_on_name, get_dict_sort_on_short_name_to_number
 from player_statistics.utility_functions.utility_functions_ownership_statistics import get_ownership_db_data
@@ -11,11 +12,128 @@ from django.http import HttpResponse
 from django.shortcuts import render
 import numpy as np
 from django.http import JsonResponse
+from player_statistics.backend.fill_db_global_statistics_eliteserien import write_global_stats_to_db_eliteserien
+from rest_framework.response import Response
+from rest_framework import generics, status
+from rest_framework.views import APIView
+from player_statistics.db_models.eliteserien.ownership_statistics_model_eliteserien import *
+from fixture_planner_eliteserien.models import EliteserienTeamInfo
+
+class PlayerOwnershipResponse:
+    def __init__(self, ownershipdata, newest_updated_gw, available_gws, team_names_and_ids, chip_data):
+        ...
+        self.ownershipdata = ownershipdata
+        self.newest_updated_gw = newest_updated_gw
+        self.available_gws = available_gws
+        self.team_names_and_ids = team_names_and_ids
+        self.chip_data = chip_data
+    
+    def toJson(self):
+        return json.dumps(self, default=lambda o: o.__dict__)
+
+class Team_And_Id_Model:
+    def __init__(self, team_name, id):
+        ...
+        self.team_name = team_name
+        self.id = id
+    
+    def toJson(self):
+        return json.dumps(self, default=lambda o: o.__dict__)
+
+class Chip_Model:
+    def __init__(self, gw, chip_data):
+        ...
+        self.gw = gw
+        self.chip_data = chip_data
+    
+    def toJson(self):
+        return json.dumps(self, default=lambda o: o.__dict__)
+
+class PlayerOwnershipAPIView(APIView):
+
+    def get(self, request, format=None):
+        empty_response = []
+        newest_updated_gw, all_gws = get_last_updated_gw_and_all_gws()
+        if (newest_updated_gw == 0): 
+            return JsonResponse(empty_response, safe=False)
+
+        player_ownership_db = EliteserienGlobalOwnershipStats1000.objects.all()
+        if len(player_ownership_db) == 0:
+            return JsonResponse(empty_response, safe=False)
+
+        for i in player_ownership_db:
+            empty_response.append(i.toJson())
+        
+        team_names_and_ids_list = []
+        team_names_and_ids = EliteserienTeamInfo.objects.all()
+        for team in team_names_and_ids:
+            team_names_and_ids_list.append(Team_And_Id_Model(team.team_name, team.team_id).toJson())
+        
+        chip_data = []
+        chips_db_data = EliteserienChipsAndUserInfo.objects.all()
+        for i in chips_db_data:
+            chip_data.append(Chip_Model(i.gw, i.extra_info_top_1000))
+            
+        response = PlayerOwnershipResponse(empty_response, newest_updated_gw, all_gws, team_names_and_ids_list, chip_data) 
+
+        return JsonResponse(response.toJson(), safe=False)
+
+    def post(self, request, format=None):
+        try:
+            top_x_players = int(request.data.get("top_x_players"))
+            current_gw = int(request.data.get("current_gw"))
+            chips_db_data = EliteserienChipsAndUserInfo.objects.filter()
+            player_ownership_db = []
+            chip_data = []
+            if (top_x_players == 100):
+                player_ownership_db = EliteserienGlobalOwnershipStats100.objects.all()
+                for i in chips_db_data:
+                    chip_data.append(Chip_Model(i.gw, i.extra_info_top_100))
+                
+            elif (top_x_players == 1000):
+                player_ownership_db = EliteserienGlobalOwnershipStats1000.objects.all()
+                for i in chips_db_data:
+                    chip_data.append(Chip_Model(i.gw, i.extra_info_top_1000))
+            elif (top_x_players == 5000):
+                player_ownership_db = EliteserienGlobalOwnershipStats5000.objects.all()
+                for i in chips_db_data:
+                    chip_data.append(Chip_Model(i.gw, i.extra_info_top_5000))
+            
+
+            empty_response = []
+            if len(player_ownership_db) == 0:
+                return JsonResponse(empty_response, safe=False)
+
+            for i in player_ownership_db:
+                empty_response.append(i.toJson())
+            
+            team_names_and_ids_list = []
+            team_names_and_ids = EliteserienTeamInfo.objects.all()
+            for team in team_names_and_ids:
+                team_names_and_ids_list.append(Team_And_Id_Model(team.team_name, team.team_id).toJson())
+        
+            response = PlayerOwnershipResponse(empty_response, current_gw, [], team_names_and_ids_list, chip_data) 
+
+            return JsonResponse(response.toJson(), safe=False)
+
+        except:
+            return Response({'Bad Request': 'Something went wrong'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+def get_last_updated_gw_and_all_gws():
+    checkedGws = EliteserienGwsChecked.objects.all()
+    if (len(checkedGws) > 0):
+        gws_checked_1000 = checkedGws[0].gws_updated_1000
+        if len(gws_checked_1000) > 0:
+            return max(gws_checked_1000), gws_checked_1000
+    return 0, []
+
 
 
 # DB functions. Should not be accessible in PRODUCTION
 def fill_db_global_stats(request):
     #write_global_stats_to_db()
+    write_global_stats_to_db_eliteserien()
     return HttpResponse("Filled Database Global Data (GlobalOwnershipStatsXXXX)")
 
 

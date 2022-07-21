@@ -1,3 +1,6 @@
 from django.contrib import admin
+from .models import EliteserienTeamInfo, EliteserienKickOffTime
 
-# Register your models here.
+
+admin.site.register(EliteserienTeamInfo)
+admin.site.register(EliteserienKickOffTime)

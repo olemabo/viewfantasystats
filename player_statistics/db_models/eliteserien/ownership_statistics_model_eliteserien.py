@@ -2,16 +2,13 @@ from django.db import models
 from django.urls import reverse
 from django_mysql.models import ListTextField
 from constants import total_number_of_gameweeks
+import json
 
-
-
-
-
-class GlobalOwnershipStats10000(models.Model):
+class EliteserienGlobalOwnershipStats5000(models.Model):
     # one stat for each gameweek + 1 total stat for all gws
     number_of_gws = total_number_of_gameweeks
     top_x = 10000
-    number_of_ownership_stats = 6 # [starting and not captain, starting and captain, starting and vice captain, owners, benched]
+    number_of_ownership_stats = 7 # [starting and not captain, starting and captain, starting and vice captain, owners, benched, total ownership]
     player_id = models.IntegerField(primary_key=True, help_text='Enter team id (1) ')
     player_team_id = models.IntegerField(help_text='Enter team id for this player (1)  ')
     player_position_id = models.IntegerField(help_text='Enter position id for this player (2) ')
@@ -20,195 +17,186 @@ class GlobalOwnershipStats10000(models.Model):
     gws_updated = ListTextField(
         base_field=models.IntegerField(help_text='All GWs that have been updated'),
         size=number_of_gws,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_1 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 1'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_2 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 2'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_3 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 3'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
     gw_4 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 4'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_5 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 5'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_6 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 6'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_7 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 7'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_8 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 8'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_9 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 9'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_10 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 10'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_11 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 11'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_12 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 12'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_13 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 13'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_14 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 14'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_15 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 15'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_16 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 16'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_17 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 17'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_18 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 18'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_19 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 19'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_20 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 20'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_21 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 21'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_22 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 22'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_23 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 23'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_24 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 24'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_25 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 25'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_26 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 26'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_27 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 27'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_28 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 28'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_29 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 29'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_30 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 30'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
-    )
-
-    gw_31 = ListTextField(
-        base_field=models.IntegerField(help_text='Ownership GW 31'),
-        size=number_of_ownership_stats,  # Maximum of 100 ids in list
-    )
-
-    gw_32 = ListTextField(
-        base_field=models.IntegerField(help_text='Ownership GW 32'),
-        size=number_of_ownership_stats,  # Maximum of 100 ids in list
-    )
-
-    gw_33 = ListTextField(
-        base_field=models.IntegerField(help_text='Ownership GW 33'),
-        size=number_of_ownership_stats,  # Maximum of 100 ids in list
-    )
-
-    gw_34 = ListTextField(
-        base_field=models.IntegerField(help_text='Ownership GW 34'),
-        size=number_of_ownership_stats,  # Maximum of 100 ids in list
-    )
-
-    gw_35 = ListTextField(
-        base_field=models.IntegerField(help_text='Ownership GW 35'),
-        size=number_of_ownership_stats,  # Maximum of 100 ids in list
-    )
-
-    gw_36 = ListTextField(
-        base_field=models.IntegerField(help_text='Ownership GW 36'),
-        size=number_of_ownership_stats,  # Maximum of 100 ids in list
-    )
-
-    gw_37 = ListTextField(
-        base_field=models.IntegerField(help_text='Ownership GW 37'),
-        size=number_of_ownership_stats,  # Maximum of 100 ids in list
-    )
-
-    gw_38 = ListTextField(
-        base_field=models.IntegerField(help_text='Ownership GW 38'),
-        size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     # Metadata
@@ -224,12 +212,15 @@ class GlobalOwnershipStats10000(models.Model):
         """String for representing the MyModelName object (in Admin site etc.)."""
         return f'{self.player_id}, {self.player_name}'
 
+    def toJson(self):
+        return json.dumps(self, default=lambda o: o.__dict__)
 
-class GlobalOwnershipStats1000(models.Model):
+
+class EliteserienGlobalOwnershipStats1000(models.Model):
     # one stat for each gameweek + 1 total stat for all gws
     number_of_gws = total_number_of_gameweeks
     top_x = 1000
-    number_of_ownership_stats = 6  # [starting and not captain, starting and captain, starting and vice captain, owners, benched]
+    number_of_ownership_stats = 7  # [starting and not captain, starting and captain, starting and vice captain, owners, benched, total ownership]
     player_id = models.IntegerField(primary_key=True, help_text='Enter team id (1) ')
     player_team_id = models.IntegerField(help_text='Enter team id for this player (1)  ')
     player_position_id = models.IntegerField(help_text='Enter position id for this player (2) ')
@@ -238,195 +229,186 @@ class GlobalOwnershipStats1000(models.Model):
     gws_updated = ListTextField(
         base_field=models.IntegerField(help_text='All GWs that have been updated'),
         size=number_of_gws,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_1 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 1'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_2 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 2'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_3 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 3'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
     gw_4 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 4'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_5 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 5'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_6 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 6'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_7 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 7'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_8 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 8'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_9 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 9'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_10 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 10'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_11 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 11'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_12 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 12'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_13 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 13'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_14 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 14'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_15 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 15'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_16 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 16'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_17 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 17'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_18 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 18'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_19 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 19'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_20 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 20'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_21 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 21'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_22 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 22'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_23 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 23'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_24 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 24'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_25 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 25'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_26 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 26'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_27 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 27'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_28 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 28'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_29 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 29'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_30 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 30'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
-    )
-
-    gw_31 = ListTextField(
-        base_field=models.IntegerField(help_text='Ownership GW 31'),
-        size=number_of_ownership_stats,  # Maximum of 100 ids in list
-    )
-
-    gw_32 = ListTextField(
-        base_field=models.IntegerField(help_text='Ownership GW 32'),
-        size=number_of_ownership_stats,  # Maximum of 100 ids in list
-    )
-
-    gw_33 = ListTextField(
-        base_field=models.IntegerField(help_text='Ownership GW 33'),
-        size=number_of_ownership_stats,  # Maximum of 100 ids in list
-    )
-
-    gw_34 = ListTextField(
-        base_field=models.IntegerField(help_text='Ownership GW 34'),
-        size=number_of_ownership_stats,  # Maximum of 100 ids in list
-    )
-
-    gw_35 = ListTextField(
-        base_field=models.IntegerField(help_text='Ownership GW 35'),
-        size=number_of_ownership_stats,  # Maximum of 100 ids in list
-    )
-
-    gw_36 = ListTextField(
-        base_field=models.IntegerField(help_text='Ownership GW 36'),
-        size=number_of_ownership_stats,  # Maximum of 100 ids in list
-    )
-
-    gw_37 = ListTextField(
-        base_field=models.IntegerField(help_text='Ownership GW 37'),
-        size=number_of_ownership_stats,  # Maximum of 100 ids in list
-    )
-
-    gw_38 = ListTextField(
-        base_field=models.IntegerField(help_text='Ownership GW 38'),
-        size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     # Metadata
@@ -442,204 +424,202 @@ class GlobalOwnershipStats1000(models.Model):
         """String for representing the MyModelName object (in Admin site etc.)."""
         return f'{self.player_id}, {self.player_name}'
 
+    def toJson(self):
+        return json.dumps(self, default=lambda o: o.__dict__)
 
-class GlobalOwnershipStats100(models.Model):
+class EliteserienGlobalOwnershipStats100(models.Model):
     # one stat for each gameweek + 1 total stat for all gws
     number_of_gws = total_number_of_gameweeks
     top_x = 100
-    number_of_ownership_stats = 6  # [starting and not captain, starting and captain, starting and vice captain, owners, benched]
+    number_of_ownership_stats = 7  # [starting and not captain, starting and captain, starting and vice captain, owners, benched]
     player_id = models.IntegerField(primary_key=True, help_text='Enter team id (1) ')
     player_team_id = models.IntegerField(help_text='Enter team id for this player (1)  ')
     player_position_id = models.IntegerField(help_text='Enter position id for this player (2) ')
     player_name = models.CharField(max_length=40, help_text='Enter player name (Salah) ')
 
+    gws_updated = ListTextField(
+        base_field=models.IntegerField(help_text='All GWs that have been updated'),
+        size=number_of_gws,  # Maximum of 100 ids in list
+        blank=True,
+    )
+
     gw_1 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 1'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_2 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 2'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_3 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 3'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
     gw_4 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 4'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_5 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 5'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_6 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 6'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_7 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 7'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_8 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 8'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_9 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 9'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_10 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 10'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_11 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 11'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_12 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 12'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_13 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 13'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_14 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 14'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_15 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 15'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_16 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 16'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_17 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 17'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_18 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 18'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_19 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 19'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_20 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 20'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_21 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 21'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_22 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 22'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_23 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 23'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_24 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 24'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_25 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 25'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_26 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 26'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_27 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 27'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_28 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 28'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_29 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 29'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     gw_30 = ListTextField(
         base_field=models.IntegerField(help_text='Ownership GW 30'),
         size=number_of_ownership_stats,  # Maximum of 100 ids in list
-    )
-
-    gw_31 = ListTextField(
-        base_field=models.IntegerField(help_text='Ownership GW 31'),
-        size=number_of_ownership_stats,  # Maximum of 100 ids in list
-    )
-
-    gw_32 = ListTextField(
-        base_field=models.IntegerField(help_text='Ownership GW 32'),
-        size=number_of_ownership_stats,  # Maximum of 100 ids in list
-    )
-
-    gw_33 = ListTextField(
-        base_field=models.IntegerField(help_text='Ownership GW 33'),
-        size=number_of_ownership_stats,  # Maximum of 100 ids in list
-    )
-
-    gw_34 = ListTextField(
-        base_field=models.IntegerField(help_text='Ownership GW 34'),
-        size=number_of_ownership_stats,  # Maximum of 100 ids in list
-    )
-
-    gw_35 = ListTextField(
-        base_field=models.IntegerField(help_text='Ownership GW 35'),
-        size=number_of_ownership_stats,  # Maximum of 100 ids in list
-    )
-
-    gw_36 = ListTextField(
-        base_field=models.IntegerField(help_text='Ownership GW 36'),
-        size=number_of_ownership_stats,  # Maximum of 100 ids in list
-    )
-
-    gw_37 = ListTextField(
-        base_field=models.IntegerField(help_text='Ownership GW 37'),
-        size=number_of_ownership_stats,  # Maximum of 100 ids in list
-    )
-
-    gw_38 = ListTextField(
-        base_field=models.IntegerField(help_text='Ownership GW 38'),
-        size=number_of_ownership_stats,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     # Metadata
@@ -655,11 +635,14 @@ class GlobalOwnershipStats100(models.Model):
         """String for representing the MyModelName object (in Admin site etc.)."""
         return f'{self.player_id}, {self.player_name}'
 
+    def toJson(self):
+        return json.dumps(self, default=lambda o: o.__dict__)
 
-class ExtraInfoStatistics(models.Model):
+
+class EliteserienChipsAndUserInfo(models.Model):
     # one stat for each gameweek + 1 total stat for all gws
     number_of_gws = total_number_of_gameweeks
-    number_of_extra_info = 8  # [Freehit, BB, TC, WC, None, Avg Value, Avg event transfer, Avg transfer cost]
+    number_of_extra_info = 10  # [Freehit, BB, TC, WC, None, Avg Value, Avg event transfer, Avg transfer cost, total points, bank]
 
     gw = models.IntegerField(primary_key=True, help_text='Enter gameweek number (1) ')
 
@@ -683,7 +666,7 @@ class ExtraInfoStatistics(models.Model):
         size=number_of_extra_info,  # Maximum of 100 ids in list
     )
 
-    extra_info_top_10000 = ListTextField(
+    extra_info_top_5000 = ListTextField(
         base_field=models.IntegerField(help_text='Extra info among top 10000'),
         size=number_of_extra_info,  # Maximum of 100 ids in list
     )
@@ -703,7 +686,7 @@ class ExtraInfoStatistics(models.Model):
 
 
 
-class GwsChecked(models.Model):
+class EliteserienGwsChecked(models.Model):
     number_of_gws = total_number_of_gameweeks
 
     id = models.IntegerField(primary_key=True, help_text='Enter team id (1) ', default=1)
@@ -720,7 +703,7 @@ class GwsChecked(models.Model):
         size=number_of_gws,  # Maximum of 100 ids in list
     )
 
-    gws_updated_10000 = ListTextField(
+    gws_updated_5000 = ListTextField(
         base_field=models.IntegerField(help_text='All GWs that have been updated'),
         size=number_of_gws,  # Maximum of 100 ids in list
     )

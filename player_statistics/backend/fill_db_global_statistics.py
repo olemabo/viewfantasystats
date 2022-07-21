@@ -1,9 +1,9 @@
 from constants import name_of_extra_info_file, name_of_nationality_file, path_to_store_local_data, all_top_x_players, name_of_ownership_file, total_number_of_gameweeks
 import numpy as np
 import datetime
-from player_statistics.db_models.ownership_statistics_model import ExtraInfoStatistics, GlobalOwnershipStats10000, \
+from player_statistics.db_models.premier_league.ownership_statistics_model import ExtraInfoStatistics, GlobalOwnershipStats10000, \
     GlobalOwnershipStats1000, GlobalOwnershipStats100, GwsChecked
-from player_statistics.db_models.nationality_statistics_model import NationalityStatistics
+from player_statistics.db_models.premier_league.nationality_statistics_model import NationalityStatistics
 
 
 def write_global_stats_to_db():

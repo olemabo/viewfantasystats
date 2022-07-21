@@ -1,4 +1,4 @@
-from player_statistics.db_models.ownership_statistics_model import GlobalOwnershipStats100, \
+from player_statistics.db_models.premier_league.ownership_statistics_model import GlobalOwnershipStats100, \
     GlobalOwnershipStats1000, GlobalOwnershipStats10000
 
 
