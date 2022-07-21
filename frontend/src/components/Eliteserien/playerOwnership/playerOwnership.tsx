@@ -194,7 +194,7 @@ export const PlayerOwnership = () => {
 
     function filterOnPositionAndTeam(keyword: string, query: string, data?: PlayerOwnershipModel[]) {
         let temp = data != null ? data : ownershipData;
-        
+
         let queryFilteredList: PlayerOwnershipModel[] = [];
         
         temp.map(x => {
@@ -351,7 +351,7 @@ export const PlayerOwnership = () => {
                     <th className="name-col">Player</th>
                     <th><TableSortHead text='EO' reset={currentSorted != 'EO'} defaultSortType={'Increasing'} onclick={(increase: boolean) => sortOwnershipData(0, increase)}/></th>
                     <th><TableSortHead text='Captaincy' reset={currentSorted != 'Captaincy'} onclick={(increase: boolean) => sortOwnershipData(1, increase)}/></th>
-                    <th><TableSortHead text='VC' reset={currentSorted != 'VC'} onclick={(increase: boolean) => sortOwnershipData(3, increase)}/></th>
+                    <th><TableSortHead text='Vice Captain' reset={currentSorted != 'VC'} onclick={(increase: boolean) => sortOwnershipData(3, increase)}/></th>
                     <th><TableSortHead text='Benched' reset={currentSorted != 'Benched'} onclick={(increase: boolean) => sortOwnershipData(5, increase)}/></th>
                     <th><TableSortHead text='Total Ownership' reset={currentSorted != 'Total Ownership'} onclick={(increase: boolean) => sortOwnershipData(6, increase)}/></th>
                 </tr>
