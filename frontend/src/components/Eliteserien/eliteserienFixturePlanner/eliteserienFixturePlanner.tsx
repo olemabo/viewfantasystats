@@ -63,7 +63,7 @@ export const EliteserienFixturePlanner = () => {
     const [ fdrToColor, setFdrToColor ] = useState({0.5: "0.5", 1: "1", 2: "2", 3: "3", 4: "4", 5: "5"});
 
 
-    const [ gwStart, setGwStart ] = useState(min_gw);
+    const [ gwStart, setGwStart ] = useState(15);
     const [ gwEnd, setGwEnd ] = useState(max_gw);
     const [ maxGw, setMaxGw ] = useState(-1);
     const [ showTeamFilters, setShowTeamFilters ] = useState(false);
@@ -76,7 +76,7 @@ export const EliteserienFixturePlanner = () => {
 
         // Get fdr data from the API
         let body = { 
-            start_gw: 1,
+            start_gw: 15,
             end_gw: 30,
             min_num_fixtures: '1',
             combinations: 'FDR'
@@ -127,7 +127,6 @@ export const EliteserienFixturePlanner = () => {
             let index = 0;
             data.fdr_data.forEach((team: any[]) => {
                 let team_name = JSON.parse(team[0][0][0]).team_name;
-                console.log(team_name, team)
                 tempTeamNames.push({ team_name: team_name, checked: false});
 
                 let FDR_gw_i: FDR_gw_i[] = [];
@@ -159,8 +158,6 @@ export const EliteserienFixturePlanner = () => {
                 index += 1;
             });
 
-            console.log("team_name_color: ", data.team_name_color);
-
             setFdrDataAllTeamsNew(apiFDRList);
             setFdrDataToShow(apiFDRList);
             setTeamNames(tempTeamNames);
@@ -176,12 +173,8 @@ export const EliteserienFixturePlanner = () => {
             if (x.team_name == e.currentTarget.value) {
                 checked = !x.checked;
             }
-            // tempTeamNames.push({ team_name: x.team_name, checked: checked});
-            console.log("x: ", x, checked, e.currentTarget.value);
             temp.push({ team_name: x.team_name, FDR: x.FDR, checked: checked, font_color: x.font_color, background_color: x.background_color });
         });
-        // setTeamNames(tempTeamNames);
-        console.log(temp);
         setFdrDataToShow(temp);
     }
 
@@ -197,8 +190,6 @@ export const EliteserienFixturePlanner = () => {
         if (int == 5) return "#" + fdrToColor[5].substring(2);
         return "#000";
     }
-
-    console.log(showTeamFilters)
 
     return <>
     <div className='fixture-planner-container' id="fixture-planner-container">
