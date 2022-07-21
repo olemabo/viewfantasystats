@@ -60,6 +60,7 @@ export const TopMenuMobile: React.FunctionComponent<TopMenyProps> = (props) => {
                 <nav className="mobile-sub-menu-container">
                     <ul>
                         { league_type == eliteserien && <>
+                            {/* <h2>Fixture Planning</h2> */}
                             <li className="sub-menu-item">
                                 {/* <HomeIcon /> */}
                                 <a href="../../../fixture-planner-eliteserien/fdr-planner/">FDR Planner</a>
@@ -71,7 +72,12 @@ export const TopMenuMobile: React.FunctionComponent<TopMenyProps> = (props) => {
                             <li className="sub-menu-item">
                                 {/* <BarChartIcon /> */}
                                 <a href="../../../fixture-planner-eliteserien/periode-planner/">Periode Planner</a>
-                            </li></>
+                            </li>
+                            {/* <h2>Statistics</h2> */}
+                            <li className="sub-menu-item">
+                                <a href="../../../statistics/player-ownership/">Player Ownership</a>
+                            </li>
+                            </>
                         }   
 
                         { league_type == fpl && <>

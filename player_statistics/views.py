@@ -250,7 +250,6 @@ def show_ownership_statistics(request, top_x=10000, gw=7):
     for name_i, ownership_i in zip(db_player_names, db_gw_ownership):
         list_name_ownership.append([name_i["player_name"], np.array(ownership_i[gw_name]) / top_x * 100])
     # player_name, starting and not captain, starting and captain, starting and vice captain, owners, benched
-    print(list_name_ownership)
 
     context = {
         'list_name_ownership': list_name_ownership,
