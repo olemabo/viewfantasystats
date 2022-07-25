@@ -1,38 +1,25 @@
-import TableSortHead from './../../Shared/TableSortHead/TableSortHead';
 import React, { useState, useEffect } from 'react';
-import store from '../../../store/index';
+
 import Pagination from 'rc-pagination';
-import './playerOwnership.scss';
 import axios from 'axios';
+
+import { PlayerOwnershipModel } from '../../../models/playerOwnership/PlayerOwnershipModel';
+import { TeamNameAndIdModel } from '../../../models/playerOwnership/TeamNameAndIdModel';
+import { ChipUsageModel } from '../../../models/playerOwnership/ChipUsageModel';
+import { TableSortHead } from './../../Shared/TableSortHead/TableSortHead';
 import { Spinner } from '../../Shared/Spinner/Spinner';
+import store from '../../../store/index';
+import './playerOwnership.scss';
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-
-interface PlayerOwnershipModel {
-    player_name: string;
-    player_postition_id: string;
-    player_team_id: string;
-    ownership: number[];
-    filter_out: boolean;
-}
-
-interface TeamNameAndIdModel {
-    team_name: string;
-    team_id: string;
-}
-
-interface ChipModel {
-    gw: number;
-    chip_data: number[];
-}
 
 export const PlayerOwnership = () => {
     const player_ownership_api_path = "/statistics/player-ownership-api/";
     const emptyOwnershipData: PlayerOwnershipModel[] = [];
     const emptyAvailableGws: any[] = []
-    const emptyChipModel: ChipModel = {gw: -1, chip_data: [-1, -1, -1, -1, -1, -1, -1]}
-    const emptyChipModelAll: ChipModel[] = [{gw: -1, chip_data: [-1, -1, -1, -1, -1, -1, -1]}]
+    const emptyChipModel: ChipUsageModel = {gw: -1, chip_data: [-1, -1, -1, -1, -1, -1, -1]}
+    const emptyChipModelAll: ChipUsageModel[] = [{gw: -1, chip_data: [-1, -1, -1, -1, -1, -1, -1]}]
     const [ allOwnershipData, setAllOwnershipData ] = useState([]);
     const [ ownershipData, setOwnershipData ] = useState(emptyOwnershipData);
     const [ ownershipDataToShow, setOwnershipDataToShow ] = useState(emptyOwnershipData);
@@ -87,7 +74,7 @@ export const PlayerOwnership = () => {
 
         axios.get(player_ownership_api_path).then(x => {  
             let data = JSON.parse(x?.data);
-            data?.chip_data?.map((x: ChipModel) => {
+            data?.chip_data?.map((x: ChipUsageModel) => {
                 if (x.gw == data.newest_updated_gw) {
                     setChipData(x.chip_data);
                 }
@@ -145,7 +132,7 @@ export const PlayerOwnership = () => {
         setIsLoading(true);
         axios.post(player_ownership_api_path, body).then(x => {  
             let data = JSON.parse(x?.data);
-            data?.chip_data?.map((x: ChipModel) => {
+            data?.chip_data?.map((x: ChipUsageModel) => {
                 if (x.gw == data.newest_updated_gw) {
                     setChipData(x.chip_data);
                 }
@@ -189,6 +176,7 @@ export const PlayerOwnership = () => {
         if ( a.ownership[0] + a.ownership[1] * 2 < b.ownership[0] + b.ownership[1] * 2){
           return 1;
         }
+        
         return 0;
     }
 
