@@ -279,13 +279,12 @@ export const PlayerOwnership = () => {
         if (sortType == 0) { setCurrentSorted('EO')}
         if (sortType == 1) { setCurrentSorted('Captaincy')}
         if (sortType == 3) { setCurrentSorted('VC')}
+        if (sortType == 4) { setCurrentSorted('Owned by')}
         if (sortType == 5) { setCurrentSorted('Benched')}
         if (sortType == 6) { setCurrentSorted('Total Ownership')}
     }
 
     const [ currentSorted, setCurrentSorted ] = useState("EO");
-
-    console.log(ownershipDataToShow[0], ownershipData[0], topXPlayers, sorting_keyword)
 
     return <>
      <div className='player-ownership-container' id="rotation-planner-container">
@@ -350,6 +349,7 @@ export const PlayerOwnership = () => {
                 <tr>
                     <th className="name-col">Player</th>
                     <th><TableSortHead text='EO' reset={currentSorted != 'EO'} defaultSortType={'Increasing'} onclick={(increase: boolean) => sortOwnershipData(0, increase)}/></th>
+                    <th><TableSortHead text='Owned by' reset={currentSorted != 'Owned by'} defaultSortType={'Increasing'} onclick={(increase: boolean) => sortOwnershipData(4, increase)}/></th>
                     <th><TableSortHead text='Captaincy' reset={currentSorted != 'Captaincy'} onclick={(increase: boolean) => sortOwnershipData(1, increase)}/></th>
                     <th><TableSortHead text='Vice Captain' reset={currentSorted != 'VC'} onclick={(increase: boolean) => sortOwnershipData(3, increase)}/></th>
                     <th><TableSortHead text='Benched' reset={currentSorted != 'Benched'} onclick={(increase: boolean) => sortOwnershipData(5, increase)}/></th>
@@ -362,6 +362,7 @@ export const PlayerOwnership = () => {
                 <tr>
                     <td className="name-col"> <div className="format-name-col">{ x.player_name }</div> </td>
                     <td className={(currentSorted == 'EO') ? 'selected' : ''}>{ ( (x.ownership[0] + x.ownership[1] * 2) / topXPlayers * 100).toFixed(1) } {'%'} </td>
+                    <td className={(currentSorted == 'Owned by') ? 'selected' : ''}>{ (x.ownership[4] / topXPlayers * 100).toFixed(1) } {'%'} </td>
                     <td className={(currentSorted == 'Captaincy') ? 'selected' : ''}>{ (x.ownership[1] / topXPlayers * 100).toFixed(1) } {'%'} </td>
                     <td className={(currentSorted == 'VC') ? 'selected' : ''}>{ (x.ownership[3] / topXPlayers * 100).toFixed(1) } {'%'} </td>
                     <td className={(currentSorted == 'Benched') ? 'selected' : ''}>{ (x.ownership[5] / topXPlayers * 100).toFixed(1) } {'%'} </td>
