@@ -15,6 +15,18 @@
     .name-col {
         padding-left: 10px;
     }
+
+    .team-info {
+        min-width: 170px;
+    }
+
+    .name-col-chips {
+        min-width: 145px;
+    }
+
+    .name-col-chips-2 {
+        min-width: 145px;
+    }
     
     .container-player-stats {
         margin: 5px auto;
@@ -86,7 +98,7 @@
     
     .input-box {
         height: 30px;
-        min-width: 70px;
+        // min-width: 70px;
         margin-left: var(--margin-left);
         margin-right: var(--margin-right);
     }
@@ -117,6 +129,7 @@
     
     .form-stuff {
         label {
+            color: black;
             display: block;
             text-align: left;
             margin-top: 20px;
@@ -125,7 +138,7 @@
             margin-left: 2px;
         }
         display: grid;
-        grid-template-columns: 150px 80px 70px 1fr 170px;
+        grid-template-columns: 150px 90px 60px 1fr 170px;
         font-size: 14px;
         grid-gap: 5px;
         
@@ -170,6 +183,7 @@
         .chips-section {
             table {
                 width: 100% !important;
+                margin-bottom: 25px;
 
                 td, th {
                     width: 400px !important;
@@ -202,6 +216,7 @@
             .box-5 {
                 grid-area: foot;
             }
+            
             .input-box {
                 height: 35px !important;
             }
@@ -251,33 +266,26 @@
 
 
 .chips-section {
-    margin-top: 25px;
+    margin-top: 30px;
     
     table {
         display: inline-flex !important;
         width: min-content !important;
+        margin-bottom: 25px;
     }
     
     .chips-table {
         float: left;
         overflow: auto;
         margin-bottom: 25px;
+        margin-right: 33px;
     }
 
     .team-info-table {
         float: left;
-        margin-left: 20px;
         overflow: auto;
     }
 }
-
-
-
-
-
-
-
-
 
 
 
@@ -287,6 +295,10 @@
     .team-info-table {
         margin-left: 0px !important;
         margin-bottom: 25px;
+    }
+
+    .team-info {
+        min-width: 145px !important; 
     }
 }
 

@@ -7,6 +7,7 @@ import axios from 'axios';
 import { FilterButton } from '../../Shared/FilterButton/FilterButton';
 import { Button } from '../../Shared/Button/Button';
 import { Spinner } from '../../Shared/Spinner/Spinner';
+import Popover from '../../Shared/Popover/Popover';
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -63,7 +64,7 @@ export const EliteserienFixturePlanner = () => {
     const [ fdrToColor, setFdrToColor ] = useState({0.5: "0.5", 1: "1", 2: "2", 3: "3", 4: "4", 5: "5"});
 
 
-    const [ gwStart, setGwStart ] = useState(15);
+    const [ gwStart, setGwStart ] = useState(16);
     const [ gwEnd, setGwEnd ] = useState(max_gw);
     const [ maxGw, setMaxGw ] = useState(-1);
     const [ showTeamFilters, setShowTeamFilters ] = useState(false);
@@ -76,7 +77,7 @@ export const EliteserienFixturePlanner = () => {
 
         // Get fdr data from the API
         let body = { 
-            start_gw: 15,
+            start_gw: gwStart,
             end_gw: 30,
             min_num_fixtures: '1',
             combinations: 'FDR'
@@ -191,12 +192,65 @@ export const EliteserienFixturePlanner = () => {
         return "#000";
     }
 
+
+    let language  = "Norwegain";
+
+    let content_json = {
+        English: {
+          title: "Fixture Planner",
+          gw_start: "GW start:",
+          gw_end: "GW end:",
+          filter_button_text: "Filter teams",
+          team: "Team",
+          round: "GW ",
+          search: "Search",
+        },
+        Norwegian: {
+          title: "Fixture Planner",
+          gw_start: "Fra runde",
+          gw_end: "til runde",
+          filter_button_text: "Filtrer lag",
+          team: "Lag",
+          round: "R",
+          search: "Søk",
+         }
+    };
+
+    let content = language === "Norwegain" ? content_json.Norwegian : content_json.English;
+
+    // language === "Norwegain" ? (content = content_json.Norwegian) : (content = content_json.English);
+
+
     return <>
     <div className='fixture-planner-container' id="fixture-planner-container">
-        <h1>Eliteserien Fixture Planner</h1>
+        <h1>{content.title}<Popover 
+            id={"rotations-planner-id"}
+            title=""
+            popover_title={content.title} 
+            iconSize={14}
+            iconpostition={[-10, 0, 0, 3]}
+            popover_text={ content.title + " rangerer lag etter best kampprogram fra " +
+            "'" + content.gw_start.toString() + "'" + " til " + "'" + content.gw_end.toString() + "'" + 
+            ". Best kampprogram ligger øverst og dårligst nederst. "
+            }>
+            Kampprogram, vanskelighetsgrader og farger er hentet fra 
+            <a href="https://docs.google.com/spreadsheets/d/168WcZ2mnGbSh-aI-NheJl5OtpTgx3lZL-YFV4bAJRU8/edit?usp=sharing">Excel arket</a>
+            til Dagfinn Thon.
+            { fdrToColor != null && 
+                <p className='diff-introduction-container'>
+                    FDR verdier: 
+                    <span style={{backgroundColor: convertFDRtoHex("1")}} className="diff-introduction-box">1</span>
+                    <span style={{backgroundColor: convertFDRtoHex("2")}} className="diff-introduction-box">2</span>
+                    <span style={{backgroundColor: convertFDRtoHex("3")}} className="diff-introduction-box">3</span>
+                    <span style={{backgroundColor: convertFDRtoHex("4")}} className="diff-introduction-box">4</span>
+                    <span style={{backgroundColor: convertFDRtoHex("5")}} className="diff-introduction-box">5</span>
+                </p>
+            }
+            </Popover>
+        </h1>
         { maxGw > 0 && 
             <form onSubmit={(e) =>  {updateFDRData(); e.preventDefault()}}>
-                GW start:
+                {content.gw_start}
                 <input 
                     className="form-number-box" 
                     type="number" 
@@ -207,7 +261,7 @@ export const EliteserienFixturePlanner = () => {
                     id="input-form-start-gw" 
                     name="input-form-start-gw">
                 </input>
-                GW end:
+                {content.gw_end}
                 <input 
                     className="form-number-box" 
                     type="number" 
@@ -218,12 +272,12 @@ export const EliteserienFixturePlanner = () => {
                     id="input-form-start-gw" 
                     name="input-form-start-gw">
                 </input>
-                <input className="submit" type="submit" value="Search">
+                <input className="submit" type="submit" value={content.search}>
                 </input>
             </form> 
         }
      
-        <Button buttonText={'Filter teams'} 
+        <Button buttonText={content.filter_button_text} 
             icon_class={"fa fa-chevron-" + (showTeamFilters ? "up" : "down")} 
             onclick={() => setShowTeamFilters(showTeamFilters ? false : true)} />
 
@@ -251,7 +305,7 @@ export const EliteserienFixturePlanner = () => {
                                 <tbody id="fdr-names">
                                     <tr>
                                         <td className="name-column min-width">
-                                            Name
+                                            {content.team}
                                         </td>
                                     </tr>
                                     { fdrDataToShow.map(fdr => (<>
@@ -271,7 +325,7 @@ export const EliteserienFixturePlanner = () => {
                                 <tbody id="fdr-gws">
                                     <tr id="fdr-row-gws">
                                         { kickOffTimesToShow.map(gw =>
-                                            <th className="min-width"> GW { gw.gameweek}
+                                            <th className="min-width">{content.round}{gw.gameweek}
                                                 <div className="day_month">
                                                     { gw.day_month }
                                                 </div>

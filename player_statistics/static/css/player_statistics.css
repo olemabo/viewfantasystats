@@ -69,7 +69,7 @@ tr:first-child {
 
 .input-box {
     height: 30px;
-    min-width: 70px;
+    /* min-width: 70px; */
     margin-left: var(--margin-left);
     margin-right: var(--margin-right);
 }

@@ -47,7 +47,7 @@ def readEliteserienExcelToDBFormat(path=r'stored_data/eliteserien/Eliteserien_fi
     return objectList, dates
 
 
-def readEliteserienExcelFromDagFinnToDBFormat(path=r'stored_data/eliteserien/R6-R20.xlsx'):
+def readEliteserienExcelFromDagFinnToDBFormat(path=r'stored_data/eliteserien/fixture_data/Eliteserien_fixtures.xlsx'):
     max_teams = 18
     max_games = 30
     wb = load_workbook(path, data_only=True)

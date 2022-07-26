@@ -8,6 +8,7 @@ import store from '../../../store/index';
 import { Button } from '../../Shared/Button/Button';
 import { CheckBox } from '../../Shared/CheckBox/CheckBox';
 import { Spinner } from '../../Shared/Spinner/Spinner';
+import { Popover } from '../../Shared/Popover/Popover';
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -61,7 +62,7 @@ export const EliteserienRotationPlanner = () => {
     const empty: RotationPlannerTeamInfo[] = [ { avg_Score: -1, id_list: [], team_name_list: [], extra_fixtures: -1, home_games: -1, fixture_list: [] }];
     const emptyGwDate: KickOffTimes[] = [{gameweek: 0, day_month: "",kickoff_time: "" }];
 
-    const [ gwStart, setGwStart ] = useState(min_gw);
+    const [ gwStart, setGwStart ] = useState(16);
     const [ gwEnd, setGwEnd ] = useState(max_gw);
     const [ fdrDataToShow, setFdrDataToShow ] = useState(empty);
     const [ kickOffTimes, setKickOffTimes ] = useState(emptyGwDate);
@@ -83,13 +84,13 @@ export const EliteserienRotationPlanner = () => {
             store.dispatch({type: "league_type", payload: "Eliteserien"});
         }
 
-        setGwStart(1);
-        setGwEnd(3);
+        // setGwStart(1);
+        // setGwEnd(3);
         
         // Get fdr data from the API
         let body = { 
-            start_gw: 1,
-            end_gw: 3,
+            start_gw: gwStart,
+            end_gw: gwStart + 5,
             min_num_fixtures: '1',
             combinations: 'Rotation',
             teams_to_check: teamsToCheck,
@@ -195,7 +196,7 @@ export const EliteserienRotationPlanner = () => {
             setValidationErrorMessage("'Teams to play' must be smaller than 'Teams to check'");
             return false;
         }
-        console.log(body.teams_in_solution.length, body.teams_to_check)
+
         if (body.teams_in_solution.length > body.teams_to_check) {
             setValidationErrorMessage("'teams_in_solution' must be smaller og equal to 'Teams to check'");
             return false;
@@ -240,11 +241,68 @@ export const EliteserienRotationPlanner = () => {
         return "#000";
     }
 
+    let language  = "Norwegain";
+
+    let content_json = {
+        English: {
+          title: "Eliteserien Rotation Planner",
+          gw_start: "GW start:",
+          gw_end: "GW end:",
+          filter_button_text: "Filter teams",
+          team: "Team",
+          round: "GW ",
+          search: "Search",
+          teams_to_check: "Teams to check:",
+          teams_to_play: "Teams to play:",
+          avg_fdr_score: "Avg. FDR score:",
+        },
+        Norwegian: {
+          title: "Rotasjonsplanlegging",
+          gw_start: "Fra runde",
+          gw_end: "til runde",
+          filter_button_text: "Filtrer lag",
+          team: "Lag",
+          round: "R",
+          search: "Søk",
+          teams_to_check: "Antall lag:",
+          teams_to_play: "Lag som skal brukes:",
+          avg_fdr_score: "Gj. snittlig FDR score:",
+         }
+    };
+
+    let content = language === "Norwegain" ? content_json.Norwegian : content_json.English;
+
     return <>
      <div className='fixture-planner-container' id="rotation-planner-container">
-         <h1>Rotation Planner</h1>
+         <h1>{content.title}<Popover 
+            id={"rotations-planner-id"}
+            title=""
+            popover_title={content.title} 
+            iconSize={14}
+            iconpostition={[-10, 0, 0, 3]}
+            popover_text={"Rotasjonsplanlegging viser kombinasjoner av lag som kan roteres for å gi best mulig kampprogram. "
+            + "Eksempelvis ønsker man å finne to keepere som roterer bra mellom runde 10 og 20. "
+            + "'" + content.gw_start.toString() + "'" + " og " + "'" + content.gw_end.toString() + "'" + " blir da henholdsvis 10 og 20. "
+            + "'" + content.teams_to_check.toString() + "'" + " blir 2 fordi man skal ha 2 keepere som skal rotere. "
+            + "'" + content.teams_to_play.toString() + "'" + " blir 1 fordi kun en av de to keeperene skal spille. "
+            }>
+            Kampprogram, vanskelighetsgrader og farger er hentet fra 
+            <a href="https://docs.google.com/spreadsheets/d/168WcZ2mnGbSh-aI-NheJl5OtpTgx3lZL-YFV4bAJRU8/edit?usp=sharing">Excel arket</a>
+            til Dagfinn Thon.
+            { fdrToColor != null && 
+                <p className='diff-introduction-container'>
+                    FDR verdier: 
+                    <span style={{backgroundColor: convertFDRtoHex("1")}} className="diff-introduction-box">1</span>
+                    <span style={{backgroundColor: convertFDRtoHex("2")}} className="diff-introduction-box">2</span>
+                    <span style={{backgroundColor: convertFDRtoHex("3")}} className="diff-introduction-box">3</span>
+                    <span style={{backgroundColor: convertFDRtoHex("4")}} className="diff-introduction-box">4</span>
+                    <span style={{backgroundColor: convertFDRtoHex("5")}} className="diff-introduction-box">5</span>
+                </p>
+            }
+            </Popover>
+        </h1>
          <form onSubmit={(e) =>  {updateFDRData(); e.preventDefault()}}>
-            GW start:
+            {content.gw_start}
             <input 
                 className="form-number-box" 
                 type="number" 
@@ -256,7 +314,7 @@ export const EliteserienRotationPlanner = () => {
                 name="input-form-start-gw">
             </input>
             
-            GW end:
+            {content.gw_end}
             <input 
                 className="form-number-box" 
                 type="number" 
@@ -269,7 +327,7 @@ export const EliteserienRotationPlanner = () => {
             </input>
             
             <br />
-            Teams to check:
+            {content.teams_to_check}
             <input 
                 className="box" 
                 type="number" 
@@ -280,7 +338,7 @@ export const EliteserienRotationPlanner = () => {
                 id="teams_to_check" 
                 name="teams_to_check" />
             
-            Teams to play:
+            {content.teams_to_play}
             <input 
                 className="box" 
                 type="number" 
@@ -291,13 +349,13 @@ export const EliteserienRotationPlanner = () => {
                 id="teams_to_play" 
                 name="teams_to_play" />
 
-            <input className="submit" type="submit" value="Search">
+            <input className="submit" type="submit" value={content.search}>
             </input>
         </form>
 
         <div style={{ color: "red" }}>{validationErrorMessage}</div>
         
-        <Button buttonText={'Filter teams'} 
+        <Button buttonText={content.filter_button_text} 
             icon_class={"fa fa-chevron-" + (showTeamFilters ? "up" : "down")} 
             onclick={() => setShowTeamFilters(showTeamFilters ? false : true)} />
 
@@ -332,10 +390,10 @@ export const EliteserienRotationPlanner = () => {
                                         <tbody>
                                             <tr>
                                                 <th className="name-col-rotation">
-                                                    Name
+                                                    {content.team}
                                                 </th>
                                                 { kickOffTimesToShow.map(gw =>
-                                                    <th className="min-width"> GW { gw.gameweek}
+                                                    <th className="min-width"> {content.round}{gw.gameweek}
                                                         <div className="day_month">
                                                             { gw.day_month }
                                                         </div>
@@ -383,7 +441,7 @@ export const EliteserienRotationPlanner = () => {
                                             ))}
                                         </tbody>
                                     </table>
-                                    <p> Avg. FDR score: <b> {row.avg_Score} </b></p>
+                                    <p> {content.avg_fdr_score} <b> {row.avg_Score.toFixed(2)} </b></p>
                                 </>
                             )
                         }

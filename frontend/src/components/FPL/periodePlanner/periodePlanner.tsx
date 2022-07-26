@@ -103,14 +103,13 @@ export const PeriodePlanner = () => {
     }
 
     function extractFDRData(body: any) {
-        setLoading(false);
+        setLoading(true);
         setKickOffTimesToShow(kickOffTimes.slice(gwStart - 1, gwEnd));
 
         // Get fdr data from api
         axios.post(fixture_planner_api_path, body).then(x => {
             let apiFDRList: TeamData[] = [];
             let tempTeamNames: TeamName[] = [];
-
             x.data.forEach((team: any[]) => {
                 let team_name = JSON.parse(team[0][0][0]).team_name;
                 tempTeamNames.push({ team_name: team_name, checked: false});
@@ -135,7 +134,7 @@ export const PeriodePlanner = () => {
             setFdrDataAllTeamsNew(apiFDRList);
             setFdrDataToShow(apiFDRList);
             setTeamNames(tempTeamNames);
-            setLoading(true);
+            setLoading(false);
         })
     }
 
@@ -249,7 +248,7 @@ export const PeriodePlanner = () => {
                                 <tbody id="fdr-gws">
                                     <tr id="fdr-row-gws">
                                         { kickOffTimesToShow.map(gw =>
-                                            <th className="min-width"> GW { gw.gameweek}
+                                            <th className=""> GW { gw.gameweek}
                                                 <div className="day_month">
                                                     { gw.day_month }
                                                 </div>

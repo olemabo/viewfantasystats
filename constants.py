@@ -57,16 +57,30 @@ path_to_store_local_data = "C:\\Users\\ole.borge\\PycharmProjects\\FPL-webpage-a
 # link to global ranks
 web_global_league = 'https://fantasy.premierleague.com/api/leagues-classic/314/standings/?phase=1&page_new_entries=1&page_standings=X'
 web_global_league_eliteserien = 'https://fantasy.tv2.no/api/leagues-classic/325/standings/?phase=1&page_new_entries=1&page_standings=X'
+
 # folder names
 eliteserien_folder_name = "eliteserien"
 premier_league_folder_name = "premier_league"
+global_stats_folder_name = "global_stats"
+user_stats_folder_name = "user_stats"
+
+# txt file names 
+country_population_txt_file_name = "country_population.txt"
+total_chip_usage_txt_file_name = "chip_usage.txt"
+
+# wildcard due date NB: MUST BE SET MANUALLY
+eliteserien_wc_due_date = "2022-07-23T13:00:00"
+premier_league_wc_due_date = "2022-07-23T13:00:00"
+
+
+user_stats_special_delimiter = ":;:"
 eliteserien_api_url = "https://fantasy.tv2.no"
 premier_league_api_url = "https://fantasy.premierleague.com"
 total_number_of_gameweeks_in_eliteserien = 30
 
 # store data from these top_x_players. Store for first player, top 10, top 100, top 1000 and top 10000
 all_top_x_players = [1, 10, 100, 1000, 5000]
-time_to_sleep_for_each_iteration = 0.35
+time_to_sleep_for_each_iteration = 0.30
 name_of_ownership_file = "complete_ownership.txt"
 name_of_nationality_file = "country_population.txt"
 name_of_extra_info_file = "extra_info.txt"

@@ -14,7 +14,14 @@
                 border-width: inherit;
                 line-height: 28px;
                 // padding: 2px 0;
-                padding-left: 4px
+                padding-left: 4px;
+                border: transparent;
+            }
+
+            input[type=number] { 
+                -moz-appearance: textfield;
+                appearance: textfield;
+                // margin: 0; 
             }
 
             .submit {
@@ -58,7 +65,7 @@
         .container-fdr {
             max-width: 1200px;
             // margin: 5px auto;
-            margin: 5px 10px !important;
+            margin: 5px 10px 30px 10px !important;
             display: flex;
 
             #fdr-table {
@@ -77,8 +84,20 @@
 
             .name-column {
                 background-color: #f4f7f8;
+                background-color: #dfdfdfc7 !important;
                 text-align: left;
                 width: 130px;
+                padding-left: 5px !important;
+            }
+
+            #fdr-names {
+                // margin-left: 1px;
+                // position: relative;
+                // left: 1px;
+                // right: -1px;
+                // tr {
+                //     border-right: 3.5px solid #dfdfdfc7;
+                // }
             }
 
             .min-width {
@@ -145,6 +164,7 @@ th, td {
     background-color: #f4f7f8;
     text-align: left;
     width: 130px;
+    margin-left: 5px !important;
 }
 
 table {
@@ -161,7 +181,20 @@ table {
     flex-direction: column;
 }
 
+.diff-introduction-container {
+    margin-top: 25px;
 
+    span:nth-of-type(1) {
+        margin-left: 5px;
+    }
+
+    .diff-introduction-box {
+        width: 18px;
+        display: inline-block;
+        text-align: center;
+    }
+}
+    
 
 
 
@@ -199,12 +232,24 @@ tbody td.color-0, tbody td.color-10, .color-0, .color-10, span.diff-introduction
     justify-content: center;
     align-items: center;
 }
+
+
 .no-padding {
     padding: 0;
 }
 .height-2 {
+    // border-color: transparent !important;
     height: 25px;
     font-size: 13px;
+}
+
+.no-padding {
+    // div:first-child {
+    //     border-bottom-color: transparent !important;
+    // }
+    // div:last-child {
+    //     border-top-color: transparent !important;
+    // }
 }
 
 .height-3 {

@@ -7,6 +7,7 @@ import axios from 'axios';
 import { FilterButton } from '../../Shared/FilterButton/FilterButton';
 import { Button } from '../../Shared/Button/Button';
 import { Spinner } from '../../Shared/Spinner/Spinner';
+import Popover from '../../Shared/Popover/Popover';
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -66,15 +67,13 @@ export const EliteserienPeriodePlanner = () => {
     const [ gwStart, setGwStart ] = useState(min_gw);
     const [ gwEnd, setGwEnd ] = useState(max_gw);
     const [ maxGw, setMaxGw ] = useState(-1);
-    const [ minNumFixtures, setMinNumFixtures ] = useState(1);
+    const [ minNumFixtures, setMinNumFixtures ] = useState(3);
     const [ showTeamFilters, setShowTeamFilters ] = useState(false);
     const [ loading, setLoading ] = useState(false);
 
     useEffect(() => {
-        console.log(store.getState()?.league_type, store.getState()?.league_type != "Eliteserien");
         if (store.getState()?.league_type != "Eliteserien") {
             store.dispatch({type: "league_type", payload: "Eliteserien"});
-            console.log(store.getState().league_type);
         }
 
         // Get fdr data from the API
@@ -130,7 +129,6 @@ export const EliteserienPeriodePlanner = () => {
             let index = 0;
             data.fdr_data.forEach((team: any[]) => {
                 let team_name = JSON.parse(team[0][0][0]).team_name;
-                console.log(team_name, team)
                 tempTeamNames.push({ team_name: team_name, checked: false});
 
                 let FDR_gw_i: FDR_gw_i[] = [];
@@ -162,8 +160,6 @@ export const EliteserienPeriodePlanner = () => {
                 index += 1;
             });
 
-            console.log("team_name_color: ", data.team_name_color);
-
             setFdrDataAllTeamsNew(apiFDRList);
             setFdrDataToShow(apiFDRList);
             setTeamNames(tempTeamNames);
@@ -180,11 +176,9 @@ export const EliteserienPeriodePlanner = () => {
                 checked = !x.checked;
             }
             // tempTeamNames.push({ team_name: x.team_name, checked: checked});
-            console.log("x: ", x, checked, e.currentTarget.value);
             temp.push({ team_name: x.team_name, FDR: x.FDR, checked: checked, font_color: x.font_color, background_color: x.background_color });
         });
         // setTeamNames(tempTeamNames);
-        console.log(temp);
         setFdrDataToShow(temp);
     }
 
@@ -201,14 +195,71 @@ export const EliteserienPeriodePlanner = () => {
         return "#000";
     }
 
-    console.log(showTeamFilters)
+    let language  = "Norwegain";
+
+    let content_json = {
+        English: {
+          title: "Eliteserien Periode Planner",
+          gw_start: "GW start:",
+          gw_end: "GW end:",
+          filter_button_text: "Filter teams",
+          team: "Team",
+          round: "GW ",
+          search: "Search",
+          teams_to_check: "Teams to check:",
+          teams_to_play: "Teams to play:",
+          avg_fdr_score: "Avg. FDR score:",
+          min_fixtures: "Minimum fixtures:",
+        },
+        Norwegian: {
+          title: "Periodeplanlegger",
+          gw_start: "Fra runde",
+          gw_end: "til runde",
+          filter_button_text: "Filtrer lag",
+          team: "Lag",
+          round: "R",
+          search: "Søk",
+          teams_to_check: "Antall lag:",
+          teams_to_play: "Lag som skal brukes:",
+          avg_fdr_score: "Gj. snittlig FDR score:",
+          min_fixtures: "Minimum kamper:",
+         }
+    };
+
+    let content = language === "Norwegain" ? content_json.Norwegian : content_json.English;
+
 
     return <>
     <div className='fixture-planner-container' id="fixture-planner-container">
-        <h1>Eliteserien Fixture Planner</h1>
+        <h1>{content.title}<Popover 
+            id={"rotations-planner-id"}
+            title=""
+            popover_title={content.title} 
+            iconSize={14}
+            iconpostition={[-10, 0, 0, 3]}
+            popover_text={ content.title + " viser perioden mellom to runder hvor hvert lag har best kampprogram. Beste rekke med kamper er markert med bokser med svart kantfarger. "
+            + "Eksempelvis ønsker man å finne ut hvilken periode mellom runde 1 og 20 hvert lag har best kamper. "
+            + "'" + content.gw_start.toString() + "'" + " og " + "'" + content.gw_end.toString() + "'" + " blir da henholdsvis 1 og 20. "
+            + "'" + content.min_fixtures.toString() + "'" + " er minste antall etterfølgende kamper et lag må ha. "
+            }>
+            Kampprogram, vanskelighetsgrader og farger er hentet fra 
+            <a href="https://docs.google.com/spreadsheets/d/168WcZ2mnGbSh-aI-NheJl5OtpTgx3lZL-YFV4bAJRU8/edit?usp=sharing">Excel arket</a>
+            til Dagfinn Thon.
+            { fdrToColor != null && 
+                <p className='diff-introduction-container'>
+                    FDR verdier: 
+                    <span style={{backgroundColor: convertFDRtoHex("1")}} className="diff-introduction-box">1</span>
+                    <span style={{backgroundColor: convertFDRtoHex("2")}} className="diff-introduction-box">2</span>
+                    <span style={{backgroundColor: convertFDRtoHex("3")}} className="diff-introduction-box">3</span>
+                    <span style={{backgroundColor: convertFDRtoHex("4")}} className="diff-introduction-box">4</span>
+                    <span style={{backgroundColor: convertFDRtoHex("5")}} className="diff-introduction-box">5</span>
+                </p>
+            }
+            </Popover>
+        </h1>
         { maxGw > 0 && 
             <form onSubmit={(e) =>  {updateFDRData(); e.preventDefault()}}>
-                GW start:
+                {content.gw_start}
                 <input 
                     className="form-number-box" 
                     type="number" 
@@ -219,7 +270,7 @@ export const EliteserienPeriodePlanner = () => {
                     id="input-form-start-gw" 
                     name="input-form-start-gw">
                 </input>
-                GW end:
+                {content.gw_end}
                 <input 
                     className="form-number-box" 
                     type="number" 
@@ -231,7 +282,7 @@ export const EliteserienPeriodePlanner = () => {
                     name="input-form-start-gw">
                 </input>
                 <br />
-                Minimum fixtures:
+                {content.min_fixtures}
                 <input 
                     className="box" 
                     type="number" 
@@ -242,12 +293,12 @@ export const EliteserienPeriodePlanner = () => {
                     id="min_num_fixtures" 
                     name="min_num_fixtures" />
         
-                <input className="submit" type="submit" value="Search">
+                <input className="submit" type="submit" value={content.search}>
                 </input>
             </form> 
         }
      
-        <Button buttonText={'Filter teams'} 
+        <Button buttonText={content.filter_button_text} 
             icon_class={"fa fa-chevron-" + (showTeamFilters ? "up" : "down")} 
             onclick={() => setShowTeamFilters(showTeamFilters ? false : true)} />
 
@@ -274,7 +325,7 @@ export const EliteserienPeriodePlanner = () => {
                                 <tbody id="fdr-names">
                                     <tr>
                                         <td className="name-column min-width">
-                                            Name
+                                            {content.team}
                                         </td>
                                     </tr>
                                     { fdrDataToShow.map(fdr => (<>
@@ -294,7 +345,7 @@ export const EliteserienPeriodePlanner = () => {
                                 <tbody id="fdr-gws">
                                     <tr id="fdr-row-gws">
                                         { kickOffTimesToShow.map(gw =>
-                                            <th className="min-width"> GW { gw.gameweek}
+                                            <th className="min-width"> {content.round}{gw.gameweek}
                                                 <div className="day_month">
                                                     { gw.day_month }
                                                 </div>

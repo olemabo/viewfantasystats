@@ -121,7 +121,7 @@ a:hover {
 }
 
 .container {
-    max-width: 1400px;
+    max-width: var(--max-width);
     margin: 0 auto; /* top/bottum left/right */
     transform: skewY(0deg); /* use negative degrees here to anti skrew text */
     overflow: auto;
@@ -159,7 +159,7 @@ background: linear-gradient(to left, #41D5F9, #2c3e50); /* W3C, IE 10+/ Edge, Fi
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    max-width: 1400px;
+    max-width: var(--max-width);
     margin: 0 auto; /* top/bottum left/right */
 }
 

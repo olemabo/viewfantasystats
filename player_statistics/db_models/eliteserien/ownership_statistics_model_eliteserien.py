@@ -643,32 +643,68 @@ class EliteserienChipsAndUserInfo(models.Model):
     # one stat for each gameweek + 1 total stat for all gws
     number_of_gws = total_number_of_gameweeks
     number_of_extra_info = 10  # [Freehit, BB, TC, WC, None, Avg Value, Avg event transfer, Avg transfer cost, total points, bank]
+    number_of_total_chip_usage = 6  # [Freehit, BB, TC, WC1, WC2, None]
 
     gw = models.IntegerField(primary_key=True, help_text='Enter gameweek number (1) ')
 
     extra_info_top_1 = ListTextField(
         base_field=models.IntegerField(help_text='Extra info among top 1'),
         size=number_of_extra_info,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     extra_info_top_10 = ListTextField(
         base_field=models.IntegerField(help_text='Extra info among top 10'),
         size=number_of_extra_info,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     extra_info_top_100 = ListTextField(
         base_field=models.IntegerField(help_text='Extra info among top 100'),
         size=number_of_extra_info,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     extra_info_top_1000 = ListTextField(
         base_field=models.IntegerField(help_text='Extra info among top 1000'),
         size=number_of_extra_info,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     extra_info_top_5000 = ListTextField(
         base_field=models.IntegerField(help_text='Extra info among top 10000'),
         size=number_of_extra_info,  # Maximum of 100 ids in list
+        blank=True,
+    )
+
+    total_chip_usage_1 = ListTextField(
+        base_field=models.IntegerField(help_text='Total chip usage among top 1'),
+        size=number_of_total_chip_usage,  # Maximum of 100 ids in list
+        blank=True,
+    )
+
+    total_chip_usage_10 = ListTextField(
+        base_field=models.IntegerField(help_text='Total chip usage among top 10'),
+        size=number_of_total_chip_usage,  # Maximum of 100 ids in list
+        blank=True,
+    )
+
+    total_chip_usage_100 = ListTextField(
+        base_field=models.IntegerField(help_text='Total chip usage among top 100'),
+        size=number_of_total_chip_usage,  # Maximum of 100 ids in list
+        blank=True,
+    )
+
+    total_chip_usage_1000 = ListTextField(
+        base_field=models.IntegerField(help_text='Total chip usage among top 1000'),
+        size=number_of_total_chip_usage,  # Maximum of 100 ids in list
+        blank=True,
+    )
+
+    total_chip_usage_5000 = ListTextField(
+        base_field=models.IntegerField(help_text='Total chip usage among top 10000'),
+        size=number_of_total_chip_usage,  # Maximum of 100 ids in list
+        blank=True,
     )
 
     # Metadata

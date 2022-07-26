@@ -1,18 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300&display=swap');
 
-:root {
+/* :root {
     --primary-color: #076585;
     --background-color: #FFFFFF;
-    --text-color: #333;
+    --text-color: #333;*/
     /* --fpl-linear-gradient-first-color: #0f3443;
     --fpl-linear-gradient-second-color: #34e89e; */
-    --fpl-linear-gradient-first-color: #0F3443;
+    /*--fpl-linear-gradient-first-color: #0F3443;
     --fpl-linear-gradient-second-color: #8decc4;
     --eliteserien-linear-gradient-first-color: #41D5F9;
     --eliteserien-linear-gradient-second-color: #2c3e50;
     --height-the-gray-box-should-go-into-header: -10px;
     --height-the-gray-box-should-go-away-from-header: 10px; /* Give this the same value as the var above only opposite sign */
-    --size-of-scewY: 30px;
+    /*--size-of-scewY: 30px;
     --size-of-top-bar: 130px;
     --size-of-top-bar-mobile: 60px;
     --skew-Degrees: 0deg;
@@ -21,8 +21,32 @@
     --content-color: #E8E8E8;
     --border-radius-content: 10px;
     --content-width: 98%;
-}
+    --max-width: 1400px;
+} */
 
+:root {
+    --primary-color: #076585;
+    --background-color: #FFFFFF;
+    --text-color: #333;
+    --fpl-linear-gradient-first-color: #0F3443;
+    --fpl-linear-gradient-second-color: #8decc4;
+    /* --eliteserien-linear-gradient-first-color: #41D5F9; */
+    --eliteserien-linear-gradient-first-color: #37d7feb3;
+    /* --eliteserien-linear-gradient-second-color: #2c3e50; */
+    --eliteserien-linear-gradient-second-color: #1b2f44;
+    --height-the-gray-box-should-go-into-header: -0px;
+    --height-the-gray-box-should-go-away-from-header: 0px; /* Give this the same value as the var above only opposite sign */
+    --size-of-scewY: 30px;
+    --size-of-top-bar: 110px;
+    --size-of-top-bar-mobile: 60px;
+    --skew-Degrees: 0deg;
+    --link-color: black;
+    --title-color: #FFFFFF;
+    --content-color: inherit;
+    --border-radius-content: 10px;
+    --content-width: 98%;
+    --max-width: 1000px;
+} 
 
 * {
     box-sizing: border-box;
@@ -80,7 +104,7 @@ a:hover {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    max-width: 1400px;
+    max-width: var(--max-width);
     margin: 0 auto; /* top/bottum left/right */
 }
 
@@ -102,6 +126,7 @@ a:hover {
 .front-page-bottom {
     position: relative;
     z-index: 10;
+    background-color: #dfdfdfc7;
 }
 
 

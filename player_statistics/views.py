@@ -12,12 +12,17 @@ from django.http import HttpResponse
 from django.shortcuts import render
 import numpy as np
 from django.http import JsonResponse
-from player_statistics.backend.fill_db_global_statistics_eliteserien import write_global_stats_to_db_eliteserien
+from player_statistics.backend.fill_db_from_txt.fill_db_global_statistics_eliteserien import write_global_stats_to_db_eliteserien
 from rest_framework.response import Response
 from rest_framework import generics, status
 from rest_framework.views import APIView
 from player_statistics.db_models.eliteserien.ownership_statistics_model_eliteserien import *
 from fixture_planner_eliteserien.models import EliteserienTeamInfo
+from player_statistics.backend.fill_db_from_txt.fill_db_user_info_statistics_eliteserien import write_user_info_to_db_eliteserien
+
+def fill_user_info_to_db_eliteserien(request):
+    write_user_info_to_db_eliteserien()
+    return HttpResponse("Filled Database User Info (UserInfoStatistics)")
 
 class PlayerOwnershipResponse:
     def __init__(self, ownershipdata, newest_updated_gw, available_gws, team_names_and_ids, chip_data):
@@ -41,10 +46,11 @@ class Team_And_Id_Model:
         return json.dumps(self, default=lambda o: o.__dict__)
 
 class Chip_Model:
-    def __init__(self, gw, chip_data):
+    def __init__(self, gw, chip_data, total_chip_usage):
         ...
         self.gw = gw
         self.chip_data = chip_data
+        self.total_chip_usage = total_chip_usage
     
     def toJson(self):
         return json.dumps(self, default=lambda o: o.__dict__)
@@ -72,7 +78,7 @@ class PlayerOwnershipAPIView(APIView):
         chip_data = []
         chips_db_data = EliteserienChipsAndUserInfo.objects.all()
         for i in chips_db_data:
-            chip_data.append(Chip_Model(i.gw, i.extra_info_top_1000))
+            chip_data.append(Chip_Model(i.gw, i.extra_info_top_1000, i.total_chip_usage_1000))
             
         response = PlayerOwnershipResponse(empty_response, newest_updated_gw, all_gws, team_names_and_ids_list, chip_data) 
 
@@ -88,16 +94,16 @@ class PlayerOwnershipAPIView(APIView):
             if (top_x_players == 100):
                 player_ownership_db = EliteserienGlobalOwnershipStats100.objects.all()
                 for i in chips_db_data:
-                    chip_data.append(Chip_Model(i.gw, i.extra_info_top_100))
+                    chip_data.append(Chip_Model(i.gw, i.extra_info_top_100, i.total_chip_usage_100))
                 
             elif (top_x_players == 1000):
                 player_ownership_db = EliteserienGlobalOwnershipStats1000.objects.all()
                 for i in chips_db_data:
-                    chip_data.append(Chip_Model(i.gw, i.extra_info_top_1000))
+                    chip_data.append(Chip_Model(i.gw, i.extra_info_top_1000, i.total_chip_usage_1000))
             elif (top_x_players == 5000):
                 player_ownership_db = EliteserienGlobalOwnershipStats5000.objects.all()
                 for i in chips_db_data:
-                    chip_data.append(Chip_Model(i.gw, i.extra_info_top_5000))
+                    chip_data.append(Chip_Model(i.gw, i.extra_info_top_5000, i.total_chip_usage_5000))
             
 
             empty_response = []
@@ -113,7 +119,7 @@ class PlayerOwnershipAPIView(APIView):
                 team_names_and_ids_list.append(Team_And_Id_Model(team.team_name, team.team_id).toJson())
         
             response = PlayerOwnershipResponse(empty_response, current_gw, [], team_names_and_ids_list, chip_data) 
-
+            print(current_gw)
             return JsonResponse(response.toJson(), safe=False)
 
         except:

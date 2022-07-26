@@ -1,0 +1,71 @@
+
+label.thin-ui-popover {
+    position: relative;
+    text-align: left;
+    &.dotted {
+        border-bottom: 1.5px dotted black;
+        cursor: pointer;
+    }
+    h3 {
+        text-align: left;
+    }
+
+    p {
+        line-height: 1.2rem;
+        text-align: left;
+        font-size: 14px;
+        font-weight: 300;
+    }
+
+    a {
+        margin-left: 4px;
+        margin-right: 4px;
+        border-bottom: 1px solid var(--eliteserien-linear-gradient-second-color);
+        cursor: pointer;
+    }
+
+    svg {
+        cursor: pointer;
+    }
+}
+
+.last-element {
+    .thin-ui-popover-body {
+        left: -200px !important;
+    }
+}
+label.thin-ui-popover button[name="popover"] {
+    font-family: inherit;
+    font-size: inherit;
+    background: none;
+    border: 0 none;
+    display: inline;
+    outline: none;
+    color: inherit;
+    padding: unset;
+}
+
+label.thin-ui-popover .thin-ui-popover-body {
+    // display: none;
+    cursor: auto;
+
+    font-size: 13px;
+    border-radius: 2px;
+    padding: 16px 36px 16px 16px;
+    background-color: #ffffff;
+
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+
+    position: absolute;
+    z-index: 128;
+    top: 32px;
+    left: 0;
+    min-width: 320px;
+    max-width: 480px;
+}
+
+label.thin-ui-popover button:focus + .thin-ui-popover-body {
+    display: block;
+}
+
+// la

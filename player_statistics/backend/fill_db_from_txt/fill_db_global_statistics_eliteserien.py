@@ -1,14 +1,14 @@
-from constants import total_number_of_gameweeks_in_eliteserien, eliteserien_folder_name, name_of_extra_info_file, name_of_nationality_file, path_to_store_local_data, all_top_x_players, name_of_ownership_file, total_number_of_gameweeks
-import numpy as np
-import datetime
+from constants import total_chip_usage_txt_file_name, total_number_of_gameweeks_in_eliteserien, eliteserien_folder_name, name_of_extra_info_file, name_of_nationality_file, path_to_store_local_data, all_top_x_players, name_of_ownership_file, total_number_of_gameweeks
 from player_statistics.db_models.eliteserien.ownership_statistics_model_eliteserien import EliteserienChipsAndUserInfo, EliteserienGlobalOwnershipStats5000, \
     EliteserienGlobalOwnershipStats1000, EliteserienGlobalOwnershipStats100, EliteserienGwsChecked
 from player_statistics.db_models.eliteserien.nationality_statistics_model_eliteserien import EliteserienNationalityStatistics
-
+import numpy as np
+import datetime
+import os
 
 def write_global_stats_to_db_eliteserien():
     gws = [gw + 1 for gw in range(total_number_of_gameweeks_in_eliteserien)]
-    fill_db_ownership_statistics_eliteserien(gws)
+    # fill_db_ownership_statistics_eliteserien(gws)
     fill_db_extra_info_statistics_eliteserien(gws)
     # fill_db_nationality_statistics_eliteserien(gws)
 
@@ -30,7 +30,6 @@ def fill_db_ownership_statistics_eliteserien(gws):
                     dtype="str", 
                     delimiter=",", 
                     skiprows=1)
-                print(str(current_data[3][3]))
                 if top_x == 100:
                     fill_global_ownership_statistics_top_x(current_data, gw, top_x)
                     temp_list = list(current_filled_gws.gws_updated_100)
@@ -88,6 +87,12 @@ def fill_db_extra_info_statistics_eliteserien(gws):
         extra_info_top_5000 = []
         new_data = False
 
+        total_chip_usage_1 = []
+        total_chip_usage_10 = []
+        total_chip_usage_100 = []
+        total_chip_usage_1000 = []
+        total_chip_usage_5000 = []
+
         for top_x in top_x_players:
             try:
                 current_path = file_path + "/top_" + str(top_x) + "/" + name_of_extra_info_file
@@ -106,33 +111,52 @@ def fill_db_extra_info_statistics_eliteserien(gws):
 
                 db_data = [chips_data[0], chips_data[1], chips_data[2], chips_data[3], chips_data[4],
                             avg_team_value, avg_gw_transfer, avg_transfer_cost]
-
+                
+                total_chip_usage = file_path + "/top_" + str(top_x) + "/" + total_chip_usage_txt_file_name
+                total_chip_usage_data = []
+                if (os.path.exists(total_chip_usage)):
+                    temp = np.loadtxt(total_chip_usage, dtype="str", delimiter=",", skiprows=1, max_rows=1)
+                    total_chip_usage_data = [temp[0], temp[1], temp[2], temp[3], temp[4]]
+                
                 if top_x == 1:
                     extra_info_top_1 = db_data
+                    total_chip_usage_1 = total_chip_usage_data
                     new_data = True
                 if top_x == 10:
                     extra_info_top_10 = db_data
+                    total_chip_usage_10 = total_chip_usage_data
                     new_data = True
                 if top_x == 100:
                     extra_info_top_100 = db_data
+                    total_chip_usage_100 = total_chip_usage_data
                     new_data = True
                 if top_x == 1000:
                     extra_info_top_1000 = db_data
+                    total_chip_usage_1000 = total_chip_usage_data
                     new_data = True
                 if top_x == 5000:
                     extra_info_top_5000 = db_data
+                    total_chip_usage_5000 = total_chip_usage_data
                     new_data = True
+                
             except:
                 error = "Error occured"
                 #print("Didn't find file: ", current_path)
 
         if new_data:
+            print(new_data, gw, top_x, total_chip_usage_1, total_chip_usage_10, total_chip_usage_100, total_chip_usage_1000,total_chip_usage_5000)
             fill_model = EliteserienChipsAndUserInfo(gw=gw,
                                              extra_info_top_1=extra_info_top_1,
                                              extra_info_top_10=extra_info_top_10,
                                              extra_info_top_100=extra_info_top_100,
                                              extra_info_top_1000=extra_info_top_1000,
-                                             extra_info_top_5000=extra_info_top_5000)
+                                             extra_info_top_5000=extra_info_top_5000,
+                                             total_chip_usage_1=total_chip_usage_1,
+                                             total_chip_usage_10=total_chip_usage_10,
+                                             total_chip_usage_100=total_chip_usage_100,
+                                             total_chip_usage_1000=total_chip_usage_1000,
+                                             total_chip_usage_5000=total_chip_usage_5000,
+                                             )
             fill_model.save()
             print("Filled up Extra Info DB for GW: ", gw)
 

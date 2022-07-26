@@ -205,7 +205,7 @@ export const RotationPlanner = () => {
             setValidationErrorMessage("'Teams to play' must be smaller than 'Teams to check'");
             return false;
         }
-        console.log(body.teams_in_solution.length, body.teams_to_check)
+
         if (body.teams_in_solution.length > body.teams_to_check) {
             setValidationErrorMessage("'teams_in_solution' must be smaller og equal to 'Teams to check'");
             return false;
@@ -236,11 +236,40 @@ export const RotationPlanner = () => {
 
     }
 
+    let language  = "Norwegain";
+
+    let content_json = {
+        English: {
+          title: "Rotation Planner",
+          gw_start: "GW start:",
+          gw_end: "GW end:",
+          filter_button_text: "Filter teams",
+          team: "Team",
+          round: "GW ",
+          search: "Search",
+          teams_to_check: "Teams to check:",
+          teams_to_play: "Teams to play:",
+        },
+        Norwegian: {
+          title: "Rotasjonsplanlegging",
+          gw_start: "Fra runde",
+          gw_end: "til runde",
+          filter_button_text: "Filtrer lag",
+          team: "Lag",
+          round: "R",
+          search: "Søk",
+          teams_to_check: "Antall lag:",
+          teams_to_play: "Lag som må brukes per runde:",
+         }
+    };
+
+    let content = language === "Norwegain" ? content_json.Norwegian : content_json.English;
+
     return <>
      <div className='fixture-planner-container' id="rotation-planner-container">
-         <h1>Rotation Planner</h1>
+         <h1>{content.title}</h1>
          <form onSubmit={(e) =>  {updateFDRData(); e.preventDefault()}}>
-            GW start:
+            {content.gw_start}
             <input 
                 className="form-number-box" 
                 type="number" 
@@ -251,7 +280,7 @@ export const RotationPlanner = () => {
                 id="input-form-start-gw" 
                 name="input-form-start-gw">
             </input>
-            GW end:
+            {content.gw_end}
             <input 
                 className="form-number-box" 
                 type="number" 
@@ -264,7 +293,7 @@ export const RotationPlanner = () => {
             </input>
 
             <br />
-            Teams to check:
+            {content.teams_to_check}
             <input 
                 className="box" 
                 type="number" 
@@ -275,7 +304,7 @@ export const RotationPlanner = () => {
                 id="teams_to_check" 
                 name="teams_to_check" />
             
-            Teams to play:
+            {content.teams_to_play}
             <input 
                 className="box" 
                 type="number" 
@@ -286,7 +315,7 @@ export const RotationPlanner = () => {
                 id="teams_to_play" 
                 name="teams_to_play" />
 
-            <input className="submit" type="submit" value="Search">
+            <input className="submit" type="submit" value={content.search}>
             </input>
         </form>
 
@@ -332,7 +361,7 @@ export const RotationPlanner = () => {
                                                     Name
                                                 </th>
                                                 { kickOffTimesToShow.map(gw =>
-                                                    <th className="min-width"> GW { gw.gameweek}
+                                                    <th className="min-width"> {content.round} { gw.gameweek}
                                                         <div className="day_month">
                                                             { gw.day_month }
                                                         </div>

@@ -228,7 +228,7 @@ export const FixturePlanner = () => {
                                 <tbody id="fdr-gws">
                                     <tr id="fdr-row-gws">
                                         { kickOffTimesToShow.map(gw =>
-                                            <th className="min-width"> GW { gw.gameweek}
+                                            <th className=""> GW { gw.gameweek}
                                                 <div className="day_month">
                                                     { gw.day_month }
                                                 </div>

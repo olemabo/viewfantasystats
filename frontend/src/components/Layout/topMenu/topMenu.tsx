@@ -41,7 +41,7 @@ export const TopMenu = () => {
                 </div>
                 <div className="navbar">
                     <div className="nav-container">
-                        <h1 className="logo">{leagueType}</h1>
+                        <h1 className="logo">{leagueType == "FPL" ? "Premier League" : leagueType}</h1>
                         { leagueType == fpl && 
                             <nav>
                                 {/* <div className="dropdown">
@@ -52,34 +52,36 @@ export const TopMenu = () => {
                                         <a href="../../../fixture-planner/">Ownership Stats</a>
                                     </div>
                                 </div> */}
-                                <div className="dropdown">
-                                    <button className="dropbtn">Fixture Planning</button>
-                                    <div className="dropdown-content">
-                                        <a href="../../../fixture-planner/fdr-planner/">FDR Planner</a>
-                                        <a href="../../../fixture-planner/rotation-planner/">Roation Planner</a>
-                                        <a href="../../../fixture-planner/periode-planner/">Period Planner</a>
-                                    </div>
-                                </div>
+                                <ul>
+                                    <li className="dropdown">
+                                        <button className="dropbtn">Fixture Planning</button>
+                                        <div className="dropdown-content">
+                                            <a href="../../../fixture-planner/fdr-planner/">FDR Planner</a>
+                                            <a href="../../../fixture-planner/rotation-planner/">Roation Planner</a>
+                                            <a href="../../../fixture-planner/periode-planner/">Period Planner</a>
+                                        </div>
+                                    </li>
+                                </ul>
                             </nav> 
                         }
                         { leagueType == eliteserien && 
                             <nav>
-                                <div className="dropdown">
-                                    <button className="dropbtn">Statistics</button>
-                                    <div className="dropdown-content">
-                                        <a className="dropbtn" href="../../../statistics/player-ownership/">Player Ownership</a>
-                                        {/* <a className="dropbtn" href="../../../fixture-planner-eliteserien/rotation-planner/">Roation Planner</a> */}
-                                        {/* <a className="dropbtn" href="../../../fixture-planner-eliteserien/periode-planner/">Period Planner</a> */}
-                                    </div>
-                                </div>
-                                <div className="dropdown">
-                                    <button className="dropbtn">Fixture Planning</button>
-                                    <div className="dropdown-content">
-                                        <a className="dropbtn" href="../../../fixture-planner-eliteserien/">FDR Planner</a>
-                                        <a className="dropbtn" href="../../../fixture-planner-eliteserien/rotation-planner/">Roation Planner</a>
-                                        <a className="dropbtn" href="../../../fixture-planner-eliteserien/periode-planner/">Period Planner</a>
-                                    </div>
-                                </div>
+                                <ul>
+                                    <li className="dropdown">
+                                        <button className="dropbtn">Statistikk</button>
+                                        <div style={{left: '0'}} className="dropdown-content">
+                                            <a className="dropbtn" href="../../../statistics/player-ownership/">Eierandel</a>
+                                        </div>
+                                    </li>
+                                    <li className="dropdown">
+                                        <button className="dropbtn">Kampprogram</button>
+                                        <div style={{float: 'left'}} className="dropdown-content">
+                                            <a className="dropbtn" href="../../../fixture-planner-eliteserien/">FDR Planner</a>
+                                            <a className="dropbtn" href="../../../fixture-planner-eliteserien/rotation-planner/">Rotasjonsplanlegger</a>
+                                            <a className="dropbtn" href="../../../fixture-planner-eliteserien/periode-planner/">Periodeplanlegger</a>
+                                        </div>
+                                    </li>
+                                </ul>
                             </nav> 
                         }
                     </div>
