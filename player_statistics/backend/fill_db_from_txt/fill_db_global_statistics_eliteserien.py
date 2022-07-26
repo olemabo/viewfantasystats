@@ -144,7 +144,6 @@ def fill_db_extra_info_statistics_eliteserien(gws):
                 #print("Didn't find file: ", current_path)
 
         if new_data:
-            print(new_data, gw, top_x, total_chip_usage_1, total_chip_usage_10, total_chip_usage_100, total_chip_usage_1000,total_chip_usage_5000)
             fill_model = EliteserienChipsAndUserInfo(gw=gw,
                                              extra_info_top_1=extra_info_top_1,
                                              extra_info_top_10=extra_info_top_10,

@@ -119,7 +119,6 @@ class PlayerOwnershipAPIView(APIView):
                 team_names_and_ids_list.append(Team_And_Id_Model(team.team_name, team.team_id).toJson())
         
             response = PlayerOwnershipResponse(empty_response, current_gw, [], team_names_and_ids_list, chip_data) 
-            print(current_gw)
             return JsonResponse(response.toJson(), safe=False)
 
         except:

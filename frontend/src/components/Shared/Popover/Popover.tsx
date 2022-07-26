@@ -7,6 +7,7 @@ type PopoverProps = {
     popover_title: string;
     popover_text: string;
     iconSize?: number;
+    algin_left?: boolean;
     iconpostition?: number[];
 }
 
@@ -75,7 +76,7 @@ export const Popover : FunctionComponent<PopoverProps> = (props) => {
                 </svg> }
         </button>
         { show &&
-        <div className="thin-ui-popover-body">
+        <div className={"thin-ui-popover-body " + (props.algin_left ? "adjust-left" : " ")}>
             <h3>{props.popover_title}</h3>
             <p>{props.popover_text}</p>
                 {props.children}
@@ -89,4 +90,5 @@ export default Popover;
 Popover.defaultProps = {
     iconSize: 0,
     iconpostition: [0, 0, 0, 0],
+    algin_left: false,
 }

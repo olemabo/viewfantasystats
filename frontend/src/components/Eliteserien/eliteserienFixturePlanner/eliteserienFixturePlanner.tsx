@@ -226,6 +226,7 @@ export const EliteserienFixturePlanner = () => {
         <h1>{content.title}<Popover 
             id={"rotations-planner-id"}
             title=""
+            algin_left={true}
             popover_title={content.title} 
             iconSize={14}
             iconpostition={[-10, 0, 0, 3]}

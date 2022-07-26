@@ -45,7 +45,7 @@ def find_best_rotation_combosEliteserien(data, GW_start, GW_end, teams_to_check=
         dict_with_team_name_to_team_ids[str(team.team_name)] = team.team_id
 
     team_ids = []
-    print(team_names, teams_in_solution)
+
     for team_name in team_names:
         if team_name == -1:
             number_of_teams = total_number_of_eliteserien_teams # originaly df.shape[0]

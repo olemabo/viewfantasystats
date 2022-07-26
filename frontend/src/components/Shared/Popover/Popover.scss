@@ -1,3 +1,7 @@
+$min-width: 300px;
+$max-width: 480px;
+$min-width-mobile: 260px;
+$max-width-mobile: 320px;
 
 label.thin-ui-popover {
     position: relative;
@@ -34,6 +38,28 @@ label.thin-ui-popover {
         left: -200px !important;
     }
 }
+
+@media (max-width: 900px) {
+    .adjust-left {
+        left: -$min-width !important;
+    }
+}
+
+@media (max-width: 600px) {
+    .adjust-left {
+        left: -$min-width-mobile !important;
+    }
+
+    label.thin-ui-popover .thin-ui-popover-body.adjust-left {
+        position: relative !important;
+        min-width: 0 !important;
+        max-width: none !important;
+        left: 0 !important;
+        top: 5px !important;
+    }
+}
+
+
 label.thin-ui-popover button[name="popover"] {
     font-family: inherit;
     font-size: inherit;
@@ -60,8 +86,9 @@ label.thin-ui-popover .thin-ui-popover-body {
     z-index: 128;
     top: 32px;
     left: 0;
-    min-width: 320px;
-    max-width: 480px;
+    // min-width: 320px;
+    min-width: $min-width;
+    max-width: $max-width;
 }
 
 label.thin-ui-popover button:focus + .thin-ui-popover-body {

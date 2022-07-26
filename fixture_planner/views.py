@@ -203,7 +203,6 @@ class PostFDRView(APIView):
                 
                 fdr_fixture_data = rotation_data 
 
-            print(fdr_fixture_data[0], "hhe")
             return JsonResponse(fdr_fixture_data, safe=False)
 
             #return HttpResponse(fdr_fixture_data, content_type="application/json", status=status.HTTP_200_OK)
@@ -393,7 +392,6 @@ def get_rotation_data(request):
         if request.method == 'POST':
             my_json = request.body.decode('utf8').replace("'", '"')
             data = json.loads(my_json)
-    print("\n \n DATA: ", request.is_ajax(), " \n \n")
     start_gw = data['start_gw']
     end_gw = data['end_gw']
     fpl_teams = data['fpl_teams']

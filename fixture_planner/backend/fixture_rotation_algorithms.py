@@ -260,7 +260,7 @@ def find_best_rotation_combos_json(data, GW_start, GW_end, teams_to_check=5, tea
 
     # create fixture dataframe. Each element: ['ARS', 'H', 3]
     df, names, short_names, ids = return_fixture_names_shortnames()
-    print(df)
+
     # adjust the fixture difficulty
     if home_away_adjustment > 0:
         l = 0

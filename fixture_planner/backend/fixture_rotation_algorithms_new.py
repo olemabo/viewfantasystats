@@ -130,8 +130,6 @@ def find_best_rotation_combos_new(data, gw_start, gw_end, teams_to_check=5, team
     dict_with_team_ids_to_team_name, dict_with_team_name_to_team_ids = \
         create_dict_with_team_ids_to_team_name_and_team_name_to_ids_from_db(fixture_list_db)
 
-    print(dict_with_team_ids_to_team_name, dict_with_team_name_to_team_ids)
-
     team_ids = []
     for team_name in team_names:
         if team_name == -1:

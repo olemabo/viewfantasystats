@@ -56,7 +56,6 @@ class GetAllEliteserienFDRData(APIView):
             end_gw = int(request.data.get("end_gw"))
             min_num_fixtures = int(request.data.get("min_num_fixtures"))
             combinations = str(request.data.get("combinations"))
-            print(start_gw, end_gw, min_num_fixtures, combinations)
             fdr_fixture_data = []
 
             fixture_list_db = AddPlTeamsToDB.objects.all()
@@ -240,7 +239,6 @@ def find_best_fixture_with_min_length_each_team_eliteserien(data, GW_start, GW_e
     #df = adjust_df_for_difficult_teams(df)
     best_fixtures_min_length = []
     for team_id in range(len(data)):
-        print(team_id, GW_start, GW_end, min_length)
         info = compute_best_fixtures_one_team_db_data(data, GW_start, GW_end, team_id + 1, min_length)
         best_fixtures_min_length.append(info)
     return best_fixtures_min_length

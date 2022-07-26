@@ -257,7 +257,7 @@ export const EliteserienRotationPlanner = () => {
           avg_fdr_score: "Avg. FDR score:",
         },
         Norwegian: {
-          title: "Rotasjonsplanlegging",
+          title: "Rotasjonsplanlegger",
           gw_start: "Fra runde",
           gw_end: "til runde",
           filter_button_text: "Filtrer lag",
@@ -277,6 +277,7 @@ export const EliteserienRotationPlanner = () => {
          <h1>{content.title}<Popover 
             id={"rotations-planner-id"}
             title=""
+            algin_left={true}
             popover_title={content.title} 
             iconSize={14}
             iconpostition={[-10, 0, 0, 3]}
