@@ -10,8 +10,8 @@ from fixture_planner.backend.utility_functions import calc_score
 from fixture_planner.models import AddPlTeamsToDB, KickOffTime
 from fixture_planner_eliteserien.backend.read_eliteserien_data import readEliteserienExcelFromDagFinnToDBFormat
 from fixture_planner_eliteserien.backend.read_eliteserien_data import readEliteserienExcelToDBFormat
-from utils.models.WhichTeamToCheck import WhichTeamToCheck
-from utils.models.FDR_team import FixtureDifficultyInfo
+from utils.models.fixtures.WhichTeamToCheck import WhichTeamToCheck
+from utils.models.fixtures.FixtureDifficultyModel import FixtureDifficultyModel
 from utils.models.KickOffTimeInfo import KickOffTimeInfo
 from django.views.decorators.csrf import csrf_exempt
 from utils.utility_functions import get_current_gw
@@ -117,7 +117,7 @@ class PostFDRView(APIView):
                         temp_gw = temp_gws[j]
                         if temp_gw in gw_numbers:
                             temp_list2[gw_numbers.index(temp_gw)].append([
-                                FixtureDifficultyInfo(team_name=team_i.team_name,
+                                FixtureDifficultyModel(team_name=team_i.team_name,
                                                       opponent_team_name=team_i.oppTeamNameList[j],
                                                       this_difficulty_score=team_i.oppTeamDifficultyScore[j],
                                                       total_fdr_score=FDR_score,
@@ -126,7 +126,7 @@ class PostFDRView(APIView):
 
                     for k in range(len(temp_list2)):
                         if not temp_list2[k]:
-                            temp_list2[k] = [[FixtureDifficultyInfo(opponent_team_name="-",
+                            temp_list2[k] = [[FixtureDifficultyModel(opponent_team_name="-",
                                                                    this_difficulty_score=0,
                                                                    H_A=" ",
                                                                    team_name=team_i.team_name,
@@ -349,7 +349,7 @@ def get_fdr_data(request):
                 temp_gw = temp_gws[j]
                 if temp_gw in gw_numbers:
                     temp_list2[gw_numbers.index(temp_gw)].append([
-                        FixtureDifficultyInfo(team_name=team_i.team_name,
+                        FixtureDifficultyModel(team_name=team_i.team_name,
                                               opponent_team_name=team_i.oppTeamNameList[j],
                                               this_difficulty_score=team_i.oppTeamDifficultyScore[j],
                                               total_fdr_score=FDR_score,
@@ -358,7 +358,7 @@ def get_fdr_data(request):
 
             for k in range(len(temp_list2)):
                 if not temp_list2[k]:
-                    temp_list2[k] = [[FixtureDifficultyInfo(opponent_team_name="-",
+                    temp_list2[k] = [[FixtureDifficultyModel(opponent_team_name="-",
                                                             this_difficulty_score=0,
                                                             H_A=" ",
                                                             team_name=team_i.team_name,

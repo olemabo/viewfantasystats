@@ -1,6 +1,7 @@
 import React from "react";
 import "./footer.scss";
 import Twitter from '@material-ui/icons/Twitter';
+import Code from '@material-ui/icons/Code';
 
 export const Footer = () => {
 
@@ -27,9 +28,13 @@ export const Footer = () => {
         {/* <div className="footer-section-social-media">
           <h2>Sosiale medier</h2>
           <div>
-            <Twitter /><a target="_blank" href="https://twitter.com/Ole_Borge">Twitter</a>                     
+            <div><Twitter /><a target="_blank" href="https://twitter.com/Ole_Borge">Twitter</a></div>                  
+            <div><Code /><a target="_blank" href="https://dev.azure.com/olemartinbo/_git/FPL-webpage">Open Source Project</a></div>                   
           </div>
         </div> */}
+        {/* https://dev.azure.com/olemartinbo/_git/FPL-webpage
+        @fplbot is an open source project made by Blank. The code is available on github. */}
+        {/* Denne nettsiden er et "open source" prosjekt laget av Ole Martin */}
       </div>
   </div></>
 };

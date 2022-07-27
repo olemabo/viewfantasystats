@@ -16,7 +16,7 @@ interface TopMenyProps {
 }
 
 export const TopMenuMobile: React.FunctionComponent<TopMenyProps> = (props) => {
-    const menuNameOpen = "Menu";
+    const menuNameOpen = "Meny";
     const menuNameClosed = "Close";
     const [ MenuOpen, setMenuOpen ] = useState(false);
     const fpl = "FPL";

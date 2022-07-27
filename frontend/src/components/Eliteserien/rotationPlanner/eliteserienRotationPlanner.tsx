@@ -1,10 +1,13 @@
-import { FDRData } from "../../FPL/fixturePlanner/FdrModel";
+import { RotationPlannerTeamModel } from '../../../models/fixturePlanning/RotationPlannerTeam';
+import { KickOffTimesModel } from '../../../models/fixturePlanning/KickOffTimes';
+import { TeamCheckedModel } from '../../../models/fixturePlanning/TeamChecked';
+
 import React, { useState, useEffect } from 'react';
-//import "../fixturePlanner/fixturePlanner.scss";
-// import "../rotationPlanner/rotationPlanner.scss";
-import axios from 'axios';
-import { contrastingColor } from '../../../utils/findContrastColor';
 import store from '../../../store/index';
+import axios from 'axios';
+
+import { contrastingColor } from '../../../utils/findContrastColor';
+
 import { Button } from '../../Shared/Button/Button';
 import { CheckBox } from '../../Shared/CheckBox/CheckBox';
 import { Spinner } from '../../Shared/Spinner/Spinner';
@@ -13,54 +16,12 @@ import { Popover } from '../../Shared/Popover/Popover';
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
-interface RotationPlannerTeamInfo {
-    avg_Score: number;
-    id_list: string[];
-    team_name_list: string[];
-    extra_fixtures: number;
-    home_games: number;
-    fixture_list: [];
-}
-
-interface gwDate {
-    gw: number;
-    day_month: string;
-}
-
-interface KickOffTimes {
-    gameweek: number;
-    kickoff_time: string;
-    day_month: string;
-}
-
-interface FDRDataNew {
-    opponent_team_name: string;
-    difficulty_score: string;
-    H_A: string;
-    Use_Not_Use: boolean;
-}
-
-interface FDR_gw_i {
-    fdr_gw_i: FDRDataNew[];
-}
-
-interface TeamData {
-    team_name: string;
-    checked: boolean;
-    checked_must_be_in_solution: boolean;
-}
-
-interface TeamName {
-    team_name: string;
-    checked: boolean;
-}
-
 export const EliteserienRotationPlanner = () => {
     const fixture_planner_api_path = "/fixture-planner-eliteserien/get-all-eliteserien-fdr-data/";
     const min_gw = 1;
     const max_gw = 30;
-    const empty: RotationPlannerTeamInfo[] = [ { avg_Score: -1, id_list: [], team_name_list: [], extra_fixtures: -1, home_games: -1, fixture_list: [] }];
-    const emptyGwDate: KickOffTimes[] = [{gameweek: 0, day_month: "",kickoff_time: "" }];
+    const empty: RotationPlannerTeamModel[] = [ { avg_Score: -1, id_list: [], team_name_list: [], extra_fixtures: -1, home_games: -1, fixture_list: [] }];
+    const emptyGwDate: KickOffTimesModel[] = [{gameweek: 0, day_month: "",kickoff_time: "" }];
 
     const [ gwStart, setGwStart ] = useState(16);
     const [ gwEnd, setGwEnd ] = useState(max_gw);
@@ -69,7 +30,7 @@ export const EliteserienRotationPlanner = () => {
     const [ kickOffTimesToShow, setKickOffTimesToShow ] = useState(emptyGwDate);
     const [ showTeamFilters, setShowTeamFilters ] = useState(false);
 
-    const emptyTeamData: TeamData[] = [ { team_name: "empty", checked: true, checked_must_be_in_solution: false }];
+    const emptyTeamData: TeamCheckedModel[] = [ { team_name: "empty", checked: true, checked_must_be_in_solution: false }];
     const [ teamData, setTeamData ] = useState(emptyTeamData);
     const [ fdrToColor, setFdrToColor ] = useState({0.5: "0.5", 1: "1", 2: "2", 3: "3", 4: "4", 5: "5"});
     const [ maxGw, setMaxGw ] = useState(-1);
@@ -83,9 +44,6 @@ export const EliteserienRotationPlanner = () => {
         if (store.getState()?.league_type != "Eliteserien") {
             store.dispatch({type: "league_type", payload: "Eliteserien"});
         }
-
-        // setGwStart(1);
-        // setGwEnd(3);
         
         // Get fdr data from the API
         let body = { 
@@ -98,7 +56,6 @@ export const EliteserienRotationPlanner = () => {
             teams_in_solution: [],
             fpl_teams: [-1],
         };
-        setKickOffTimesToShow(kickOffTimes.slice(1, 3));
 
         extractFDRData(body)
     }, []);
@@ -119,8 +76,9 @@ export const EliteserienRotationPlanner = () => {
     function extractFDRData(body: any) {
         setLoading(true);
         axios.post(fixture_planner_api_path, body).then(x => {
-            let RotationPlannerTeamInfoList: RotationPlannerTeamInfo[] = [];
+            let RotationPlannerTeamInfoList: RotationPlannerTeamModel[] = [];
             let data = JSON.parse(x.data);
+
             if (maxGw < 0) { 
                 setMaxGw(data.gws_and_dates.length); 
                 setGwEnd(data.gws_and_dates.length); 
@@ -129,14 +87,14 @@ export const EliteserienRotationPlanner = () => {
             setFdrToColor(data.fdr_to_colors_dict);
 
             if (data?.gws_and_dates?.length > 0) {
-                let temp_KickOffTimes: KickOffTimes[] = [];
+                let temp_KickOffTimes: KickOffTimesModel[] = [];
                 data?.gws_and_dates.forEach((kickoff: string) => temp_KickOffTimes.push(JSON.parse(kickoff)));
                 setKickOffTimes(temp_KickOffTimes);
                 setKickOffTimesToShow(temp_KickOffTimes.slice(gwStart - 1, body['end_gw']));
                 setGwEnd(body['end_gw']); 
             }
 
-            var emptyTeamData: TeamData[] = [];
+            var emptyTeamData: TeamCheckedModel[] = [];
             if (data?.team_name_color?.length > 0 && teamData.length < 2) {
                 data?.team_name_color.forEach( (x: string[]) => {
                     emptyTeamData.push({ team_name: x[0], checked: true, checked_must_be_in_solution: false })
@@ -147,7 +105,7 @@ export const EliteserienRotationPlanner = () => {
             data.fdr_data.forEach((team: any) => {
                 
                 let team_i_json = JSON.parse(team);
-                let temp: RotationPlannerTeamInfo = { avg_Score: team_i_json.avg_Score, 
+                let temp: RotationPlannerTeamModel = { avg_Score: team_i_json.avg_Score, 
                     id_list: team_i_json.id_list, team_name_list: team_i_json.team_name_list, 
                     extra_fixtures: team_i_json.extra_fixtures, home_games: team_i_json.home_games,
                     fixture_list: team_i_json.fixture_list}
@@ -160,7 +118,7 @@ export const EliteserienRotationPlanner = () => {
     }
 
     function toggleCheckbox(e: any) {
-        let temp: TeamData[] = [];
+        let temp: TeamCheckedModel[] = [];
         teamData.forEach(x => {
             let checked = x.checked;
             let checked_must_be_in_solution = x.checked_must_be_in_solution;
@@ -174,7 +132,7 @@ export const EliteserienRotationPlanner = () => {
     }
 
     function toggleCheckboxMustBeInSolution(e: any) {
-        let temp: TeamData[] = [];
+        let temp: TeamCheckedModel[] = [];
         teamData.forEach(x => {
             let checked_must_be_in_solution = x.checked_must_be_in_solution;
             let checked = x.checked;
@@ -189,11 +147,11 @@ export const EliteserienRotationPlanner = () => {
 
     function validateInput(body: any) {
         if (body.start_gw > body.end_gw) { 
-            setValidationErrorMessage("GW start must be smaller than GW end");
+            setValidationErrorMessage("'" + content.gw_start + "' må være mindre enn '" + content.gw_end + "'");
             return false;
         }
         if (body.teams_to_play > body.teams_to_check) { 
-            setValidationErrorMessage("'Teams to play' must be smaller than 'Teams to check'");
+            setValidationErrorMessage("'" + content.teams_to_play + "' må være mindre enn '" + content.teams_to_check + "'");
             return false;
         }
 
@@ -281,7 +239,7 @@ export const EliteserienRotationPlanner = () => {
             popover_title={content.title} 
             iconSize={14}
             iconpostition={[-10, 0, 0, 3]}
-            popover_text={"Rotasjonsplanlegging viser kombinasjoner av lag som kan roteres for å gi best mulig kampprogram. "
+            popover_text={ content.title + " viser kombinasjoner av lag som kan roteres for å gi best mulig kampprogram. "
             + "Eksempelvis ønsker man å finne to keepere som roterer bra mellom runde 10 og 20. "
             + "'" + content.gw_start.toString() + "'" + " og " + "'" + content.gw_end.toString() + "'" + " blir da henholdsvis 10 og 20. "
             + "'" + content.teams_to_check.toString() + "'" + " blir 2 fordi man skal ha 2 keepere som skal rotere. "
@@ -291,14 +249,17 @@ export const EliteserienRotationPlanner = () => {
             <a href="https://docs.google.com/spreadsheets/d/168WcZ2mnGbSh-aI-NheJl5OtpTgx3lZL-YFV4bAJRU8/edit?usp=sharing">Excel arket</a>
             til Dagfinn Thon.
             { fdrToColor != null && 
-                <p className='diff-introduction-container'>
+                <><p className='diff-introduction-container'>
                     FDR verdier: 
+                    <span style={{backgroundColor: convertFDRtoHex("0.5")}} className="diff-introduction-box wide">0.25</span>
                     <span style={{backgroundColor: convertFDRtoHex("1")}} className="diff-introduction-box">1</span>
                     <span style={{backgroundColor: convertFDRtoHex("2")}} className="diff-introduction-box">2</span>
                     <span style={{backgroundColor: convertFDRtoHex("3")}} className="diff-introduction-box">3</span>
                     <span style={{backgroundColor: convertFDRtoHex("4")}} className="diff-introduction-box">4</span>
                     <span style={{backgroundColor: convertFDRtoHex("5")}} className="diff-introduction-box">5</span>
+                    <span style={{backgroundColor: convertFDRtoHex("10")}} className="diff-introduction-box black">10</span>
                 </p>
+                <p>Lilla bokser markerer en dobbelt runde, mens svarte bokser markerer at laget ikke har kamp den runden.</p></>
             }
             </Popover>
         </h1>
@@ -394,7 +355,7 @@ export const EliteserienRotationPlanner = () => {
                                                     {content.team}
                                                 </th>
                                                 { kickOffTimesToShow.map(gw =>
-                                                    <th className="min-width"> {content.round}{gw.gameweek}
+                                                    <th> {content.round}{gw.gameweek}
                                                         <div className="day_month">
                                                             { gw.day_month }
                                                         </div>

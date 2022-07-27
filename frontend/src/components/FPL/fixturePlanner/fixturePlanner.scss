@@ -192,6 +192,16 @@ table {
         width: 18px;
         display: inline-block;
         text-align: center;
+
+        &.wide {
+            width: 33px;
+            color: white;
+        }
+
+        &.black {
+            color: white;
+            width: 22px;
+        }
     }
 }
     
@@ -240,7 +250,7 @@ tbody td.color-0, tbody td.color-10, .color-0, .color-10, span.diff-introduction
 .height-2 {
     // border-color: transparent !important;
     height: 25px;
-    font-size: 13px;
+    font-size: 11px;
 }
 
 .no-padding {

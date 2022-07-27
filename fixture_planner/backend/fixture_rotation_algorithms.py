@@ -4,7 +4,7 @@ from fixture_planner.backend.create_data_objects import return_fixture_names_sho
 from fixture_planner.backend.utility_functions import insertion_sort, create_two_dim_list
 from utils.models.RotationPlannerTeamInfo import RotationPlannerTeamInfo
 import fixture_planner.backend.read_fixture_planner_data as read_data
-from utils.models.FDR_team import FixtureDifficultyInfo
+from utils.models.fixtures.FixtureDifficultyModel import FixtureDifficultyModel
 from itertools import combinations
 import numpy as np
 import json

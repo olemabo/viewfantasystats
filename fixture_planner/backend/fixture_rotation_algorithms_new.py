@@ -1,6 +1,6 @@
 from fixture_planner.backend.create_data_objects import create_FDR_dict
 from fixture_planner.backend.utility_functions import insertion_sort, create_two_dim_list
-from utils.models.FDR_team import FixtureDifficultyInfo
+from utils.models.fixtures.FixtureDifficultyModel import FixtureDifficultyModel
 from fixture_planner.models import AddPlTeamsToDB
 from constants import blank_gw_fdr_score
 from itertools import combinations
@@ -197,14 +197,14 @@ def find_best_rotation_combos_new(data, gw_start, gw_end, teams_to_check=5, team
                     for i in range(gws_this_round):
                         temp_score += data_gw[i][2]
 
-                        team_object_new.append(FixtureDifficultyInfo(team_name=team_name,
+                        team_object_new.append(FixtureDifficultyModel(team_name=team_name,
                                                                      opponent_team_name=data_gw[i][0].upper(),
                                                                      this_difficulty_score=data_gw[i][2],
                                                                      H_A=data_gw[i][1],
                                                                      Use_Not_Use=0).toJson())
                 else:
                     temp_score += data_gw[0][2]
-                    team_object_new.append(FixtureDifficultyInfo(team_name=team_name,
+                    team_object_new.append(FixtureDifficultyModel(team_name=team_name,
                                                                  opponent_team_name=data_gw[0][0].upper(),
                                                                  this_difficulty_score=data_gw[0][2],
                                                                  H_A=data_gw[0][1],

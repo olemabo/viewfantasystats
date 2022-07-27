@@ -1,47 +1,18 @@
+import { KickOffTimesModel } from '../../../models/fixturePlanning/KickOffTimes';
+import { TeamFDRDataModel, FDR_GW_i, FDRData } from '../../../models/fixturePlanning/TeamFDRData';
+import { FilterButton } from '../../Shared/FilterButton/FilterButton';
 import { contrastingColor } from '../../../utils/findContrastColor';
-import { FDRData } from "../../FPL/fixturePlanner/FdrModel";
+import { Spinner } from '../../Shared/Spinner/Spinner';
 import "../../FPL/fixturePlanner/fixturePlanner.scss";
+import { Button } from '../../Shared/Button/Button';
 import React, { useState, useEffect } from 'react';
+import Popover from '../../Shared/Popover/Popover';
 import store from '../../../store/index';
 import axios from 'axios';
-import { FilterButton } from '../../Shared/FilterButton/FilterButton';
-import { Button } from '../../Shared/Button/Button';
-import { Spinner } from '../../Shared/Spinner/Spinner';
-import Popover from '../../Shared/Popover/Popover';
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
-
-interface KickOffTimes {
-    gameweek: number;
-    kickoff_time: string;
-    day_month: string;
-}
-
-interface FDRDataNew {
-    opponent_team_name: string;
-    difficulty_score: string;
-    H_A: string;
-    Use_Not_Use: boolean;
-}
-
-interface FDR_gw_i {
-    fdr_gw_i: FDRDataNew[];
-}
-
-interface TeamData {
-    team_name: string;
-    background_color: string;
-    font_color: string;
-    checked: boolean;
-    FDR: FDR_gw_i [];
-}
-
-interface TeamName {
-    team_name: string;
-    checked: boolean;
-}
 
 export const EliteserienFixturePlanner = () => {
     const fixture_planner_kickoff_time_api_path = "/fixture-planner-eliteserien/get-eliteserien-kickoff-times/";
@@ -49,22 +20,18 @@ export const EliteserienFixturePlanner = () => {
     const min_gw = 1;
     const max_gw = 30;
 
-    const empty: TeamData[] = [ { team_name: "-", FDR: [], checked: true, font_color: "FFF", background_color: "FFF" }];
-    const emptyFDRList: FDRData[] = [{ gw: "0", oppTeamDifficultyScore: "0", oppTeamHomeAwayList: "0", oppTeamNameList: "0", team_name: "0", team_short_name: "0" }];
-    const emptyGwDate: KickOffTimes[] = [{gameweek: 0, day_month: "",kickoff_time: "" }];
-    const emptyTeamNames: TeamName[] = [{team_name: "empty", checked: false}];
+    const empty: TeamFDRDataModel[] = [ { team_name: "-", FDR: [], checked: true, font_color: "FFF", background_color: "FFF" }];
+    const emptyGwDate: KickOffTimesModel[] = [{gameweek: 0, day_month: "",kickoff_time: "" }];
 
-    const [ teamNames, setTeamNames ] = useState(emptyTeamNames);
-    const [ fdrDataAllTeams, setFdrDataAllTeams ] = useState(emptyFDRList);
     const [ fdrDataToShow, setFdrDataToShow ] = useState(empty);
-    const [ fdrDataAllTeamsNew, setFdrDataAllTeamsNew] = useState(empty);
+    // const [ fdrDataAllTeamsNew, setFdrDataAllTeamsNew] = useState(empty);
     
-    const [ kickOffTimes, setKickOffTimes ] = useState(emptyGwDate);
+    // const [ kickOffTimes, setKickOffTimes ] = useState(emptyGwDate);
     const [ kickOffTimesToShow, setKickOffTimesToShow ] = useState(emptyGwDate);
     const [ fdrToColor, setFdrToColor ] = useState({0.5: "0.5", 1: "1", 2: "2", 3: "3", 4: "4", 5: "5"});
 
 
-    const [ gwStart, setGwStart ] = useState(16);
+    const [ gwStart, setGwStart ] = useState(-1);
     const [ gwEnd, setGwEnd ] = useState(max_gw);
     const [ maxGw, setMaxGw ] = useState(-1);
     const [ showTeamFilters, setShowTeamFilters ] = useState(false);
@@ -106,33 +73,37 @@ export const EliteserienFixturePlanner = () => {
         // Get fdr data from api
         setLoading(true);
         axios.post(fixture_planner_api_path, body).then((x: any) => {
-            let apiFDRList: TeamData[] = [];
-            let tempTeamNames: TeamName[] = [];
+            let apiFDRList: TeamFDRDataModel[] = [];
             let data = JSON.parse(x.data);
+            if (data.gw_start != gwStart) { 
+                setGwStart(data.gw_start);
+            }
+
+            if (data.gw_end != gwEnd) { 
+                setGwEnd(data.gw_end);
+            }
 
             if (maxGw < 0) { 
                 setMaxGw(data.gws_and_dates.length); 
-                setGwEnd(data.gws_and_dates.length); 
             }
             
             setFdrToColor(data.fdr_to_colors_dict);
             
             if (data?.gws_and_dates?.length > 0) {
-                let temp_KickOffTimes: KickOffTimes[] = [];
+                let temp_KickOffTimes: KickOffTimesModel[] = [];
                 data?.gws_and_dates.forEach((kickoff: string) => temp_KickOffTimes.push(JSON.parse(kickoff)));
-                setKickOffTimes(temp_KickOffTimes);
-                setKickOffTimesToShow(temp_KickOffTimes.slice(gwStart - 1, gwEnd));
+                // setKickOffTimes(temp_KickOffTimes);
+                setKickOffTimesToShow(temp_KickOffTimes.slice(data.gw_start - 1, data.gw_end));
             }
 
             
             let index = 0;
             data.fdr_data.forEach((team: any[]) => {
                 let team_name = JSON.parse(team[0][0][0]).team_name;
-                tempTeamNames.push({ team_name: team_name, checked: false});
 
-                let FDR_gw_i: FDR_gw_i[] = [];
+                let FDR_gw_i: FDR_GW_i[] = [];
                 team.forEach((fdr_for_each_gw: any[]) => {
-                    let temp: FDRDataNew[] = [];
+                    let temp: FDRData[] = [];
                     fdr_for_each_gw.forEach((fdr_in_gw_i: any) => {
                         let fdr_in_gw_i_json = JSON.parse(fdr_in_gw_i);
                         temp.push({
@@ -159,16 +130,14 @@ export const EliteserienFixturePlanner = () => {
                 index += 1;
             });
 
-            setFdrDataAllTeamsNew(apiFDRList);
+            // setFdrDataAllTeamsNew(apiFDRList);
             setFdrDataToShow(apiFDRList);
-            setTeamNames(tempTeamNames);
             setLoading(false);
         })
     }
 
     function toggleCheckbox(e: any) {
-        let tempTeamNames: TeamName[] = [];
-        let temp: TeamData[] = [];
+        let temp: TeamFDRDataModel[] = [];
         fdrDataToShow.forEach(x => {
             let checked = x.checked;
             if (x.team_name == e.currentTarget.value) {
@@ -192,12 +161,11 @@ export const EliteserienFixturePlanner = () => {
         return "#000";
     }
 
-
     let language  = "Norwegain";
 
     let content_json = {
         English: {
-          title: "Fixture Planner",
+          title: "FDR Planner",
           gw_start: "GW start:",
           gw_end: "GW end:",
           filter_button_text: "Filter teams",
@@ -206,7 +174,7 @@ export const EliteserienFixturePlanner = () => {
           search: "Search",
         },
         Norwegian: {
-          title: "Fixture Planner",
+          title: "FDR Planner",
           gw_start: "Fra runde",
           gw_end: "til runde",
           filter_button_text: "Filtrer lag",
@@ -218,9 +186,6 @@ export const EliteserienFixturePlanner = () => {
 
     let content = language === "Norwegain" ? content_json.Norwegian : content_json.English;
 
-    // language === "Norwegain" ? (content = content_json.Norwegian) : (content = content_json.English);
-
-
     return <>
     <div className='fixture-planner-container' id="fixture-planner-container">
         <h1>{content.title}<Popover 
@@ -230,22 +195,25 @@ export const EliteserienFixturePlanner = () => {
             popover_title={content.title} 
             iconSize={14}
             iconpostition={[-10, 0, 0, 3]}
-            popover_text={ content.title + " rangerer lag etter best kampprogram fra " +
-            "'" + content.gw_start.toString() + "'" + " til " + "'" + content.gw_end.toString() + "'" + 
+            popover_text={ content.title + " (Fixture Difficulty Rating) rangerer lag etter best kampprogram mellom to runder " +
+            "('" + content.gw_start.toString() + "'" + " og " + "'" + content.gw_end.toString() + "')" + 
             ". Best kampprogram ligger øverst og dårligst nederst. "
             }>
             Kampprogram, vanskelighetsgrader og farger er hentet fra 
             <a href="https://docs.google.com/spreadsheets/d/168WcZ2mnGbSh-aI-NheJl5OtpTgx3lZL-YFV4bAJRU8/edit?usp=sharing">Excel arket</a>
             til Dagfinn Thon.
             { fdrToColor != null && 
-                <p className='diff-introduction-container'>
+                <><p className='diff-introduction-container'>
                     FDR verdier: 
+                    <span style={{backgroundColor: convertFDRtoHex("0.5")}} className="diff-introduction-box wide">0.25</span>
                     <span style={{backgroundColor: convertFDRtoHex("1")}} className="diff-introduction-box">1</span>
                     <span style={{backgroundColor: convertFDRtoHex("2")}} className="diff-introduction-box">2</span>
                     <span style={{backgroundColor: convertFDRtoHex("3")}} className="diff-introduction-box">3</span>
                     <span style={{backgroundColor: convertFDRtoHex("4")}} className="diff-introduction-box">4</span>
                     <span style={{backgroundColor: convertFDRtoHex("5")}} className="diff-introduction-box">5</span>
+                    <span style={{backgroundColor: convertFDRtoHex("10")}} className="diff-introduction-box black">10</span>
                 </p>
+                <p>Lilla bokser markerer en dobbelt runde, mens svarte bokser markerer at laget ikke har kamp den runden.</p></>
             }
             </Popover>
         </h1>
@@ -326,7 +294,7 @@ export const EliteserienFixturePlanner = () => {
                                 <tbody id="fdr-gws">
                                     <tr id="fdr-row-gws">
                                         { kickOffTimesToShow.map(gw =>
-                                            <th className="min-width">{content.round}{gw.gameweek}
+                                            <th className="">{content.round}{gw.gameweek}
                                                 <div className="day_month">
                                                     { gw.day_month }
                                                 </div>

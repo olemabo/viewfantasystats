@@ -1,7 +1,7 @@
 import json
 
 
-class FixtureDifficultyInfo:
+class FixtureDifficultyModel:
     def __init__(self, team_name, opponent_team_name, this_difficulty_score, H_A, Use_Not_Use, total_fdr_score=0):
         ...
         self.team_name = team_name

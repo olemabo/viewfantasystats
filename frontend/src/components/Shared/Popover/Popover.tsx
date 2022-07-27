@@ -79,7 +79,7 @@ export const Popover : FunctionComponent<PopoverProps> = (props) => {
         <div className={"thin-ui-popover-body " + (props.algin_left ? "adjust-left" : " ")}>
             <h3>{props.popover_title}</h3>
             <p>{props.popover_text}</p>
-                {props.children}
+            <p>{props.children}</p>
         </div>}
     </label></>
 };

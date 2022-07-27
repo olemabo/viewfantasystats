@@ -1,7 +1,7 @@
 from fixture_planner.backend.utility_functions import fixture_score_one_team, insertion_sort, create_two_dim_list
 from fixture_planner.backend.fixture_planner_best_algorithms import compute_best_fixtures_one_team_db_data
 from constants import total_number_of_eliteserien_teams
-from utils.models.FDR_team import FixtureDifficultyInfo
+from utils.models.fixtures.FixtureDifficultyModel import FixtureDifficultyModel
 from itertools import combinations
 import numpy as np
 from utils.models.RotationPlannerTeamInfo import RotationPlannerTeamInfo
@@ -114,14 +114,14 @@ def find_best_rotation_combosEliteserien(data, GW_start, GW_end, teams_to_check=
                 if gws_this_round > 1:
                     for i in range(gws_this_round):
                         temp_score += data_gw[i][2]
-                        team_object_new.append(FixtureDifficultyInfo(team_name=team_name,
+                        team_object_new.append(FixtureDifficultyModel(team_name=team_name,
                                                                      opponent_team_name=data_gw[i][0].upper(),
                                                                      this_difficulty_score=data_gw[i][2],
                                                                      H_A=data_gw[i][1],
                                                                      Use_Not_Use=0).toJson())
                 else:
                     temp_score += data_gw[0][2]
-                    team_object_new.append(FixtureDifficultyInfo(team_name=team_name,
+                    team_object_new.append(FixtureDifficultyModel(team_name=team_name,
                                                                  opponent_team_name=data_gw[0][0].upper(),
                                                                  this_difficulty_score=data_gw[0][2],
                                                                  H_A=data_gw[0][1],
