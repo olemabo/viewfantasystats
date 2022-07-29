@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, FunctionComponent } from 'react';
 import { FDRData } from "./FdrModel";
 import "./fixturePlanner.scss";
 import axios from 'axios';
@@ -41,7 +41,11 @@ interface TeamName {
     checked: boolean;
 }
 
-export const FixturePlanner = () => {
+type LanguageProps = {
+    content: any;
+}
+
+export const FixturePlanner : FunctionComponent<LanguageProps> = (props) => {
     const fixture_planner_kickoff_time_api_path = "/fixture-planner/get-kickoff-times/";
     const fixture_planner_api_path = "/fixture-planner/get-all-fdr-data/";
     const min_gw = 1;
@@ -144,19 +148,17 @@ export const FixturePlanner = () => {
                 checked = !x.checked;
             }
             // tempTeamNames.push({ team_name: x.team_name, checked: checked});
-            console.log("x: ", x, checked, e.currentTarget.value);
             temp.push({ team_name: x.team_name, FDR: x.FDR, checked: checked});
         });
         // setTeamNames(tempTeamNames);
-        console.log(temp);
         setFdrDataToShow(temp);
     }
 
     return <>
     <div className='fixture-planner-container' id="fixture-planner-container">
-        <h1>Fixture Planner</h1>
+        <h1>{props.content.Fixture.FixturePlanner.title}</h1>
         <form onSubmit={(e) =>  {updateFDRData(); e.preventDefault()}}>
-            GW start:
+            {props.content.Fixture.gw_start}
             <input 
                 className="form-number-box" 
                 type="number" 
@@ -167,7 +169,7 @@ export const FixturePlanner = () => {
                 id="input-form-start-gw" 
                 name="input-form-start-gw">
             </input>
-            GW end:
+            {props.content.Fixture.gw_end}
             <input 
                 className="form-number-box" 
                 type="number" 
@@ -178,11 +180,11 @@ export const FixturePlanner = () => {
                 id="input-form-start-gw" 
                 name="input-form-start-gw">
             </input>
-            <input className="submit" type="submit" value="Search">
+            <input className="submit" type="submit" value={props.content.General.search_button_name}>
             </input>
         </form>
 
-        <Button buttonText={'Filter teams'} 
+        <Button buttonText={props.content.Fixture.filter_button_text} 
                     icon_class={"fa fa-chevron-" + (showTeamFilters ? "up" : "down")} 
                     onclick={() => setShowTeamFilters(showTeamFilters ? false : true)} />
 
@@ -206,7 +208,7 @@ export const FixturePlanner = () => {
                                 <tbody id="fdr-names">
                                     <tr>
                                         <td className="name-column min-width">
-                                            Name
+                                            {props.content.Fixture.team}
                                         </td>
                                     </tr>
                                     { fdrDataToShow.map(fdr => (
@@ -228,7 +230,7 @@ export const FixturePlanner = () => {
                                 <tbody id="fdr-gws">
                                     <tr id="fdr-row-gws">
                                         { kickOffTimesToShow.map(gw =>
-                                            <th className=""> GW { gw.gameweek}
+                                            <th>{props.content.General.round_short}{ gw.gameweek}
                                                 <div className="day_month">
                                                     { gw.day_month }
                                                 </div>

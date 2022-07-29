@@ -63,11 +63,14 @@ eliteserien_folder_name = "eliteserien"
 premier_league_folder_name = "premier_league"
 global_stats_folder_name = "global_stats"
 user_stats_folder_name = "user_stats"
+backup_data_folder_name= "backup_data"
 
 # txt file names 
 country_population_txt_file_name = "country_population.txt"
 total_chip_usage_txt_file_name = "chip_usage.txt"
-
+backup_data_txt_file_name = "backup_id.txt"
+top_x_players_ids_backup_file_name = "top_x_players_ids_backup.txt"
+user_stats_txt_file_name = "user_stats.txt"
 # wildcard due date NB: MUST BE SET MANUALLY
 eliteserien_wc_due_date = "2022-07-23T13:00:00"
 premier_league_wc_due_date = "2022-07-23T13:00:00"
@@ -79,10 +82,13 @@ premier_league_api_url = "https://fantasy.premierleague.com"
 total_number_of_gameweeks_in_eliteserien = 30
 
 # store data from these top_x_players. Store for first player, top 10, top 100, top 1000 and top 10000
-all_top_x_players = [1, 10, 100, 1000, 5000]
+all_top_x_players_premier_league = [1, 10, 100, 1000, 10000]
+all_top_x_players_eliteserien = [1, 10, 100, 1000, 5000]
+how_often_do_back_up_of_global_data = 250
 time_to_sleep_for_each_iteration = 0.30
 name_of_ownership_file = "complete_ownership.txt"
 name_of_nationality_file = "country_population.txt"
+nationality_delimiter = ":"
 name_of_extra_info_file = "extra_info.txt"
 
 ############# PLAYER STATS ########################

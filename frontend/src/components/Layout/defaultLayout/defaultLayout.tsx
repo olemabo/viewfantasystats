@@ -2,7 +2,7 @@ import React, { FunctionComponent, useEffect, useState } from "react"; // this m
 import TopMenu from "../topMenu/topMenu";
 import Footer from "../footer/footer";
 import { BrowserRouter as Router, Routes, Link, Route } from "react-router-dom";
-import store from "../../../store/index";
+import { store, persistor} from "../../../store/index";
 import { useSelector } from 'react-redux';
 import FixturePlanner from "../../FPL/fixturePlanner/fixturePlanner";
 import RotationPlanner from "../../FPL/rotationPlanner/rotationPlanner";
@@ -14,8 +14,9 @@ import PlayerOwnership from "../../Eliteserien/playerOwnership/playerOwnership";
 
 export const DefaultLayout = () => {
     const [ isAnyMenuOpen, setIsMenuOpen ] = useState(false);
-    
+    const [ langagueContent, setLangaugeContent ] = useState(store.getState().language);
     const isMenuOpenFromRedux = useSelector((state: any) => state?.isMenuOpen);
+    const langaugeContentFromRedux = useSelector((state: any) => state?.language);
 
     // useEffect will listen if isMenuOpen property from redux changes
     useEffect(() => {
@@ -26,9 +27,16 @@ export const DefaultLayout = () => {
         return () => { isCancelled = true }
     }, [isMenuOpenFromRedux]);
 
+    // must be here
+    useEffect(() => {
+        if (langaugeContentFromRedux != null) {
+            setLangaugeContent(langaugeContentFromRedux);
+        }
+    }, [langaugeContentFromRedux]);
+
     return <>
     <div>
-        <TopMenu />
+        <TopMenu content={langagueContent} />
         { (!isAnyMenuOpen) && 
         <><div className="showcase">
         </div>
@@ -37,25 +45,25 @@ export const DefaultLayout = () => {
               <div className="content-container">
                   <div className="col-sm-10 max-width">
                         <Routes>
-                            <Route path="/" element={<FixturePlanner />}></Route>
-                            <Route path="/fixture-planner/" element={<FixturePlanner />} />
-                            <Route path="/fixture-planner/fdr-planner/" element={<FixturePlanner />} />
-                            <Route path="/fixture-planner/periode-planner/" element={<PeriodePlanner />} />
-                            <Route path="/fixture-planner/rotation-planner/" element={<RotationPlanner />} />
-                            <Route path="/fixture-planner-eliteserien/" element={<EliteserienFixturePlanner />} />
-                            <Route path="/fixture-planner-eliteserien/fdr-planner/" element={<EliteserienFixturePlanner />} />
-                            <Route path="/fixture-planner-eliteserien/rotation-planner/" element={<EliteserienRotationPlanner />} />
-                            <Route path="/fixture-planner-eliteserien/periode-planner/" element={<EliteserienPeriodePlanner />} />
-                            <Route path="/statistics/player-ownership/" element={<PlayerOwnership />} />
+                            <Route path="/" element={<FixturePlanner content={langagueContent} />}></Route>
+                            <Route path="/fixture-planner/" element={<FixturePlanner content={langagueContent} />} />
+                            <Route path="/fixture-planner/fdr-planner/" element={<FixturePlanner content={langagueContent} />} />
+                            <Route path="/fixture-planner/periode-planner/" element={<PeriodePlanner content={langagueContent} />} />
+                            <Route path="/fixture-planner/rotation-planner/" element={<RotationPlanner content={langagueContent} />} />
+                            <Route path="/fixture-planner-eliteserien/" element={<EliteserienFixturePlanner content={langagueContent} />} />
+                            <Route path="/fixture-planner-eliteserien/fdr-planner/" element={<EliteserienFixturePlanner content={langagueContent} />} />
+                            <Route path="/fixture-planner-eliteserien/rotation-planner/" element={<EliteserienRotationPlanner content={langagueContent} />} />
+                            <Route path="/fixture-planner-eliteserien/periode-planner/" element={<EliteserienPeriodePlanner content={langagueContent} />} />
+                            <Route path="/statistics/player-ownership/" element={<PlayerOwnership content={langagueContent} />} />
                         </Routes>
                   </div>
               </div>
             </div>
-        <Footer />
+        <Footer content={langagueContent}/>
         </div></>}
         { isAnyMenuOpen && (
             <div className="footer-under-menu">
-                <Footer />
+                <Footer content={langagueContent}/>
             </div>
         )}
     </div>

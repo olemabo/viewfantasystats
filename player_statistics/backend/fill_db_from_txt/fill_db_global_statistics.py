@@ -1,4 +1,4 @@
-from constants import name_of_extra_info_file, name_of_nationality_file, path_to_store_local_data, all_top_x_players, name_of_ownership_file, total_number_of_gameweeks
+from constants import global_stats_folder_name, name_of_extra_info_file, name_of_nationality_file, path_to_store_local_data, all_top_x_players_premier_league, name_of_ownership_file, total_number_of_gameweeks
 import numpy as np
 import datetime
 from player_statistics.db_models.premier_league.ownership_statistics_model import ExtraInfoStatistics, GlobalOwnershipStats10000, \
@@ -16,8 +16,8 @@ def write_global_stats_to_db():
 
 def fill_db_ownership_statistics(gws):
     for gw in gws:
-        file_path = path_to_store_local_data + "/global_stats/" + str(gw)
-        top_x_players = all_top_x_players
+        file_path = path_to_store_local_data + "/" + global_stats_folder_name + "/" + str(gw)
+        top_x_players = all_top_x_players_premier_league
         current_filled_gws = GwsChecked.objects.all()[0]
         for top_x in top_x_players:
             try:
@@ -72,8 +72,8 @@ def fill_db_ownership_statistics(gws):
 
 def fill_db_extra_info_statistics(gws):
     for gw in gws:
-        file_path = path_to_store_local_data + "/global_stats/" + str(gw)
-        top_x_players = all_top_x_players
+        file_path = path_to_store_local_data + "/" + global_stats_folder_name +  "/" + str(gw)
+        top_x_players = all_top_x_players_premier_league
 
         extra_info_top_1 = []
         extra_info_top_10 = []
@@ -157,7 +157,7 @@ def fill_global_ownership_statistics_top_x(ownership_data, gw, top_x):
 
 def fill_db_nationality_statistics(gws):
     for gw in gws:
-        file_path = path_to_store_local_data + "/global_stats/" + str(gw)
+        file_path = path_to_store_local_data + "/" + global_stats_folder_name + "/" + str(gw)
         try:
             current_path = file_path + "/top_10000" + "/" + name_of_nationality_file
             open(current_path, "r", encoding="utf-8")

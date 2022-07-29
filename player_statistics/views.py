@@ -3,11 +3,11 @@ from player_statistics.utility_functions.utility_functions_player_statistics imp
     get_dict_sort_on_short_name_to_sort_on_name, get_dict_sort_on_short_name_to_number
 from player_statistics.utility_functions.utility_functions_ownership_statistics import get_ownership_db_data
 from utils.utility_functions import convert_list_with_strings_to_floats, get_list_of_all_pl_team_names
-#from player_statistics.backend.fill_db_player_statistics import fill_database_all_players
+from player_statistics.backend.fill_db_from_txt.fill_db_player_statistics import fill_database_all_players
 #from player_statistics.backend.fill_db_global_statistics import write_global_stats_to_db
-#from player_statistics.backend.read_global_statistics import save_all_fpl_teams_stats
+#from player_statistics.backend.read_global_statistics import save_all_global_stats_for_current_gw
 from django.views.decorators.csrf import csrf_exempt
-from constants import total_number_of_gameweeks
+from constants import total_number_of_gameweeks, eliteserien_folder_name
 from django.http import HttpResponse
 from django.shortcuts import render
 import numpy as np
@@ -20,9 +20,16 @@ from player_statistics.db_models.eliteserien.ownership_statistics_model_eliteser
 from fixture_planner_eliteserien.models import EliteserienTeamInfo
 from player_statistics.backend.fill_db_from_txt.fill_db_user_info_statistics_eliteserien import write_user_info_to_db_eliteserien
 
+
+def fill_player_statistics_eliteserien(request):
+    fill_database_all_players(eliteserien_folder_name)
+    return HttpResponse("Filled Database Eliteserien Player Statistics Info (EliteserienPlayerStatistic)")
+
+
 def fill_user_info_to_db_eliteserien(request):
     write_user_info_to_db_eliteserien()
     return HttpResponse("Filled Database User Info (UserInfoStatistics)")
+
 
 class PlayerOwnershipResponse:
     def __init__(self, ownershipdata, newest_updated_gw, available_gws, team_names_and_ids, chip_data):
@@ -143,18 +150,18 @@ def fill_db_global_stats(request):
 
 
 def fill_txt_global_stats(request):
-    #save_all_fpl_teams_stats()
+    #save_all_global_stats_for_current_gw()
     return HttpResponse("Filled Txt global stats")
 
 
 def fill_player_stat_db(request):
-    #fill_database_all_players()
+    #save_all_global_stats_for_current_gw()
     return HttpResponse("Filled Database Player Data (FPLPlayersModel)")
 
 
 def fill_all_statistics(request):
     #fill_database_all_players()
-    #save_all_fpl_teams_stats()
+    #save_all_global_stats_for_current_gw()
     #write_global_stats_to_db()
     return HttpResponse("Finished all statistics")
 

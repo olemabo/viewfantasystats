@@ -5,6 +5,7 @@ from player_statistics.db_models.eliteserien.nationality_statistics_model_elites
 from player_statistics.db_models.premier_league.player_statistics_model import FPLPlayersModel
 from player_statistics.db_models.eliteserien.ownership_statistics_model_eliteserien import EliteserienGwsChecked, EliteserienGlobalOwnershipStats5000, EliteserienGlobalOwnershipStats1000, EliteserienGlobalOwnershipStats100, EliteserienChipsAndUserInfo
 from player_statistics.db_models.eliteserien.user_statistics_model_eliteserien import UserInfoStatistics
+from player_statistics.db_models.eliteserien.player_statistics_model import EliteserienPlayerStatistic
 from django.contrib import admin
 
 
@@ -16,6 +17,7 @@ admin.site.register(ExtraInfoStatistics)
 admin.site.register(NationalityStatistics)
 admin.site.register(GwsChecked)
 
+admin.site.register(EliteserienPlayerStatistic)
 admin.site.register(EliteserienGlobalOwnershipStats100)
 admin.site.register(EliteserienGlobalOwnershipStats1000)
 admin.site.register(EliteserienGlobalOwnershipStats5000)

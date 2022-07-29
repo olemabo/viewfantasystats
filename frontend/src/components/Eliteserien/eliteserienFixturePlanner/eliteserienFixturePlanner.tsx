@@ -5,21 +5,23 @@ import { contrastingColor } from '../../../utils/findContrastColor';
 import { Spinner } from '../../Shared/Spinner/Spinner';
 import "../../FPL/fixturePlanner/fixturePlanner.scss";
 import { Button } from '../../Shared/Button/Button';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, FunctionComponent } from 'react';
 import Popover from '../../Shared/Popover/Popover';
-import store from '../../../store/index';
+import { store } from '../../../store/index';
 import axios from 'axios';
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
+type LanguageProps = {
+    content: any;
+}
 
-export const EliteserienFixturePlanner = () => {
+export const EliteserienFixturePlanner : FunctionComponent<LanguageProps> = (props) => {
     const fixture_planner_kickoff_time_api_path = "/fixture-planner-eliteserien/get-eliteserien-kickoff-times/";
     const fixture_planner_api_path = "/fixture-planner-eliteserien/get-all-eliteserien-fdr-data/";
     const min_gw = 1;
     const max_gw = 30;
-
     const empty: TeamFDRDataModel[] = [ { team_name: "-", FDR: [], checked: true, font_color: "FFF", background_color: "FFF" }];
     const emptyGwDate: KickOffTimesModel[] = [{gameweek: 0, day_month: "",kickoff_time: "" }];
 
@@ -161,42 +163,17 @@ export const EliteserienFixturePlanner = () => {
         return "#000";
     }
 
-    let language  = "Norwegain";
-
-    let content_json = {
-        English: {
-          title: "FDR Planner",
-          gw_start: "GW start:",
-          gw_end: "GW end:",
-          filter_button_text: "Filter teams",
-          team: "Team",
-          round: "GW ",
-          search: "Search",
-        },
-        Norwegian: {
-          title: "FDR Planner",
-          gw_start: "Fra runde",
-          gw_end: "til runde",
-          filter_button_text: "Filtrer lag",
-          team: "Lag",
-          round: "R",
-          search: "Søk",
-         }
-    };
-
-    let content = language === "Norwegain" ? content_json.Norwegian : content_json.English;
-
     return <>
     <div className='fixture-planner-container' id="fixture-planner-container">
-        <h1>{content.title}<Popover 
+        <h1>{props.content.Fixture.FixturePlanner.title}<Popover 
             id={"rotations-planner-id"}
             title=""
             algin_left={true}
-            popover_title={content.title} 
+            popover_title={props.content.Fixture.FixturePlanner.title} 
             iconSize={14}
             iconpostition={[-10, 0, 0, 3]}
-            popover_text={ content.title + " (Fixture Difficulty Rating) rangerer lag etter best kampprogram mellom to runder " +
-            "('" + content.gw_start.toString() + "'" + " og " + "'" + content.gw_end.toString() + "')" + 
+            popover_text={ props.content.Fixture.FixturePlanner.title + " (Fixture Difficulty Rating) rangerer lag etter best kampprogram mellom to runder " +
+            "('" + props.content.Fixture.gw_start.toString() + "'" + " og " + "'" + props.content.Fixture.gw_end.toString() + "')" + 
             ". Best kampprogram ligger øverst og dårligst nederst. "
             }>
             Kampprogram, vanskelighetsgrader og farger er hentet fra 
@@ -219,7 +196,7 @@ export const EliteserienFixturePlanner = () => {
         </h1>
         { maxGw > 0 && 
             <form onSubmit={(e) =>  {updateFDRData(); e.preventDefault()}}>
-                {content.gw_start}
+                {props.content.Fixture.gw_start}
                 <input 
                     className="form-number-box" 
                     type="number" 
@@ -230,7 +207,7 @@ export const EliteserienFixturePlanner = () => {
                     id="input-form-start-gw" 
                     name="input-form-start-gw">
                 </input>
-                {content.gw_end}
+                {props.content.Fixture.gw_end}
                 <input 
                     className="form-number-box" 
                     type="number" 
@@ -241,12 +218,12 @@ export const EliteserienFixturePlanner = () => {
                     id="input-form-start-gw" 
                     name="input-form-start-gw">
                 </input>
-                <input className="submit" type="submit" value={content.search}>
+                <input className="submit" type="submit" value={props.content.General.search_button_name}>
                 </input>
             </form> 
         }
      
-        <Button buttonText={content.filter_button_text} 
+        <Button buttonText={props.content.Fixture.filter_button_text} 
             icon_class={"fa fa-chevron-" + (showTeamFilters ? "up" : "down")} 
             onclick={() => setShowTeamFilters(showTeamFilters ? false : true)} />
 
@@ -274,7 +251,7 @@ export const EliteserienFixturePlanner = () => {
                                 <tbody id="fdr-names">
                                     <tr>
                                         <td className="name-column min-width">
-                                            {content.team}
+                                            {props.content.Fixture.team}
                                         </td>
                                     </tr>
                                     { fdrDataToShow.map(fdr => (<>
@@ -294,7 +271,7 @@ export const EliteserienFixturePlanner = () => {
                                 <tbody id="fdr-gws">
                                     <tr id="fdr-row-gws">
                                         { kickOffTimesToShow.map(gw =>
-                                            <th className="">{content.round}{gw.gameweek}
+                                            <th>{props.content.General.round_short}{gw.gameweek}
                                                 <div className="day_month">
                                                     { gw.day_month }
                                                 </div>

@@ -1,5 +1,5 @@
 import { FDRData } from "../fixturePlanner/FdrModel";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, FunctionComponent } from 'react';
 import "../fixturePlanner/fixturePlanner.scss";
 import "../rotationPlanner/rotationPlanner.scss";
 import axios from 'axios';
@@ -52,7 +52,11 @@ interface TeamName {
     checked: boolean;
 }
 
-export const RotationPlanner = () => {
+type LanguageProps = {
+    content: any;
+}
+
+export const RotationPlanner : FunctionComponent<LanguageProps> = (props) => {
     const fixture_planner_kickoff_time_api_path = "/fixture-planner/get-kickoff-times/";
     const fixture_planner_api_path = "/fixture-planner/get-all-fdr-data/";
     const min_gw = 1;
@@ -131,7 +135,6 @@ export const RotationPlanner = () => {
         // Get fdr data from api
         axios.post(fixture_planner_api_path, body).then(x => {
             let RotationPlannerTeamInfoList: RotationPlannerTeamInfo[] = [];
-            console.log("x: ", x);
             x.data.forEach((team: any) => {
                 let team_i_json = JSON.parse(team);
                 let temp: RotationPlannerTeamInfo = { avg_Score: team_i_json.avg_Score, 
@@ -146,8 +149,6 @@ export const RotationPlanner = () => {
                 // dimensions [ teams_to_check x number_of_gws]
             })
 
-            console.log("RotationPlannerTeamInfoList: ", RotationPlannerTeamInfoList);
-            console.log("slice: ", kickOffTimes, kickOffTimes.slice(body['start_gw'] - 1, body['end_gw']));
             if (kickOffTimes.length > 1) {
                 setKickOffTimesToShow(kickOffTimes.slice(body['start_gw'] - 1, body['end_gw']));
             }
@@ -236,40 +237,11 @@ export const RotationPlanner = () => {
 
     }
 
-    let language  = "Norwegain";
-
-    let content_json = {
-        English: {
-          title: "Rotation Planner",
-          gw_start: "GW start:",
-          gw_end: "GW end:",
-          filter_button_text: "Filter teams",
-          team: "Team",
-          round: "GW ",
-          search: "Search",
-          teams_to_check: "Teams to check:",
-          teams_to_play: "Teams to play:",
-        },
-        Norwegian: {
-          title: "Rotasjonsplanlegging",
-          gw_start: "Fra runde",
-          gw_end: "til runde",
-          filter_button_text: "Filtrer lag",
-          team: "Lag",
-          round: "R",
-          search: "Søk",
-          teams_to_check: "Antall lag:",
-          teams_to_play: "Lag som må brukes per runde:",
-         }
-    };
-
-    let content = language === "Norwegain" ? content_json.Norwegian : content_json.English;
-
     return <>
      <div className='fixture-planner-container' id="rotation-planner-container">
-         <h1>{content.title}</h1>
+         <h1>{props.content.Fixture.RotationPlanner.title}</h1>
          <form onSubmit={(e) =>  {updateFDRData(); e.preventDefault()}}>
-            {content.gw_start}
+            {props.content.Fixture.gw_start}
             <input 
                 className="form-number-box" 
                 type="number" 
@@ -280,7 +252,7 @@ export const RotationPlanner = () => {
                 id="input-form-start-gw" 
                 name="input-form-start-gw">
             </input>
-            {content.gw_end}
+            {props.content.Fixture.gw_end}
             <input 
                 className="form-number-box" 
                 type="number" 
@@ -293,7 +265,7 @@ export const RotationPlanner = () => {
             </input>
 
             <br />
-            {content.teams_to_check}
+            {props.content.Fixture.teams_to_check}
             <input 
                 className="box" 
                 type="number" 
@@ -304,7 +276,7 @@ export const RotationPlanner = () => {
                 id="teams_to_check" 
                 name="teams_to_check" />
             
-            {content.teams_to_play}
+            {props.content.Fixture.teams_to_play}
             <input 
                 className="box" 
                 type="number" 
@@ -315,13 +287,13 @@ export const RotationPlanner = () => {
                 id="teams_to_play" 
                 name="teams_to_play" />
 
-            <input className="submit" type="submit" value={content.search}>
+            <input className="submit" type="submit" value={props.content.General.search_button_name}>
             </input>
         </form>
 
         <div style={{ color: "red" }}>{validationErrorMessage}</div>
         
-        <Button buttonText={'Filter teams'} 
+        <Button buttonText={props.content.Fixture.filter_button_text} 
             icon_class={"fa fa-chevron-" + (showTeamFilters ? "up" : "down")} 
             onclick={() => setShowTeamFilters(showTeamFilters ? false : true)} />
 
@@ -358,10 +330,10 @@ export const RotationPlanner = () => {
                                         <tbody>
                                             <tr>
                                                 <th className="name-col-rotation">
-                                                    Name
+                                                    {props.content.Fixture.team}
                                                 </th>
                                                 { kickOffTimesToShow.map(gw =>
-                                                    <th className="min-width"> {content.round} { gw.gameweek}
+                                                    <th>{props.content.General.round_short}{gw.gameweek}
                                                         <div className="day_month">
                                                             { gw.day_month }
                                                         </div>
@@ -409,7 +381,7 @@ export const RotationPlanner = () => {
                                             ))}
                                         </tbody>
                                     </table>
-                                    <p> Avg. FDR score: <b> {row.avg_Score} </b></p>
+                                    <p> {props.content.Fixture.RotationPlanner.avg_fdr_score} <b> {row.avg_Score} </b></p>
                                 </>
                             )
                         }

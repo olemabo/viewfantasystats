@@ -1,20 +1,23 @@
 import { TeamFDRDataModel, FDR_GW_i, FDRData } from '../../../models/fixturePlanning/TeamFDRData';
 import { KickOffTimesModel } from '../../../models/fixturePlanning/KickOffTimes';
+import React, { useState, useEffect, FunctionComponent } from 'react';
 import { FilterButton } from '../../Shared/FilterButton/FilterButton';
 import { contrastingColor } from '../../../utils/findContrastColor';
 import { Spinner } from '../../Shared/Spinner/Spinner';
 import "../../FPL/fixturePlanner/fixturePlanner.scss";
 import { Button } from '../../Shared/Button/Button';
 import Popover from '../../Shared/Popover/Popover';
-import React, { useState, useEffect } from 'react';
-import store from '../../../store/index';
+import { store } from '../../../store/index';
 import axios from 'axios';
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
+type LanguageProps = {
+    content: any;
+}
 
-export const EliteserienPeriodePlanner = () => {
+export const EliteserienPeriodePlanner : FunctionComponent<LanguageProps> = (props) => {
     const fixture_planner_kickoff_time_api_path = "/fixture-planner-eliteserien/get-eliteserien-kickoff-times/";
     const fixture_planner_api_path = "/fixture-planner-eliteserien/get-all-eliteserien-fdr-data/";
     const min_gw = 1;
@@ -155,54 +158,20 @@ export const EliteserienPeriodePlanner = () => {
         if (int == 5) return "#" + fdrToColor[5].substring(2);
         return "#000";
     }
-
-    let language  = "Norwegain";
-
-    let content_json = {
-        English: {
-          title: "Eliteserien Periode Planner",
-          gw_start: "GW start:",
-          gw_end: "GW end:",
-          filter_button_text: "Filter teams",
-          team: "Team",
-          round: "GW ",
-          search: "Search",
-          teams_to_check: "Teams to check:",
-          teams_to_play: "Teams to play:",
-          avg_fdr_score: "Avg. FDR score:",
-          min_fixtures: "Minimum fixtures:",
-        },
-        Norwegian: {
-          title: "Periodeplanlegger",
-          gw_start: "Fra runde",
-          gw_end: "til runde",
-          filter_button_text: "Filtrer lag",
-          team: "Lag",
-          round: "R",
-          search: "Søk",
-          teams_to_check: "Antall lag:",
-          teams_to_play: "Lag som skal brukes:",
-          avg_fdr_score: "Gj. snittlig FDR score:",
-          min_fixtures: "Minimum kamper:",
-         }
-    };
-
-    let content = language === "Norwegain" ? content_json.Norwegian : content_json.English;
-
-
+    
     return <>
     <div className='fixture-planner-container' id="fixture-planner-container">
-        <h1>{content.title}<Popover 
+        <h1>{props.content.Fixture.PeriodPlanner.title}<Popover 
             id={"rotations-planner-id"}
             title=""
             algin_left={true}
-            popover_title={content.title} 
+            popover_title={props.content.Fixture.PeriodPlanner.title} 
             iconSize={14}
             iconpostition={[-10, 0, 0, 3]}
-            popover_text={ content.title + "¨markerer perioden et lag har best kampprogram mellom to runder. Beste rekke med kamper er markert svart kantfarger. "
+            popover_text={ props.content.Fixture.PeriodPlanner.title + "¨markerer perioden et lag har best kampprogram mellom to runder. Beste rekke med kamper er markert svart kantfarger. "
             + "Eksempelvis ønsker man å finne ut hvilken periode mellom runde 1 og 20 hvert lag har best kamper. "
-            + "'" + content.gw_start.toString() + "'" + " og " + "'" + content.gw_end.toString() + "'" + " blir da henholdsvis 1 og 20. "
-            + "'" + content.min_fixtures.toString() + "'" + " er minste antall etterfølgende kamper et lag må ha. "
+            + "'" + props.content.Fixture.gw_start.toString() + "'" + " og " + "'" + props.content.Fixture.gw_end.toString() + "'" + " blir da henholdsvis 1 og 20. "
+            + "'" + props.content.Fixture.min_fixtures.toString() + "'" + " er minste antall etterfølgende kamper et lag må ha. "
             }>
             Kampprogram, vanskelighetsgrader og farger er hentet fra 
             <a href="https://docs.google.com/spreadsheets/d/168WcZ2mnGbSh-aI-NheJl5OtpTgx3lZL-YFV4bAJRU8/edit?usp=sharing">Excel arket</a>
@@ -224,7 +193,7 @@ export const EliteserienPeriodePlanner = () => {
         </h1>
         { maxGw > 0 && 
             <form onSubmit={(e) =>  {updateFDRData(); e.preventDefault()}}>
-                {content.gw_start}
+                {props.content.Fixture.gw_start}
                 <input 
                     className="form-number-box" 
                     type="number" 
@@ -235,7 +204,7 @@ export const EliteserienPeriodePlanner = () => {
                     id="input-form-start-gw" 
                     name="input-form-start-gw">
                 </input>
-                {content.gw_end}
+                {props.content.Fixture.gw_end}
                 <input 
                     className="form-number-box" 
                     type="number" 
@@ -247,7 +216,7 @@ export const EliteserienPeriodePlanner = () => {
                     name="input-form-start-gw">
                 </input>
                 <br />
-                {content.min_fixtures}
+                {props.content.Fixture.min_fixtures}
                 <input 
                     className="box" 
                     type="number" 
@@ -258,12 +227,12 @@ export const EliteserienPeriodePlanner = () => {
                     id="min_num_fixtures" 
                     name="min_num_fixtures" />
         
-                <input className="submit" type="submit" value={content.search}>
+                <input className="submit" type="submit" value={props.content.General.search_button_name}>
                 </input>
             </form> 
         }
      
-        <Button buttonText={content.filter_button_text} 
+        <Button buttonText={props.content.Fixture.filter_button_text} 
             icon_class={"fa fa-chevron-" + (showTeamFilters ? "up" : "down")} 
             onclick={() => setShowTeamFilters(showTeamFilters ? false : true)} />
 
@@ -290,7 +259,7 @@ export const EliteserienPeriodePlanner = () => {
                                 <tbody id="fdr-names">
                                     <tr>
                                         <td className="name-column min-width">
-                                            {content.team}
+                                            {props.content.Fixture.team}
                                         </td>
                                     </tr>
                                     { fdrDataToShow.map(fdr => (<>
@@ -310,7 +279,7 @@ export const EliteserienPeriodePlanner = () => {
                                 <tbody id="fdr-gws">
                                     <tr id="fdr-row-gws">
                                         { kickOffTimesToShow.map(gw =>
-                                            <th> {content.round}{gw.gameweek}
+                                            <th> {props.content.General.round_short}{gw.gameweek}
                                                 <div className="day_month">
                                                     { gw.day_month }
                                                 </div>

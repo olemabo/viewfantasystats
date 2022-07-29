@@ -1,11 +1,11 @@
 from utils.utility_functions import get_static_json_data
+from constants import premier_league_api_url
 
-
-def get_ids(use_api_or_local):
+def get_ids(use_api_or_local, api_url=premier_league_api_url):
     """
         Extract and return a list of all fpl player ids
     """
-    static_info = get_static_json_data(use_api_or_local)['elements']
+    static_info = get_static_json_data(use_api_or_local, api_url)['elements']
     ids = []
     for info in static_info:
         ids.append(info['id'])
@@ -13,11 +13,11 @@ def get_ids(use_api_or_local):
     return ids
 
 
-def static_json(use_api_or_local="local"):
+def static_json(use_api_or_local="local", api_url=premier_league_api_url):
     """
         return all relevant player stats in a dict (key = player_id)
     """
-    static_info = get_static_json_data(use_api_or_local)
+    static_info = get_static_json_data(use_api_or_local, api_url)
     elements = static_info['elements']
     player_dict = dict()
 
@@ -42,19 +42,19 @@ def static_json(use_api_or_local="local"):
                                      player['red_cards'],
                                      player['saves'],
                                      player['bonus'],
-                                     player['bps'],
-                                     player['influence'],
-                                     player['creativity'],
-                                     player['threat'],
-                                     player['ict_index'],
-                                     player['influence_rank'],
-                                     player['influence_rank_type'],
-                                     player['creativity_rank'],
-                                     player['creativity_rank_type'],
-                                     player['threat_rank'],
-                                     player['threat_rank_type'],
-                                     player['ict_index_rank'],
-                                     player['ict_index_rank_type'],
+                                     player['bps'] if api_url == premier_league_api_url else 0,
+                                     player['influence'] if api_url == premier_league_api_url else 0,
+                                     player['creativity'] if api_url == premier_league_api_url else 0,
+                                     player['threat'] if api_url == premier_league_api_url else 0,
+                                     player['ict_index'] if api_url == premier_league_api_url else 0,
+                                     player['influence_rank'] if api_url == premier_league_api_url else 0,
+                                     player['influence_rank_type'] if api_url == premier_league_api_url else 0,
+                                     player['creativity_rank'] if api_url == premier_league_api_url else 0,
+                                     player['creativity_rank_type'] if api_url == premier_league_api_url else 0,
+                                     player['threat_rank'] if api_url == premier_league_api_url else 0,
+                                     player['threat_rank_type'] if api_url == premier_league_api_url else 0,
+                                     player['ict_index_rank'] if api_url == premier_league_api_url else 0,
+                                     player['ict_index_rank_type'] if api_url == premier_league_api_url else 0,
                                      player['transfers_in'],
                                      player['transfers_out'],
                                      player['team'],

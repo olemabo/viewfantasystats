@@ -2,8 +2,8 @@ import { RotationPlannerTeamModel } from '../../../models/fixturePlanning/Rotati
 import { KickOffTimesModel } from '../../../models/fixturePlanning/KickOffTimes';
 import { TeamCheckedModel } from '../../../models/fixturePlanning/TeamChecked';
 
-import React, { useState, useEffect } from 'react';
-import store from '../../../store/index';
+import React, { useState, useEffect, FunctionComponent } from 'react';
+import { store } from '../../../store/index';
 import axios from 'axios';
 
 import { contrastingColor } from '../../../utils/findContrastColor';
@@ -12,11 +12,16 @@ import { Button } from '../../Shared/Button/Button';
 import { CheckBox } from '../../Shared/CheckBox/CheckBox';
 import { Spinner } from '../../Shared/Spinner/Spinner';
 import { Popover } from '../../Shared/Popover/Popover';
+import { useSelector } from 'react-redux';
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
-export const EliteserienRotationPlanner = () => {
+type LanguageProps = {
+    content: any;
+}
+
+export const EliteserienRotationPlanner : FunctionComponent<LanguageProps> = (props) => {
     const fixture_planner_api_path = "/fixture-planner-eliteserien/get-all-eliteserien-fdr-data/";
     const min_gw = 1;
     const max_gw = 30;
@@ -147,11 +152,11 @@ export const EliteserienRotationPlanner = () => {
 
     function validateInput(body: any) {
         if (body.start_gw > body.end_gw) { 
-            setValidationErrorMessage("'" + content.gw_start + "' må være mindre enn '" + content.gw_end + "'");
+            setValidationErrorMessage("'" + props.content.Fixture.gw_start + "' må være mindre enn '" + props.content.Fixture.gw_end + "'");
             return false;
         }
         if (body.teams_to_play > body.teams_to_check) { 
-            setValidationErrorMessage("'" + content.teams_to_play + "' må være mindre enn '" + content.teams_to_check + "'");
+            setValidationErrorMessage("'" + props.content.Fixture.teams_to_play + "' må være mindre enn '" + props.content.Fixture.teams_to_check + "'");
             return false;
         }
 
@@ -199,51 +204,20 @@ export const EliteserienRotationPlanner = () => {
         return "#000";
     }
 
-    let language  = "Norwegain";
-
-    let content_json = {
-        English: {
-          title: "Eliteserien Rotation Planner",
-          gw_start: "GW start:",
-          gw_end: "GW end:",
-          filter_button_text: "Filter teams",
-          team: "Team",
-          round: "GW ",
-          search: "Search",
-          teams_to_check: "Teams to check:",
-          teams_to_play: "Teams to play:",
-          avg_fdr_score: "Avg. FDR score:",
-        },
-        Norwegian: {
-          title: "Rotasjonsplanlegger",
-          gw_start: "Fra runde",
-          gw_end: "til runde",
-          filter_button_text: "Filtrer lag",
-          team: "Lag",
-          round: "R",
-          search: "Søk",
-          teams_to_check: "Antall lag:",
-          teams_to_play: "Lag som skal brukes:",
-          avg_fdr_score: "Gj. snittlig FDR score:",
-         }
-    };
-
-    let content = language === "Norwegain" ? content_json.Norwegian : content_json.English;
-
     return <>
      <div className='fixture-planner-container' id="rotation-planner-container">
-         <h1>{content.title}<Popover 
+         <h1>{props.content.Fixture.RotationPlanner.title}<Popover 
             id={"rotations-planner-id"}
             title=""
             algin_left={true}
-            popover_title={content.title} 
+            popover_title={props.content.Fixture.RotationPlanner.title} 
             iconSize={14}
             iconpostition={[-10, 0, 0, 3]}
-            popover_text={ content.title + " viser kombinasjoner av lag som kan roteres for å gi best mulig kampprogram. "
+            popover_text={ props.content.Fixture.RotationPlanner.title + " viser kombinasjoner av lag som kan roteres for å gi best mulig kampprogram. "
             + "Eksempelvis ønsker man å finne to keepere som roterer bra mellom runde 10 og 20. "
-            + "'" + content.gw_start.toString() + "'" + " og " + "'" + content.gw_end.toString() + "'" + " blir da henholdsvis 10 og 20. "
-            + "'" + content.teams_to_check.toString() + "'" + " blir 2 fordi man skal ha 2 keepere som skal rotere. "
-            + "'" + content.teams_to_play.toString() + "'" + " blir 1 fordi kun en av de to keeperene skal spille. "
+            + "'" + props.content.Fixture.gw_start.toString() + "'" + " og " + "'" + props.content.Fixture.gw_end.toString() + "'" + " blir da henholdsvis 10 og 20. "
+            + "'" + props.content.Fixture.teams_to_check.toString() + "'" + " blir 2 fordi man skal ha 2 keepere som skal rotere. "
+            + "'" + props.content.Fixture.teams_to_play.toString() + "'" + " blir 1 fordi kun en av de to keeperene skal spille. "
             }>
             Kampprogram, vanskelighetsgrader og farger er hentet fra 
             <a href="https://docs.google.com/spreadsheets/d/168WcZ2mnGbSh-aI-NheJl5OtpTgx3lZL-YFV4bAJRU8/edit?usp=sharing">Excel arket</a>
@@ -264,7 +238,7 @@ export const EliteserienRotationPlanner = () => {
             </Popover>
         </h1>
          <form onSubmit={(e) =>  {updateFDRData(); e.preventDefault()}}>
-            {content.gw_start}
+            {props.content.Fixture.gw_start}
             <input 
                 className="form-number-box" 
                 type="number" 
@@ -276,7 +250,7 @@ export const EliteserienRotationPlanner = () => {
                 name="input-form-start-gw">
             </input>
             
-            {content.gw_end}
+            {props.content.Fixture.gw_end}
             <input 
                 className="form-number-box" 
                 type="number" 
@@ -289,7 +263,7 @@ export const EliteserienRotationPlanner = () => {
             </input>
             
             <br />
-            {content.teams_to_check}
+            {props.content.Fixture.teams_to_check}
             <input 
                 className="box" 
                 type="number" 
@@ -300,7 +274,7 @@ export const EliteserienRotationPlanner = () => {
                 id="teams_to_check" 
                 name="teams_to_check" />
             
-            {content.teams_to_play}
+            {props.content.Fixture.teams_to_play}
             <input 
                 className="box" 
                 type="number" 
@@ -311,13 +285,13 @@ export const EliteserienRotationPlanner = () => {
                 id="teams_to_play" 
                 name="teams_to_play" />
 
-            <input className="submit" type="submit" value={content.search}>
+            <input className="submit" type="submit" value={props.content.General.search_button_name}>
             </input>
         </form>
 
         <div style={{ color: "red" }}>{validationErrorMessage}</div>
         
-        <Button buttonText={content.filter_button_text} 
+        <Button buttonText={props.content.Fixture.filter_button_text} 
             icon_class={"fa fa-chevron-" + (showTeamFilters ? "up" : "down")} 
             onclick={() => setShowTeamFilters(showTeamFilters ? false : true)} />
 
@@ -352,10 +326,10 @@ export const EliteserienRotationPlanner = () => {
                                         <tbody>
                                             <tr>
                                                 <th className="name-col-rotation">
-                                                    {content.team}
+                                                    {props.content.Fixture.team}
                                                 </th>
                                                 { kickOffTimesToShow.map(gw =>
-                                                    <th> {content.round}{gw.gameweek}
+                                                    <th> {props.content.General.round_short}{gw.gameweek}
                                                         <div className="day_month">
                                                             { gw.day_month }
                                                         </div>
@@ -403,7 +377,7 @@ export const EliteserienRotationPlanner = () => {
                                             ))}
                                         </tbody>
                                     </table>
-                                    <p> {content.avg_fdr_score} <b> {row.avg_Score.toFixed(2)} </b></p>
+                                    <p> {props.content.Fixture.RotationPlanner.avg_fdr_score} <b> {row.avg_Score.toFixed(2)} </b></p>
                                 </>
                             )
                         }

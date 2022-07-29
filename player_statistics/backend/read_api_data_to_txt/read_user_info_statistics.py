@@ -1,5 +1,5 @@
 
-from constants import user_stats_special_delimiter, user_stats_folder_name, premier_league_api_url, eliteserien_api_url, eliteserien_folder_name, premier_league_folder_name, name_of_extra_info_file, name_of_nationality_file, path_to_store_local_data, web_global_league, all_top_x_players, time_to_sleep_for_each_iteration, name_of_ownership_file
+from constants import user_stats_special_delimiter, user_stats_folder_name, premier_league_api_url, eliteserien_api_url, eliteserien_folder_name, path_to_store_local_data
 from utils.models.DataFetch import DataFetch
 import numpy as np
 import time

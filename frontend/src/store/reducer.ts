@@ -1,6 +1,10 @@
+import { content_json } from "../language/languageContent";
+
 const initialState = {
     isMenuOpen: false,
     league_type: 'FPL',
+    language: content_json.Norwegian,
+    language_code: 'no',
 }
   
   // Use the initialState as a default value
@@ -13,6 +17,12 @@ const initialState = {
         return {...state};
       case "league_type":
         state.league_type = action.payload;
+        return {...state};
+      case "language":
+        state.language = action.payload;
+        return {...state};
+      case "language_code":
+        state.language_code = action.payload;
         return {...state};
       default:
         // If this reducer doesn't recognize the action type, or doesn't

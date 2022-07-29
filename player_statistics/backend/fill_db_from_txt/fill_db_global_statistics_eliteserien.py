@@ -1,4 +1,4 @@
-from constants import total_chip_usage_txt_file_name, total_number_of_gameweeks_in_eliteserien, eliteserien_folder_name, name_of_extra_info_file, name_of_nationality_file, path_to_store_local_data, all_top_x_players, name_of_ownership_file, total_number_of_gameweeks
+from constants import nationality_delimiter, total_chip_usage_txt_file_name, total_number_of_gameweeks_in_eliteserien, global_stats_folder_name, eliteserien_folder_name, name_of_extra_info_file, name_of_nationality_file, path_to_store_local_data, all_top_x_players_eliteserien, name_of_ownership_file, total_number_of_gameweeks
 from player_statistics.db_models.eliteserien.ownership_statistics_model_eliteserien import EliteserienChipsAndUserInfo, EliteserienGlobalOwnershipStats5000, \
     EliteserienGlobalOwnershipStats1000, EliteserienGlobalOwnershipStats100, EliteserienGwsChecked
 from player_statistics.db_models.eliteserien.nationality_statistics_model_eliteserien import EliteserienNationalityStatistics
@@ -15,8 +15,8 @@ def write_global_stats_to_db_eliteserien():
 
 def fill_db_ownership_statistics_eliteserien(gws):
     for gw in gws:
-        file_path = path_to_store_local_data + "/" + eliteserien_folder_name + "/global_stats/" + str(gw)
-        top_x_players = all_top_x_players
+        file_path = path_to_store_local_data + "/" + eliteserien_folder_name + "/" + global_stats_folder_name + "/" + str(gw)
+        top_x_players = all_top_x_players_eliteserien
         current_filled_gws = EliteserienGwsChecked.objects.all()[0]
 
 
@@ -77,8 +77,8 @@ def fill_db_ownership_statistics_eliteserien(gws):
 
 def fill_db_extra_info_statistics_eliteserien(gws):
     for gw in gws:
-        file_path = path_to_store_local_data + "/" + eliteserien_folder_name + "/global_stats/" + str(gw)
-        top_x_players = all_top_x_players
+        file_path = path_to_store_local_data + "/" + eliteserien_folder_name + "/" + global_stats_folder_name + "/" + str(gw)
+        top_x_players = all_top_x_players_eliteserien
 
         extra_info_top_1 = []
         extra_info_top_10 = []
@@ -201,11 +201,11 @@ def fill_global_ownership_statistics_top_x(ownership_data, gw, top_x):
 
 def fill_db_nationality_statistics_eliteserien(gws):
     for gw in gws:
-        file_path = path_to_store_local_data + "/" + eliteserien_folder_name + "/global_stats/" + str(gw)
+        file_path = path_to_store_local_data + "/" + eliteserien_folder_name + "/" + global_stats_folder_name + "/" + str(gw)
         try:
             current_path = file_path + "/top_10000" + "/" + name_of_nationality_file
             open(current_path, "r", encoding="utf-8")
-            nationality_data = np.loadtxt(current_path, dtype="str", delimiter=":", skiprows=1)
+            nationality_data = np.loadtxt(current_path, dtype="str", delimiter=nationality_delimiter, skiprows=1)
 
             for data_i in nationality_data:
                 country_code = data_i[1]

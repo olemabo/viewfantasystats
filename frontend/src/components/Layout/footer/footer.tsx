@@ -1,9 +1,13 @@
-import React from "react";
+import React, { FunctionComponent } from "react";
 import "./footer.scss";
 import Twitter from '@material-ui/icons/Twitter';
 import Code from '@material-ui/icons/Code';
 
-export const Footer = () => {
+type LanguageProps = {
+  content: any;
+}
+
+export const Footer : FunctionComponent<LanguageProps> = (props) => {
 
     return <>
     <div className="footer">
@@ -11,18 +15,18 @@ export const Footer = () => {
         <div className="footer-section">
           <h2>Premier League</h2>
           <div>
-            <a href="../../../fixture-planner/fdr-planner/">FDR Planner</a>
-            <a href="../../../fixture-planner/rotation-planner/">Roation Planner</a>
-            <a href="../../../fixture-planner/periode-planner/">Period Planner</a>
+            <a href="../../../fixture-planner/fdr-planner/">{props.content.Fixture.FixturePlanner.title}</a>
+            <a href="../../../fixture-planner/rotation-planner/">{props.content.Fixture.RotationPlanner.title}</a>
+            <a href="../../../fixture-planner/periode-planner/">{props.content.Fixture.PeriodPlanner.title}</a>
           </div>
         </div>
         <div className="footer-section">
           <h2>Eliteserien</h2>
           <div>
-            <a href="../../../fixture-planner-eliteserien/">FDR Planner</a>
-            <a href="../../../fixture-planner-eliteserien/rotation-planner/">Rotasjonsplanlegger</a>
-            <a href="../../../fixture-planner-eliteserien/periode-planner/">Periodeplanlegger</a>
-            <a className="dropbtn" href="../../../statistics/player-ownership/">Eierandel</a>                     
+            <a href="../../../fixture-planner-eliteserien/">{props.content.Fixture.FixturePlanner.title}</a>
+            <a href="../../../fixture-planner-eliteserien/rotation-planner/">{props.content.Fixture.RotationPlanner.title}</a>
+            <a href="../../../fixture-planner-eliteserien/periode-planner/">{props.content.Fixture.PeriodPlanner.title}</a>
+            <a className="dropbtn" href="../../../statistics/player-ownership/">{props.content.Statistics.PlayerOwnership.title}</a>                     
           </div>
         </div>
         {/* <div className="footer-section-social-media">

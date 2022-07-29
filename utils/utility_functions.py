@@ -1,5 +1,5 @@
+from constants import total_number_of_gameweeks, premier_league_api_url
 from fixture_planner.models import AddPlTeamsToDB, KickOffTime
-from constants import total_number_of_gameweeks
 from utils.models.DataFetch import DataFetch
 from datetime import date
 import pandas as pd
@@ -24,12 +24,12 @@ def get_list_of_all_pl_team_names():
     return [team.team_name for team in fixture_list_db]
 
 
-def get_static_json_data(use_api_or_local):
+def get_static_json_data(use_api_or_local, api_url=premier_league_api_url):
     """
         Use either local extract json data or fpl api to load data from https://fantasy.premierleague.com/api/bootstrap-static/
     """
     if use_api_or_local == "api":
-        return DataFetch().get_current_fpl_info()
+        return DataFetch(api_url).get_current_fpl_info()
     else:
         with open('stored_data/static_json/static.json', encoding='utf-8') as json_static:
             return json.load(json_static)

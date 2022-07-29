@@ -58,7 +58,7 @@
         height: 100vh;
         
         .mobile-sub-menu-container {
-            padding: 20px 20px;
+            padding: 10px 20px 20px 20px;
 
 
             .sub-menu-item {
@@ -81,6 +81,37 @@
     a:hover {
         border-bottom: 1px solid var(--link-color);
     }
+
+
+
+    .top-navbar-langauge-container {
+        color: white;
+
+        button {
+            color: inherit;
+            background-color: transparent;
+            border: none;
+            cursor: auto;
+
+            &:hover {
+                border-color: transparent;
+                cursor: auto;
+                &.not-chosen {
+                    color: white;
+                    border-bottom: 1px solid white;
+                }
+            }
+
+            &.not-chosen {
+                color: #9b9696;
+                cursor: pointer;
+            }
+        }
+
+        button:last-child {
+            margin-left: 2px;
+        }
+    }
 }
 
 @media screen and (max-width: 400px) {
@@ -102,10 +133,42 @@
 }
 
 
+// .top-menu-mobile-circle-container {
+//     display: flex;
+//     justify-content: flex-end;
+//     align-items: flex-end;
+            
+//     .circle-link {
+//         display: block;
+//         width: 30px;
+//         height: 30px;
+//         border-radius: 25px;
+//         background-color: white; // default circle color
+//         margin: 1px 10px;
+
+//         &.fpl {
+//             background: var(--fpl-linear-gradient-second-color);  /* fallback for old browsers */
+//             background: -webkit-linear-gradient(to right, var(--fpl-linear-gradient-first-color), var(--fpl-linear-gradient-second-color));  /* Chrome 10-25, Safari 5.1-6 */
+//             background: linear-gradient(to right, var(--fpl-linear-gradient-first-color), var(--fpl-linear-gradient-second-color)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+//             position: relative;
+//         }
+
+//         &.eliteserien {
+//             background: var(--eliteserien-linear-gradient-first-color);  /* fallback for old browsers */
+//             background: -webkit-linear-gradient(to left, var(--eliteserien-linear-gradient-first-color), var(--eliteserien-linear-gradient-second-color));  /* Chrome 10-25, Safari 5.1-6 */
+//             background: linear-gradient(to left, var(--eliteserien-linear-gradient-first-color), var(--eliteserien-linear-gradient-second-color)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+//             position: relative;
+//         }
+//     }  
+// }
+
 .top-menu-mobile-circle-container {
+    padding-top: 20px;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: flex-end;
+    margin-right: 30px;
+    margin-left: 30px;
             
     .circle-link {
         display: block;
@@ -113,8 +176,12 @@
         height: 30px;
         border-radius: 25px;
         background-color: white; // default circle color
-        margin: 1px 10px;
+        top: 3px;
+        margin-left: 30px;
 
+        &:hover {
+            border-bottom: none !important;
+        }
         &.fpl {
             background: var(--fpl-linear-gradient-second-color);  /* fallback for old browsers */
             background: -webkit-linear-gradient(to right, var(--fpl-linear-gradient-first-color), var(--fpl-linear-gradient-second-color));  /* Chrome 10-25, Safari 5.1-6 */
@@ -129,5 +196,35 @@
             position: relative;
         }
     }  
+}
+
+.top-navbar-mobile-langauge-container {
+    color: black;
+
+    button {
+        font-size: 16px;
+        color: inherit;
+        background-color: transparent;
+        border: none;
+        cursor: auto;
+
+        &:hover {
+            border-color: transparent;
+            cursor: auto;
+            &.not-chosen {
+                color: black;
+                border-bottom: 1px solid black;
+            }
+        }
+
+        &.not-chosen {
+            color: #616161;
+            cursor: pointer;
+        }
+    }
+
+    button:last-child {
+        margin-left: 2px;
+    }
 }
 

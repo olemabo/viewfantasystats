@@ -2,7 +2,7 @@ from django.test import TestCase
 import requests
 import json
 # Create your tests here.
-from constants import name_of_extra_info_file, name_of_nationality_file, path_to_store_local_data, all_top_x_players, name_of_ownership_file, total_number_of_gameweeks
+from constants import name_of_extra_info_file, name_of_nationality_file, path_to_store_local_data, all_top_x_players_premier_league, name_of_ownership_file, total_number_of_gameweeks
 import numpy as np
 
 
@@ -27,7 +27,7 @@ def fill_Extra_Info_Statistics():
     gws = [gw + 1 for gw in range(total_number_of_gameweeks)]
     for gw in gws:
         file_path = path_to_store_local_data + "/global_stats/" + str(gw)
-        top_x_players = all_top_x_players
+        top_x_players = all_top_x_players_premier_league
         for top_x in top_x_players:
             try:
                 current_path = file_path + "/top_" + str(top_x) + "/" + name_of_extra_info_file

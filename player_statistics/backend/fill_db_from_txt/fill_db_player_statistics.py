@@ -1,25 +1,29 @@
-from player_statistics.backend.read_player_statistics import static_json, get_ids
-from player_statistics.db_models.player_statistics_model import FPLPlayersModel
+from constants import eliteserien_api_url, premier_league_api_url, premier_league_folder_name, eliteserien_folder_name
+from player_statistics.backend.read_api_data_to_txt.read_player_statistics import static_json, get_ids
+from player_statistics.db_models.premier_league.player_statistics_model import FPLPlayersModel
+from player_statistics.db_models.eliteserien.player_statistics_model import EliteserienPlayerStatistic
 from utils.models.DataFetch import DataFetch
 import time
 
 
-def fill_database_all_players():
-    static_data = static_json("api")
-    ids = get_ids("api")
-    dataFetch = DataFetch()
+def fill_database_all_players(league_name=premier_league_folder_name):
+    api_url = eliteserien_api_url if league_name == eliteserien_folder_name else premier_league_api_url
+    static_data = static_json("api", api_url)
+    ids = get_ids("api", api_url)
+    dataFetch = DataFetch(api_url)
     print("\nStart to fill db for all ", str(len(ids)), " players. \n")
+
     for idx, id in enumerate(ids):
         player_data = dataFetch.get_current_individual_players(player_id=id)
         name = static_data[id][0] + " & " + static_data[id][1]
         print("Filling db for player: ", name, " with id: ", id, " ... (",
               idx, "/", len(ids), ")")
-        fill_database_for_one_player(player_data, static_data, id)
+        fill_database_for_one_player(player_data, static_data, id, league_name)
         time.sleep(1)
     print("Filled db for all ", str(len(ids)), " players. \n")
 
 
-def fill_database_for_one_player(player_data_json, static_data, id):
+def fill_database_for_one_player(player_data_json, static_data, id, league_name):
     """
         Use extracted fpl data to fill db
     """
@@ -85,50 +89,86 @@ def fill_database_for_one_player(player_data_json, static_data, id):
         temp_yellow_cards.append(gw_i_data['yellow_cards'])
         temp_saves.append(gw_i_data['saves'])
         temp_bonus.append(gw_i_data['bonus'])
-        temp_bps.append(gw_i_data['bps'])
-        temp_influence.append(gw_i_data['influence'])
-        temp_creativity.append(gw_i_data['creativity'])
-        temp_threat.append(gw_i_data['threat'])
+        if (league_name == premier_league_folder_name):
+            temp_bps.append(gw_i_data['bps'])
+            temp_influence.append(gw_i_data['influence'])
+            temp_creativity.append(gw_i_data['creativity'])
+            temp_threat.append(gw_i_data['threat'])
+            temp_ict_index.append(gw_i_data['ict_index'])
         temp_transfers_balance.append(gw_i_data['transfers_balance'])
-        temp_ict_index.append(gw_i_data['ict_index'])
         temp_selected.append(gw_i_data['selected'])
         temp_transfers_in.append(gw_i_data['transfers_in'])
         temp_transfers_out.append(gw_i_data['transfers_out'])
         temp_value.append(gw_i_data['value'])
         temp_red_cards.append(gw_i_data['red_cards'])
 
-    fill_model = FPLPlayersModel(player_id=element_id,
-                                 player_team_id=team_id,
-                                 player_position_id=player_position_id,
-                                 player_name=player_name,
-                                 player_web_name=web_name,
-                                 chance_of_playing=chance_of_playing,
-                                 assists_list=temp_assists,
-                                 bonus_list=temp_bonus,
-                                 bps_list=temp_bps,
-                                 clean_sheets_list=temp_clean_sheets,
-                                 creativity_list=temp_creativity,
-                                 goals_conceded_list=temp_goals_conceded,
-                                 goals_scored_list=temp_goals_scored,
-                                 ict_index_list=temp_ict_index,
-                                 influence_list=temp_influence,
-                                 minutes_list=temp_minutes,
-                                 opponent_team_list=temp_opponent_team,
-                                 own_goals_list=temp_own_goals,
-                                 penalties_missed_list=temp_penalties_missed,
-                                 penalties_saved_list=temp_penalties_saved,
-                                 red_cards_list=temp_red_cards,
-                                 round_list=temp_round,
-                                 saves_list=temp_saves,
-                                 selected_list=temp_selected,
-                                 team_a_score_list=temp_team_a_score,
-                                 team_h_score_list=temp_team_h_score,
-                                 threat_list=temp_threat,
-                                 total_points_list=temp_total_points,
-                                 transfers_balance_list=temp_transfers_balance,
-                                 transfers_in_list=temp_transfers_in,
-                                 transfers_out_list=temp_transfers_out,
-                                 value_list=temp_value,
-                                 was_home_list=temp_was_home,
-                                 yellow_cards_list=temp_yellow_cards)
-    fill_model.save()
+    if league_name == premier_league_folder_name:
+        fill_model = FPLPlayersModel(
+            player_id=element_id,
+            player_team_id=team_id,
+            player_position_id=player_position_id,
+            player_name=player_name,
+            player_web_name=web_name,
+            chance_of_playing=chance_of_playing,
+            assists_list=temp_assists,
+            bonus_list=temp_bonus,
+            bps_list=temp_bps,
+            clean_sheets_list=temp_clean_sheets,
+            creativity_list=temp_creativity,
+            goals_conceded_list=temp_goals_conceded,
+            goals_scored_list=temp_goals_scored,
+            ict_index_list=temp_ict_index,
+            influence_list=temp_influence,
+            minutes_list=temp_minutes,
+            opponent_team_list=temp_opponent_team,
+            own_goals_list=temp_own_goals,
+            penalties_missed_list=temp_penalties_missed,
+            penalties_saved_list=temp_penalties_saved,
+            red_cards_list=temp_red_cards,
+            round_list=temp_round,
+            saves_list=temp_saves,
+            selected_list=temp_selected,
+            team_a_score_list=temp_team_a_score,
+            team_h_score_list=temp_team_h_score,
+            threat_list=temp_threat,
+            total_points_list=temp_total_points,
+            transfers_balance_list=temp_transfers_balance,
+            transfers_in_list=temp_transfers_in,
+            transfers_out_list=temp_transfers_out,
+            value_list=temp_value,
+            was_home_list=temp_was_home,
+            yellow_cards_list=temp_yellow_cards)
+        fill_model.save()
+    
+    if league_name == eliteserien_folder_name:
+        fill_model = EliteserienPlayerStatistic(
+            player_id=element_id,
+            player_team_id=team_id,
+            player_position_id=player_position_id,
+            player_name=player_name,
+            player_web_name=web_name,
+            chance_of_playing=chance_of_playing,
+            assists_list=temp_assists,
+            bonus_list=temp_bonus,
+            clean_sheets_list=temp_clean_sheets,
+            goals_conceded_list=temp_goals_conceded,
+            goals_scored_list=temp_goals_scored,
+            minutes_list=temp_minutes,
+            opponent_team_list=temp_opponent_team,
+            own_goals_list=temp_own_goals,
+            penalties_missed_list=temp_penalties_missed,
+            penalties_saved_list=temp_penalties_saved,
+            red_cards_list=temp_red_cards,
+            round_list=temp_round,
+            saves_list=temp_saves,
+            selected_list=temp_selected,
+            team_a_score_list=temp_team_a_score,
+            team_h_score_list=temp_team_h_score,
+            total_points_list=temp_total_points,
+            transfers_balance_list=temp_transfers_balance,
+            transfers_in_list=temp_transfers_in,
+            transfers_out_list=temp_transfers_out,
+            value_list=temp_value,
+            was_home_list=temp_was_home,
+            yellow_cards_list=temp_yellow_cards)
+        fill_model.save()

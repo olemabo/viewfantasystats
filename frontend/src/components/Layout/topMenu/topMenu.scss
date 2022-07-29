@@ -18,7 +18,7 @@
 
     .top-navbar {
         display: flex;
-        justify-content: flex-end;
+        justify-content: space-between;
         align-items: flex-end;
         max-width: var(--max-width);
         margin: 0 auto;
@@ -51,6 +51,35 @@
                     background: linear-gradient(to left, var(--eliteserien-linear-gradient-first-color), var(--eliteserien-linear-gradient-second-color)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
                     position: relative;
                 }
+            }
+        }
+
+        .top-navbar-language-container {
+            color: white;
+    
+            button {
+                color: inherit;
+                background-color: transparent;
+                border: none;
+                cursor: auto;
+
+                &:hover {
+                    border-color: transparent;
+                    cursor: auto;
+                    &.not-chosen {
+                        color: white;
+                        border-bottom: 1px solid white;
+                    }
+                }
+
+                &.not-chosen {
+                    color: #9b9696;
+                    cursor: pointer;
+                }
+            }
+
+            button:last-child {
+                margin-left: 2px;
             }
         }
     }
