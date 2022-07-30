@@ -287,86 +287,7 @@ export const PlayerOwnership : FunctionComponent<LanguageProps> = (props) => {
         if (sortType == 6) { setCurrentSorted('Total Ownership')}
     }
 
-    // console.log(totalChipUsage);
-
     const [ currentSorted, setCurrentSorted ] = useState("EO");
-
-    // let language  = "Norwegain";
-
-    // let content_json = {
-    //     English: {
-    //       title: "Player Ownership",
-    //       all_players: "All Players",
-    //       by_position: "By Position",
-    //       goalkeeper: "Goalkeepers",
-    //       defenders: "Defenders",
-    //       midfielders: "Midfielders",
-    //       forwards: "Forwards",
-    //       by_team: "By Team",
-    //       view: "View",
-    //       top_x_managers: "Top 'x' managers",
-    //       gw: "GW",
-    //       eo: "EO",
-    //       owned_by: "Owned by",
-    //       captain: "Captaincy",
-    //       vice_captain: "Vice Captain",
-    //       benched: "Benched",
-    //       tot_ownership: "Total Ownership",
-    //       player: "Player",
-    //       chip_title: "Chip Usage This Round",
-    //       chip_total_usage_title: "Total Chip Usage",
-    //       percent: "Percentage",
-    //       no_chip: "No Chips",
-    //       wildcard: "Wildcard",
-    //       rich_uncle: "Rich Uncle",
-    //       forward_rush: "Forward Rush",
-    //       two_captain: "2 Captains",
-    //       team_info: "Team Info",
-    //       value: "Value",
-    //       avg_team_value: "Avg. Team Value",
-    //       avg_transfers: "Avg. Transfers",
-    //       avg_transfer_cost: "Avg. Transfer Cost",
-    //       search_text: "Search..",
-    //     },
-    //     Norwegian: {
-    //       title: "Eierandel",
-    //       all_players: "Alle spiller",
-    //       by_position: "Etter posisjon",
-    //       goalkeeper: "Keepere",
-    //       defenders: "Forsvarere",
-    //       midfielders: "Midtbanespillere",
-    //       forwards: "Angrepsspillere",
-    //       by_team: "Etter lag",
-    //       view: "Se",
-    //       top_x_managers: "Topp 'x' lag",
-    //       gw: "Runde",
-    //       eo: "EO",
-    //       owned_by: "Valgt av",
-    //       captain: "Kaptein",
-    //       vice_captain: "Visekaptein",
-    //       benched: "Benket",
-    //       tot_ownership: "Total eierandel",
-    //       player: "Spiller",
-    //       chip_title: "Chips brukt (Runde)",
-    //       chip_total_usage_title: "Chips brukt (Totalt)",
-    //       percent: "Prosentandel",
-    //       no_chip: "Ingen Chips",
-    //       wildcard: "Wildcard",
-    //       rich_uncle: "Rik Onkel",
-    //       forward_rush: "Spiss Rush",
-    //       two_captain: "2 Kapteiner",
-    //       team_info: "Laginfo",
-    //       value: "Verdi",
-    //       avg_team_value: "Gj. snittlig lagverdi",
-    //       avg_transfers: "Gj. snittlig antall bytter",
-    //       avg_transfer_cost: "Gj. snittlig byttekostnad",
-    //       search_text: "Søk..",
-    //      }
-    // };
-
-    // let content;
-
-    // language === "Norwegain" ? (content = content_json.Norwegian) : (content = content_json.English);
 
     return <>
      <div className='player-ownership-container' id="rotation-planner-container">
@@ -474,7 +395,7 @@ export const PlayerOwnership : FunctionComponent<LanguageProps> = (props) => {
                 <table className='chips-table'>
                     <thead>
                         <tr>
-                            <th className="name-col-chips">{props.content.Statistics.PlayerOwnership.chip_title} {" ("}{props.content.General.round_short}{currentGw}{")"}</th>
+                            <th className="name-col-chips">{props.content.Statistics.PlayerOwnership.chip_title} {" "}{props.content.General.round_short}{currentGw}</th>
                             <th>{props.content.Statistics.PlayerOwnership.percent}</th>
                         </tr>
                     </thead>
@@ -508,7 +429,7 @@ export const PlayerOwnership : FunctionComponent<LanguageProps> = (props) => {
                         <thead>
                             <tr>
                                 <th className="name-col-chips-2">{props.content.Statistics.PlayerOwnership.chip_total_usage_title}</th>
-                                <th>{props.content.General.percent}</th>
+                                <th>{props.content.Statistics.PlayerOwnership.percent}</th>
                             </tr>
                         </thead>
 
