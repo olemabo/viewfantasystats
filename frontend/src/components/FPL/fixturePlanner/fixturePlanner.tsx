@@ -52,41 +52,37 @@ export const FixturePlanner : FunctionComponent<LanguageProps> = (props) => {
     const max_gw = 38;
 
     const empty: TeamData[] = [ { team_name: "-", FDR: [], checked: true}];
-    const emptyFDRList: FDRData[] = [{ gw: "0", oppTeamDifficultyScore: "0", oppTeamHomeAwayList: "0", oppTeamNameList: "0", team_name: "0", team_short_name: "0" }];
     const emptyGwDate: KickOffTimes[] = [{gameweek: 0, day_month: "",kickoff_time: "" }];
-    const emptyTeamNames: TeamName[] = [{team_name: "empty", checked: false}];
 
-    const [ teamNames, setTeamNames ] = useState(emptyTeamNames);
-    const [ fdrDataAllTeams, setFdrDataAllTeams ] = useState(emptyFDRList);
     const [ fdrDataToShow, setFdrDataToShow ] = useState(empty);
-    const [ fdrDataAllTeamsNew, setFdrDataAllTeamsNew] = useState(empty);
     
     const [ kickOffTimes, setKickOffTimes ] = useState(emptyGwDate);
     const [ kickOffTimesToShow, setKickOffTimesToShow ] = useState(emptyGwDate);
 
-
     const [ gwStart, setGwStart ] = useState(min_gw);
-    const [ gwEnd, setGwEnd ] = useState(max_gw);
+    const [ gwEnd, setGwEnd ] = useState(min_gw + 7);
     const [ showTeamFilters, setShowTeamFilters ] = useState(false);
 
     useEffect(() => {
         // Get kickoff time data from the API
+        
+        // Get fdr data from the API
+        let body = { 
+            start_gw: min_gw,
+            end_gw: gwEnd,
+            min_num_fixtures: '1',
+            combinations: 'FDR'
+        };
+        
         axios.get(fixture_planner_kickoff_time_api_path).then(x => {
             if (x.data?.length > 0) {
                 let temp_KickOffTimes: KickOffTimes[] = [];
                 x.data.forEach((kickoff: string) => temp_KickOffTimes.push(JSON.parse(kickoff)));
                 setKickOffTimes(temp_KickOffTimes);
-                setKickOffTimesToShow(temp_KickOffTimes);
+                setKickOffTimesToShow(temp_KickOffTimes.slice(body['start_gw'] - 1, body['end_gw']));
             }
         })
 
-        // Get fdr data from the API
-        let body = { 
-            start_gw: min_gw,
-            end_gw: max_gw,
-            min_num_fixtures: '1',
-            combinations: 'FDR'
-        };
         
         extractFDRData(body)
     }, []);
@@ -104,8 +100,7 @@ export const FixturePlanner : FunctionComponent<LanguageProps> = (props) => {
     }
 
     function extractFDRData(body: any) {
-
-        setKickOffTimesToShow(kickOffTimes.slice(gwStart - 1, gwEnd));
+        setKickOffTimesToShow(kickOffTimes.slice(body['start_gw'] - 1, body['end_gw']));
 
         // Get fdr data from api
         axios.post(fixture_planner_api_path, body).then(x => {
@@ -133,25 +128,30 @@ export const FixturePlanner : FunctionComponent<LanguageProps> = (props) => {
                 apiFDRList.push(tempTeamData);
             });
 
-            setFdrDataAllTeamsNew(apiFDRList);
             setFdrDataToShow(apiFDRList);
-            setTeamNames(tempTeamNames);
         })
     }
 
     function toggleCheckbox(e: any) {
-        let tempTeamNames: TeamName[] = [];
         let temp: TeamData[] = [];
         fdrDataToShow.forEach(x => {
             let checked = x.checked;
             if (x.team_name == e.currentTarget.value) {
                 checked = !x.checked;
             }
-            // tempTeamNames.push({ team_name: x.team_name, checked: checked});
             temp.push({ team_name: x.team_name, FDR: x.FDR, checked: checked});
         });
-        // setTeamNames(tempTeamNames);
         setFdrDataToShow(temp);
+    }
+
+    function toggleBorderLine(e: React.MouseEvent<HTMLTableCellElement, MouseEvent>) {
+        let classList = e.currentTarget.classList;
+        if (classList.contains("double-border-0")) {
+            e.currentTarget.classList.replace("double-border-0", "double-border-1")
+        }
+        else if (classList.contains("double-border-1")) {
+            e.currentTarget.classList.replace("double-border-1", "double-border-0")
+        }
     }
 
     return <>
@@ -242,9 +242,9 @@ export const FixturePlanner : FunctionComponent<LanguageProps> = (props) => {
                                          { fdr.checked && (
                                             <tr id={"fdr-row-" + fdr.team_name}>
                                                 { fdr.FDR.map(f => (
-                                                    <td scope='col' className={'min-width'
+                                                    
+                                                    <td onClick={(e) => toggleBorderLine(e)} scope='col' className={'min-width'
                                                     + (f.fdr_gw_i.length == 1 ? " color-" + f.fdr_gw_i[0].difficulty_score + " " : " no-padding ") + 'double-border-' + f.fdr_gw_i[0].Use_Not_Use  }>
-
                                                         { f.fdr_gw_i.map(g => (
                                                             <div className={'min-width color-' + g.difficulty_score + ' multiple-fixtures height-' + f.fdr_gw_i.length}>
                                                                 { g.opponent_team_name == '-' ? "Blank" : (g.opponent_team_name + " (" + g.H_A + ")") }

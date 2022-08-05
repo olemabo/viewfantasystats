@@ -51,7 +51,14 @@
         font-size: 18px;
         color: #7fd9ff;
     }
+
+    &.FPL {
+        h2 {
+            color: var(--fpl-linear-gradient-second-color);
+        }
+    }
 }
+
 
 @media (max-width: 600px) {
     .footer-container {

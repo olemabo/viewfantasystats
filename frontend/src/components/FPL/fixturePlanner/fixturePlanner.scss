@@ -123,13 +123,26 @@
     }
 }
 
-th, td {
-    height: 54px;
-    border-top: 4px solid #FFF;
-    border-bottom: 4px solid #FFF;
-    border-left: 3px solid #FFF;
-    border-right: 3px solid #FFF;
-  }
+.fixture-planner-container {
+    th, td {
+        height: 54px;
+        // border-top: 4px solid #FFF;
+        // border-bottom: 4px solid #FFF;
+        // border-left: 3px solid #FFF;
+        // border-right: 3px solid #FFF;
+        border: 3px solid white;
+    }
+
+}
+
+.double-border-1 div {
+    border: 3px solid black !important;
+}
+
+.double-border-1 {
+    border: 3px solid white !important;
+}
+
 
   tbody td {
     text-align: center;

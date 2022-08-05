@@ -2,15 +2,17 @@ import React, { FunctionComponent } from "react";
 import "./footer.scss";
 import Twitter from '@material-ui/icons/Twitter';
 import Code from '@material-ui/icons/Code';
+import { useSelector } from "react-redux";
 
 type LanguageProps = {
   content: any;
 }
 
 export const Footer : FunctionComponent<LanguageProps> = (props) => {
-
-    return <>
-    <div className="footer">
+  const league_type = useSelector((state: any) => state?.league_type);
+  
+  return <>
+    <div className={"footer " + league_type}>
       <div className="footer-container">
         <div className="footer-section">
           <h2>Premier League</h2>
@@ -27,6 +29,7 @@ export const Footer : FunctionComponent<LanguageProps> = (props) => {
             <a href="../../../fixture-planner-eliteserien/rotation-planner/">{props.content.Fixture.RotationPlanner.title}</a>
             <a href="../../../fixture-planner-eliteserien/periode-planner/">{props.content.Fixture.PeriodPlanner.title}</a>
             <a className="dropbtn" href="../../../statistics/player-ownership/">{props.content.Statistics.PlayerOwnership.title}</a>                     
+            {/* <a className="dropbtn" href="../../../statistics/search-user-names/">{props.content.Statistics.SearchUserName.title}</a> */}
           </div>
         </div>
         {/* <div className="footer-section-social-media">
