@@ -1,6 +1,6 @@
 from constants import eliteserien_api_url, premier_league_api_url, premier_league_folder_name, eliteserien_folder_name
 from player_statistics.backend.read_api_data_to_txt.read_player_statistics import static_json, get_ids
-from player_statistics.db_models.premier_league.player_statistics_model import FPLPlayersModel
+from player_statistics.db_models.premier_league.player_statistics_model import PremierLeaguePlayers
 from player_statistics.db_models.eliteserien.player_statistics_model import EliteserienPlayerStatistic
 from utils.models.DataFetch import DataFetch
 import time
@@ -103,7 +103,7 @@ def fill_database_for_one_player(player_data_json, static_data, id, league_name)
         temp_red_cards.append(gw_i_data['red_cards'])
 
     if league_name == premier_league_folder_name:
-        fill_model = FPLPlayersModel(
+        fill_model = PremierLeaguePlayers(
             player_id=element_id,
             player_team_id=team_id,
             player_position_id=player_position_id,

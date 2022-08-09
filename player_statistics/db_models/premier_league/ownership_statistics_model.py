@@ -1,10 +1,11 @@
+import json
 from django.db import models
 from django.urls import reverse
 from django_mysql.models import ListTextField
 from constants import total_number_of_gameweeks
 
 
-class GlobalOwnershipStats10000(models.Model):
+class PremierLeagueGlobalOwnershipStats10000(models.Model):
     # one stat for each gameweek + 1 total stat for all gws
     number_of_gws = total_number_of_gameweeks
     top_x = 10000
@@ -220,9 +221,12 @@ class GlobalOwnershipStats10000(models.Model):
     def __str__(self):
         """String for representing the MyModelName object (in Admin site etc.)."""
         return f'{self.player_id}, {self.player_name}'
+    
+    def toJson(self):
+        return json.dumps(self, default=lambda o: o.__dict__)
 
 
-class GlobalOwnershipStats1000(models.Model):
+class PremierLeagueGlobalOwnershipStats1000(models.Model):
     # one stat for each gameweek + 1 total stat for all gws
     number_of_gws = total_number_of_gameweeks
     top_x = 1000
@@ -439,8 +443,11 @@ class GlobalOwnershipStats1000(models.Model):
         """String for representing the MyModelName object (in Admin site etc.)."""
         return f'{self.player_id}, {self.player_name}'
 
+    def toJson(self):
+        return json.dumps(self, default=lambda o: o.__dict__)
 
-class GlobalOwnershipStats100(models.Model):
+
+class PremierLeagueGlobalOwnershipStats100(models.Model):
     # one stat for each gameweek + 1 total stat for all gws
     number_of_gws = total_number_of_gameweeks
     top_x = 100
@@ -651,12 +658,16 @@ class GlobalOwnershipStats100(models.Model):
     def __str__(self):
         """String for representing the MyModelName object (in Admin site etc.)."""
         return f'{self.player_id}, {self.player_name}'
+    
+    def toJson(self):
+        return json.dumps(self, default=lambda o: o.__dict__)
 
 
-class ExtraInfoStatistics(models.Model):
+class PremierLeagueChipsAndUserInfo(models.Model):
     # one stat for each gameweek + 1 total stat for all gws
     number_of_gws = total_number_of_gameweeks
-    number_of_extra_info = 8  # [Freehit, BB, TC, WC, None, Avg Value, Avg event transfer, Avg transfer cost]
+    number_of_extra_info = 10  # [Freehit, BB, TC, WC, None, Avg Value, Avg event transfer, Avg transfer cost, total points, bank]
+    number_of_total_chip_usage = 6  # [Freehit, BB, TC, WC1, WC2, None]
 
     gw = models.IntegerField(primary_key=True, help_text='Enter gameweek number (1) ')
 
@@ -685,6 +696,36 @@ class ExtraInfoStatistics(models.Model):
         size=number_of_extra_info,  # Maximum of 100 ids in list
     )
 
+    total_chip_usage_1 = ListTextField(
+        base_field=models.IntegerField(help_text='Total chip usage among top 1'),
+        size=number_of_total_chip_usage,  # Maximum of 100 ids in list
+        blank=True,
+    )
+
+    total_chip_usage_10 = ListTextField(
+        base_field=models.IntegerField(help_text='Total chip usage among top 10'),
+        size=number_of_total_chip_usage,  # Maximum of 100 ids in list
+        blank=True,
+    )
+
+    total_chip_usage_100 = ListTextField(
+        base_field=models.IntegerField(help_text='Total chip usage among top 100'),
+        size=number_of_total_chip_usage,  # Maximum of 100 ids in list
+        blank=True,
+    )
+
+    total_chip_usage_1000 = ListTextField(
+        base_field=models.IntegerField(help_text='Total chip usage among top 1000'),
+        size=number_of_total_chip_usage,  # Maximum of 100 ids in list
+        blank=True,
+    )
+
+    total_chip_usage_10000 = ListTextField(
+        base_field=models.IntegerField(help_text='Total chip usage among top 10000'),
+        size=number_of_total_chip_usage,  # Maximum of 100 ids in list
+        blank=True,
+    )
+
     # Metadata
     class Meta:
         ordering = ['gw']
@@ -697,10 +738,13 @@ class ExtraInfoStatistics(models.Model):
     def __str__(self):
         """String for representing the MyModelName object (in Admin site etc.)."""
         return f'{self.gw}'
+    
+    def toJson(self):
+        return json.dumps(self, default=lambda o: o.__dict__)
 
 
 
-class GwsChecked(models.Model):
+class PremierLeagueGwsChecked(models.Model):
     number_of_gws = total_number_of_gameweeks
 
     id = models.IntegerField(primary_key=True, help_text='Enter team id (1) ', default=1)
@@ -734,3 +778,6 @@ class GwsChecked(models.Model):
     def __str__(self):
         """String for representing the MyModelName object (in Admin site etc.)."""
         return f'{self.id}'
+
+    def toJson(self):
+        return json.dumps(self, default=lambda o: o.__dict__)

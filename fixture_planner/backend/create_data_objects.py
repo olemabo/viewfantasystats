@@ -21,8 +21,8 @@ def create_list_with_team_ids_from_list_with_team_names(f, team_names_list):
     return team_id_list
 
 
-def create_team_list():
-    static, fixture_info = get_static_and_fixture_data()
+def create_team_list(api_local="local"):
+    static, fixture_info = get_static_and_fixture_data(api_local)
     player_info = static['elements']
     players = Players(player_info, fixture_info)
     team_list = players.create_all_teams()  # list teams, where Arsenal = team_list[0], ... Wolves = team_list[-1]
@@ -33,7 +33,7 @@ def create_team_list():
     return team_list
 
 
-def create_data_frame():
+def create_data_frame(api_local="local"):
     """
     create dataframe with fixture information.
     Rows: Team_id - 1
@@ -43,8 +43,8 @@ def create_data_frame():
             1      Aston Villa  [MCI, A, 0]  [SHU, H, 3]  ...  [CHE, H, 3]
 
     """
-    static, fixture = get_static_and_fixture_data()
-    team_list = create_team_list()
+    static, fixture = get_static_and_fixture_data(api_local)
+    team_list = create_team_list(api_local)
     number_of_PL_teams = len(team_list)
     columns = [str(i) for i in range(0, len(team_list[0].fixtures_df.index) + 1)]
     columns[0] = 'Team'
@@ -67,9 +67,9 @@ def create_data_frame():
     return pd.DataFrame(data=data, columns=columns)
 
 
-def return_fixture_names_shortnames():
-    df = create_data_frame()
-    static, fixture = get_static_and_fixture_data()
+def return_fixture_names_shortnames(api_local="local"):
+    df = create_data_frame(api_local)
+    static, fixture = get_static_and_fixture_data(api_local)
     names = pd.DataFrame(static['teams'])['name']
     short_names = pd.DataFrame(static['teams'])['short_name']
     ids = pd.DataFrame(static['teams'])['id']

@@ -5,7 +5,7 @@ from django.db import models
 from datetime import date
 
 
-class AddPlTeamsToDB(models.Model):
+class PremierLeagueTeamInfo(models.Model):
     """A typical class defining a model, derived from the Model class."""
 
     # Fields

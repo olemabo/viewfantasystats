@@ -1,21 +1,21 @@
-from player_statistics.db_models.premier_league.ownership_statistics_model import ExtraInfoStatistics, GlobalOwnershipStats100, \
-    GlobalOwnershipStats1000, GlobalOwnershipStats10000, GwsChecked
-from player_statistics.db_models.premier_league.nationality_statistics_model import NationalityStatistics
+from player_statistics.db_models.premier_league.ownership_statistics_model import PremierLeagueChipsAndUserInfo, PremierLeagueGlobalOwnershipStats100, \
+    PremierLeagueGlobalOwnershipStats1000, PremierLeagueGlobalOwnershipStats10000, PremierLeagueGwsChecked
+from player_statistics.db_models.premier_league.nationality_statistics_model import PremierLeagueNationalityStatistics
 from player_statistics.db_models.eliteserien.nationality_statistics_model_eliteserien import EliteserienNationalityStatistics
-from player_statistics.db_models.premier_league.player_statistics_model import FPLPlayersModel
+from player_statistics.db_models.premier_league.player_statistics_model import PremierLeaguePlayers
 from player_statistics.db_models.eliteserien.ownership_statistics_model_eliteserien import EliteserienGwsChecked, EliteserienGlobalOwnershipStats5000, EliteserienGlobalOwnershipStats1000, EliteserienGlobalOwnershipStats100, EliteserienChipsAndUserInfo
-from player_statistics.db_models.eliteserien.user_statistics_model_eliteserien import UserInfoStatistics
+from player_statistics.db_models.eliteserien.user_statistics_model_eliteserien import EliteserienUserInfoStatistics
 from player_statistics.db_models.eliteserien.player_statistics_model import EliteserienPlayerStatistic
 from django.contrib import admin
 
 
-admin.site.register(FPLPlayersModel)
-admin.site.register(GlobalOwnershipStats100)
-admin.site.register(GlobalOwnershipStats1000)
-admin.site.register(GlobalOwnershipStats10000)
-admin.site.register(ExtraInfoStatistics)
-admin.site.register(NationalityStatistics)
-admin.site.register(GwsChecked)
+admin.site.register(PremierLeaguePlayers)
+admin.site.register(PremierLeagueGlobalOwnershipStats100)
+admin.site.register(PremierLeagueGlobalOwnershipStats1000)
+admin.site.register(PremierLeagueGlobalOwnershipStats10000)
+admin.site.register(PremierLeagueChipsAndUserInfo)
+admin.site.register(PremierLeagueNationalityStatistics)
+admin.site.register(PremierLeagueGwsChecked)
 
 admin.site.register(EliteserienPlayerStatistic)
 admin.site.register(EliteserienGlobalOwnershipStats100)
@@ -25,4 +25,4 @@ admin.site.register(EliteserienChipsAndUserInfo)
 admin.site.register(EliteserienNationalityStatistics)
 admin.site.register(EliteserienGwsChecked)
 
-admin.site.register(UserInfoStatistics)
+admin.site.register(EliteserienUserInfoStatistics)

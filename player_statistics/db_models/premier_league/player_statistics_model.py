@@ -4,7 +4,7 @@ from constants import total_number_of_gameweeks
 from django.urls import reverse
 
 
-class FPLPlayersModel(models.Model):
+class PremierLeaguePlayers(models.Model):
     """FPL Player model. Statistics relevant for each player in fpl."""
     # one stat for each gameweek + 1 total stat for all gws
     number_of_gws = total_number_of_gameweeks + 1

@@ -1,5 +1,5 @@
-from player_statistics.db_models.premier_league.ownership_statistics_model import GlobalOwnershipStats100, \
-    GlobalOwnershipStats1000, GlobalOwnershipStats10000
+from player_statistics.db_models.premier_league.ownership_statistics_model import PremierLeagueGlobalOwnershipStats100, \
+    PremierLeagueGlobalOwnershipStats1000, PremierLeagueGlobalOwnershipStats10000
 
 
 def get_ownership_db_data(top_x, field_name, player_position_ids, player_team_ids):
@@ -13,11 +13,11 @@ def get_ownership_db_data(top_x, field_name, player_position_ids, player_team_id
     :return: DB object with data from database based on filters.
     """
     if top_x == 100:
-        return GlobalOwnershipStats100.objects.values(field_name).\
+        return PremierLeagueGlobalOwnershipStats100.objects.values(field_name).\
                 filter(player_position_id__in=player_position_ids).filter(player_team_id__in=player_team_ids)
     if top_x == 1000:
-        return GlobalOwnershipStats1000.objects.values(field_name).\
+        return PremierLeagueGlobalOwnershipStats1000.objects.values(field_name).\
                 filter(player_position_id__in=player_position_ids).filter(player_team_id__in=player_team_ids)
     if top_x == 10000:
-        return GlobalOwnershipStats10000.objects.values(field_name). \
+        return PremierLeagueGlobalOwnershipStats10000.objects.values(field_name). \
                 filter(player_position_id__in=player_position_ids).filter(player_team_id__in=player_team_ids)

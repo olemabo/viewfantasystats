@@ -1,6 +1,6 @@
 from django.contrib import admin
-from .models import AddPlTeamsToDB, KickOffTime
+from .models import PremierLeagueTeamInfo, KickOffTime
 
 
-admin.site.register(AddPlTeamsToDB)
+admin.site.register(PremierLeagueTeamInfo)
 admin.site.register(KickOffTime)

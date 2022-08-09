@@ -11,11 +11,10 @@ from utils.models.fixtures.WhichTeamToCheck import WhichTeamToCheck
 from django.http import HttpResponse, JsonResponse
 from utils.models.DataFetch import DataFetch
 from rest_framework.response import Response
-from constants import eliteserien_api_url
+from constants import eliteserien_api_url, current_season_name_eliteserien, eliteserien_folder_name, path_to_store_local_data, fixture_folder_name
 from rest_framework.views import APIView
 from rest_framework import status
 from datetime import date
-
 
 class GetKickOffTimesEliteserien(APIView):
 
@@ -44,7 +43,7 @@ class PostEliteserienFDRData(APIView):
 
             fdr_fixture_data = []
 
-            fixture_list_db, dates, fdr_to_colors_dict, team_name_color = readEliteserienExcelFromDagFinnToDBFormat()
+            fixture_list_db, dates, fdr_to_colors_dict, team_name_color = readEliteserienExcelFromDagFinnToDBFormat(path_to_store_local_data  + "/" + eliteserien_folder_name + "/" + current_season_name_eliteserien + "/" + fixture_folder_name + "/" + "Eliteserien_fixtures.xlsx")
             
             if start_gw < 0:
                 start_gw = get_upcoming_gw_eliteserien()

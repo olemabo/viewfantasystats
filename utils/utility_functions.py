@@ -1,5 +1,5 @@
 from constants import total_number_of_gameweeks, premier_league_api_url
-from fixture_planner.models import AddPlTeamsToDB, KickOffTime
+from fixture_planner.models import PremierLeagueTeamInfo, KickOffTime
 from utils.models.DataFetch import DataFetch
 from datetime import date
 import pandas as pd
@@ -17,10 +17,10 @@ def convert_list_with_strings_to_floats(list_of_strings):
 
 def get_list_of_all_pl_team_names():
     """
-    Extract all pl team names from AddPlTeamsToDB db
+    Extract all pl team names from PremierLeagueTeamInfo db
     :return: a list of all pl team names
     """
-    fixture_list_db = AddPlTeamsToDB.objects.all()
+    fixture_list_db = PremierLeagueTeamInfo.objects.all()
     return [team.team_name for team in fixture_list_db]
 
 
@@ -91,7 +91,7 @@ def return_fixture_names_shortnames(fixture_list_db):
 
 
 
-# from fixture_planner.models import AddPlTeamsToDB, KickOffTime
+# from fixture_planner.models import PremierLeagueTeamInfo, KickOffTime
 # from utils.models.DataFetch import DataFetch
 # from datetime import date
 # import json
@@ -113,10 +113,10 @@ def return_fixture_names_shortnames(fixture_list_db):
 
 # def get_list_of_all_pl_team_names():
 #     """
-#     Extract all pl team names from AddPlTeamsToDB db
+#     Extract all pl team names from PremierLeagueTeamInfo db
 #     :return: a list of all pl team names
 #     """
-#     fixture_list_db = AddPlTeamsToDB.objects.all()
+#     fixture_list_db = PremierLeagueTeamInfo.objects.all()
 #     return [team.team_name for team in fixture_list_db]
 
 

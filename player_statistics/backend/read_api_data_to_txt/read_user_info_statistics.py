@@ -1,5 +1,5 @@
 
-from constants import user_stats_special_delimiter, user_stats_folder_name, premier_league_api_url, eliteserien_api_url, eliteserien_folder_name, path_to_store_local_data
+from constants import current_season_name_eliteserien, current_season_name_premier_league, user_stats_special_delimiter, user_stats_folder_name, premier_league_api_url, eliteserien_api_url, eliteserien_folder_name, path_to_store_local_data
 from utils.models.DataFetch import DataFetch
 import numpy as np
 import time
@@ -12,9 +12,18 @@ def read_user_info_statistics_eliteserien(league_name=eliteserien_folder_name):
     
     # create a folder to store data in txt files, and return data if allready exists
     start_id, path_to_file = check_if_txt_file_exist(league_name)
+    print("\n\nRead data from API | User statistics\n")
+    print("Start at id: ", start_id, "\n")
     
     # get number of fantasy players
     number_of_fantasy_players = DFObject.get_current_fpl_info()['total_players']
+    
+    print("Number of fantasy managers: ", number_of_fantasy_players, "\n")
+    
+    if start_id > number_of_fantasy_players:
+        print("All ", number_of_fantasy_players, " managers allready stored :)")
+        return 0
+
     total_time = 0
     for id in range(start_id, number_of_fantasy_players + 1):
         start_time = time.time()
@@ -23,19 +32,27 @@ def read_user_info_statistics_eliteserien(league_name=eliteserien_folder_name):
         end_time = time.time()
         total_time += (end_time - start_time) 
         avg_time = total_time / (id - start_id + 1)
-        print(id, " / ", number_of_fantasy_players, " | ", round(id / number_of_fantasy_players * 100, 2) , "% | " , round(avg_time * (number_of_fantasy_players - id) / 3600, 2), " hours")
+        print(id, " / ", number_of_fantasy_players, " | ", round(id / number_of_fantasy_players * 100, 2) , "% | " , round(avg_time * (number_of_fantasy_players - id) / 3600, 2), " hours left")
 
     return 0
 
 
 def check_if_txt_file_exist(league_name):
-    if not os.path.isdir(path_to_store_local_data + "/" + league_name):
-        os.mkdir(path_to_store_local_data + "/" + league_name)
-    
-    if not os.path.isdir(path_to_store_local_data + "/" + league_name + "/" + user_stats_folder_name):
-        os.mkdir(path_to_store_local_data + "/" + league_name + "/" + user_stats_folder_name)
+    league_path = path_to_store_local_data + "/" + league_name + "/"
+    if not os.path.isdir(league_path):
+        os.mkdir(league_path)
 
-    txt_file_path = path_to_store_local_data + "/" + league_name + "/" + user_stats_folder_name + "/" + user_stats_folder_name + ".txt"
+    season_name = current_season_name_eliteserien if league_name == eliteserien_folder_name else current_season_name_premier_league
+    season_path = league_path + "/" + season_name + "/"
+    if not os.path.isdir(season_path):
+        os.mkdir(season_path)
+
+    user_stat_path = season_path + "/" + user_stats_folder_name
+    if not os.path.isdir(user_stat_path):
+        os.mkdir(user_stat_path)
+
+
+    txt_file_path = user_stat_path + "/" + user_stats_folder_name + ".txt"
     if not os.path.exists(txt_file_path):
         f = open(txt_file_path, "w", encoding="utf-8")
         f.write("id, joined_time, started_event, favourite_team, name,  player_first_name, player_last_name, player_region_id, player_region_name, player_region_iso_code_long, ranking \n")
@@ -71,9 +88,9 @@ def read_single_user_info(id, DFObject: DataFetch):
 
 
 def wrtie_to_file(content, path_to_file):
-    f = open(path_to_file, "a", encoding="utf-8")
-    f.write(content + "\n")
-    f.close()   
+    f2 = open(path_to_file, "a", encoding="utf-8")
+    f2.write(content + "\n")
+    f2.close()   
 
 
-read_user_info_statistics_eliteserien()
+# read_user_info_statistics_eliteserien()

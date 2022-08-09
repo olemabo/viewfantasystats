@@ -1,4 +1,4 @@
-from constants import top_x_players_ids_backup_file_name, backup_data_txt_file_name, backup_data_folder_name, how_often_do_back_up_of_global_data, nationality_delimiter, name_of_nationality_file, global_stats_folder_name, eliteserien_wc_due_date, premier_league_wc_due_date, total_chip_usage_txt_file_name, country_population_txt_file_name, global_stats_folder_name, premier_league_api_url, eliteserien_api_url, web_global_league_eliteserien, eliteserien_folder_name, premier_league_folder_name, name_of_extra_info_file, path_to_store_local_data, web_global_league, all_top_x_players_premier_league, all_top_x_players_eliteserien, time_to_sleep_for_each_iteration, name_of_ownership_file
+from constants import current_season_name_eliteserien, top_x_players_ids_backup_file_name, backup_data_txt_file_name, current_season_name_premier_league, backup_data_folder_name, how_often_do_back_up_of_global_data, nationality_delimiter, name_of_nationality_file, global_stats_folder_name, eliteserien_wc_due_date, premier_league_wc_due_date, total_chip_usage_txt_file_name, country_population_txt_file_name, global_stats_folder_name, premier_league_api_url, eliteserien_api_url, web_global_league_eliteserien, eliteserien_folder_name, premier_league_folder_name, name_of_extra_info_file, path_to_store_local_data, web_global_league, all_top_x_players_premier_league, all_top_x_players_eliteserien, time_to_sleep_for_each_iteration, name_of_ownership_file
 from utils.models.DataFetch import DataFetch
 from tqdm import tqdm
 import pandas as pd
@@ -23,7 +23,9 @@ def save_all_global_stats_for_current_gw(league_name=premier_league_folder_name)
     """
     
     all_top_x_players = all_top_x_players_eliteserien if league_name == eliteserien_folder_name else all_top_x_players_premier_league
-    
+
+    print("League name: ", league_name, "\n")
+
     x = input("You will now extract data from the FPL api. It will be for top " +  str(max(all_top_x_players)) + " fpl managers. " +
             "Time to sleep between each api call is: " + str(time_to_sleep_for_each_iteration) +
                   " and should be more than 0.2 at least. Will you proceed? (y/n) ")
@@ -36,14 +38,22 @@ def save_all_global_stats_for_current_gw(league_name=premier_league_folder_name)
     # collect fpl api class
     api_url = eliteserien_api_url if league_name == eliteserien_folder_name else premier_league_api_url
     DFObject = DataFetch(api_url)
-    current_gameweek = get_current_gw(DFObject)
     
+    current_gameweek = get_current_gw(DFObject)
+    season_name = current_season_name_eliteserien if league_name == eliteserien_folder_name else current_season_name_premier_league
+
+    print("\nCurrent GW: ", current_gameweek, "\nCurrent season: ", season_name, "\n")
+
     # create new directories if not already done
     league_path = path_to_store_local_data + "/" + league_name + "/"
     if not os.path.isdir(league_path):
         os.mkdir(league_path)
+
+    season_path = league_path + "/" + season_name + "/"
+    if not os.path.isdir(season_path):
+        os.mkdir(season_path)
     
-    global_stats_path = league_path + "/" + global_stats_folder_name + "/"
+    global_stats_path = season_path + "/" + global_stats_folder_name + "/"
     if not os.path.isdir(global_stats_path):
         os.mkdir(global_stats_path)
 
@@ -71,7 +81,7 @@ def save_all_global_stats_for_current_gw(league_name=premier_league_folder_name)
             id_s = ids_allready_stored
     
     # find the team ids from the top x fpl players on global rank
-    if (len(id_s) != top_x_players):
+    if len(id_s) != top_x_players:
         id_s = find_team_ids_from_top_x_players(top_x_players, league_name, )
         f_ids = open(path_ids_txt_file, "w", encoding="utf-8")
         for id in id_s:
@@ -117,7 +127,8 @@ def save_all_global_stats_for_current_gw(league_name=premier_league_folder_name)
             print("Wrong input data")
             print(1/0)
         number_of_ids_allready_stored = current_number_stored
-    
+
+    print("Remaining ids to check: ", len(id_s), "\n")
     # extract different data for each id among top_x_players
     for player_i in tqdm(range(len(id_s))):
         
@@ -153,7 +164,7 @@ def save_all_global_stats_for_current_gw(league_name=premier_league_folder_name)
                 ids_dict[player_id][1] = int(ids_dict[player_id][1]) + 1
             if player_row['multiplier'] == 2:
                 ids_dict[player_id][2] = int(ids_dict[player_id][2]) + 1
-            if player_row['is_vice_captain']:
+            if player_row['is_vice_captain'] and player_row['multiplier'] == 1:
                 ids_dict[player_id][3] = int(ids_dict[player_id][3]) + 1
             if player_row['multiplier'] == 3:
                 ids_dict[player_id][11] = int(ids_dict[player_id][11]) + 1
@@ -191,12 +202,12 @@ def save_all_global_stats_for_current_gw(league_name=premier_league_folder_name)
             
             if (player_i + 1) in all_top_x_players:
                 print("Store data for top: ", player_i + 1)
-                general_folder_path = path_to_store_local_data + "/" + league_name + "/" + global_stats_folder_name + "/" + str(current_gameweek) + "/top_" + str(top_x_players_i)
+                general_folder_path = gw_path + "/top_" + str(top_x_players_i)
                 if not os.path.isdir(general_folder_path):
                     os.mkdir(general_folder_path)
             else:
                 print("Do backup data for first ", player_i + 1, " players")
-                general_folder_path = path_to_store_local_data + "/" + league_name + "/" + global_stats_folder_name + "/" + str(current_gameweek) + "/" + backup_data_folder_name
+                general_folder_path = gw_path + "/" + backup_data_folder_name
                 if not os.path.isdir(general_folder_path):
                     os.mkdir(general_folder_path)
                 f_current_id = open(general_folder_path + "/" + backup_data_txt_file_name, "w", encoding="utf-8")
@@ -285,6 +296,15 @@ def save_all_global_stats_for_current_gw(league_name=premier_league_folder_name)
     print("\nTotal time to collect data for top " + str(top_x_players) + " players: ", (end_time - start_time) / 60, " min")
 
 
+def get_season_name(DFObject):
+    fixture = DFObject.get_current_fixtures()
+    min_year = fixture[0]['kickoff_time'].split("-")[0]
+    max_year = fixture[-1]['kickoff_time'].split("-")[0]
+    if min_year == max_year:
+        return str(min_year)
+    else:
+        return str(min_year) + "-" + str(max_year)
+
 def data_fetch(num, league_type):
     """
     data_fetch will collect 50 teams from page "num" from global rank
@@ -357,7 +377,7 @@ def create_dict(players, things_to_store=12):
     return player_dict
 
 
-def get_player_name_ids(dataFetchObject):
+def get_player_name_ids(dataFetchObject: DataFetch):
     static_info = dataFetchObject.get_current_fpl_info()['elements']
     ID_POSITIONID_TEAMID_FIRSTNAME_SECONDNAME_WEBNAME_GLOBALPERCENTAGE = []
     for info in static_info:
@@ -381,9 +401,9 @@ def get_tz_notation_to_seconds(time_str):
 
 
 def read_chips_and_event_info(top_x_players, path):
-    fpl_player_chip_info = np.loadtxt(path, dtype="int", delimiter=",", skiprows=1, max_rows=1)
+    fpl_player_chip_info = np.loadtxt(path, dtype="int", delimiter=",", skiprows=1, max_rows=1,  encoding="utf-8")
     event_fpl_team_info = np.zeros((top_x_players, 5))
-    event_fpl_team_info_data = np.loadtxt(path, dtype="int", delimiter=",", skiprows=4)
+    event_fpl_team_info_data = np.loadtxt(path, dtype="int", delimiter=",", skiprows=4,  encoding="utf-8")
     for idx, data in enumerate(event_fpl_team_info_data):
         event_fpl_team_info[idx, 0] = int(data[1])
         event_fpl_team_info[idx, 1] = int(data[2])
@@ -395,7 +415,7 @@ def read_chips_and_event_info(top_x_players, path):
 
 
 def read_dict_total_chip_usage_to_index(dict_total_chip_usage_to_index, path):
-    temp = np.loadtxt(path, dtype="int", delimiter=",", skiprows=1, max_rows=1)
+    temp = np.loadtxt(path, dtype="int", delimiter=",", skiprows=1, max_rows=1,  encoding="utf-8")
     total_chip_usage_data = [[temp[0], temp[1]], temp[2], temp[3], temp[4]]
     for dict_i, data_i in zip(dict_total_chip_usage_to_index.keys(), total_chip_usage_data):
         dict_total_chip_usage_to_index[dict_i] = data_i
@@ -404,7 +424,7 @@ def read_dict_total_chip_usage_to_index(dict_total_chip_usage_to_index, path):
 
 def read_regions_dict(path):
     regions_dict = {}
-    data = np.loadtxt(path, dtype="str", delimiter=nationality_delimiter, skiprows=1)
+    data = np.loadtxt(path, dtype="str", delimiter=nationality_delimiter, skiprows=1,  encoding="utf-8")
     for data_i in data:
         region_name = str(data_i[0])
         region_iso_name = str(data_i[1])
@@ -437,6 +457,6 @@ def get_id_s(path, id_s):
 
 
 if __name__ == "__main__":
-    save_all_global_stats_for_current_gw(eliteserien_folder_name)
-
+    save_all_global_stats_for_current_gw(premier_league_folder_name)
+    #save_all_global_stats_for_current_gw(eliteserien_folder_name)
 

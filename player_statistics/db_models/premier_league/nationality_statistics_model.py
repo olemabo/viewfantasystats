@@ -3,7 +3,7 @@ from django.urls import reverse
 from constants import total_number_of_gameweeks
 
 
-class NationalityStatistics(models.Model):
+class PremierLeagueNationalityStatistics(models.Model):
     # one stat for each gameweek + 1 total stat for all gws
     number_of_gws = total_number_of_gameweeks
     number_of_extra_info = 8  # [Freehit, BB, TC, WC, None, Avg Value, Avg event transfer, Avg transfer cost]

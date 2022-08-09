@@ -1,7 +1,7 @@
 from fixture_planner.backend.create_data_objects import create_FDR_dict
 from fixture_planner.backend.utility_functions import insertion_sort, create_two_dim_list
 from utils.models.fixtures.FixtureDifficultyModel import FixtureDifficultyModel
-from fixture_planner.models import AddPlTeamsToDB
+from fixture_planner.models import PremierLeagueTeamInfo
 from constants import blank_gw_fdr_score
 from itertools import combinations
 import numpy as np
@@ -26,10 +26,10 @@ def convert_list_with_strings_to_floats(list_of_strings):
 
 def get_list_of_all_pl_team_names():
     """
-    Extract all pl team names from AddPlTeamsToDB db
+    Extract all pl team names from PremierLeagueTeamInfo db
     :return: a list of all pl team names
     """
-    fixture_list_db = AddPlTeamsToDB.objects.all()
+    fixture_list_db = PremierLeagueTeamInfo.objects.all()
     return [team.team_name for team in fixture_list_db]
 
 
@@ -122,7 +122,7 @@ def find_best_rotation_combos_new(data, gw_start, gw_end, teams_to_check=5, team
     # adjust the fixture difficulty TODO: Implement adjust fixture difficulty
 
     # get all fixture data from db
-    fixture_list_db = AddPlTeamsToDB.objects.all()
+    fixture_list_db = PremierLeagueTeamInfo.objects.all()
 
     # create fixture dataframe. Each element: ['ARS', 'H', 3]
     df, names, short_names, ids = return_fixture_names_shortnames(fixture_list_db)

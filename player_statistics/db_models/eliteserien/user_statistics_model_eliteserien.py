@@ -1,9 +1,10 @@
 from django.urls import reverse
 from django.db import models
 import json
-# from django_mysql.models import ListTextField
+from django_mysql.models import ListTextField
+from constants import number_of_years_eliteserien_has_stored_rankings
 
-class UserInfoStatistics(models.Model):
+class EliteserienUserInfoStatistics(models.Model):
     # one stat for each gameweek + 1 total stat for all gws
     user_id = models.IntegerField(primary_key=True, help_text='Enter user id (1)')
     user_team_name = models.CharField(max_length=40, help_text='Enter team name')
@@ -17,11 +18,11 @@ class UserInfoStatistics(models.Model):
     # player_region_name = models.CharField(max_length=40, help_text='Enter player name (Salah) ')
     # player_region_iso_code_long = models.CharField(max_length=40, help_text='Enter player name (Salah) ')
     
-    # ranking_history = ListTextField(
-    #     base_field=models.IntegerField(help_text='All rankings from previous gws'),
-    #     size=number_of_gws,  # Maximum of 100 ids in list
-    #     blank=True,
-    # )
+    ranking_history = ListTextField(
+        base_field=models.CharField(max_length=20, help_text='Year,points,ranking -- 2019,1961,1586'),
+        size=number_of_years_eliteserien_has_stored_rankings,  # Maximum of 100 ids in list
+        blank=True,
+    )
     # {"season_name":"2017","total_points":1424,"rank":5410},{"season_name":"2018","total_points":1475,"rank":6816},{"season_name":"2019","total_points":1524,"rank":12364},{"season_name":"2020","total_points":1620,"rank":14859},{"season_name":"2021","total_points":1595,"rank":8051}
     
     

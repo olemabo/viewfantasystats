@@ -7,9 +7,7 @@ import fixture_planner.backend.create_data_objects as create_data_objects
 from constants import total_number_of_gameweeks, initial_extra_gameweeks
 import fixture_planner.backend.read_fixture_planner_data as read_data
 from fixture_planner.backend.utility_functions import calc_score
-from fixture_planner.models import AddPlTeamsToDB, KickOffTime
-from fixture_planner_eliteserien.backend.read_eliteserien_data import readEliteserienExcelFromDagFinnToDBFormat
-from fixture_planner_eliteserien.backend.read_eliteserien_data import readEliteserienExcelToDBFormat
+from fixture_planner.models import PremierLeagueTeamInfo, KickOffTime
 from utils.models.fixtures.WhichTeamToCheck import WhichTeamToCheck
 from utils.models.fixtures.FixtureDifficultyModel import FixtureDifficultyModel
 from utils.models.KickOffTimeInfo import KickOffTimeInfo
@@ -20,17 +18,17 @@ from django.http import HttpResponse
 from django.shortcuts import render
 import json
 from rest_framework import generics, status
-from fixture_planner.models import AddPlTeamsToDB, KickOffTime
-from .serializers import AddPlTeamsToDBSerializer
+from fixture_planner.models import PremierLeagueTeamInfo, KickOffTime
+from .serializers import PremierLeagueTeamInfoSerializer
 from .serializers import GetKickOffTimeSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.core import serializers
 
 
-class AddPlTeamsToDBView(generics.ListAPIView):
-    queryset = AddPlTeamsToDB.objects.all()
-    serializer_class = AddPlTeamsToDBSerializer
+class PremierLeagueTeamInfoView(generics.ListAPIView):
+    queryset = PremierLeagueTeamInfo.objects.all()
+    serializer_class = PremierLeagueTeamInfoSerializer
 
 
 class KickOffTimeView(generics.ListAPIView):
@@ -58,7 +56,7 @@ class GetKickOffTimes(APIView):
 
 
 class PostFDRView(APIView):
-    serializer_class = AddPlTeamsToDBSerializer
+    serializer_class = PremierLeagueTeamInfoSerializer
 
     def get(self, request, format=None):
         kick_off_time_db = KickOffTime.objects.filter(gameweek__range=(0, 38))
@@ -78,7 +76,7 @@ class PostFDRView(APIView):
             gws = end_gw - start_gw + 1
             gw_numbers = [gw for gw in range(start_gw, end_gw + 1)]
 
-            fixture_list_db = AddPlTeamsToDB.objects.all()
+            fixture_list_db = PremierLeagueTeamInfo.objects.all()
 
             team_dict = {}
             number_of_teams = len(fixture_list_db)
@@ -214,8 +212,8 @@ class PostFDRView(APIView):
 def fixture_planner(request, start_gw=get_current_gw(), end_gw=get_current_gw() + initial_extra_gameweeks, combinations="FDR", teams_to_check=2, teams_to_play=1, min_num_fixtures=4):
     if end_gw > total_number_of_gameweeks:
         end_gw = total_number_of_gameweeks
-    # collect data from database [[AddPlTeamsToDB], [AddPlTeamsToDB], ... ]
-    fixture_list_db = AddPlTeamsToDB.objects.all()
+    # collect data from database [[PremierLeagueTeamInfo], [PremierLeagueTeamInfo], ... ]
+    fixture_list_db = PremierLeagueTeamInfo.objects.all()
     team_name_list = []
     teams_in_solution = []
     team_dict = {}
@@ -301,7 +299,7 @@ def get_fdr_data(request):
     gws = end_gw - start_gw + 1
     gw_numbers = [gw for gw in range(start_gw, end_gw + 1)]
 
-    fixture_list_db = AddPlTeamsToDB.objects.all()
+    fixture_list_db = PremierLeagueTeamInfo.objects.all()
     team_dict = {}
     number_of_teams = len(fixture_list_db)
 
@@ -317,7 +315,7 @@ def get_fdr_data(request):
         for fpl_team in fpl_teams:
             team_dict[fpl_team] = WhichTeamToCheck(team_dict[fpl_team].team_name, 'checked')
 
-    fixture_list_db = AddPlTeamsToDB.objects.all()
+    fixture_list_db = PremierLeagueTeamInfo.objects.all()
 
     team_name_list = []
     fixture_list = []
@@ -400,7 +398,7 @@ def get_rotation_data(request):
     teams_to_play = data['teams_to_play']
     teams_in_solution = data['teams_in_solution']
 
-    fixture_list_db = AddPlTeamsToDB.objects.all()
+    fixture_list_db = PremierLeagueTeamInfo.objects.all()
     team_dict = {}
     number_of_teams = len(fixture_list_db)
 
@@ -451,11 +449,11 @@ def get_rotation_data(request):
 
 def fill_fixture_planner_and_kick_off_time_db(request):
     """
-    Fill fixture planner db (AddPlTeamsToDB) and kick off times db (KickOffTime)
+    Fill fixture planner db (PremierLeagueTeamInfo) and kick off times db (KickOffTime)
     :param request:
     :return:
     """
-    df, names, short_names, ids = create_data_objects.return_fixture_names_shortnames()
+    df, names, short_names, ids = create_data_objects.return_fixture_names_shortnames("api")
     number_of_teams = len(names)
     for team_i in range(number_of_teams):
         oppTeamNameList, oppTeamHomeAwayList, oppTeamDifficultyScore, gw = [], [], [], []
@@ -467,7 +465,7 @@ def fill_fixture_planner_and_kick_off_time_db(request):
             oppTeamDifficultyScore.append(gw_info_TEAM_HA_SCORE_GW[2])
             gw.append(gw_info_TEAM_HA_SCORE_GW[3])
 
-        fill_fixture_planner_model = AddPlTeamsToDB(team_name=names[team_i],
+        fill_fixture_planner_model = PremierLeagueTeamInfo(team_name=names[team_i],
                                                     team_id=ids[team_i],
                                                     team_short_name=short_names[team_i],
                                                     oppTeamDifficultyScore=oppTeamDifficultyScore,
@@ -476,9 +474,9 @@ def fill_fixture_planner_and_kick_off_time_db(request):
                                                     gw=gw)
         fill_fixture_planner_model.save()
 
-    kick_off_time_info = read_data.return_kick_off_time()
+    kick_off_time_info = read_data.return_kick_off_time("api")
     for gw_info in kick_off_time_info:
         fill_kick_off_time_model = KickOffTime(gameweek=gw_info[0], kickoff_time=gw_info[1], day_month=gw_info[2])
         fill_kick_off_time_model.save()
 
-    return HttpResponse("Successfully filled 'AddPlTeamsToDB' and 'KickOffTime' Databases")
+    return HttpResponse("Successfully filled 'PremierLeagueTeamInfo' and 'KickOffTime' Databases")

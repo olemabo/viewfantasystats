@@ -60,10 +60,15 @@ web_global_league_eliteserien = 'https://fantasy.tv2.no/api/leagues-classic/325/
 
 # folder names
 eliteserien_folder_name = "eliteserien"
+fixture_folder_name = "fixture_data"
 premier_league_folder_name = "premier_league"
 global_stats_folder_name = "global_stats"
 user_stats_folder_name = "user_stats"
 backup_data_folder_name= "backup_data"
+
+# must change before each season
+current_season_name_eliteserien = "2022"
+current_season_name_premier_league = "2022-2023"
 
 # txt file names 
 country_population_txt_file_name = "country_population.txt"
@@ -80,7 +85,7 @@ user_stats_special_delimiter = ":;:"
 eliteserien_api_url = "https://fantasy.tv2.no"
 premier_league_api_url = "https://fantasy.premierleague.com"
 total_number_of_gameweeks_in_eliteserien = 30
-
+fantasy_manager_eliteserien_url = "https://fantasy.tv2.no/entry/X/history"
 # store data from these top_x_players. Store for first player, top 10, top 100, top 1000 and top 10000
 all_top_x_players_premier_league = [1, 10, 100, 1000, 10000]
 all_top_x_players_eliteserien = [1, 10, 100, 1000, 5000]
@@ -90,7 +95,9 @@ name_of_ownership_file = "complete_ownership.txt"
 name_of_nationality_file = "country_population.txt"
 nationality_delimiter = ":"
 name_of_extra_info_file = "extra_info.txt"
-
+ranking_delimiter = "&"
+# https://fantasy.tv2.no/entry/417/history fra 2017, update this manually each year
+number_of_years_eliteserien_has_stored_rankings = 5
 ############# PLAYER STATS ########################
 
 
