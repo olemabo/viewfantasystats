@@ -16,6 +16,8 @@ axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
 type LanguageProps = {
     content: any;
+    league_type: string;
+    top_x_managers_default: number;
 }
 
 export const PlayerOwnership : FunctionComponent<LanguageProps> = (props) => {
@@ -31,7 +33,8 @@ export const PlayerOwnership : FunctionComponent<LanguageProps> = (props) => {
     const [ currentGw, setCurrentGw ] = useState(0);
     const [ sorting_keyword, setSorting_keyword ] = useState("All");
     const [ teamNameAndIds, setTeamNameAndIds ] = useState(emptyAvailableGws);
-    const [ topXPlayers, setTopXPlayers ] = useState(1000);
+    const [ topXPlayers, setTopXPlayers ] = useState(props.top_x_managers_default);
+    const [ topXPlayersList, setTopXPlayersList ] = useState([]);
     
     const [ chipData, setChipData ] = useState([-1, -1, -1, -1, -1, -1, -1]);
     const [ chipDataAll, setChipDataAll ] = useState(emptyChipModelAll);
@@ -73,15 +76,21 @@ export const PlayerOwnership : FunctionComponent<LanguageProps> = (props) => {
         if (gw == 28) return data.gw_28;
         if (gw == 29) return data.gw_29;
         if (gw == 30) return data.gw_30;
+        if (gw == 31) return data.gw_31;
+        if (gw == 32) return data.gw_32;
+        if (gw == 33) return data.gw_33;
+        if (gw == 34) return data.gw_34;
+        if (gw == 35) return data.gw_35;
+        if (gw == 36) return data.gw_36;
+        if (gw == 37) return data.gw_37;
+        if (gw == 38) return data.gw_38;
         return []
     }
 
     useEffect(() => {
-        if (store.getState()?.league_type != "Eliteserien") {
-            store.dispatch({type: "league_type", payload: "Eliteserien"});
-        }
+        store.dispatch({type: "league_type", payload: props.league_type});
 
-        axios.get(player_ownership_api_path).then(x => {  
+        axios.get(player_ownership_api_path + "?league_name=" + props.league_type).then(x => {  
             let data = JSON.parse(x?.data);
             data?.chip_data?.map((x: ChipUsageModel) => {
                 if (x.gw == data.newest_updated_gw) {
@@ -89,6 +98,7 @@ export const PlayerOwnership : FunctionComponent<LanguageProps> = (props) => {
                     setTotalChipUsage(x.total_chip_usage);
                 }
             })
+            setTopXPlayersList(data?.top_x_managers_list);
             setChipDataAll(data?.chip_data);
             UpdateTeamNameAndIds(data.team_names_and_ids);
             setAllOwnershipData(data.ownershipdata)
@@ -138,16 +148,20 @@ export const PlayerOwnership : FunctionComponent<LanguageProps> = (props) => {
         var body = {
             top_x_players: top_x_players,
             current_gw: currentGw,
+            league_name: props.league_type,
         };
         setIsLoading(true);
         axios.post(player_ownership_api_path, body).then(x => {  
             let data = JSON.parse(x?.data);
+
             data?.chip_data?.map((x: ChipUsageModel) => {
                 if (x.gw == data.newest_updated_gw) {
+                    console.log(x.chip_data, x.total_chip_usage)
                     setChipData(x.chip_data);
                     setTotalChipUsage(x.total_chip_usage);
                 }
             })
+            setTopXPlayersList(data?.top_x_managers_list);
             setChipDataAll(data?.chip_data);
             setTotalChipUsageAll(data?.total_chip_usage);
             setAllOwnershipData(data.ownershipdata);
@@ -185,10 +199,10 @@ export const PlayerOwnership : FunctionComponent<LanguageProps> = (props) => {
     }
 
     function compare( a: any, b: any ) {
-        if ( a.ownership[0] + a.ownership[1] * 2 > b.ownership[0] + b.ownership[1] * 2 ){
+        if ( a.ownership[0] + a.ownership[1] * 2 + a.ownership[2] * 3 > b.ownership[0] + b.ownership[1] * 2 + b.ownership[2] * 3){
           return -1;
         }
-        if ( a.ownership[0] + a.ownership[1] * 2 < b.ownership[0] + b.ownership[1] * 2){
+        if ( a.ownership[0] + a.ownership[1] * 2 + a.ownership[2] * 3 < b.ownership[0] + b.ownership[1] * 2 + b.ownership[2] * 3){
           return 1;
         }
 
@@ -256,10 +270,10 @@ export const PlayerOwnership : FunctionComponent<LanguageProps> = (props) => {
     const propComparator = (prop:number, increasing: boolean) =>
     (a:PlayerOwnershipModel, b:PlayerOwnershipModel) => {
         if (prop == 0) {
-            if (a.ownership[0] + a.ownership[1] * 2 > b.ownership[0] + b.ownership[1] * 2) {
+            if (a.ownership[0] + a.ownership[1] * 2 + a.ownership[2] * 3 > b.ownership[0] + b.ownership[1] * 2 + b.ownership[2] * 3) {
                 return increasing ? -1 : 1;
             }
-            if (a.ownership[0] + a.ownership[1] * 2 < b.ownership[0] + b.ownership[1] * 2) {
+            if (a.ownership[0] + a.ownership[1] * 2 + a.ownership[2] * 3 < b.ownership[0] + b.ownership[1] * 2 + b.ownership[2] * 3) {
                 return increasing ? 1 : -1;
             }
             return 0;
@@ -281,6 +295,7 @@ export const PlayerOwnership : FunctionComponent<LanguageProps> = (props) => {
         setOwnershipDataToShow(sorted);
         if (sortType == 0) { setCurrentSorted('EO')}
         if (sortType == 1) { setCurrentSorted('Captaincy')}
+        if (sortType == 2) { setCurrentSorted('3xC')}
         if (sortType == 3) { setCurrentSorted('VC')}
         if (sortType == 4) { setCurrentSorted('Owned by')}
         if (sortType == 5) { setCurrentSorted('Benched')}
@@ -288,7 +303,7 @@ export const PlayerOwnership : FunctionComponent<LanguageProps> = (props) => {
     }
 
     const [ currentSorted, setCurrentSorted ] = useState("EO");
-
+    console.log(totalChipUsage)
     return <>
      <div className='player-ownership-container' id="rotation-planner-container">
          <h1>{props.content.Statistics.PlayerOwnership.title}</h1>
@@ -317,12 +332,18 @@ export const PlayerOwnership : FunctionComponent<LanguageProps> = (props) => {
             </div>
             
             <div className='box-2'>
-                <label>{props.content.General.top_x_managers}</label>
-                <select onChange={(e) => updateOwnershipTopXData(parseInt(e.target.value))} className="input-box" id="sort_on_dropdown" name="sort_on">
-                    <option value="100">100</option>
-                    <option selected value="1000">1000</option>
-                    <option value="5000">5000</option>
-                </select>
+                { topXPlayersList.length > 0 && 
+                <>
+                    <label>{props.content.General.top_x_managers}</label>
+                    <select onChange={(e) => updateOwnershipTopXData(parseInt(e.target.value))} className="input-box" id="sort_on_dropdown" name="sort_on">
+                    { topXPlayersList?.length > 0 &&
+                         topXPlayersList.map(x => (
+                            <option selected={x == topXPlayers} value={x}>{x}</option>
+                        ))
+                    }
+                    </select>
+                    </>
+                }
             </div>
             
             <div className='box-3'>
@@ -354,6 +375,9 @@ export const PlayerOwnership : FunctionComponent<LanguageProps> = (props) => {
                     <th><TableSortHead popover_title='Effective Ownership' popover_text='Effektivt eierskap er en beregning som tar hensyn til managere som starter en spiller (ikke bare de som eier dem), sammen med de som kapteiner spilleren. Det er altså eierandel som starter spilleren pluss eierandelen som har kapteinet spilleren. ' text={props.content.General.eo} reset={currentSorted != 'EO'} defaultSortType={'Increasing'} onclick={(increase: boolean) => sortOwnershipData(0, increase)}/></th>
                     <th><TableSortHead popover_title='Valgt av' popover_text='Prosentandel som har denne spilleren i troppen sin (trenger ikke være i startelleveren).' text={props.content.Statistics.PlayerOwnership.owned_by} reset={currentSorted != 'Owned by'} defaultSortType={'Increasing'} onclick={(increase: boolean) => sortOwnershipData(4, increase)}/></th>
                     <th><TableSortHead text={props.content.Statistics.PlayerOwnership.captain} reset={currentSorted != 'Captaincy'} onclick={(increase: boolean) => sortOwnershipData(1, increase)}/></th>
+                    { props.league_type == "FPL" && 
+                        <th><TableSortHead text={props.content.Statistics.PlayerOwnership.three_captain} reset={currentSorted != '3xC'} onclick={(increase: boolean) => sortOwnershipData(2, increase)}/></th>
+                    }
                     <th><TableSortHead text={props.content.Statistics.PlayerOwnership.vice_captain} reset={currentSorted != 'VC'} onclick={(increase: boolean) => sortOwnershipData(3, increase)}/></th>
                     <th><TableSortHead text={props.content.Statistics.PlayerOwnership.benched} reset={currentSorted != 'Benched'} onclick={(increase: boolean) => sortOwnershipData(5, increase)}/></th>
                     <th className='last-element'><TableSortHead popover_title={props.content.Statistics.PlayerOwnership.tot_ownership} popover_text={'Prosentandel blant alle managere som eier denne spilleren. Altså ikke bare blant topp ' + topXPlayers.toString() + ' managere.' } text={props.content.Statistics.PlayerOwnership.tot_ownership} reset={currentSorted != 'Total Ownership'} onclick={(increase: boolean) => sortOwnershipData(6, increase)}/></th>
@@ -364,9 +388,12 @@ export const PlayerOwnership : FunctionComponent<LanguageProps> = (props) => {
                 { ownershipDataToShow.slice( (pagingationNumber - 1) * numberOfHitsPerPagination, (pagingationNumber - 1) * numberOfHitsPerPagination + numberOfHitsPerPagination).map( (x, index) => 
                 <tr>
                     <td className="name-col"> <div className="format-name-col">{ x.player_name }</div> </td>
-                    <td className={(currentSorted == 'EO') ? 'selected' : ''}>{ ( (x.ownership[0] + x.ownership[1] * 2) / topXPlayers * 100).toFixed(1) } {'%'} </td>
+                    <td className={(currentSorted == 'EO') ? 'selected' : ''}>{ ( (x.ownership[0] + x.ownership[1] * 2 + x.ownership[2] * 3) / topXPlayers * 100).toFixed(1) } {'%'} </td>
                     <td className={(currentSorted == 'Owned by') ? 'selected' : ''}>{ (x.ownership[4] / topXPlayers * 100).toFixed(1) } {'%'} </td>
                     <td className={(currentSorted == 'Captaincy') ? 'selected' : ''}>{ (x.ownership[1] / topXPlayers * 100).toFixed(1) } {'%'} </td>
+                    { props.league_type == "FPL" && 
+                        <td className={(currentSorted == '3xC') ? 'selected' : ''}>{ (x.ownership[2] / topXPlayers * 100).toFixed(1) } {'%'} </td>
+                    }
                     <td className={(currentSorted == 'VC') ? 'selected' : ''}>{ (x.ownership[3] / topXPlayers * 100).toFixed(1) } {'%'} </td>
                     <td className={(currentSorted == 'Benched') ? 'selected' : ''}>{ (x.ownership[5] / topXPlayers * 100).toFixed(1) } {'%'} </td>
                     <td className={(currentSorted == 'Total Ownership') ? 'selected' : ''}>{ (x.ownership[6] / 100).toFixed(1) } {'%'} </td>
@@ -410,15 +437,15 @@ export const PlayerOwnership : FunctionComponent<LanguageProps> = (props) => {
                             <td>{(chipData[3] / topXPlayers * 100).toFixed(1)} {'%'}</td>
                         </tr>
                         <tr>
-                            <td className="name-col-chips"> <div className="format-name-col">{props.content.Statistics.PlayerOwnership.rich_uncle}</div> </td>
+                            <td className="name-col-chips"> <div className="format-name-col">{props.league_type == "Eliteserien" ? props.content.Statistics.PlayerOwnership.rich_uncle : props.content.Statistics.PlayerOwnership.free_hit}</div> </td>
                             <td>{(chipData[0] / topXPlayers * 100).toFixed(1)} {'%'}</td>
                         </tr>
                         <tr>
-                            <td className="name-col-chips"> <div className="format-name-col">{props.content.Statistics.PlayerOwnership.forward_rush}</div> </td>
+                            <td className="name-col-chips"> <div className="format-name-col">{props.league_type == "Eliteserien" ? props.content.Statistics.PlayerOwnership.forward_rush: props.content.Statistics.PlayerOwnership.bench_boost}</div> </td>
                             <td>{(chipData[1] / topXPlayers * 100).toFixed(1)} {'%'}</td>
                         </tr>
                         <tr>
-                            <td className="name-col-chips"> <div className="format-name-col">{props.content.Statistics.PlayerOwnership.two_captain}</div> </td>
+                            <td className="name-col-chips"> <div className="format-name-col">{props.league_type == "Eliteserien" ? props.content.Statistics.PlayerOwnership.two_captain : props.content.Statistics.PlayerOwnership.three_captain}</div> </td>
                             <td>{(chipData[2] / topXPlayers * 100).toFixed(1)} {'%'}</td>
                         </tr>
                     </tbody>
@@ -443,16 +470,16 @@ export const PlayerOwnership : FunctionComponent<LanguageProps> = (props) => {
                                 <td>{(totalChipUsage[1] / topXPlayers * 100).toFixed(1)} {'%'}</td>
                             </tr>
                             <tr>
-                                <td className="name-col-chips-2"> <div className="format-name-col">{props.content.Statistics.PlayerOwnership.rich_uncle}</div> </td>
+                                <td className="name-col-chips-2"> <div className="format-name-col">{props.league_type == "Eliteserien" ? props.content.Statistics.PlayerOwnership.rich_uncle : props.content.Statistics.PlayerOwnership.free_hit}</div> </td>
                                 <td>{(totalChipUsage[2] / topXPlayers * 100).toFixed(1)} {'%'}</td>
                             </tr>
                             <tr>
-                                <td className="name-col-chips-2"> <div className="format-name-col">{props.content.Statistics.PlayerOwnership.forward_rush}</div> </td>
-                                <td>{(totalChipUsage[3] / topXPlayers * 100).toFixed(1)} {'%'}</td>
+                                <td className="name-col-chips-2"> <div className="format-name-col">{props.league_type == "Eliteserien" ? props.content.Statistics.PlayerOwnership.forward_rush : props.content.Statistics.PlayerOwnership.bench_boost}</div> </td>
+                                <td>{(totalChipUsage[props.league_type == "Eliteserien" ? 3 : 4] / topXPlayers * 100).toFixed(1)} {'%'}</td>
                             </tr>
                             <tr>
-                                <td className="name-col-chips-2"> <div className="format-name-col">{props.content.Statistics.PlayerOwnership.two_captain}</div> </td>
-                                <td>{(totalChipUsage[4] / topXPlayers * 100).toFixed(1)} {'%'}</td>
+                                <td className="name-col-chips-2"> <div className="format-name-col">{props.league_type == "Eliteserien" ? props.content.Statistics.PlayerOwnership.two_captain : props.content.Statistics.PlayerOwnership.three_captain}</div> </td>
+                                <td>{(totalChipUsage[props.league_type == "Eliteserien" ? 4 : 3] / topXPlayers * 100).toFixed(1)} {'%'}</td>
                             </tr>
                         </tbody>
                     </table>

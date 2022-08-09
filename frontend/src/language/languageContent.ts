@@ -18,6 +18,11 @@ export const content_json = {
             menu: "Menu",
             eliteserien: "Eliteserien",
             premier_league: "Premier League",
+            see_team: "View team",
+            name: "Name",
+            rank: "Ranking",
+            last: "Last",
+            year: "Year",
         },
         Fixture: {
             FixturePlanner: {
@@ -57,12 +62,24 @@ export const content_json = {
                 rich_uncle: "Rich Uncle",
                 forward_rush: "Forward Rush",
                 two_captain: "2 Captains",
+                three_captain: "Triple Captain",
+                free_hit: "Free Hit",
+                bench_boost: "Bench Boost",
                 team_info: "Team Info",
                 value: "Value",
                 avg_team_value: "Avg. Team Value",
                 avg_transfers: "Avg. Transfers",
                 avg_transfer_cost: "Avg. Transfer Cost",
                 search_text: "Search..",
+            },
+            SearchUserName: {
+                title: "User search",
+            },
+            RankStatistics: {
+                title: "Rank Statitstics",
+                rank: "Avg. Ranking",
+                points: "Avg. Points",
+                last_season: "Last 'x' seasons",
             },
             statistic: "Statistics",
         }
@@ -86,6 +103,11 @@ export const content_json = {
             close: "Lukk",
             eliteserien: "Eliteserien",
             premier_league: "Premier League",
+            see_team: "Se lag",
+            name: "Navn",
+            rank: "Plassering",
+            last: "Siste",
+            year: "År",
         },
         Fixture: {
             FixturePlanner: {
@@ -124,12 +146,24 @@ export const content_json = {
                 rich_uncle: "Rik Onkel",
                 forward_rush: "Spiss Rush",
                 two_captain: "2 Kapteiner",
+                three_captain: "Trippel Kaptein",
+                free_hit: "Free Hit",
+                bench_boost: "Bench Boost",
                 team_info: "Laginfo",
                 value: "Verdi",
                 avg_team_value: "Gj. snittlig lagverdi",
                 avg_transfers: "Gj. snittlig antall bytter",
                 avg_transfer_cost: "Gj. snittlig byttekostnad",
                 search_text: "Søk..",
+            },
+            SearchUserName: {
+                title: "Søk blant managere",
+            },
+            RankStatistics: {
+                title: "Rankingstatestikk",
+                rank: "Gj. snittlig ranking",
+                points: "Gj. snittlig poeng",
+                last_season: "Siste 'x' sesonger",
             },
             statistic: "Statistikk",
         }

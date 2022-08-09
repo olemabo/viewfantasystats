@@ -11,12 +11,19 @@ import EliteserienFixturePlanner from "../../Eliteserien/eliteserienFixturePlann
 import EliteserienRotationPlanner from "../../Eliteserien/rotationPlanner/eliteserienRotationPlanner";
 import EliteserienPeriodePlanner from "../../Eliteserien/periodePlanner/eliteserienPeriodePlanner";
 import PlayerOwnership from "../../Eliteserien/playerOwnership/playerOwnership";
+// import SearchUserName from "../../Eliteserien/searchUserName/searchUserName";
+// import RankStatistics from "../../Eliteserien/rankStatistics/rankStatistics";
+
 
 export const DefaultLayout = () => {
     const [ isAnyMenuOpen, setIsMenuOpen ] = useState(false);
     const [ langagueContent, setLangaugeContent ] = useState(store.getState().language);
     const isMenuOpenFromRedux = useSelector((state: any) => state?.isMenuOpen);
     const langaugeContentFromRedux = useSelector((state: any) => state?.language);
+    const leagueTypeFromRedux = store.getState()?.league_type;
+    
+    const fpl = "FPL";
+    const eliteserien = "Eliteserien";
 
     // useEffect will listen if isMenuOpen property from redux changes
     useEffect(() => {
@@ -54,7 +61,10 @@ export const DefaultLayout = () => {
                             <Route path="/fixture-planner-eliteserien/fdr-planner/" element={<EliteserienFixturePlanner content={langagueContent} />} />
                             <Route path="/fixture-planner-eliteserien/rotation-planner/" element={<EliteserienRotationPlanner content={langagueContent} />} />
                             <Route path="/fixture-planner-eliteserien/periode-planner/" element={<EliteserienPeriodePlanner content={langagueContent} />} />
-                            <Route path="/statistics/player-ownership/" element={<PlayerOwnership content={langagueContent} />} />
+                            <Route path="/statistics/player-ownership/" element={<PlayerOwnership top_x_managers_default={1000} league_type={eliteserien} content={langagueContent} />} />
+                            <Route path="/statistics-premier-league/player-ownership/" element={<PlayerOwnership top_x_managers_default={10000} league_type={fpl} content={langagueContent} />} />
+                            {/* <Route path="/statistics/search-user-names/" element={<SearchUserName content={langagueContent} />} />
+                            <Route path="/statistics/rank-statistics/" element={<RankStatistics content={langagueContent} />} /> */}
                         </Routes>
                   </div>
               </div>

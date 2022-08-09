@@ -58,7 +58,7 @@ export const TopMenuMobile: React.FunctionComponent<TopMenyProps> = (props) => {
     }
     
     let league_type = store.getState()?.league_type;
-    console.log(props.title, props.content.General.premier_league, props.content)
+
     return <>
     <div className="top-menu-mobile">
         <div className="fpl-linear-gradient-color-darker">
