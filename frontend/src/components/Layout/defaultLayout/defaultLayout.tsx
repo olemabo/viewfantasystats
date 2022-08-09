@@ -52,9 +52,9 @@ export const DefaultLayout = () => {
               <div className="content-container">
                   <div className="col-sm-10 max-width">
                         <Routes>
-                            <Route path="/" element={<FixturePlanner content={langagueContent} />}></Route>
-                            <Route path="/fixture-planner/" element={<FixturePlanner content={langagueContent} />} />
-                            <Route path="/fixture-planner/fdr-planner/" element={<FixturePlanner content={langagueContent} />} />
+                            <Route path="/" element={<FixturePlanner league_type={fpl} content={langagueContent} />}></Route>
+                            <Route path="/fixture-planner/" element={<FixturePlanner league_type={fpl} content={langagueContent} />} />
+                            <Route path="/fixture-planner/fdr-planner/" element={<FixturePlanner league_type={fpl} content={langagueContent} />} />
                             <Route path="/fixture-planner/periode-planner/" element={<PeriodePlanner content={langagueContent} />} />
                             <Route path="/fixture-planner/rotation-planner/" element={<RotationPlanner content={langagueContent} />} />
                             <Route path="/fixture-planner-eliteserien/" element={<EliteserienFixturePlanner content={langagueContent} />} />

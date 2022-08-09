@@ -4,6 +4,7 @@ import "./fixturePlanner.scss";
 import axios from 'axios';
 import { FilterButton } from '../../Shared/FilterButton/FilterButton';
 import { Button } from '../../Shared/Button/Button';
+import { store } from '../../../store/index';
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -43,6 +44,7 @@ interface TeamName {
 
 type LanguageProps = {
     content: any;
+    league_type: string;
 }
 
 export const FixturePlanner : FunctionComponent<LanguageProps> = (props) => {
@@ -65,7 +67,8 @@ export const FixturePlanner : FunctionComponent<LanguageProps> = (props) => {
 
     useEffect(() => {
         // Get kickoff time data from the API
-        
+        store.dispatch({type: "league_type", payload: props.league_type});
+
         // Get fdr data from the API
         let body = { 
             start_gw: min_gw,

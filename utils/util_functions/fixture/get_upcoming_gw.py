@@ -1,6 +1,5 @@
 from datetime import date
 from fixture_planner_eliteserien.models import EliteserienKickOffTime
-from fixture_planner.models import KickOffTime
 
 
 def get_upcoming_gw_eliteserien():
