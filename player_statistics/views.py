@@ -128,7 +128,7 @@ class PlayerOwnershipAPIView(APIView):
         try:
             top_x_players = int(request.data.get("top_x_players"))
             current_gw = int(request.data.get("current_gw"))
-            league_name = str(request.data.get("league_name"))
+            league_name = str(request.data.get("league_name")).lower()
             chips_db_data = EliteserienChipsAndUserInfo.objects.all() if league_name == eliteserien_folder_name else PremierLeagueChipsAndUserInfo.objects.all()
             player_ownership_db = []
             chip_data = []
