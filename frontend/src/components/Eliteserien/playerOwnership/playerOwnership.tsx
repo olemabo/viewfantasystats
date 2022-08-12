@@ -156,7 +156,6 @@ export const PlayerOwnership : FunctionComponent<LanguageProps> = (props) => {
 
             data?.chip_data?.map((x: ChipUsageModel) => {
                 if (x.gw == data.newest_updated_gw) {
-                    console.log(x.chip_data, x.total_chip_usage)
                     setChipData(x.chip_data);
                     setTotalChipUsage(x.total_chip_usage);
                 }
@@ -189,13 +188,14 @@ export const PlayerOwnership : FunctionComponent<LanguageProps> = (props) => {
         chipDataAll.map(x => {
             if (x.gw == gw) {
                 setChipData(x.chip_data);
-                console.log("x.total_chip_usage: ", x.total_chip_usage)
                 setTotalChipUsage(x.total_chip_usage);
             }
         })
         setCurrentGw(gw);
         setCurrentSorted('EO');
         setOwnershipDataToShow(tempOwnershipModel.sort(compare))
+        setOwnershipData(tempOwnershipModel.sort(compare));
+        filterOnPositionAndTeam(sorting_keyword, query, tempOwnershipModel.sort(compare));
     }
 
     function compare( a: any, b: any ) {
@@ -210,7 +210,7 @@ export const PlayerOwnership : FunctionComponent<LanguageProps> = (props) => {
     }
 
     function filterOnPositionAndTeam(keyword: string, query: string, data?: PlayerOwnershipModel[]) {
-        let temp = data != null ? data : ownershipData;
+        let temp: PlayerOwnershipModel[] = data != null ? data : ownershipData;    
 
         let queryFilteredList: PlayerOwnershipModel[] = [];
         
@@ -252,7 +252,6 @@ export const PlayerOwnership : FunctionComponent<LanguageProps> = (props) => {
                 }
             })
         }
-
         setOwnershipDataToShow(queryFilteredList);
         setSorting_keyword(keyword);
         setQuery(query);
@@ -303,7 +302,7 @@ export const PlayerOwnership : FunctionComponent<LanguageProps> = (props) => {
     }
 
     const [ currentSorted, setCurrentSorted ] = useState("EO");
-    console.log(totalChipUsage)
+
     return <>
      <div className='player-ownership-container' id="rotation-planner-container">
          <h1>{props.content.Statistics.PlayerOwnership.title}</h1>
@@ -388,7 +387,32 @@ export const PlayerOwnership : FunctionComponent<LanguageProps> = (props) => {
                 { ownershipDataToShow.slice( (pagingationNumber - 1) * numberOfHitsPerPagination, (pagingationNumber - 1) * numberOfHitsPerPagination + numberOfHitsPerPagination).map( (x, index) => 
                 <tr>
                     <td className="name-col"> <div className="format-name-col">{ x.player_name }</div> </td>
-                    <td className={(currentSorted == 'EO') ? 'selected' : ''}>{ ( (x.ownership[0] + x.ownership[1] * 2 + x.ownership[2] * 3) / topXPlayers * 100).toFixed(1) } {'%'} </td>
+                    { x.ownership.length == 0 ? <>
+                        <td className={(currentSorted == 'EO') ? 'selected' : ''}>{} {'-'} </td>
+                        <td className={(currentSorted == 'Owned by') ? 'selected' : ''}>{  } {'-'} </td>
+                        <td className={(currentSorted == 'Captaincy') ? 'selected' : ''}>{  } {'-'} </td>
+                        { props.league_type == "FPL" && 
+                            <td className={(currentSorted == '3xC') ? 'selected' : ''}>{ } {'-'} </td>
+                        }
+                        <td className={(currentSorted == 'VC') ? 'selected' : ''}>{ } {'-'} </td>
+                        <td className={(currentSorted == 'Benched') ? 'selected' : ''}>{ } {'-'} </td>
+                        <td className={(currentSorted == 'Total Ownership') ? 'selected' : ''}>{  } {'-'} </td>
+                    
+                    </> : 
+                    <>
+                        <td className={(currentSorted == 'EO') ? 'selected' : ''}>{ ( (x.ownership[0] + x.ownership[1] * 2 + x.ownership[2] * 3) / topXPlayers * 100).toFixed(1) } {'%'} </td>
+                        <td className={(currentSorted == 'Owned by') ? 'selected' : ''}>{ (x.ownership[4] / topXPlayers * 100).toFixed(1) } {'%'} </td>
+                        <td className={(currentSorted == 'Captaincy') ? 'selected' : ''}>{ (x.ownership[1] / topXPlayers * 100).toFixed(1) } {'%'} </td>
+                        { props.league_type == "FPL" && 
+                            <td className={(currentSorted == '3xC') ? 'selected' : ''}>{ (x.ownership[2] / topXPlayers * 100).toFixed(1) } {'%'} </td>
+                        }
+                        <td className={(currentSorted == 'VC') ? 'selected' : ''}>{ (x.ownership[3] / topXPlayers * 100).toFixed(1) } {'%'} </td>
+                        <td className={(currentSorted == 'Benched') ? 'selected' : ''}>{ (x.ownership[5] / topXPlayers * 100).toFixed(1) } {'%'} </td>
+                        <td className={(currentSorted == 'Total Ownership') ? 'selected' : ''}>{ (x.ownership[6] / 100).toFixed(1) } {'%'} </td>
+                    </>
+                    
+                    }
+                    {/* <td className={(currentSorted == 'EO') ? 'selected' : ''}>{ ( (x.ownership[0] + x.ownership[1] * 2 + x.ownership[2] * 3) / topXPlayers * 100).toFixed(1) } {'%'} </td>
                     <td className={(currentSorted == 'Owned by') ? 'selected' : ''}>{ (x.ownership[4] / topXPlayers * 100).toFixed(1) } {'%'} </td>
                     <td className={(currentSorted == 'Captaincy') ? 'selected' : ''}>{ (x.ownership[1] / topXPlayers * 100).toFixed(1) } {'%'} </td>
                     { props.league_type == "FPL" && 
@@ -396,7 +420,7 @@ export const PlayerOwnership : FunctionComponent<LanguageProps> = (props) => {
                     }
                     <td className={(currentSorted == 'VC') ? 'selected' : ''}>{ (x.ownership[3] / topXPlayers * 100).toFixed(1) } {'%'} </td>
                     <td className={(currentSorted == 'Benched') ? 'selected' : ''}>{ (x.ownership[5] / topXPlayers * 100).toFixed(1) } {'%'} </td>
-                    <td className={(currentSorted == 'Total Ownership') ? 'selected' : ''}>{ (x.ownership[6] / 100).toFixed(1) } {'%'} </td>
+                    <td className={(currentSorted == 'Total Ownership') ? 'selected' : ''}>{ (x.ownership[6] / 100).toFixed(1) } {'%'} </td> */}
                 </tr>
                 )}             
             </tbody>
@@ -417,7 +441,7 @@ export const PlayerOwnership : FunctionComponent<LanguageProps> = (props) => {
             <Spinner />
         }
 
-        { chipData?.length > 5 && chipData[0] != -1 && 
+        { !isLoading && chipData?.length > 5 && chipData[0] != -1 && 
             <div className='chips-section'>
                 <table className='chips-table'>
                     <thead>
