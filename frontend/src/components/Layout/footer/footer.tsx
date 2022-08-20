@@ -20,6 +20,7 @@ export const Footer : FunctionComponent<LanguageProps> = (props) => {
             <a href="../../../fixture-planner/fdr-planner/">{props.content.Fixture.FixturePlanner.title}</a>
             <a href="../../../fixture-planner/rotation-planner/">{props.content.Fixture.RotationPlanner.title}</a>
             <a href="../../../fixture-planner/periode-planner/">{props.content.Fixture.PeriodPlanner.title}</a>
+            <a className="dropbtn" href="../../../statistics-premier-league/player-ownership/">{props.content.Statistics.PlayerOwnership.title}</a>
           </div>
         </div>
         <div className="footer-section">

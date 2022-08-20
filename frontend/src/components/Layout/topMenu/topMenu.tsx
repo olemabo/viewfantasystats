@@ -83,6 +83,12 @@ export const TopMenu : FunctionComponent<LanguageProps> = (props) => {
                                 </div> */}
                                 <ul>
                                     <li className="dropdown">
+                                        <button className="dropbtn">{props.content.Statistics.statistic}</button>
+                                        <div style={{left: '0'}} className="dropdown-content">
+                                            <a className="dropbtn" href="../../../statistics-premier-league/player-ownership/">{props.content.Statistics.PlayerOwnership.title}</a>
+                                        </div>
+                                    </li>
+                                    <li className="dropdown">
                                         <button className="dropbtn">{props.content.Fixture.fixture}</button>
                                         <div className="dropdown-content">
                                             <a href="../../../fixture-planner/fdr-planner/">{props.content.Fixture.FixturePlanner.title}</a>
@@ -100,6 +106,8 @@ export const TopMenu : FunctionComponent<LanguageProps> = (props) => {
                                         <button className="dropbtn">{props.content.Statistics.statistic}</button>
                                         <div style={{left: '0'}} className="dropdown-content">
                                             <a className="dropbtn" href="../../../statistics/player-ownership/">{props.content.Statistics.PlayerOwnership.title}</a>
+                                            {/* <a className="dropbtn" href="../../../statistics/search-user-names/">{props.content.Statistics.SearchUserName.title}</a> */}
+                                            {/* <a className="dropbtn" href="../../../statistics/rank-statistics/">{props.content.Statistics.RankStatistics.title}</a> */}
                                         </div>
                                     </li>
                                     <li className="dropdown">

@@ -88,9 +88,16 @@ total_number_of_gameweeks_in_eliteserien = 30
 fantasy_manager_eliteserien_url = "https://fantasy.tv2.no/entry/X/history"
 # store data from these top_x_players. Store for first player, top 10, top 100, top 1000 and top 10000
 all_top_x_players_premier_league = [1, 10, 100, 1000, 10000]
+all_top_x_players_premier_league_nationality = [1]
+all_top_x_players_premier_league_total_chips = [1, 10, 100]
+
+
 all_top_x_players_eliteserien = [1, 10, 100, 1000, 5000]
+all_top_x_players_eliteserien_nationality = [1]
+all_top_x_players_eliteserien_total_chips = [1, 10, 100, 1000]
+
 how_often_do_back_up_of_global_data = 250
-time_to_sleep_for_each_iteration = 0.30
+time_to_sleep_for_each_iteration = 0.3
 name_of_ownership_file = "complete_ownership.txt"
 name_of_nationality_file = "country_population.txt"
 nationality_delimiter = ":"
