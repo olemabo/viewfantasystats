@@ -1,19 +1,26 @@
-import React, { FunctionComponent, useEffect, useState } from "react"; // this must be here
+import React, { useEffect, useState } from "react"; // this must be here
 import TopMenu from "../topMenu/topMenu";
 import Footer from "../footer/footer";
-import { BrowserRouter as Router, Routes, Link, Route } from "react-router-dom";
-import { store, persistor} from "../../../store/index";
+import { Routes, Route } from "react-router-dom";
+import { store } from "../../../store/index";
 import { useSelector } from 'react-redux';
-import FixturePlanner from "../../FPL/fixturePlanner/fixturePlanner";
-import RotationPlanner from "../../FPL/rotationPlanner/rotationPlanner";
-import PeriodePlanner from "../../FPL/periodePlanner/periodePlanner";
+// import FixturePlanner from "../../FPL/fixturePlanner/fixturePlanner";
+// import RotationPlanner from "../../FPL/rotationPlanner/rotationPlanner";
+// import PeriodePlanner from "../../FPL/periodePlanner/periodePlanner";
 import EliteserienFixturePlanner from "../../Eliteserien/eliteserienFixturePlanner/eliteserienFixturePlanner";
 import EliteserienRotationPlanner from "../../Eliteserien/rotationPlanner/eliteserienRotationPlanner";
 import EliteserienPeriodePlanner from "../../Eliteserien/periodePlanner/eliteserienPeriodePlanner";
-import PlayerOwnership from "../../Eliteserien/playerOwnership/playerOwnership";
-// import SearchUserName from "../../Eliteserien/searchUserName/searchUserName";
-// import RankStatistics from "../../Eliteserien/rankStatistics/rankStatistics";
-
+import PlayerOwnership from "../../Pages/playerOwnership/playerOwnership";
+import SearchUserName from "../../Eliteserien/searchUserName/searchUserName";
+import RankStatistics from "../../Eliteserien/rankStatistics/rankStatistics";
+import FixturePlannerPage from "../../Pages/FixturePlanner/FixturePlanner";
+import { FixturePlanningType } from '../../../models/fixturePlanning/FixturePlanningType';
+import RotationPlannerPage from "../../Pages/RotationPlanner/rotationPlanner";
+// enum FixturePlanningType {
+//     FDR = "FDR",
+//     Periode = "FDR-best",
+//     Rotation = "Rotation",
+// }
 
 export const DefaultLayout = () => {
     const [ isAnyMenuOpen, setIsMenuOpen ] = useState(false);
@@ -52,11 +59,16 @@ export const DefaultLayout = () => {
               <div className="content-container">
                   <div className="col-sm-10 max-width">
                         <Routes>
-                            <Route path="/" element={<FixturePlanner league_type={fpl} content={langagueContent} />}></Route>
-                            <Route path="/fixture-planner/" element={<FixturePlanner league_type={fpl} content={langagueContent} />} />
-                            <Route path="/fixture-planner/fdr-planner/" element={<FixturePlanner league_type={fpl} content={langagueContent} />} />
-                            <Route path="/fixture-planner/periode-planner/" element={<PeriodePlanner content={langagueContent} />} />
-                            <Route path="/fixture-planner/rotation-planner/" element={<RotationPlanner content={langagueContent} />} />
+                            {/* <Route path="/" element={<FixturePlanner league_type={fpl} content={langagueContent} />}></Route> */}
+                            {/* <Route path="/fixture-planner/" element={<FixturePlanner league_type={fpl} content={langagueContent} />} /> */}
+                            {/* <Route path="/fixture-planner/fdr-planner/" element={<FixturePlanner league_type={fpl} content={langagueContent} />} /> */}
+                            {/* <Route path="/fixture-planner/periode-planner/" element={<PeriodePlanner content={langagueContent} />} /> */}
+                            <Route path="/fixture-planner/rotation-planner/" element={<RotationPlannerPage content={langagueContent} />} />
+                            <Route path="/" element={<FixturePlannerPage fixture_planning_type={FixturePlanningType.FDR} league_type={fpl} content={langagueContent} />}></Route>
+                            <Route path="/fixture-planner/" element={<FixturePlannerPage fixture_planning_type={FixturePlanningType.FDR} league_type={fpl} content={langagueContent} />} />
+                            <Route path="/fixture-planner/fdr-planner/" element={<FixturePlannerPage fixture_planning_type={FixturePlanningType.FDR} league_type={fpl} content={langagueContent} />} />
+                            <Route path="/fixture-planner/periode-planner/" element={<FixturePlannerPage fixture_planning_type={FixturePlanningType.Periode} league_type={fpl} content={langagueContent} />} />
+                            {/* <Route path="/fixture-planner/rotation-planner/" element={<FixturePlannerPage fixture_planning_type={FixturePlanningType.Rotation} league_type={fpl} content={langagueContent} />} /> */}
                             <Route path="/fixture-planner-eliteserien/" element={<EliteserienFixturePlanner content={langagueContent} />} />
                             <Route path="/fixture-planner-eliteserien/fdr-planner/" element={<EliteserienFixturePlanner content={langagueContent} />} />
                             <Route path="/fixture-planner-eliteserien/rotation-planner/" element={<EliteserienRotationPlanner content={langagueContent} />} />

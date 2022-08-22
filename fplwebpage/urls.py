@@ -32,17 +32,10 @@ urlpatterns = [
 ]
 
 urlpatterns += [
-    #path('home/', include('fixture_planner.urls')),
-]
-urlpatterns += [
     path('fixture-planner-eliteserien/', include('fixture_planner_eliteserien.urls')),
     path('fixture-planner/', include("fixture_planner.urls")),
-    path('', include("frontend.urls")),
-    #path('', RedirectView.as_view(url='fixture-planner/', permanent=True)),
-    #path('fixture-planner/', include('fixture_planner.urls')),
     path('statistics/', include('player_statistics.urls')),
-    #path('', include("react.urls")),
+    path('', include("frontend.urls")),
 ]
-
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -1,10 +1,10 @@
-import os
 from constants import premier_league_folder_name, global_stats_folder_name, nationality_delimiter, total_chip_usage_txt_file_name, name_of_extra_info_file, current_season_name_premier_league, name_of_nationality_file, path_to_store_local_data, all_top_x_players_premier_league, name_of_ownership_file, total_number_of_gameweeks
-import numpy as np
-import datetime
 from player_statistics.db_models.premier_league.ownership_statistics_model import PremierLeagueChipsAndUserInfo, PremierLeagueGlobalOwnershipStats10000, \
     PremierLeagueGlobalOwnershipStats1000, PremierLeagueGlobalOwnershipStats100, PremierLeagueGwsChecked
 from player_statistics.db_models.premier_league.nationality_statistics_model import PremierLeagueNationalityStatistics
+import numpy as np
+import datetime
+import os
 
 
 def write_global_stats_to_db():

@@ -3,7 +3,8 @@ import { TeamFDRDataModel, FDR_GW_i, FDRData } from '../../../models/fixturePlan
 import { FilterButton } from '../../Shared/FilterButton/FilterButton';
 import { contrastingColor } from '../../../utils/findContrastColor';
 import { Spinner } from '../../Shared/Spinner/Spinner';
-import "../../FPL/fixturePlanner/fixturePlanner.scss";
+// import "../../FPL/fixturePlanner/fixturePlanner.scss";
+import "../../Pages/FixturePlanner/FixturePlanner.scss";
 import { Button } from '../../Shared/Button/Button';
 import React, { useState, useEffect, FunctionComponent } from 'react';
 import Popover from '../../Shared/Popover/Popover';
@@ -26,9 +27,6 @@ export const EliteserienFixturePlanner : FunctionComponent<LanguageProps> = (pro
     const emptyGwDate: KickOffTimesModel[] = [{gameweek: 0, day_month: "",kickoff_time: "" }];
 
     const [ fdrDataToShow, setFdrDataToShow ] = useState(empty);
-    // const [ fdrDataAllTeamsNew, setFdrDataAllTeamsNew] = useState(empty);
-    
-    // const [ kickOffTimes, setKickOffTimes ] = useState(emptyGwDate);
     const [ kickOffTimesToShow, setKickOffTimesToShow ] = useState(emptyGwDate);
     const [ fdrToColor, setFdrToColor ] = useState({0.5: "0.5", 1: "1", 2: "2", 3: "3", 4: "4", 5: "5"});
 
@@ -47,7 +45,7 @@ export const EliteserienFixturePlanner : FunctionComponent<LanguageProps> = (pro
         // Get fdr data from the API
         let body = { 
             start_gw: gwStart,
-            end_gw: 30,
+            end_gw: max_gw,
             min_num_fixtures: '1',
             combinations: 'FDR'
         };

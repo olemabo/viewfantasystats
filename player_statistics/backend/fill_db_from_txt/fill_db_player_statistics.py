@@ -1,7 +1,7 @@
 from constants import eliteserien_api_url, premier_league_api_url, premier_league_folder_name, eliteserien_folder_name
 from player_statistics.backend.read_api_data_to_txt.read_player_statistics import static_json, get_ids
-from player_statistics.db_models.premier_league.player_statistics_model import PremierLeaguePlayers
 from player_statistics.db_models.eliteserien.player_statistics_model import EliteserienPlayerStatistic
+from player_statistics.db_models.premier_league.player_statistics_model import PremierLeaguePlayers
 from utils.models.DataFetch import DataFetch
 import time
 
@@ -19,7 +19,7 @@ def fill_database_all_players(league_name=premier_league_folder_name):
         print("Filling db for player: ", name, " with id: ", id, " ... (",
               idx, "/", len(ids), ")")
         fill_database_for_one_player(player_data, static_data, id, league_name)
-        time.sleep(1)
+        time.sleep(0.7)
     print("Filled db for all ", str(len(ids)), " players. \n")
 
 

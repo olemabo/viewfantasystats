@@ -6,6 +6,12 @@ export interface TeamFDRDataModel {
     FDR: FDR_GW_i [];
 }
 
+export interface SimpleTeamFDRDataModel {
+    team_name: string;
+    checked: boolean;
+    FDR: FDR_GW_i [];
+}
+
 export interface FDR_GW_i {
     fdr_gw_i: FDRData[];
 }

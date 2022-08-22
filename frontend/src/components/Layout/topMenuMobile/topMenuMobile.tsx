@@ -127,7 +127,11 @@ export const TopMenuMobile: React.FunctionComponent<TopMenyProps> = (props) => {
                             <li className="sub-menu-item">
                                 {/* <BarChartIcon /> */}
                                 <a onClick={() => closeMenu()} href="../../../fixture-planner/periode-planner/">{props.content.Fixture.PeriodPlanner.title}</a>
-                            </li></>
+                            </li>
+                            <li onClick={() => closeMenu()} className="sub-menu-item">
+                                <a href="../../../statistics-premier-league/player-ownership/">{props.content.Statistics.PlayerOwnership.title}</a>
+                            </li>
+                            </>
                         }
                     </ul>
             </nav>

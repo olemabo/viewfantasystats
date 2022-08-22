@@ -1,10 +1,10 @@
-import ReactDOM from 'react-dom';
 import { DefaultLayout } from './Layout/defaultLayout/defaultLayout';
-import { Provider } from 'react-redux';
-import {store, persistor} from "../store/index";
-import React from "react"; // this must be here
-import { BrowserRouter } from "react-router-dom";
 import { PersistGate } from 'redux-persist/integration/react'
+import { BrowserRouter } from "react-router-dom";
+import {store, persistor} from "../store/index";
+import { Provider } from 'react-redux';
+import ReactDOM from 'react-dom';
+import React from "react"; // this must be here
 
 function App() {
   return (<DefaultLayout />
@@ -22,6 +22,3 @@ ReactDOM.render(
     </BrowserRouter>,
   document.getElementById('app')
 );
-
-// const appDiv = document.getElementById("app");
-// render(<App />, appDiv);

@@ -1,4 +1,4 @@
-from constants import current_season_name_eliteserien, top_x_players_ids_backup_file_name, backup_data_txt_file_name, current_season_name_premier_league, backup_data_folder_name, how_often_do_back_up_of_global_data, nationality_delimiter, name_of_nationality_file, global_stats_folder_name, eliteserien_wc_due_date, premier_league_wc_due_date, total_chip_usage_txt_file_name, country_population_txt_file_name, global_stats_folder_name, premier_league_api_url, eliteserien_api_url, web_global_league_eliteserien, eliteserien_folder_name, premier_league_folder_name, name_of_extra_info_file, path_to_store_local_data, web_global_league, all_top_x_players_premier_league, all_top_x_players_eliteserien, time_to_sleep_for_each_iteration, name_of_ownership_file
+from constants import current_season_name_eliteserien, all_top_x_players_eliteserien_nationality, all_top_x_players_eliteserien_total_chips, all_top_x_players_premier_league_total_chips, all_top_x_players_premier_league_nationality, top_x_players_ids_backup_file_name, backup_data_txt_file_name, current_season_name_premier_league, backup_data_folder_name, how_often_do_back_up_of_global_data, nationality_delimiter, name_of_nationality_file, global_stats_folder_name, eliteserien_wc_due_date, premier_league_wc_due_date, total_chip_usage_txt_file_name, country_population_txt_file_name, global_stats_folder_name, premier_league_api_url, eliteserien_api_url, web_global_league_eliteserien, eliteserien_folder_name, premier_league_folder_name, name_of_extra_info_file, path_to_store_local_data, web_global_league_premier_league, all_top_x_players_premier_league, all_top_x_players_eliteserien, time_to_sleep_for_each_iteration, name_of_ownership_file
 from utils.models.DataFetch import DataFetch
 from tqdm import tqdm
 import pandas as pd
@@ -30,12 +30,12 @@ def save_all_global_stats_for_current_gw(league_name=premier_league_folder_name)
             "Time to sleep between each api call is: " + str(time_to_sleep_for_each_iteration) +
                   " and should be more than 0.2 at least. Will you proceed? (y/n) ")
 
-    if str(x) == "n":
+    if str(x) != "y":
         return 0
 
     start_time = time.time()
     
-    # collect fpl api class
+    # collect fpl api class for premier league or eliteserien
     api_url = eliteserien_api_url if league_name == eliteserien_folder_name else premier_league_api_url
     DFObject = DataFetch(api_url)
     
@@ -64,6 +64,10 @@ def save_all_global_stats_for_current_gw(league_name=premier_league_folder_name)
 
     # find max top_x players to check
     top_x_players = max(all_top_x_players)
+    all_top_x_player_nationality = all_top_x_players_eliteserien_nationality if league_name == eliteserien_folder_name else all_top_x_players_premier_league_nationality
+    all_top_x_player_total_chips = all_top_x_players_eliteserien_total_chips if league_name == eliteserien_folder_name else all_top_x_players_premier_league_total_chips
+    top_x_players_nationality = max(all_top_x_player_nationality)
+    top_x_players_total_chips = max(all_top_x_player_total_chips)
 
     # get soccer player name and ids
     ids = get_player_name_ids(DFObject)
@@ -94,10 +98,10 @@ def save_all_global_stats_for_current_gw(league_name=premier_league_folder_name)
     
     print("All ids successfully extracted for gw ", str(current_gameweek), "\n")
 
-    # [free hit, bench boost, triple captain, wildcard, no chips]
+    # [free hit, bench boost, triple captain, wildcard, no chips] chips usage this round
     fpl_player_chip_info = [0, 0, 0, 0, 0]
     
-    # [ team_value, event_transfer, event_transfer_cost ]
+    # [ team_value, event_transfer, event_transfer_cost, total points, bank ]
     event_fpl_team_info = np.zeros((top_x_players, 5))
 
     dict_chip_to_index_premier_league = {"freehit": 0, "bboost": 1, "3xc": 2, "wildcard": 3, None: 4}
@@ -109,7 +113,8 @@ def save_all_global_stats_for_current_gw(league_name=premier_league_folder_name)
     total_chip_usage_premier_league_dict = {"wildcard": [0, 0], "freehit": 0, "3xc": 0, "bboost": 0}
     dict_total_chip_usage_to_index = total_chip_usage_eliteserien_dict if league_name == eliteserien_folder_name else total_chip_usage_premier_league_dict
     wildcard_date = eliteserien_wc_due_date if league_name == eliteserien_folder_name else premier_league_wc_due_date
-    
+    wildcard_deadline = get_tz_notation_to_seconds(wildcard_date)
+
     # data for nationality data
     regions_dict = {}
 
@@ -125,19 +130,19 @@ def save_all_global_stats_for_current_gw(league_name=premier_league_folder_name)
         print("Extract data from backup. Start from player number: ", current_number_stored)
         if (len(id_s) + current_number_stored != top_x_players):
             print("Wrong input data")
-            print(1/0)
+            return 0
         number_of_ids_allready_stored = current_number_stored
 
     print("Remaining ids to check: ", len(id_s), "\n")
     # extract different data for each id among top_x_players
     for player_i in tqdm(range(len(id_s))):
-        
         # sleep som seconds to not get DDOS
         time.sleep(time_to_sleep_for_each_iteration)
         
         user_id = id_s[player_i]
         
         player_i = player_i + number_of_ids_allready_stored
+        # print(player_i, top_x_players_nationality, top_x_players_total_chips)
         
         ### extract ownership info ###
         # get info for player_i with id = user_id
@@ -148,11 +153,12 @@ def save_all_global_stats_for_current_gw(league_name=premier_league_folder_name)
         fpl_player_chip_info[dict_chip_to_index[chip_used_this_round]] += 1
 
         # team info
-        event_fpl_team_info[player_i, 0] = int(team_info["entry_history"]["value"])
-        event_fpl_team_info[player_i, 1] = int(team_info["entry_history"]["event_transfers"])
-        event_fpl_team_info[player_i, 2] = int(team_info["entry_history"]["event_transfers_cost"])
-        event_fpl_team_info[player_i, 3] = int(team_info["entry_history"]["total_points"])
-        event_fpl_team_info[player_i, 4] = int(team_info["entry_history"]["bank"])
+        entry_history = team_info["entry_history"]
+        event_fpl_team_info[player_i, 0] = int(entry_history["value"])
+        event_fpl_team_info[player_i, 1] = int(entry_history["event_transfers"])
+        event_fpl_team_info[player_i, 2] = int(entry_history["event_transfers_cost"])
+        event_fpl_team_info[player_i, 3] = int(entry_history["total_points"])
+        event_fpl_team_info[player_i, 4] = int(entry_history["bank"])
 
         # extract soccer player info
         players_with_all_info = pd.DataFrame(team_info['picks'])
@@ -170,30 +176,32 @@ def save_all_global_stats_for_current_gw(league_name=premier_league_folder_name)
                 ids_dict[player_id][11] = int(ids_dict[player_id][11]) + 1
             ids_dict[player_id][4] = int(ids_dict[player_id][4]) + 1
 
-        # extract nationality info 
-        nationality = DFObject.get_current_fpl_player(user_id)
-        region_name = nationality['player_region_name']
-        region_iso_name = nationality['player_region_iso_code_long']
-        if region_name not in regions_dict.keys():
-            regions_dict[region_name] = [1, region_iso_name]
-        else:
-            regions_dict[region_name][0] += 1
-
-        # extract total chip usage info 
-        wildcard_deadline = get_tz_notation_to_seconds(wildcard_date)
         
-        chip_usage = DFObject.get_current_member(user_id)["chips"]
-        for chips_used in chip_usage:
-            chip = chips_used["name"]
-            if chip != "wildcard":
-                dict_total_chip_usage_to_index[chip] += 1
+        # extract nationality info 
+        if player_i < top_x_players_nationality:
+            nationality = DFObject.get_current_fpl_player(user_id)
+            region_name = nationality['player_region_name']
+            region_iso_name = nationality['player_region_iso_code_long']
+            if region_name not in regions_dict.keys():
+                regions_dict[region_name] = [1, region_iso_name]
             else:
-                wildcard_time = chips_used["time"].split(".")[0]
-                wildcard_time_used = get_tz_notation_to_seconds(wildcard_time)
-                if wildcard_time_used < wildcard_deadline:
-                    dict_total_chip_usage_to_index[chip][0] += 1
+                regions_dict[region_name][0] += 1
+
+            # extract total chip usage info 
+        
+        if player_i < top_x_players_total_chips:
+            chip_usage = DFObject.get_current_member(user_id)["chips"]
+            for chips_used in chip_usage:
+                chip = chips_used["name"]
+                if chip != "wildcard":
+                    dict_total_chip_usage_to_index[chip] += 1
                 else:
-                    dict_total_chip_usage_to_index[chip][1] += 1
+                    wildcard_time = chips_used["time"].split(".")[0]
+                    wildcard_time_used = get_tz_notation_to_seconds(wildcard_time)
+                    if wildcard_time_used < wildcard_deadline:
+                        dict_total_chip_usage_to_index[chip][0] += 1
+                    else:
+                        dict_total_chip_usage_to_index[chip][1] += 1
 
 
         # store data when it reach player limits found in all_top_x_players (1, 10, 100, 1000 ...) or when we do backup
@@ -266,31 +274,33 @@ def save_all_global_stats_for_current_gw(league_name=premier_league_folder_name)
             f2.close()
 
             # write data to nationlaity text file
-            store_nationality_path = general_folder_path + "/" + country_population_txt_file_name
+            if (player_i + 1) <= top_x_players_nationality:
+                store_nationality_path = general_folder_path + "/" + country_population_txt_file_name
 
-            f3 = open(store_nationality_path, "w", encoding="utf-8")
-            f3.write("Country name, number of fpl players from this country \n")
-            for key in regions_dict.keys():
-                f3.write(str(key) + nationality_delimiter + str(regions_dict[key][1]) + nationality_delimiter + str(regions_dict[key][0]) + "\n")
-            f3.close()
+                f3 = open(store_nationality_path, "w", encoding="utf-8")
+                f3.write("Country name, number of fpl players from this country \n")
+                for key in regions_dict.keys():
+                    f3.write(str(key) + nationality_delimiter + str(regions_dict[key][1]) + nationality_delimiter + str(regions_dict[key][0]) + "\n")
+                f3.close()
 
             # write data to total chip usage txt file
-            store_total_chips_usage_path = general_folder_path + "/" + total_chip_usage_txt_file_name
-            first_line, data_line = "", ""
-            for idx, chip_key in enumerate(dict_total_chip_usage_to_index.keys()):
-                if (chip_key == "wildcard"):
-                    first_line += "wildcard_1, wildcard_2"
-                    data_line += str(dict_total_chip_usage_to_index["wildcard"][0]) + "," + str(dict_total_chip_usage_to_index["wildcard"][1])
-                else:
-                    first_line += chip_key
-                    data_line += str(dict_total_chip_usage_to_index[chip_key])
-                if (idx != len(dict_total_chip_usage_to_index.keys()) - 1):
-                   first_line += "," 
-                   data_line += "," 
-            f4 = open(store_total_chips_usage_path, "w", encoding="utf-8")
-            f4.write(first_line + "\n")
-            f4.write(data_line + "\n")
-            f4.close()
+            if (player_i + 1) <= top_x_players_total_chips:
+                store_total_chips_usage_path = general_folder_path + "/" + total_chip_usage_txt_file_name
+                first_line, data_line = "", ""
+                for idx, chip_key in enumerate(dict_total_chip_usage_to_index.keys()):
+                    if (chip_key == "wildcard"):
+                        first_line += "wildcard_1, wildcard_2"
+                        data_line += str(dict_total_chip_usage_to_index["wildcard"][0]) + "," + str(dict_total_chip_usage_to_index["wildcard"][1])
+                    else:
+                        first_line += chip_key
+                        data_line += str(dict_total_chip_usage_to_index[chip_key])
+                    if (idx != len(dict_total_chip_usage_to_index.keys()) - 1):
+                        first_line += "," 
+                        data_line += "," 
+                f4 = open(store_total_chips_usage_path, "w", encoding="utf-8")
+                f4.write(first_line + "\n")
+                f4.write(data_line + "\n")
+                f4.close()
 
     end_time = time.time()
     print("\nTotal time to collect data for top " + str(top_x_players) + " players: ", (end_time - start_time) / 60, " min")
@@ -310,9 +320,8 @@ def data_fetch(num, league_type):
     data_fetch will collect 50 teams from page "num" from global rank
     """
     time.sleep(0.5)
-    
     if league_type == premier_league_folder_name:
-        r = requests.get(web_global_league.replace('X', str(num)))
+        r = requests.get(web_global_league_premier_league.replace('X', str(num)))
     elif league_type == eliteserien_folder_name:
         r = requests.get(web_global_league_eliteserien.replace('X', str(num)))
     else:
@@ -415,22 +424,24 @@ def read_chips_and_event_info(top_x_players, path):
 
 
 def read_dict_total_chip_usage_to_index(dict_total_chip_usage_to_index, path):
-    temp = np.loadtxt(path, dtype="int", delimiter=",", skiprows=1, max_rows=1,  encoding="utf-8")
-    total_chip_usage_data = [[temp[0], temp[1]], temp[2], temp[3], temp[4]]
-    for dict_i, data_i in zip(dict_total_chip_usage_to_index.keys(), total_chip_usage_data):
-        dict_total_chip_usage_to_index[dict_i] = data_i
+    if (os.path.exists(path)):
+        temp = np.loadtxt(path, dtype="int", delimiter=",", skiprows=1, max_rows=1,  encoding="utf-8")
+        total_chip_usage_data = [[temp[0], temp[1]], temp[2], temp[3], temp[4]]
+        for dict_i, data_i in zip(dict_total_chip_usage_to_index.keys(), total_chip_usage_data):
+            dict_total_chip_usage_to_index[dict_i] = data_i
     return dict_total_chip_usage_to_index
 
 
 def read_regions_dict(path):
     regions_dict = {}
-    data = np.loadtxt(path, dtype="str", delimiter=nationality_delimiter, skiprows=1,  encoding="utf-8")
-    for data_i in data:
-        region_name = str(data_i[0])
-        region_iso_name = str(data_i[1])
-        number = int(data_i[2])
-        if region_name not in regions_dict.keys():
-            regions_dict[region_name] = [number, region_iso_name]
+    if (os.path.exists(path)):
+        data = np.loadtxt(path, dtype="str", delimiter=nationality_delimiter, skiprows=1,  encoding="utf-8")
+        for data_i in data:
+            region_name = str(data_i[0])
+            region_iso_name = str(data_i[1])
+            number = int(data_i[2])
+            if region_name not in regions_dict.keys():
+                regions_dict[region_name] = [number, region_iso_name]
         
     return regions_dict
 
@@ -456,7 +467,7 @@ def get_id_s(path, id_s):
     return new_id_s_list, current_number_stored
 
 
-if __name__ == "__main__":
-    save_all_global_stats_for_current_gw(premier_league_folder_name)
-    #save_all_global_stats_for_current_gw(eliteserien_folder_name)
+#if __name__ == "__main__":
+    # save_all_global_stats_for_current_gw(premier_league_folder_name)
+    # save_all_global_stats_for_current_gw(eliteserien_folder_name)
 

@@ -4,7 +4,9 @@ import React, { useState, useEffect, FunctionComponent } from 'react';
 import { FilterButton } from '../../Shared/FilterButton/FilterButton';
 import { contrastingColor } from '../../../utils/findContrastColor';
 import { Spinner } from '../../Shared/Spinner/Spinner';
-import "../../FPL/fixturePlanner/fixturePlanner.scss";
+// import "../../FPL/fixturePlanner/fixturePlanner.scss";
+import "../../Pages/FixturePlanner/FixturePlanner.scss";
+
 import { Button } from '../../Shared/Button/Button';
 import Popover from '../../Shared/Popover/Popover';
 import { store } from '../../../store/index';
@@ -24,7 +26,7 @@ export const EliteserienPeriodePlanner : FunctionComponent<LanguageProps> = (pro
     const max_gw = 30;
 
     const empty: TeamFDRDataModel[] = [ { team_name: "-", FDR: [], checked: true, font_color: "FFF", background_color: "FFF" }];
-    const emptyGwDate: KickOffTimesModel[] = [{gameweek: 0, day_month: "",kickoff_time: "" }];
+    const emptyGwDate: KickOffTimesModel[] = [{gameweek: 0, day_month: "", kickoff_time: "" }];
 
     const [ fdrDataToShow, setFdrDataToShow ] = useState(empty);
     const [ fdrDataAllTeamsNew, setFdrDataAllTeamsNew] = useState(empty);

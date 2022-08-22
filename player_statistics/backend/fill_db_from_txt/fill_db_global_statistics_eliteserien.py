@@ -152,6 +152,7 @@ def fill_db_extra_info_statistics_eliteserien(gw, file_path):
 def fill_global_ownership_statistics_top_x(ownership_data, gw, top_x):
     for data_i in ownership_data:
         if top_x == 100:
+            # print(data_i, EliteserienGlobalOwnershipStats100.objects.filter(player_id = data_i[0]), len(EliteserienGlobalOwnershipStats100.objects.filter(player_id = data_i[0])), len(EliteserienGlobalOwnershipStats100.objects.filter(player_id = data_i[0])) > 0)
             if len(EliteserienGlobalOwnershipStats100.objects.filter(player_id = data_i[0])) > 0:
                 fill_model = EliteserienGlobalOwnershipStats100.objects.filter(player_id = data_i[0])
                 fill_model.update(player_name=data_i[3], player_team_id=data_i[1], player_position_id=data_i[2])
@@ -169,7 +170,7 @@ def fill_global_ownership_statistics_top_x(ownership_data, gw, top_x):
                 fill_model.update(player_name=data_i[3], player_team_id=data_i[1], player_position_id=data_i[2])
                 fill_and_update_model(data_i, gw, fill_model)
             else:
-                fill_model = EliteserienGlobalOwnershipStats100(player_id=data_i[0],
+                fill_model = EliteserienGlobalOwnershipStats1000(player_id=data_i[0],
                                                     player_team_id=data_i[1],
                                                     player_position_id=data_i[2],
                                                     player_name=data_i[3])

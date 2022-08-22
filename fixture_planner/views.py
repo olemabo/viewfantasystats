@@ -24,6 +24,8 @@ from .serializers import GetKickOffTimeSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.core import serializers
+from utils.util_functions.fixture.get_upcoming_gw import get_upcoming_gw_premier_league
+from utils.models.fixtures.FdrApiResponse import FdrApiResponse
 
 
 class PremierLeagueTeamInfoView(generics.ListAPIView):
@@ -70,6 +72,16 @@ class PostFDRView(APIView):
             end_gw = int(request.data.get("end_gw"))
             min_num_fixtures = int(request.data.get("min_num_fixtures"))
             combinations = str(request.data.get("combinations"))
+            
+            if combinations == "FDR" and start_gw < 0:
+                start_gw = get_upcoming_gw_premier_league()
+                end_gw = start_gw + 6
+                if (end_gw > 38):
+                    end_gw = 38
+            
+            if (combinations == "FDR-best" and start_gw < 0):
+                start_gw = get_upcoming_gw_premier_league()
+                end_gw = 38
 
             fdr_fixture_data = []
 
@@ -201,9 +213,9 @@ class PostFDRView(APIView):
                 
                 fdr_fixture_data = rotation_data 
 
-            return JsonResponse(fdr_fixture_data, safe=False)
+            response = FdrApiResponse(fdr_fixture_data, [], [], [], start_gw, end_gw) 
 
-            #return HttpResponse(fdr_fixture_data, content_type="application/json", status=status.HTTP_200_OK)
+            return JsonResponse(response.toJson(), safe=False)
 
         except:
             return Response({'Bad Request': 'Something went wrong'}, status=status.HTTP_400_BAD_REQUEST)

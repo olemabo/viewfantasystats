@@ -61,7 +61,3 @@ def static_json(use_api_or_local="local", api_url=premier_league_api_url):
                                      player['web_name']
                                      ]
     return player_dict
-
-
-
-

@@ -32,7 +32,13 @@ def read_user_info_statistics_eliteserien(league_name=eliteserien_folder_name):
         end_time = time.time()
         total_time += (end_time - start_time) 
         avg_time = total_time / (id - start_id + 1)
-        print(id, " / ", number_of_fantasy_players, " | ", round(id / number_of_fantasy_players * 100, 2) , "% | " , round(avg_time * (number_of_fantasy_players - id) / 3600, 2), " hours left")
+        sec_left = avg_time * (number_of_fantasy_players - id)
+        if (sec_left < 60):
+            print(id, " / ", number_of_fantasy_players, " | ", round(id / number_of_fantasy_players * 100, 2) , "% | " , round(sec_left, 2), " secs left")
+        if (sec_left < 60 * 60):
+            print(id, " / ", number_of_fantasy_players, " | ", round(id / number_of_fantasy_players * 100, 2) , "% | " , round(sec_left / 60, 2), " mins left")
+        else:
+            print(id, " / ", number_of_fantasy_players, " | ", round(id / number_of_fantasy_players * 100, 2) , "% | " , round(sec_left / 3600, 2), " hours left")
 
     return 0
 
@@ -90,7 +96,4 @@ def read_single_user_info(id, DFObject: DataFetch):
 def wrtie_to_file(content, path_to_file):
     f2 = open(path_to_file, "a", encoding="utf-8")
     f2.write(content + "\n")
-    f2.close()   
-
-
-# read_user_info_statistics_eliteserien()
+    f2.close()

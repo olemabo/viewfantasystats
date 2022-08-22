@@ -1,0 +1,541 @@
+
+:root {
+    --col-1: 25%;
+    --col-2: 12%;
+    --col-3: 7%;
+    --col-4: 15%;
+    --margin-left: 1.25px;
+    --margin-right: 1.25px;
+}
+
+.player-ownership-container {
+    max-width: 920px;
+    margin: auto;
+
+    .name-col {
+        padding-left: 10px;
+    }
+
+    .team-info {
+        min-width: 170px;
+    }
+
+    .name-col-chips {
+        min-width: 145px;
+    }
+
+    .name-col-chips-2 {
+        min-width: 145px;
+    }
+    
+    .container-player-stats {
+        margin: 5px auto;
+        display: flex;
+        background-color: #EEE;
+        justify-content: center;
+    }
+    
+    thead tr th {
+        height: 40px;
+        font-size: 700;
+    }
+    
+    th {
+        text-align: center;
+        width: 55px;
+        height: 20px;
+    }
+    
+    td {
+        text-align: center;
+        width: 55px;
+        height: 20px;
+    }
+    
+    tbody tr {
+        height: 30px;
+    }
+    
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: white;
+        font-size: 14px;
+        overflow: auto;
+    }
+
+    td {
+      border: solid;
+      border-width: 1px 1px;
+      border-color: #d1cbcb;
+      text-align: left;
+    }
+
+    th {
+        border: solid;
+        border-width: 1px 1px;
+        border-color: #d1cbcb;
+        text-align: left;
+        padding-left: 7px;
+        border-bottom: 1px solid black;
+    }
+    
+    tr:first-child {
+      border-top: none;
+    }
+    
+    
+    .name-col {
+        text-align: left;
+        width: 170px;
+        background-color: white;
+    }
+    
+    .input-box {
+        height: 30px;
+        // min-width: 70px;
+        margin-left: var(--margin-left);
+        margin-right: var(--margin-right);
+    }
+    
+    .player-input-box {
+        width: var(--col-1);
+        margin-left: 0;
+    }
+    
+    .category-input-box {
+        width: var(--col-2);
+    }
+    
+    .last-x-input-box {
+        width: var(--col-3);
+    }
+    
+    .search-box {
+        width: var(--col-4);
+        background: #0f3443;  /* fallback for old browsers */
+        /*background: -webkit-linear-gradient(to right, #0f3443, #34e89e);
+        background: linear-gradient(to right, #0f3443, #34e89e);
+        */
+        position: relative;
+        color: white;
+        margin-right: 0;
+    }
+    
+    .form-stuff {
+        label {
+            color: black;
+            display: block;
+            text-align: left;
+            margin-top: 20px;
+            font-size: 10px;
+            font-weight: 900;
+            margin-left: 2px;
+        }
+        display: grid;
+        grid-template-columns: 150px 90px 60px 1fr 170px;
+        font-size: 14px;
+        grid-gap: 5px;
+
+        select {
+            border: 1px solid black;
+            background-color: white;
+        }
+        
+        .hidden {
+            color: transparent;
+        }
+        .input-box {
+            float: left;
+            width: 100%;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .form-stuff {
+            grid-template-columns: 0.5fr 0.5fr;
+            
+            label {
+                margin-top: 5px !important;
+            }
+
+        }
+
+        .chips-section {
+            table {
+                width: 100% !important;
+                margin-bottom: 25px;
+
+                td, th {
+                    width: 400px !important;
+                }
+            }
+        }
+    }
+
+    @media (max-width: 600px) {
+        .form-stuff {
+            // grid-template-columns: 1fr;
+            grid-template-areas: 
+                "head head"
+                "aside main"
+                "foot foot";
+            .box-1 {
+                grid-area: head;
+            }
+
+            .box-2 {
+                grid-area: aside;
+
+            }
+
+            .box-3 {
+                grid-area: main;
+
+            }
+
+            .box-5 {
+                grid-area: foot;
+            }
+            
+            .input-box {
+                height: 35px !important;
+            }
+        }
+
+    }
+    
+    .form-info {
+        margin-top: 20px;
+        display: flex;
+        font-size: 10px;
+        font-weight: 900;
+    }
+    
+    .describe-boxes {
+        text-align: left;
+        margin: 0 1px;
+    }
+    .one {
+        width: var(--col-1);
+    }
+    .two {
+        width: var(--col-2);
+    }
+    .three {
+        width: var(--col-3);
+    }
+    .four {
+        width: var(--col-4);
+    }
+    
+    .fixture-planner-container {
+        max-width: 600px;
+    }
+
+    th, td {
+        min-width: 130px;
+    }
+
+    input {
+        border: 1px solid white;
+        margin-left: auto !important;
+        padding-left: 5px;
+    }
+}
+
+
+
+.chips-section {
+    margin-top: 30px;
+    
+    table {
+        display: inline-flex !important;
+        width: min-content !important;
+        margin-bottom: 25px;
+    }
+    
+    .chips-table {
+        float: left;
+        overflow: auto;
+        margin-bottom: 25px;
+        margin-right: 33px;
+    }
+
+    .team-info-table {
+        float: left;
+        overflow: auto;
+    }
+}
+
+
+
+
+
+@media (max-width: 600px) {
+    .team-info-table {
+        margin-left: 0px !important;
+        margin-bottom: 25px;
+    }
+
+    .team-info {
+        min-width: 145px !important; 
+    }
+}
+
+
+
+.rc-pagination {
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+}
+ .rc-pagination ul, .rc-pagination ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+ .rc-pagination::after {
+    display: block;
+    clear: both;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+    content: ' ';
+}
+ .rc-pagination-total-text {
+    display: inline-block;
+    height: 28px;
+    margin-right: 8px;
+    line-height: 26px;
+    vertical-align: middle;
+}
+ .rc-pagination-item {
+    display: inline-block;
+    min-width: 28px;
+    height: 28px;
+    margin-right: 8px;
+    font-family: Arial;
+    line-height: 26px;
+    text-align: center;
+    vertical-align: middle;
+    list-style: none;
+    background-color: #fff;
+    border: 1px solid #d9d9d9;
+    border-radius: 2px;
+    outline: 0;
+    cursor: pointer;
+    user-select: none;
+}
+ .rc-pagination-item a {
+    display: block;
+    padding: 0 6px;
+    color: rgba(0, 0, 0, 0.85);
+    transition: none;
+}
+ .rc-pagination-item a:hover {
+    text-decoration: none;
+}
+ .rc-pagination-item:focus, .rc-pagination-item:hover {
+    border-color: #1890ff;
+    transition: all 0.3s;
+}
+ .rc-pagination-item:focus a, .rc-pagination-item:hover a {
+    color: #1890ff;
+}
+ .rc-pagination-item-active {
+    font-weight: 500;
+    background: #fff;
+    border-color: #1890ff;
+}
+ .rc-pagination-item-active a {
+    color: #1890ff;
+}
+ .rc-pagination-item-active:focus, .rc-pagination-item-active:hover {
+    border-color: #40a9ff;
+}
+ .rc-pagination-item-active:focus a, .rc-pagination-item-active:hover a {
+    color: #40a9ff;
+}
+ .rc-pagination-jump-prev, .rc-pagination-jump-next {
+    outline: 0;
+}
+ .rc-pagination-jump-prev button, .rc-pagination-jump-next button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #666;
+}
+ .rc-pagination-jump-prev button:after, .rc-pagination-jump-next button:after {
+    display: block;
+    content: '•••';
+}
+ .rc-pagination-prev, .rc-pagination-jump-prev, .rc-pagination-jump-next {
+    margin-right: 8px;
+}
+ .rc-pagination-prev, .rc-pagination-next, .rc-pagination-jump-prev, .rc-pagination-jump-next {
+    display: inline-block;
+    min-width: 28px;
+    height: 28px;
+    color: rgba(0, 0, 0, 0.85);
+    font-family: Arial;
+    line-height: 28px;
+    text-align: center;
+    vertical-align: middle;
+    list-style: none;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+ .rc-pagination-prev, .rc-pagination-next {
+    outline: 0;
+}
+ .rc-pagination-prev button, .rc-pagination-next button {
+    color: rgba(0, 0, 0, 0.85);
+    cursor: pointer;
+    user-select: none;
+}
+ .rc-pagination-prev:hover button, .rc-pagination-next:hover button {
+    border-color: #40a9ff;
+}
+ .rc-pagination-prev .rc-pagination-item-link, .rc-pagination-next .rc-pagination-item-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+    font-size: 12px;
+    text-align: center;
+    background-color: #fff;
+    border: 1px solid #d9d9d9;
+    border-radius: 2px;
+    outline: none;
+    transition: all 0.3s;
+}
+ .rc-pagination-prev:focus .rc-pagination-item-link, .rc-pagination-next:focus .rc-pagination-item-link, .rc-pagination-prev:hover .rc-pagination-item-link, .rc-pagination-next:hover .rc-pagination-item-link {
+    color: #1890ff;
+    border-color: #1890ff;
+}
+ .rc-pagination-prev button:after {
+    content: '‹';
+    display: block;
+}
+ .rc-pagination-next button:after {
+    content: '›';
+    display: block;
+}
+ .rc-pagination-disabled, .rc-pagination-disabled:hover, .rc-pagination-disabled:focus {
+    cursor: not-allowed;
+}
+ .rc-pagination-disabled .rc-pagination-item-link, .rc-pagination-disabled:hover .rc-pagination-item-link, .rc-pagination-disabled:focus .rc-pagination-item-link {
+    color: rgba(0, 0, 0, 0.25);
+    border-color: #d9d9d9;
+    cursor: not-allowed;
+}
+ .rc-pagination-slash {
+    margin: 0 10px 0 5px;
+}
+ .rc-pagination-options {
+    display: inline-block;
+    margin-left: 16px;
+    vertical-align: middle;
+}
+ @media all and (-ms-high-contrast: none) {
+    .rc-pagination-options *::-ms-backdrop, .rc-pagination-options {
+       vertical-align: top;
+   }
+}
+ .rc-pagination-options-size-changer.rc-select {
+    display: inline-block;
+    width: auto;
+    margin-right: 8px;
+}
+ .rc-pagination-options-quick-jumper {
+    display: inline-block;
+    height: 28px;
+    line-height: 28px;
+    vertical-align: top;
+}
+ .rc-pagination-options-quick-jumper input {
+    width: 50px;
+    margin: 0 8px;
+}
+ .rc-pagination-simple .rc-pagination-prev, .rc-pagination-simple .rc-pagination-next {
+    height: 24px;
+    line-height: 24px;
+    vertical-align: top;
+}
+ .rc-pagination-simple .rc-pagination-prev .rc-pagination-item-link, .rc-pagination-simple .rc-pagination-next .rc-pagination-item-link {
+    height: 24px;
+    background-color: transparent;
+    border: 0;
+}
+ .rc-pagination-simple .rc-pagination-prev .rc-pagination-item-link::after, .rc-pagination-simple .rc-pagination-next .rc-pagination-item-link::after {
+    height: 24px;
+    line-height: 24px;
+}
+ .rc-pagination-simple .rc-pagination-simple-pager {
+    display: inline-block;
+    height: 24px;
+    margin-right: 8px;
+}
+ .rc-pagination-simple .rc-pagination-simple-pager input {
+    box-sizing: border-box;
+    height: 100%;
+    margin-right: 8px;
+    padding: 0 6px;
+    text-align: center;
+    background-color: #fff;
+    border: 1px solid #d9d9d9;
+    border-radius: 2px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+ .rc-pagination-simple .rc-pagination-simple-pager input:hover {
+    border-color: #1890ff;
+}
+ .rc-pagination.rc-pagination-disabled {
+    cursor: not-allowed;
+}
+ .rc-pagination.rc-pagination-disabled .rc-pagination-item {
+    background: #f5f5f5;
+    border-color: #d9d9d9;
+    cursor: not-allowed;
+}
+ .rc-pagination.rc-pagination-disabled .rc-pagination-item a {
+    color: rgba(0, 0, 0, 0.25);
+    background: transparent;
+    border: none;
+    cursor: not-allowed;
+}
+ .rc-pagination.rc-pagination-disabled .rc-pagination-item-active {
+    background: #dbdbdb;
+    border-color: transparent;
+}
+ .rc-pagination.rc-pagination-disabled .rc-pagination-item-active a {
+    color: #fff;
+}
+ .rc-pagination.rc-pagination-disabled .rc-pagination-item-link {
+    color: rgba(0, 0, 0, 0.25);
+    background: #f5f5f5;
+    border-color: #d9d9d9;
+    cursor: not-allowed;
+}
+ .rc-pagination.rc-pagination-disabled .rc-pagination-item-link-icon {
+    opacity: 0;
+}
+ .rc-pagination.rc-pagination-disabled .rc-pagination-item-ellipsis {
+    opacity: 1;
+}
+ @media only screen and (max-width: 992px) {
+    .rc-pagination-item-after-jump-prev, .rc-pagination-item-before-jump-next {
+       display: none;
+   }
+}
+ @media only screen and (max-width: 576px) {
+    .rc-pagination-options {
+       display: none;
+   }
+}
+ 
+.ant-pagination {
+    margin-top: 10px;
+}
