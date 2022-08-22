@@ -5,7 +5,7 @@ from player_statistics.utility_functions.utility_functions_ownership_statistics 
 from utils.utility_functions import convert_list_with_strings_to_floats, get_list_of_all_pl_team_names
 from player_statistics.backend.fill_db_from_txt.fill_db_player_statistics import fill_database_all_players
 from player_statistics.backend.fill_db_from_txt.fill_db_global_statistics import write_global_stats_to_db
-from player_statistics.backend.read_api_data_to_txt.read_global_statistics import save_all_global_stats_for_current_gw
+# from player_statistics.backend.read_api_data_to_txt.read_global_statistics import save_all_global_stats_for_current_gw
 # from player_statistics.backend.read_global_statistics import save_all_global_stats_for_current_gw
 from django.views.decorators.csrf import csrf_exempt
 from constants import ranking_delimiter, premier_league_folder_name, total_number_of_gameweeks, eliteserien_folder_name, fantasy_manager_eliteserien_url
@@ -50,6 +50,57 @@ def fill_user_info_to_db_eliteserien(request):
     if (request.META['HTTP_HOST'] == "127.0.0.1:8000"):
         write_user_info_to_db_eliteserien()
     return HttpResponse("Filled Database User Info (EliteserienUserInfoStatistics)")
+
+
+# DB functions. Should not be accessible in PRODUCTION
+def fill_db_global_stats(request):
+    if (request.META['HTTP_HOST'] == "127.0.0.1:8000"):
+        write_global_stats_to_db_eliteserien()
+    return HttpResponse("Filled Database Global Data (GlobalOwnershipStatsXXXX)")
+
+
+def read_and_fill_db_global_stats(request):
+    # save_all_global_stats_for_current_gw(eliteserien_folder_name)
+    if (request.META['HTTP_HOST'] == "127.0.0.1:8000"):
+        write_global_stats_to_db_eliteserien()
+    return HttpResponse("Read global stats from api and filled Database Global Data (GlobalOwnershipStatsXXXX)")
+
+
+def fill_db_global_stats_premier_league(request):
+    if (request.META['HTTP_HOST'] == "127.0.0.1:8000"):
+        write_global_stats_to_db()
+    return HttpResponse("Filled Database Global Data (GlobalOwnershipStatsXXXX)")
+
+
+def read_and_fill_db_global_stats_premier_league(request):
+    # save_all_global_stats_for_current_gw(premier_league_folder_name)
+    if (request.META['HTTP_HOST'] == "127.0.0.1:8000"):
+        write_global_stats_to_db()
+    return HttpResponse("Filled Database Global Data (GlobalOwnershipStatsXXXX)")
+
+
+
+def fill_txt_global_stats(request):
+    #if (request.META['HTTP_HOST'] == "127.0.0.1:8000"):
+        #save_all_global_stats_for_current_gw()
+    return HttpResponse("Filled Txt global stats")
+
+
+def fill_player_stat_db(request):
+    #if (request.META['HTTP_HOST'] == "127.0.0.1:8000"):
+        #save_all_global_stats_for_current_gw()
+    return HttpResponse("Filled Database Player Data (PremierLeaguePlayers)")
+
+
+def fill_all_statistics(request):
+    #fill_database_all_players()
+    #save_all_global_stats_for_current_gw()
+    #write_global_stats_to_db()
+    return HttpResponse("Finished all statistics")
+
+
+
+
 
 
 class PlayerOwnershipResponse:
@@ -360,46 +411,6 @@ def get_last_updated_gw_and_all_gws_premier_league():
     return 0, []
 
 
-
-# DB functions. Should not be accessible in PRODUCTION
-def fill_db_global_stats(request):
-    write_global_stats_to_db_eliteserien()
-    return HttpResponse("Filled Database Global Data (GlobalOwnershipStatsXXXX)")
-
-
-def read_and_fill_db_global_stats(request):
-    save_all_global_stats_for_current_gw(eliteserien_folder_name)
-    write_global_stats_to_db_eliteserien()
-    return HttpResponse("Read global stats from api and filled Database Global Data (GlobalOwnershipStatsXXXX)")
-
-
-def fill_db_global_stats_premier_league(request):
-    write_global_stats_to_db()
-    return HttpResponse("Filled Database Global Data (GlobalOwnershipStatsXXXX)")
-
-
-def read_and_fill_db_global_stats_premier_league(request):
-    save_all_global_stats_for_current_gw(premier_league_folder_name)
-    write_global_stats_to_db()
-    return HttpResponse("Filled Database Global Data (GlobalOwnershipStatsXXXX)")
-
-
-
-def fill_txt_global_stats(request):
-    #save_all_global_stats_for_current_gw()
-    return HttpResponse("Filled Txt global stats")
-
-
-def fill_player_stat_db(request):
-    #save_all_global_stats_for_current_gw()
-    return HttpResponse("Filled Database Player Data (PremierLeaguePlayers)")
-
-
-def fill_all_statistics(request):
-    #fill_database_all_players()
-    #save_all_global_stats_for_current_gw()
-    #write_global_stats_to_db()
-    return HttpResponse("Finished all statistics")
 
 @csrf_exempt
 def show_player_statistics(request, sorting_keyword="All", sort_on="Total points", acs_dec="-", last_x_gw="All GWs"):
