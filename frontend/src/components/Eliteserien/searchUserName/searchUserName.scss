@@ -1,0 +1,93 @@
+.search-user-name-container {
+    form {
+        .search-box {
+            display: inline;
+            
+            input {
+                width: 230px;
+                height: 30px;
+                padding-left: 6px;
+            }
+
+            .hidden {
+                display: none;
+            }
+        }
+        
+        .submit {
+            height: 30px;
+            width: 50px;
+            display: inline;
+            margin-left: 10px;
+            color: white;
+            background-color: var(--eliteserien-linear-gradient-second-color);
+        }
+    }
+
+    .hits-section {
+        margin-top: 25px;
+        margin-bottom: 35px;
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        align-items: center;
+        
+        .hit-element {
+            width: 500px;
+            background-color: white;
+            margin-bottom: 10px;
+            padding: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            &:hover {
+                background-color: beige;
+            }
+
+            .user-info-section {
+                display: inline;
+                margin-left: 10px;
+                
+                p {
+                    margin: 0;
+                    text-align: left;
+                }
+            }
+
+
+            a {
+                display: inline;
+                border-bottom: 1px solid black;
+                margin-right: 10px;
+            }
+        }
+    }
+
+    @media (max-width: 600px) {
+        .hit-element {
+            max-width: 300px;
+        }
+    }
+
+    @media (max-width: 450px) {
+        .hit-element {
+            width: 100% !important;
+        }
+
+        form {
+            .search-box {
+                input {
+                    width: 180px !important;
+                }    
+            }
+            
+        }
+    }
+
+    @media (max-width: 300px) {
+        .hit-element {
+            width: 100% !important;
+        }
+    }
+}

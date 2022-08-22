@@ -7,7 +7,7 @@ import React, { useState, useEffect, FunctionComponent } from 'react';
 import { CheckBox } from '../../Shared/CheckBox/CheckBox';
 import { Spinner } from '../../Shared/Spinner/Spinner';
 import { Button } from '../../Shared/Button/Button';
-import "../rotationPlanner/rotationPlanner.scss";
+import "../RotationPlanner/rotationPlanner.scss";
 import { store } from '../../../store/index';
 import axios from 'axios';
 

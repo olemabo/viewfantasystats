@@ -1,0 +1,231 @@
+
+:root {
+    --margin-left: 1.25px;
+    --margin-right: 1.25px;
+}
+
+.search-user-name-container {
+    max-width: 697px;
+    margin: auto;
+    margin-bottom: 25px;
+
+    .name-col {
+        padding-left: 10px;
+    }
+
+    .narrow {
+        max-width: 100px !important;
+        min-width: 80px !important;
+    }
+
+    .name-col {
+        min-width: 180px !important;
+    }
+
+    .team-info {
+        min-width: 170px;
+    }
+
+    .name-col-chips {
+        min-width: 145px;
+    }
+
+    .name-col-chips-2 {
+        min-width: 145px;
+    }
+    
+    .container-player-stats {
+        margin: 5px auto;
+        display: flex;
+        background-color: #EEE;
+        justify-content: center;
+    }
+
+    table {
+        a {
+            border-bottom: 1px solid black;
+        }
+    }
+    
+    thead tr th {
+        height: 40px;
+        font-size: 700;
+    }
+    
+    tbody tr {
+        height: 30px;
+    }
+    
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: white;
+        font-size: 14px;
+        overflow: auto;
+    }
+
+    td {
+        border: solid;
+        border-width: 1px 1px;
+        border-color: #d1cbcb;
+        text-align: left;
+        width: 55px;
+        height: 20px;
+    }
+
+    th {
+        width: 55px;
+        height: 20px;
+        border: solid;
+        border-width: 1px 1px;
+        border-color: #d1cbcb;
+        text-align: left;
+        padding-left: 7px;
+        border-bottom: 1px solid black;
+    }
+    
+    tr:first-child {
+      border-top: none;
+    }
+    
+    .name-col {
+        text-align: left;
+        width: 170px;
+        background-color: white;
+    }
+    
+    .input-box {
+        height: 30px;
+        margin-left: var(--margin-left);
+        margin-right: var(--margin-right);
+    }
+    
+    .form-stuff {
+        label {
+            color: black;
+            display: block;
+            text-align: left;
+            margin-top: 20px;
+            font-size: 10px;
+            font-weight: 900;
+            margin-left: 2px;
+        }
+        display: grid;
+        grid-template-columns: 75px 1fr 170px;
+        font-size: 14px;
+        grid-gap: 5px;
+        
+        .hidden {
+            color: transparent;
+        }
+        .input-box {
+            float: left;
+            width: 100%;
+        }
+    }
+
+    @media (max-width: 300px) {
+        .form-stuff {
+            grid-template-columns: 0.5fr 0.5fr;
+            
+            label {
+                margin-top: 5px !important;
+            }
+        }
+
+        .chips-section {
+            table {
+                width: 100% !important;
+                margin-bottom: 25px;
+
+                td, th {
+                    width: 400px !important;
+                }
+            }
+        }
+    }
+
+    @media (max-width: 300px) {
+        .form-stuff {
+            grid-template-areas: 
+                "head head"
+                "aside main"
+                "foot foot";
+            
+            .box-1 {
+                grid-area: head;
+            }
+
+            .box-5 {
+                grid-area: foot;
+            }
+            
+            .input-box {
+                height: 35px !important;
+            }
+        }
+    }
+    
+    .form-info {
+        margin-top: 20px;
+        display: flex;
+        font-size: 10px;
+        font-weight: 900;
+    }
+    
+    .describe-boxes {
+        text-align: left;
+        margin: 0 1px;
+    }
+    
+    .fixture-planner-container {
+        max-width: 600px;
+    }
+
+    th, td {
+        min-width: 145px;
+    }
+
+    input {
+        border: 1px solid white;
+        margin-left: auto !important;
+        padding-left: 5px;
+    }
+}
+
+.chips-section {
+    margin-top: 30px;
+    
+    table {
+        display: inline-flex !important;
+        width: min-content !important;
+        margin-bottom: 25px;
+    }
+    
+    .chips-table {
+        float: left;
+        overflow: auto;
+        margin-bottom: 25px;
+        margin-right: 33px;
+    }
+
+    .team-info-table {
+        float: left;
+        overflow: auto;
+    }
+}
+
+@media (max-width: 350px) {
+    .team-info-table {
+        margin-left: 0px !important;
+        margin-bottom: 25px;
+    }
+
+    .team-info {
+        min-width: 145px !important; 
+    }
+}
+ 
+.ant-pagination {
+    margin-top: 10px;
+}
