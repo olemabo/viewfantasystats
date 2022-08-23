@@ -10,7 +10,7 @@ import { Spinner } from '../../Shared/Spinner/Spinner';
 import { store } from '../../../store/index';
 
 import '../../../components/Shared/Pagination/Pagination.scss';
-import './rankStatistics.scss';
+import './RankStatistics.scss';
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
