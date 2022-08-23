@@ -4,7 +4,7 @@ import Pagination from 'rc-pagination';
 import axios from 'axios';
 
 import { TableSortHead } from './../../Shared/TableSortHead/TableSortHead';
-import { RankModel } from '../../../models/rankStatistics/rankStatistics';
+import { RankModel } from '../../../models/RankStatistics/RankStatistics';
 import { LanguageProps } from '../../../models/shared/LanguageProps';
 import { Spinner } from '../../Shared/Spinner/Spinner';
 import { store } from '../../../store/index';
