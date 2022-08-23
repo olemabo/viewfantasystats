@@ -3,7 +3,7 @@ import React, { useState, useEffect, FunctionComponent } from 'react';
 import Pagination from 'rc-pagination';
 import axios from 'axios';
 
-import { UserSearchHitModel } from '../../../models/searchUserName/UserSearchHitModel';
+import { UserSearchHitModel } from '../../../models/SearchUserName/UserSearchHitModel';
 import { LanguageProps } from '../../../models/shared/LanguageProps';
 import { Spinner } from '../../Shared/Spinner/Spinner';
 import { store } from '../../../store/index';
