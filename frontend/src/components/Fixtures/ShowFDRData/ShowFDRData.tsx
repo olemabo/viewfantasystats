@@ -1,20 +1,35 @@
 import { SimpleTeamFDRDataModel, TeamFDRDataModel } from '../../../models/fixturePlanning/TeamFDRData';
 import { KickOffTimesModel } from '../../../models/fixturePlanning/KickOffTimes';
 import React, { FunctionComponent } from 'react';
+import { contrastingColor } from '../../../utils/findContrastColor';
+import { convertFDRtoHex } from '../../../utils/convertFDRtoHex';
+import './ShowFDRData.scss';
 
 type ShowFDRProps = {
     content: any;
     fdrData: SimpleTeamFDRDataModel[] | TeamFDRDataModel[];
     kickOffTimes: KickOffTimesModel[];
-    toggleBorder: any;
+    allowToggleBorder?: boolean;
+    fdrToColor?: any;
 }
 
 export const ShowFDRData : FunctionComponent<ShowFDRProps> = (props) => {
     
+    function toggleBorderLine(e: React.MouseEvent<HTMLTableCellElement, MouseEvent>) {
+        if (!props.allowToggleBorder) { return; }
+        let classList = e.currentTarget.classList;
+        if (classList.contains("double-border-0")) {
+            e.currentTarget.classList.replace("double-border-0", "double-border-1")
+        }
+        else if (classList.contains("double-border-1")) {
+            e.currentTarget.classList.replace("double-border-1", "double-border-0")
+        }
+    }
+
     return <>
         <div className="container-fdr">
-            <div id="fdr-table" className="container-rotation">
-                <div id="fdr-team-names">
+            <div className="fdr-table">
+                <div className="fdr-team-names">
                     <table>
                         <tbody id="fdr-names">
                             <tr>
@@ -36,13 +51,13 @@ export const ShowFDRData : FunctionComponent<ShowFDRProps> = (props) => {
                         </tbody>
                     </table>
                 </div>
-                <div id="fdr-team-difficulty">
+                <div className="fdr-team-difficulty">
                     <table>
-                        <tbody id="fdr-gws">
-                            <tr id="fdr-row-gws">
+                        <tbody>
+                            <tr className="fdr-row-gws">
                                 { props.kickOffTimes.map(gw =>
                                     <th>{props.content.General.round_short}{ gw.gameweek}
-                                        <div className="day_month">
+                                        <div className="day-month">
                                             { gw.day_month }
                                         </div>
                                     </th>
@@ -53,10 +68,10 @@ export const ShowFDRData : FunctionComponent<ShowFDRProps> = (props) => {
                                     { fdr.checked && (
                                     <tr id={"fdr-row-" + fdr.team_name}>
                                         { fdr.FDR.map(f => (
-                                            <td onClick={(e) => props.toggleBorder(e)} scope='col' className={'min-width'
+                                            <td onClick={(e) => toggleBorderLine(e)} scope='col' style={{backgroundColor: convertFDRtoHex(f.fdr_gw_i[0].difficulty_score, props.fdrToColor)}} className={'min-width'
                                             + (f.fdr_gw_i.length == 1 ? " color-" + f.fdr_gw_i[0].difficulty_score + " " : " no-padding ") + 'double-border-' + f.fdr_gw_i[0].Use_Not_Use  }>
                                                 { f.fdr_gw_i.map(g => (
-                                                    <div className={'min-width color-' + g.difficulty_score + ' multiple-fixtures height-' + f.fdr_gw_i.length}>
+                                                    <div style={{backgroundColor: convertFDRtoHex(f.fdr_gw_i[0].difficulty_score, props.fdrToColor), color: contrastingColor(convertFDRtoHex(f.fdr_gw_i[0].difficulty_score, props.fdrToColor))}} className={'min-width color-' + g.difficulty_score + ' multiple-fixtures height-' + f.fdr_gw_i.length}>
                                                         { g.opponent_team_name == '-' ? "Blank" : (g.opponent_team_name + " (" + g.H_A + ")") }
                                                     </div>
                                                 ))}
@@ -75,3 +90,8 @@ export const ShowFDRData : FunctionComponent<ShowFDRProps> = (props) => {
 };
 
 export default ShowFDRData;
+
+ShowFDRData.defaultProps = {
+    fdrToColor: null,
+    allowToggleBorder: true,
+}

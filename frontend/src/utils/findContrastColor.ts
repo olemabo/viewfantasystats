@@ -1,5 +1,6 @@
 export function contrastingColor(color: string)
 {
+    if (color == null || color == "") { return ""; }
     if (color.includes("#")) { color = color.replace("#", ""); }
     return (luma(color) >= 165) ? '#000' : '#fff';
 }

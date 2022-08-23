@@ -1,0 +1,26 @@
+
+.col-sm-10 {
+    position: relative;
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+.big-container {
+    display: flex;
+    margin-top: 10px;
+    margin-bottom: 35px;
+
+    .container-rotation {
+        max-width: 1000px;
+        margin: 3px auto;
+        display: inline-block;
+        background-color: #dfdfdfc7;
+        border: 0px black solid;
+        height: 1000px;
+        overflow-y: auto;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+

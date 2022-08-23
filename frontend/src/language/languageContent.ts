@@ -33,7 +33,7 @@ export const content_json = {
                 avg_fdr_score: "Gj. snittlig FDR score:",
             },
             PeriodPlanner: {
-                title: "Rotation Planner",
+                title: "Period Planner",
             }, 
             fixture: "Fixture Planning",
             gw_start: "GW start:",

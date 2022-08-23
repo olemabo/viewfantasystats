@@ -15,7 +15,7 @@ import './rankStatistics.scss';
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
-export const RankStatistics : FunctionComponent<LanguageProps> = (props) => {
+export const RankStatisticsPage : FunctionComponent<LanguageProps> = (props) => {
     const player_ownership_api_path = "/statistics/rank-statistics-api/";
     
     const initial_last_x_years = 3;
@@ -188,4 +188,4 @@ export const RankStatistics : FunctionComponent<LanguageProps> = (props) => {
      </div></>
 };
 
-export default RankStatistics;
+export default RankStatisticsPage;

@@ -1,26 +1,20 @@
 import React, { useEffect, useState } from "react"; // this must be here
-import TopMenu from "../topMenu/topMenu";
-import Footer from "../footer/footer";
+import TopMenu from "../TopMenu/TopMenu";
+import Footer from "../Footer/Footer";
 import { Routes, Route } from "react-router-dom";
 import { store } from "../../../store/index";
 import { useSelector } from 'react-redux';
-// import FixturePlanner from "../../FPL/fixturePlanner/fixturePlanner";
-// import RotationPlanner from "../../FPL/rotationPlanner/rotationPlanner";
-// import PeriodePlanner from "../../FPL/periodePlanner/periodePlanner";
-import EliteserienFixturePlanner from "../../Eliteserien/eliteserienFixturePlanner/eliteserienFixturePlanner";
-import EliteserienRotationPlanner from "../../Eliteserien/rotationPlanner/eliteserienRotationPlanner";
-import EliteserienPeriodePlanner from "../../Eliteserien/periodePlanner/eliteserienPeriodePlanner";
-import PlayerOwnership from "../../Pages/playerOwnership/playerOwnership";
-import SearchUserName from "../../Eliteserien/searchUserName/searchUserName";
-import RankStatistics from "../../Eliteserien/rankStatistics/rankStatistics";
-import FixturePlannerPage from "../../Pages/FixturePlanner/FixturePlanner";
 import { FixturePlanningType } from '../../../models/fixturePlanning/FixturePlanningType';
-import RotationPlannerPage from "../../Pages/RotationPlanner/rotationPlanner";
-// enum FixturePlanningType {
-//     FDR = "FDR",
-//     Periode = "FDR-best",
-//     Rotation = "Rotation",
-// }
+
+
+import PlayerOwnership from "../../Pages/PlayerOwnership/PlayerOwnership";
+import SearchUserNamePage from '../../Pages/SearchUserName/SearchUserName';
+import RankStatisticsPage from '../../Pages/RankStatistics/RankStatistics';
+import FixturePlannerPage from '../../Pages/FixturePlanner/FixturePlanner';
+import RotationPlannerPage from '../../Pages/RotationPlanner/RotationPlanner';
+import FixturePlannerEliteserienPage from '../../Pages/FixturePlannerEliteserien/FixturePlannerEliteserien';
+import RotationPlannerEliteserienPage from '../../Pages/RotationPlannerEliteserien/RotationPlannerEliteserien';
+
 
 export const DefaultLayout = () => {
     const [ isAnyMenuOpen, setIsMenuOpen ] = useState(false);
@@ -32,7 +26,7 @@ export const DefaultLayout = () => {
     const fpl = "FPL";
     const eliteserien = "Eliteserien";
 
-    // useEffect will listen if isMenuOpen property from redux changes
+    // useEffect will listen if isMenuOpen property from redux changes 
     useEffect(() => {
         let isCancelled : boolean = false;
         if (isMenuOpenFromRedux != null) {
@@ -69,14 +63,14 @@ export const DefaultLayout = () => {
                             <Route path="/fixture-planner/fdr-planner/" element={<FixturePlannerPage fixture_planning_type={FixturePlanningType.FDR} league_type={fpl} content={langagueContent} />} />
                             <Route path="/fixture-planner/periode-planner/" element={<FixturePlannerPage fixture_planning_type={FixturePlanningType.Periode} league_type={fpl} content={langagueContent} />} />
                             {/* <Route path="/fixture-planner/rotation-planner/" element={<FixturePlannerPage fixture_planning_type={FixturePlanningType.Rotation} league_type={fpl} content={langagueContent} />} /> */}
-                            <Route path="/fixture-planner-eliteserien/" element={<EliteserienFixturePlanner content={langagueContent} />} />
-                            <Route path="/fixture-planner-eliteserien/fdr-planner/" element={<EliteserienFixturePlanner content={langagueContent} />} />
-                            <Route path="/fixture-planner-eliteserien/rotation-planner/" element={<EliteserienRotationPlanner content={langagueContent} />} />
-                            <Route path="/fixture-planner-eliteserien/periode-planner/" element={<EliteserienPeriodePlanner content={langagueContent} />} />
+                            <Route path="/fixture-planner-eliteserien/" element={<FixturePlannerEliteserienPage fixture_planning_type={FixturePlanningType.FDR} league_type={eliteserien} content={langagueContent} />} />
+                            <Route path="/fixture-planner-eliteserien/fdr-planner/" element={<FixturePlannerEliteserienPage fixture_planning_type={FixturePlanningType.FDR} league_type={eliteserien} content={langagueContent} />} />
+                            <Route path="/fixture-planner-eliteserien/rotation-planner/" element={<RotationPlannerEliteserienPage content={langagueContent} />} />
+                            <Route path="/fixture-planner-eliteserien/periode-planner/" element={<FixturePlannerEliteserienPage fixture_planning_type={FixturePlanningType.Periode} league_type={eliteserien} content={langagueContent} />} />
                             <Route path="/statistics/player-ownership/" element={<PlayerOwnership top_x_managers_default={1000} league_type={eliteserien} content={langagueContent} />} />
                             <Route path="/statistics-premier-league/player-ownership/" element={<PlayerOwnership top_x_managers_default={10000} league_type={fpl} content={langagueContent} />} />
-                            {/* <Route path="/statistics/search-user-names/" element={<SearchUserName content={langagueContent} />} />
-                            <Route path="/statistics/rank-statistics/" element={<RankStatistics content={langagueContent} />} /> */}
+                            <Route path="/statistics/search-user-names/" element={<SearchUserNamePage content={langagueContent} />} />
+                            <Route path="/statistics/rank-statistics/" element={<RankStatisticsPage content={langagueContent} />} />
                         </Routes>
                   </div>
               </div>

@@ -1,12 +1,13 @@
-import { KickOffTimesModel } from '../../../models/fixturePlanning/KickOffTimes';
 import { TeamFDRDataModel, FDR_GW_i, FDRData } from '../../../models/fixturePlanning/TeamFDRData';
-import { FilterButton } from '../../Shared/FilterButton/FilterButton';
-import { contrastingColor } from '../../../utils/findContrastColor';
-import { Spinner } from '../../Shared/Spinner/Spinner';
-// import "../../FPL/fixturePlanner/fixturePlanner.scss";
-import "../../Pages/FixturePlanner/FixturePlanner.scss";
-import { Button } from '../../Shared/Button/Button';
+import { FixturePlanningType } from '../../../models/fixturePlanning/FixturePlanningType';
+import { KickOffTimesModel } from '../../../models/fixturePlanning/KickOffTimes';
 import React, { useState, useEffect, FunctionComponent } from 'react';
+import { FilterButton } from '../../Shared/FilterButton/FilterButton';
+import { ShowFDRData } from '../../Fixtures/ShowFDRData/ShowFDRData';
+import { convertFDRtoHex } from '../../../utils/convertFDRtoHex';
+import "../../Pages/FixturePlanner/FixturePlanner.scss";
+import { Spinner } from '../../Shared/Spinner/Spinner';
+import { Button } from '../../Shared/Button/Button';
 import Popover from '../../Shared/Popover/Popover';
 import { store } from '../../../store/index';
 import axios from 'axios';
@@ -14,15 +15,19 @@ import axios from 'axios';
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
-type LanguageProps = {
+type FixturePlannerPageProps = {
     content: any;
+    league_type: string;
+    fixture_planning_type: string;
 }
 
-export const EliteserienFixturePlanner : FunctionComponent<LanguageProps> = (props) => {
+export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPageProps> = (props) => {
     const fixture_planner_kickoff_time_api_path = "/fixture-planner-eliteserien/get-eliteserien-kickoff-times/";
     const fixture_planner_api_path = "/fixture-planner-eliteserien/get-all-eliteserien-fdr-data/";
+    
     const min_gw = 1;
     const max_gw = 30;
+    
     const empty: TeamFDRDataModel[] = [ { team_name: "-", FDR: [], checked: true, font_color: "FFF", background_color: "FFF" }];
     const emptyGwDate: KickOffTimesModel[] = [{gameweek: 0, day_month: "",kickoff_time: "" }];
 
@@ -36,18 +41,17 @@ export const EliteserienFixturePlanner : FunctionComponent<LanguageProps> = (pro
     const [ maxGw, setMaxGw ] = useState(-1);
     const [ showTeamFilters, setShowTeamFilters ] = useState(false);
     const [ loading, setLoading ] = useState(false);
+    const [ minNumFixtures, setMinNumFixtures ] = useState(3);
 
     useEffect(() => {
-        if (store.getState()?.league_type != "Eliteserien") {
-            store.dispatch({type: "league_type", payload: "Eliteserien"});
-        }
+        store.dispatch({type: "league_type", payload: props.league_type});
 
         // Get fdr data from the API
         let body = { 
             start_gw: gwStart,
             end_gw: max_gw,
-            min_num_fixtures: '1',
-            combinations: 'FDR'
+            min_num_fixtures: minNumFixtures,
+            combinations: props.fixture_planning_type,
         };
         
         extractFDRData(body);
@@ -58,20 +62,17 @@ export const EliteserienFixturePlanner : FunctionComponent<LanguageProps> = (pro
         var body = {
             start_gw: gwStart,
             end_gw: gwEnd,
-            min_num_fixtures: '1',
-            combinations: 'FDR'
+            min_num_fixtures: minNumFixtures,
+            combinations: props.fixture_planning_type,
         };
 
         extractFDRData(body);
     }
 
-    function isEmpty(obj: {}) {
-        return Object.keys(obj).length === 0;
-      }
-
     function extractFDRData(body: any) {
-        // Get fdr data from api
         setLoading(true);
+        
+        // Get fdr data from api
         axios.post(fixture_planner_api_path, body).then((x: any) => {
             let apiFDRList: TeamFDRDataModel[] = [];
             let data = JSON.parse(x.data);
@@ -92,12 +93,9 @@ export const EliteserienFixturePlanner : FunctionComponent<LanguageProps> = (pro
             if (data?.gws_and_dates?.length > 0) {
                 let temp_KickOffTimes: KickOffTimesModel[] = [];
                 data?.gws_and_dates.forEach((kickoff: string) => temp_KickOffTimes.push(JSON.parse(kickoff)));
-                // setKickOffTimes(temp_KickOffTimes);
                 setKickOffTimesToShow(temp_KickOffTimes.slice(data.gw_start - 1, data.gw_end));
             }
-
             
-            let index = 0;
             data.fdr_data.forEach((team: any[]) => {
                 let team_name = JSON.parse(team[0][0][0]).team_name;
 
@@ -127,10 +125,8 @@ export const EliteserienFixturePlanner : FunctionComponent<LanguageProps> = (pro
                 }
                 let tempTeamData = { team_name: team_name, FDR: FDR_gw_i, checked: true, font_color: font_color, background_color: background_color }
                 apiFDRList.push(tempTeamData);
-                index += 1;
             });
 
-            // setFdrDataAllTeamsNew(apiFDRList);
             setFdrDataToShow(apiFDRList);
             setLoading(false);
         })
@@ -148,45 +144,51 @@ export const EliteserienFixturePlanner : FunctionComponent<LanguageProps> = (pro
         setFdrDataToShow(temp);
     }
 
-    function convertFDRtoHex(fdr: string) {
-        if (isEmpty(fdrToColor)) return fdr;
-        var float = parseFloat(fdr);
-        if (float == 0.5) return "#" + fdrToColor[0.5].substring(2);
-        var int = parseInt(fdr);
-        if (int == 1) return "#" + fdrToColor[1].substring(2);
-        if (int == 2) return "#" + fdrToColor[2].substring(2);
-        if (int == 3) return "#" + fdrToColor[3].substring(2);
-        if (int == 4) return "#" + fdrToColor[4].substring(2);
-        if (int == 5) return "#" + fdrToColor[5].substring(2);
-        return "#000";
+    var title_fixture_planner = props.content.Fixture.FixturePlanner.title
+    var title_rotation_planner = props.content.Fixture.RotationPlanner.title
+    var title_period_planner = props.content.Fixture.PeriodPlanner.title
+
+    var title = title_fixture_planner;
+    var description = "";
+    
+    if (props.fixture_planning_type == FixturePlanningType.FDR) { 
+        title = title_fixture_planner;
+        description = title + " (Fixture Difficulty Rating) rangerer lag etter best kampprogram mellom to runder " +
+        "('" + props.content.Fixture.gw_start.toString() + "'" + " og " + "'" + props.content.Fixture.gw_end.toString() + "')" + 
+        ". Best kampprogram ligger øverst og dårligst nederst. ";
+    }
+
+    if (props.fixture_planning_type == FixturePlanningType.Periode) { 
+        title = title_period_planner;
+        description = title + " markerer perioden et lag har best kampprogram mellom to runder. Beste rekke med kamper er markert svart kantfarger. "
+        + "Eksempelvis ønsker man å finne ut hvilken periode mellom runde 1 og 20 hvert lag har best kamper. "
+        + "'" + props.content.Fixture.gw_start.toString() + "'" + " og " + "'" + props.content.Fixture.gw_end.toString() + "'" + " blir da henholdsvis 1 og 20. "
+        + "'" + props.content.Fixture.min_fixtures.toString() + "'" + " er minste antall etterfølgende kamper et lag må ha. ";
     }
 
     return <>
     <div className='fixture-planner-container' id="fixture-planner-container">
-        <h1>{props.content.Fixture.FixturePlanner.title}<Popover 
+        <h1>{title}<Popover 
             id={"rotations-planner-id"}
             title=""
             algin_left={true}
-            popover_title={props.content.Fixture.FixturePlanner.title} 
+            popover_title={title} 
             iconSize={14}
             iconpostition={[-10, 0, 0, 3]}
-            popover_text={ props.content.Fixture.FixturePlanner.title + " (Fixture Difficulty Rating) rangerer lag etter best kampprogram mellom to runder " +
-            "('" + props.content.Fixture.gw_start.toString() + "'" + " og " + "'" + props.content.Fixture.gw_end.toString() + "')" + 
-            ". Best kampprogram ligger øverst og dårligst nederst. "
-            }>
+            popover_text={ description }>
             Kampprogram, vanskelighetsgrader og farger er hentet fra 
             <a href="https://docs.google.com/spreadsheets/d/168WcZ2mnGbSh-aI-NheJl5OtpTgx3lZL-YFV4bAJRU8/edit?usp=sharing">Excel arket</a>
             til Dagfinn Thon.
             { fdrToColor != null && 
                 <><p className='diff-introduction-container'>
                     FDR verdier: 
-                    <span style={{backgroundColor: convertFDRtoHex("0.5")}} className="diff-introduction-box wide">0.25</span>
-                    <span style={{backgroundColor: convertFDRtoHex("1")}} className="diff-introduction-box">1</span>
-                    <span style={{backgroundColor: convertFDRtoHex("2")}} className="diff-introduction-box">2</span>
-                    <span style={{backgroundColor: convertFDRtoHex("3")}} className="diff-introduction-box">3</span>
-                    <span style={{backgroundColor: convertFDRtoHex("4")}} className="diff-introduction-box">4</span>
-                    <span style={{backgroundColor: convertFDRtoHex("5")}} className="diff-introduction-box">5</span>
-                    <span style={{backgroundColor: convertFDRtoHex("10")}} className="diff-introduction-box black">10</span>
+                    <span style={{backgroundColor: convertFDRtoHex("0.5", fdrToColor)}} className="diff-introduction-box wide">0.25</span>
+                    <span style={{backgroundColor: convertFDRtoHex("1", fdrToColor)}} className="diff-introduction-box">1</span>
+                    <span style={{backgroundColor: convertFDRtoHex("2", fdrToColor)}} className="diff-introduction-box">2</span>
+                    <span style={{backgroundColor: convertFDRtoHex("3", fdrToColor)}} className="diff-introduction-box">3</span>
+                    <span style={{backgroundColor: convertFDRtoHex("4", fdrToColor)}} className="diff-introduction-box">4</span>
+                    <span style={{backgroundColor: convertFDRtoHex("5", fdrToColor)}} className="diff-introduction-box">5</span>
+                    <span style={{backgroundColor: convertFDRtoHex("10", fdrToColor)}} className="diff-introduction-box black">10</span>
                 </p>
                 <p>Lilla bokser markerer en dobbelt runde, mens svarte bokser markerer at laget ikke har kamp den runden.</p></>
             }
@@ -216,8 +218,22 @@ export const EliteserienFixturePlanner : FunctionComponent<LanguageProps> = (pro
                     id="input-form-start-gw" 
                     name="input-form-start-gw">
                 </input>
-                <input className="submit" type="submit" value={props.content.General.search_button_name}>
-                </input>
+
+                { props.fixture_planning_type == FixturePlanningType.Periode && 
+                <><br />
+                    {props.content.Fixture.min_fixtures}
+                    <input 
+                        className="box" 
+                        type="number" 
+                        min={1} 
+                        max={gwEnd}
+                        value={minNumFixtures} 
+                        onInput={(e) => setMinNumFixtures(parseInt(e.currentTarget.value))} 
+                        id="min_num_fixtures" 
+                        name="min_num_fixtures" /></>
+                }
+
+                <input className="submit" type="submit" value={props.content.General.search_button_name} />
             </form> 
         }
      
@@ -239,70 +255,15 @@ export const EliteserienFixturePlanner : FunctionComponent<LanguageProps> = (pro
             <div style={{ backgroundColor: "#E8E8E8"}}><Spinner /></div>
         }
 
-
         { !loading && fdrDataToShow.length > 0 && fdrDataToShow[0].team_name != "-" && kickOffTimesToShow.length > 0 && kickOffTimesToShow[0].gameweek != 0 && (
-            <div>
-                <div className="container-fdr">
-                    <div id="fdr-table" className="container-rotation">
-                        <div id="fdr-team-names">
-                            <table>
-                                <tbody id="fdr-names">
-                                    <tr>
-                                        <td className="name-column min-width">
-                                            {props.content.Fixture.team}
-                                        </td>
-                                    </tr>
-                                    { fdrDataToShow.map(fdr => (<>
-                                        { fdr.checked && (
-                                            <tr>
-                                                <td className='name-column min-width'>
-                                                    {fdr.team_name}
-                                                </td>
-                                            </tr>
-                                        )}</>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                        <div id="fdr-team-difficulty">
-                            <table>
-                                <tbody id="fdr-gws">
-                                    <tr id="fdr-row-gws">
-                                        { kickOffTimesToShow.map(gw =>
-                                            <th>{props.content.General.round_short}{gw.gameweek}
-                                                <div className="day_month">
-                                                    { gw.day_month }
-                                                </div>
-                                            </th>
-                                        )}
-                                    </tr>
-                                    { fdrDataToShow.map(fdr => 
-                                        <>
-                                         { fdr.checked && (
-                                            <tr id={"fdr-row-" + fdr.team_name}>
-                                                { fdr.FDR.map(f => (
-                                                    <td scope='col' style={{backgroundColor: convertFDRtoHex(f.fdr_gw_i[0].difficulty_score)}} className={'min-width'
-                                                    + (f.fdr_gw_i.length == 1 ? " color-" + f.fdr_gw_i[0].difficulty_score + " " : " no-padding ") + 'double-border-' + f.fdr_gw_i[0].Use_Not_Use  }>
-
-                                                        { f.fdr_gw_i.map(g => (
-                                                            <div style={{backgroundColor: convertFDRtoHex(f.fdr_gw_i[0].difficulty_score), color: contrastingColor(convertFDRtoHex(f.fdr_gw_i[0].difficulty_score))}} className={'min-width color-' + g.difficulty_score + ' multiple-fixtures height-' + f.fdr_gw_i.length}>
-                                                                { g.opponent_team_name == '-' ? "Blank" : (g.opponent_team_name.toUpperCase() + " (" + g.H_A + ")") }
-                                                            </div>
-                                                        ))}
-                                                    </td>
-                                                ))}
-                                            </tr>
-                                        )}
-                                        </>
-                                    )}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <ShowFDRData 
+                content={props.content}
+                fdrData={fdrDataToShow}
+                kickOffTimes={kickOffTimesToShow}
+                allowToggleBorder={true}
+                fdrToColor={fdrToColor} />
         )}
      </div> </>
 };
 
-export default EliteserienFixturePlanner;
+export default FixturePlannerEliteserienPage;

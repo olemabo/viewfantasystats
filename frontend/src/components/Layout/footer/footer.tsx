@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from "react";
-import "./footer.scss";
+import "./Footer.scss";
 import Twitter from '@material-ui/icons/Twitter';
 import Code from '@material-ui/icons/Code';
 import { useSelector } from "react-redux";

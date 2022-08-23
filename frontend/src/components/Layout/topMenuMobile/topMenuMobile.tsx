@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import "./topMenuMobile.scss";
+import React, { useState } from "react";
+import "./TopMenuMobile.scss";
 import MenuIcon from '@material-ui/icons/Menu';
 import CloseIcon from '@material-ui/icons/Close';
 import HomeIcon from '@material-ui/icons/Home';
@@ -18,8 +18,6 @@ interface TopMenyProps {
 }
 
 export const TopMenuMobile: React.FunctionComponent<TopMenyProps> = (props) => {
-    const menuNameOpen = "Meny";
-    const menuNameClosed = "Close";
     const [ MenuOpen, setMenuOpen ] = useState(false);
     const fpl = "FPL";
     const eliteserien = "Eliteserien";
@@ -39,6 +37,7 @@ export const TopMenuMobile: React.FunctionComponent<TopMenyProps> = (props) => {
 
     const norwegain = "no";
     const english = "en";
+    
     function updateLanguage(lang: string) {
         if (lang == english) {
             store.dispatch({type: "language", payload: content_json.English});

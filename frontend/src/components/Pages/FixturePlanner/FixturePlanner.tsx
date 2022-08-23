@@ -1,5 +1,5 @@
 import { SimpleTeamFDRDataModel, FDR_GW_i, FDRData } from '../../../models/fixturePlanning/TeamFDRData';
-import { DefaultPageContainer } from '../../Layout/defaultPageContainer/DefaultPageContainer';
+import { DefaultPageContainer } from '../../Layout/DefaultPageContainer/DefaultPageContainer';
 import { FixturePlanningType } from '../../../models/fixturePlanning/FixturePlanningType';
 import { KickOffTimesModel } from '../../../models/fixturePlanning/KickOffTimes';
 import { FilterButton } from '../../Shared/FilterButton/FilterButton';
@@ -140,16 +140,6 @@ export const FixturePlannerPage : FunctionComponent<FixturePlannerPageProps> = (
         setFdrDataToShow(temp);
     }
 
-    function toggleBorderLine(e: React.MouseEvent<HTMLTableCellElement, MouseEvent>) {
-        let classList = e.currentTarget.classList;
-        if (classList.contains("double-border-0")) {
-            e.currentTarget.classList.replace("double-border-0", "double-border-1")
-        }
-        else if (classList.contains("double-border-1")) {
-            e.currentTarget.classList.replace("double-border-1", "double-border-0")
-        }
-    }
-
     var title_fixture_planner = props.content.Fixture.FixturePlanner.title
     var title_rotation_planner = props.content.Fixture.RotationPlanner.title
     var title_period_planner = props.content.Fixture.PeriodPlanner.title
@@ -212,7 +202,7 @@ export const FixturePlannerPage : FunctionComponent<FixturePlannerPageProps> = (
             <div className='filter-teams-container'>
                 <div className='filter-teams-list'>
                 { fdrDataToShow.map(team_name =>
-                    <FilterButton fontColor={"1"} backgroundColor={"0"}  onclick={(e: any) => toggleCheckbox(e)} buttonText={team_name.team_name} checked={team_name.checked} />
+                    <FilterButton fontColor={"1"} backgroundColor={"0"} onclick={(e: any) => toggleCheckbox(e)} buttonText={team_name.team_name} checked={team_name.checked} />
                 )}
                 </div>
             </div>
@@ -227,7 +217,7 @@ export const FixturePlannerPage : FunctionComponent<FixturePlannerPageProps> = (
                 content={props.content}
                 fdrData={fdrDataToShow}
                 kickOffTimes={kickOffTimesToShow}
-                toggleBorder={(e: any) => toggleBorderLine(e)}
+                allowToggleBorder={true}
             />
         )}
     </DefaultPageContainer>

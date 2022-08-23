@@ -3,14 +3,15 @@ import React, { useState, useEffect, FunctionComponent } from 'react';
 import Pagination from 'rc-pagination';
 import axios from 'axios';
 
-import { DefaultPageContainer } from '../../Layout/defaultPageContainer/DefaultPageContainer';
+import { DefaultPageContainer } from '../../Layout/DefaultPageContainer/DefaultPageContainer';
 import { PlayerOwnershipModel } from '../../../models/playerOwnership/PlayerOwnershipModel';
 import { TeamNameAndIdModel } from '../../../models/playerOwnership/TeamNameAndIdModel';
 import { ChipUsageModel } from '../../../models/playerOwnership/ChipUsageModel';
 import { TableSortHead } from '../../Shared/TableSortHead/TableSortHead';
 import { Spinner } from '../../Shared/Spinner/Spinner';
+import '../../Shared/Pagination/Pagination.scss';
 import { store } from '../../../store/index';
-import './playerOwnership.scss';
+import './PlayerOwnership.scss';
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';

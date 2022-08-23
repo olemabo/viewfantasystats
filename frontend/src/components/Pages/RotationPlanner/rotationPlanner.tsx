@@ -1,5 +1,5 @@
 import { RotationPlannerTeamInfoModel } from '../../../models/fixturePlanning/RotationPlannerTeamInfo';
-import { DefaultPageContainer } from '../../Layout/defaultPageContainer/DefaultPageContainer';
+import { DefaultPageContainer } from '../../Layout/DefaultPageContainer/DefaultPageContainer';
 import { ShowRotationData } from '../../Fixtures/ShowRotationData/ShowRotationData';
 import { KickOffTimesModel } from '../../../models/fixturePlanning/KickOffTimes';
 import { TeamCheckedModel } from '../../../models/fixturePlanning/TeamChecked';
@@ -7,7 +7,7 @@ import React, { useState, useEffect, FunctionComponent } from 'react';
 import { CheckBox } from '../../Shared/CheckBox/CheckBox';
 import { Spinner } from '../../Shared/Spinner/Spinner';
 import { Button } from '../../Shared/Button/Button';
-import "../RotationPlanner/rotationPlanner.scss";
+import "./RotationPlanner.scss";
 import { store } from '../../../store/index';
 import axios from 'axios';
 

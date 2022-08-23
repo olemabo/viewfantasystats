@@ -2,17 +2,16 @@ import { RotationPlannerTeamModel } from '../../../models/fixturePlanning/Rotati
 import { KickOffTimesModel } from '../../../models/fixturePlanning/KickOffTimes';
 import { TeamCheckedModel } from '../../../models/fixturePlanning/TeamChecked';
 
+import { DefaultPageContainer } from '../../Layout/DefaultPageContainer/DefaultPageContainer';
+import { ShowRotationData } from '../../Fixtures/ShowRotationData/ShowRotationData';
 import React, { useState, useEffect, FunctionComponent } from 'react';
-import { store } from '../../../store/index';
-import axios from 'axios';
-
-import { contrastingColor } from '../../../utils/findContrastColor';
-
-import { Button } from '../../Shared/Button/Button';
+import { convertFDRtoHex } from '../../../utils/convertFDRtoHex';
 import { CheckBox } from '../../Shared/CheckBox/CheckBox';
 import { Spinner } from '../../Shared/Spinner/Spinner';
 import { Popover } from '../../Shared/Popover/Popover';
-import { useSelector } from 'react-redux';
+import { Button } from '../../Shared/Button/Button';
+import { store } from '../../../store/index';
+import axios from 'axios';
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -21,7 +20,7 @@ type LanguageProps = {
     content: any;
 }
 
-export const EliteserienRotationPlanner : FunctionComponent<LanguageProps> = (props) => {
+export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> = (props) => {
     const fixture_planner_api_path = "/fixture-planner-eliteserien/get-all-eliteserien-fdr-data/";
     const min_gw = 1;
     const max_gw = 30;
@@ -31,7 +30,6 @@ export const EliteserienRotationPlanner : FunctionComponent<LanguageProps> = (pr
     const [ gwStart, setGwStart ] = useState(16);
     const [ gwEnd, setGwEnd ] = useState(max_gw);
     const [ fdrDataToShow, setFdrDataToShow ] = useState(empty);
-    const [ kickOffTimes, setKickOffTimes ] = useState(emptyGwDate);
     const [ kickOffTimesToShow, setKickOffTimesToShow ] = useState(emptyGwDate);
     const [ showTeamFilters, setShowTeamFilters ] = useState(false);
 
@@ -94,7 +92,6 @@ export const EliteserienRotationPlanner : FunctionComponent<LanguageProps> = (pr
             if (data?.gws_and_dates?.length > 0) {
                 let temp_KickOffTimes: KickOffTimesModel[] = [];
                 data?.gws_and_dates.forEach((kickoff: string) => temp_KickOffTimes.push(JSON.parse(kickoff)));
-                setKickOffTimes(temp_KickOffTimes);
                 setKickOffTimesToShow(temp_KickOffTimes.slice(gwStart - 1, body['end_gw']));
                 setGwEnd(body['end_gw']); 
             }
@@ -186,26 +183,9 @@ export const EliteserienRotationPlanner : FunctionComponent<LanguageProps> = (pr
             extractFDRData(body);
         }
     }
-    
-    function isEmpty(obj: {}) {
-        return Object.keys(obj).length === 0;
-    }
-
-    function convertFDRtoHex(fdr: string) {
-        if (isEmpty(fdrToColor)) return fdr;
-        var float = parseFloat(fdr);
-        if (float == 0.5) return "#" + fdrToColor[0.5].substring(2);
-        var int = parseInt(fdr);
-        if (int == 1) return "#" + fdrToColor[1].substring(2);
-        if (int == 2) return "#" + fdrToColor[2].substring(2);
-        if (int == 3) return "#" + fdrToColor[3].substring(2);
-        if (int == 4) return "#" + fdrToColor[4].substring(2);
-        if (int == 5) return "#" + fdrToColor[5].substring(2);
-        return "#000";
-    }
 
     return <>
-     <div className='fixture-planner-container' id="rotation-planner-container">
+    <DefaultPageContainer pageClassName='fixture-planner-container' heading={props.content.Fixture.RotationPlanner.title + " - " + store.getState().league_type} description={props.content.Fixture.RotationPlanner.title}>
          <h1>{props.content.Fixture.RotationPlanner.title}<Popover 
             id={"rotations-planner-id"}
             title=""
@@ -225,13 +205,13 @@ export const EliteserienRotationPlanner : FunctionComponent<LanguageProps> = (pr
             { fdrToColor != null && 
                 <><p className='diff-introduction-container'>
                     FDR verdier: 
-                    <span style={{backgroundColor: convertFDRtoHex("0.5")}} className="diff-introduction-box wide">0.25</span>
-                    <span style={{backgroundColor: convertFDRtoHex("1")}} className="diff-introduction-box">1</span>
-                    <span style={{backgroundColor: convertFDRtoHex("2")}} className="diff-introduction-box">2</span>
-                    <span style={{backgroundColor: convertFDRtoHex("3")}} className="diff-introduction-box">3</span>
-                    <span style={{backgroundColor: convertFDRtoHex("4")}} className="diff-introduction-box">4</span>
-                    <span style={{backgroundColor: convertFDRtoHex("5")}} className="diff-introduction-box">5</span>
-                    <span style={{backgroundColor: convertFDRtoHex("10")}} className="diff-introduction-box black">10</span>
+                    <span style={{backgroundColor: convertFDRtoHex("0.5", fdrToColor)}} className="diff-introduction-box wide">0.25</span>
+                    <span style={{backgroundColor: convertFDRtoHex("1", fdrToColor)}} className="diff-introduction-box">1</span>
+                    <span style={{backgroundColor: convertFDRtoHex("2", fdrToColor)}} className="diff-introduction-box">2</span>
+                    <span style={{backgroundColor: convertFDRtoHex("3", fdrToColor)}} className="diff-introduction-box">3</span>
+                    <span style={{backgroundColor: convertFDRtoHex("4", fdrToColor)}} className="diff-introduction-box">4</span>
+                    <span style={{backgroundColor: convertFDRtoHex("5", fdrToColor)}} className="diff-introduction-box">5</span>
+                    <span style={{backgroundColor: convertFDRtoHex("10", fdrToColor)}} className="diff-introduction-box black">10</span>
                 </p>
                 <p>Lilla bokser markerer en dobbelt runde, mens svarte bokser markerer at laget ikke har kamp den runden.</p></>
             }
@@ -315,78 +295,14 @@ export const EliteserienRotationPlanner : FunctionComponent<LanguageProps> = (pr
             <div style={{ backgroundColor: "#E8E8E8"}}><Spinner /></div>
         }
 
-        <div id="data-box" className="text-center mt-3">
-            <div className="big-container">
-                <div className="container-rotation">
-                    <div id="fdr-rotation">
-                        { !loading && fdrDataToShow.length > 0 && fdrDataToShow[0].avg_Score != -1 &&
-                            fdrDataToShow.map(row => 
-                                <>
-                                    <table className="rotation">
-                                        <tbody>
-                                            <tr>
-                                                <th className="name-col-rotation">
-                                                    {props.content.Fixture.team}
-                                                </th>
-                                                { kickOffTimesToShow.map(gw =>
-                                                    <th> {props.content.General.round_short}{gw.gameweek}
-                                                        <div className="day_month">
-                                                            { gw.day_month }
-                                                        </div>
-                                                    </th>
-                                                )}
-                                            </tr>
-                                            { row.fixture_list.map( (team_i: any[]) => (
-                                                <tr>
-                                                    { team_i.map( (team_i_j: any, index) => (
-                                                        <>
-                                                        { index == 0 && JSON.parse(team_i_j[0]).team_name && (
-                                                            <td className="name-column min-width">
-                                                                { JSON.parse(team_i_j[0]).team_name }
-                                                            </td>
-                                                        )}
-                                                        { team_i_j.length == 1 ?
-                                                            <td style={{backgroundColor: convertFDRtoHex(JSON.parse(team_i_j[0]).difficulty_score), color: contrastingColor(convertFDRtoHex(JSON.parse(team_i_j[0]).difficulty_score))}} scope="col" className={" min-width color-" + JSON.parse(team_i_j[0]).difficulty_score + " double-border-" + JSON.parse(team_i_j[0]).Use_Not_Use}>
-                                                                { team_i_j.map( (team: any) => {
-                                                                    var num_teams = team_i_j.length;
-                                                                    var json_team_data = JSON.parse(team); 
-                                                                    return <div style={{backgroundColor: convertFDRtoHex(json_team_data.difficulty_score), color: contrastingColor(convertFDRtoHex(json_team_data.difficulty_score))}} className={"min-width color-" + json_team_data.difficulty_score + " multiple-fixtures height-" + num_teams.toString() }>
-                                                                        { json_team_data.opponent_team_name == '-' ? "Blank" : 
-                                                                            json_team_data.opponent_team_name + " (" + json_team_data.H_A + ")"
-                                                                        }
-                                                                    </div>
-
-                                                                })}
-                                                            </td> :
-                                                            <td style={{backgroundColor: convertFDRtoHex(JSON.parse(team_i_j[0]).difficulty_score), color: contrastingColor(convertFDRtoHex(JSON.parse(team_i_j[0]).difficulty_score))}} scope="col" className={" min-width no-padding double-border-" + JSON.parse(team_i_j[0]).Use_Not_Use}>
-                                                                { team_i_j.map( (team: any) => {
-                                                                    var num_teams = team_i_j.length;
-                                                                    var json_team_data = JSON.parse(team); 
-                                                                    return <div style={{backgroundColor: convertFDRtoHex(json_team_data.difficulty_score), color: contrastingColor(convertFDRtoHex(json_team_data.difficulty_score))}} className={"min-width color-" + json_team_data.difficulty_score + " multiple-fixtures height-" + num_teams.toString() }>
-                                                                        { json_team_data.opponent_team_name == '-' ? "Blank" : 
-                                                                            json_team_data.opponent_team_name + " (" + json_team_data.H_A + ")"
-                                                                        }
-                                                                    </div>
-
-                                                                })}
-                                                            </td>
-                                                        }
-                                                        </>
-                                                    ))}
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                    <p> {props.content.Fixture.RotationPlanner.avg_fdr_score} <b> {row.avg_Score.toFixed(2)} </b></p>
-                                </>
-                            )
-                        }
-                    </div>
-                </div>
-            </div>
-        </div>
-     </div>  </>
-
+        { !loading && fdrDataToShow.length > 0 && fdrDataToShow[0].avg_Score != -1 &&
+            <ShowRotationData 
+                content={props.content}
+                fdrData={fdrDataToShow}
+                fdrToColor={fdrToColor}
+                kickOffTimes={kickOffTimesToShow} />
+        }
+     </DefaultPageContainer></>
 };
 
-export default EliteserienRotationPlanner;
+export default RotationPlannerEliteserienPage;

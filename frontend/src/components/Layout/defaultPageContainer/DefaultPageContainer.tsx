@@ -1,6 +1,6 @@
 import { HelmetAndMetaData } from '../../Shared/HelmetAndMetaData/HelmetAndMetaData';
-import React from 'react';
 import { useSelector } from 'react-redux';
+import React from 'react';
 
 type DefaultPageContainerProps = {
     heading: string;

@@ -1,4 +1,4 @@
-import { DefaultLayout } from './Layout/defaultLayout/defaultLayout';
+import { DefaultLayout } from './Layout/DefaultLayout/DefaultLayout';
 import { PersistGate } from 'redux-persist/integration/react'
 import { BrowserRouter } from "react-router-dom";
 import {store, persistor} from "../store/index";
@@ -15,10 +15,10 @@ export default App;
 
 ReactDOM.render(
     <BrowserRouter>
-    <Provider store={store}><PersistGate loading={null} persistor={persistor}>
-          <App />
-        </PersistGate>
-    </Provider>
+      <Provider store={store}><PersistGate loading={null} persistor={persistor}>
+            <App />
+          </PersistGate>
+      </Provider>
     </BrowserRouter>,
   document.getElementById('app')
 );

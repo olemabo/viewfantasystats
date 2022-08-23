@@ -12,7 +12,7 @@ import './searchUserName.scss';
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
-export const SearchUserName : FunctionComponent<LanguageProps> = (props) => {
+export const SearchUserNamePage : FunctionComponent<LanguageProps> = (props) => {
     const player_ownership_api_path = "/statistics/search-user-names-api/";
     
     const emptyHits: UserSearchHitModel[] = [{ hit_text: "", user_id: "", user_team_name: "", user_first_name: "", user_last_name: ""}];
@@ -99,4 +99,4 @@ export const SearchUserName : FunctionComponent<LanguageProps> = (props) => {
      </div></>
 };
 
-export default SearchUserName;
+export default SearchUserNamePage;

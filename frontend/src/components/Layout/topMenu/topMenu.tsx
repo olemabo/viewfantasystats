@@ -1,11 +1,11 @@
 import { useWindowDimensions } from "../../../utils/useWindowDimensions";
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { content_json } from "../../../language/languageContent";
-import { TopMenuMobile } from "../topMenuMobile/topMenuMobile";
+import { TopMenuMobile } from '../TopMenuMobile/TopMenuMobile';
+import { store } from '../../../store/index';
 import { useSelector } from 'react-redux';
-import { store, persistor } from '../../../store/index';
 import { Link } from "react-router-dom";
-import "./topMenu.scss";
+import "./TopMenu.scss";
 
 type LanguageProps = {
     content: any;
