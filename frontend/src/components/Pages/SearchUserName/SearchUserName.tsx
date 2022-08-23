@@ -7,7 +7,7 @@ import { UserSearchHitModel } from '../../../models/SearchUserName/UserSearchHit
 import { LanguageProps } from '../../../models/shared/LanguageProps';
 import { Spinner } from '../../Shared/Spinner/Spinner';
 import { store } from '../../../store/index';
-import './searchUserName.scss';
+import './SearchUserName.scss';
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
