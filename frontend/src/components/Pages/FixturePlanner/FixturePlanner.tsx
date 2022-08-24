@@ -58,10 +58,10 @@ export const FixturePlannerPage : FunctionComponent<FixturePlannerPageProps> = (
                 x.data.forEach((kickoff: string) => temp_KickOffTimes.push(JSON.parse(kickoff)));
                 setKickOffTimes(temp_KickOffTimes);
                 setKickOffTimesToShow(temp_KickOffTimes.slice(body['start_gw'] - 1, body['end_gw']));
+                extractFDRData(body, temp_KickOffTimes);
             }
         })
 
-        extractFDRData(body, temp_KickOffTimes)
     }, []);
 
 
