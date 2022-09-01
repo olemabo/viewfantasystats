@@ -49,7 +49,7 @@ def readEliteserienExcelToDBFormat(path=r'stored_data/eliteserien/Eliteserien_fi
 
 def readEliteserienExcelFromDagFinnToDBFormat(path=r'stored_data/eliteserien/fixture_data/Eliteserien_fixtures.xlsx'):
     max_teams = 18
-    max_games = 30
+    max_games = 30 + 2
     wb = load_workbook(path, data_only=True)
     sheet_names = wb.sheetnames
     ws_fdr = wb[sheet_names[0]]
@@ -62,7 +62,6 @@ def readEliteserienExcelFromDagFinnToDBFormat(path=r'stored_data/eliteserien/fix
 
     column_letters_list = get_list_of_column_letters_from_int_range(2, max_games)
     row_numbers_list = get_list_of_row_numbers_from_int_range(3, max_teams + 1)
-
     team_name_hexcolor = []
 
     max_gws = 0
