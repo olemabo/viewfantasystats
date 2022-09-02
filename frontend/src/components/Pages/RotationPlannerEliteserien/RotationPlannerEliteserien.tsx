@@ -27,7 +27,7 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
     const empty: RotationPlannerTeamModel[] = [ { avg_Score: -1, id_list: [], team_name_list: [], extra_fixtures: -1, home_games: -1, fixture_list: [] }];
     const emptyGwDate: KickOffTimesModel[] = [{gameweek: 0, day_month: "",kickoff_time: "" }];
 
-    const [ gwStart, setGwStart ] = useState(16);
+    const [ gwStart, setGwStart ] = useState(21);
     const [ gwEnd, setGwEnd ] = useState(max_gw);
     const [ fdrDataToShow, setFdrDataToShow ] = useState(empty);
     const [ kickOffTimesToShow, setKickOffTimesToShow ] = useState(emptyGwDate);
