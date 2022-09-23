@@ -165,7 +165,7 @@ export const RankStatisticsPage : FunctionComponent<LanguageProps> = (props) => 
         { !isLoading && ranksToShow.length > 0 && ranksToShow[0].user_id != "" &&  
         <>
             <div className="container-player-stats">
-            <table>
+            <table className='stat-table'>
                 <thead>
                     <tr>
                         <th className="narrow">{props.content.General.rank}</th>

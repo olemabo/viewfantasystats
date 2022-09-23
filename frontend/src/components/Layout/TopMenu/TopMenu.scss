@@ -34,17 +34,17 @@
             .circle-link {
                 display: block;
                 // width: 27px;
-                height: 20px;
+                height: 21px;
                 border-radius: 25px;
                 background-color: white; // default circle color
                 // margin: 1px 10px;
                 
                 box-shadow: 0 0 0 1px #c8c8c8a3;
-                margin: 0 10px 6px 20px;
+                margin: 0 10px 5px 20px;
                 color: white;
                 font-size: 12px;
                 padding-left: 10px;
-                padding-top: 0px;
+                padding-top: 1px;
                 width: 40px !important;
 
                 &.fpl {
