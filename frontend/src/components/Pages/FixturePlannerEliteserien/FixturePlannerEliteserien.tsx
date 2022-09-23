@@ -147,9 +147,9 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
         setFdrDataToShow(temp);
     }
 
-    var title_fixture_planner = props.content.Fixture.FixturePlanner.title
-    var title_rotation_planner = props.content.Fixture.RotationPlanner.title
-    var title_period_planner = props.content.Fixture.PeriodPlanner.title
+    var title_fixture_planner = props.content.Fixture.FixturePlanner?.title
+    var title_rotation_planner = props.content.Fixture.RotationPlanner?.title
+    var title_period_planner = props.content.Fixture.PeriodPlanner?.title
 
     var title = title_fixture_planner;
     var description = "";

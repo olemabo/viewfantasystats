@@ -64,7 +64,7 @@ export const TopMenuMobile: React.FunctionComponent<TopMenyProps> = (props) => {
         <div className="fpl-linear-gradient-color-darker">
             <div className="top-menu-container">
                 <div className="header-title">
-                    { props.title}
+                    { props?.title}
                 </div>
                 <div className="header-menu-section">
                     {/* <div className="top-menu-mobile-circle-container">
@@ -98,22 +98,22 @@ export const TopMenuMobile: React.FunctionComponent<TopMenyProps> = (props) => {
                             {/* <h2>Fixture Planning</h2> */}
                             <li className="sub-menu-item">
                                 {/* <HomeIcon /> */}
-                                <a onClick={() => closeMenu()} href={"../../../" + urls.url_elitserien_fdr_planner}>{props.content.Fixture.FixturePlanner.title}</a>
+                                <a onClick={() => closeMenu()} href={"../../../" + urls.url_elitserien_fdr_planner}>{props.content.Fixture.FixturePlanner?.title}</a>
                             </li>
                             <li className="sub-menu-item">
                                 {/* <SportsSoccerIcon /> */}
-                                <a onClick={() => closeMenu()} href={"../../../" + urls.url_eliteserien_rotation_planner}>{props.content.Fixture.RotationPlanner.title}</a>
+                                <a onClick={() => closeMenu()} href={"../../../" + urls.url_eliteserien_rotation_planner}>{props.content.Fixture.RotationPlanner?.title}</a>
                             </li>
                             <li onClick={() => closeMenu()} className="sub-menu-item">
                                 {/* <BarChartIcon /> */}
-                                <a href={"../../../" + urls.url_eliteserien_periode_planner}>{props.content.Fixture.PeriodPlanner.title}</a>
+                                <a href={"../../../" + urls.url_eliteserien_periode_planner}>{props.content.Fixture.PeriodPlanner?.title}</a>
                             </li>
                             {/* <h2>Statistics</h2> */}
                             <li onClick={() => closeMenu()} className="sub-menu-item">
-                                <a href={"../../../" + urls.url_eliteserien_player_ownership}>{props.content.Statistics.PlayerOwnership.title}</a>
+                                <a href={"../../../" + urls.url_eliteserien_player_ownership}>{props.content.Statistics.PlayerOwnership?.title}</a>
                             </li>
                             <li onClick={() => closeMenu()} className="sub-menu-item">
-                                <a href={"../../../" + urls.url_eliteserien_rank_statistics}>{props.content.Statistics.RankStatistics.title}</a>
+                                <a href={"../../../" + urls.url_eliteserien_rank_statistics}>{props.content.Statistics.RankStatistics?.title}</a>
                             </li>
                             </>
                         }   
@@ -121,22 +121,22 @@ export const TopMenuMobile: React.FunctionComponent<TopMenyProps> = (props) => {
                         { league_type == fpl && <>
                             <li className="sub-menu-item">
                                 {/* <HomeIcon /> */}
-                                <a onClick={() => closeMenu()} href={"../../../" + urls.url_premier_league_fdr_planner}>{props.content.Fixture.FixturePlanner.title}</a>
+                                <a onClick={() => closeMenu()} href={"../../../" + urls.url_premier_league_fdr_planner}>{props.content.Fixture.FixturePlanner?.title}</a>
                             </li>
                             <li className="sub-menu-item">
                                 {/* <SportsSoccerIcon /> */}
-                                <a onClick={() => closeMenu()} href={"../../../" + urls.url_premier_league_rotation_planner}>{props.content.Fixture.RotationPlanner.title}</a>
+                                <a onClick={() => closeMenu()} href={"../../../" + urls.url_premier_league_rotation_planner}>{props.content.Fixture.RotationPlanner?.title}</a>
                             </li>
                             <li className="sub-menu-item">
                                 {/* <BarChartIcon /> */}
-                                <a onClick={() => closeMenu()} href={"../../../" + urls.url_premier_league_periode_planner}>{props.content.Fixture.PeriodPlanner.title}</a>
+                                <a onClick={() => closeMenu()} href={"../../../" + urls.url_premier_league_periode_planner}>{props.content.Fixture.PeriodPlanner?.title}</a>
                             </li>
                             <li onClick={() => closeMenu()} className="sub-menu-item">
-                                <a href={"../../../" + urls.url_premier_league_player_ownership}>{props.content.Statistics.PlayerOwnership.title}</a>
+                                <a href={"../../../" + urls.url_premier_league_player_ownership}>{props.content.Statistics.PlayerOwnership?.title}</a>
                             </li>
 
                             <li onClick={() => closeMenu()} className="sub-menu-item">
-                                <a href={"../../../" + urls.url_premier_league_player_statistics}>{props.content.Statistics.PlayerStatistics.title}</a>
+                                <a href={"../../../" + urls.url_premier_league_player_statistics}>{props.content.Statistics.PlayerStatistics?.title}</a>
                             </li>
                             </>
                         }

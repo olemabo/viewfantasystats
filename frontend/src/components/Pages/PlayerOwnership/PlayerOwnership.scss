@@ -196,7 +196,11 @@
             grid-template-columns: 0.5fr 0.5fr !important;
             
             label {
-                margin-top: 5px !important;
+                margin-top: 5px;
+
+                &.hidden {
+                    margin-top: -5px !important;
+                }
             }
         }
 

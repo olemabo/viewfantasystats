@@ -156,6 +156,15 @@
         }
     }
 
+    @media (max-width: 600px) {
+        .form-stuff {
+                        
+            .input-box {
+                height: 35px !important;
+            }
+        }
+    }
+
     @media (max-width: 300px) {
         .form-stuff {
             grid-template-columns: 0.5fr 0.5fr;
@@ -222,6 +231,12 @@
         border: 1px solid white;
         margin-left: auto !important;
         padding-left: 5px;
+    }
+
+    select {
+        // border: 1px solid var(--black-color);
+        border: 1px solid var(--white-color);
+        background-color: var(--white-color);
     }
 }
 
