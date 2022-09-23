@@ -62,7 +62,7 @@ export const DefaultLayout = () => {
         { (!isAnyMenuOpen) && 
         <><div className="showcase">
         </div>
-        <div className="front-page-bottom">
+        <div className={"front-page-bottom " + leagueTypeFromRedux}>
             <div className="start-container">
               <div className="content-container">
                   <div className="col-sm-10 max-width">

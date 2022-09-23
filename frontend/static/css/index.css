@@ -19,7 +19,7 @@
     /* --eliteserien-linear-gradient-second-color: #2c3e50; */
     --eliteserien-linear-gradient-second-color: #1b2f44;
     --height-the-gray-box-should-go-into-header: -0px;
-    --height-the-gray-box-should-go-away-from-header: 0px; /* Give this the same value as the var above only opposite sign */
+    --height-the-gray-box-should-go-away-from-header: 2px; /* Give this the same value as the var above only opposite sign */
     --size-of-scewY: 30px;
     --size-of-top-bar: 100px;
     --size-of-top-bar-mobile: 60px;
@@ -32,8 +32,8 @@
     --max-width: 1000px;
 
     /* Header */
-    --font-size-menu-items: 17px;
-    --font-size-menu-sub-items: 15px;
+    --font-size-menu-items: 16px;
+    --font-size-menu-sub-items: 14px;
     --font-size-header-title: 26px;
 
     /* Components */
@@ -45,8 +45,8 @@
     --table-thead-color: var(--white-color);
     --table-even-rows: rgb(248, 249, 249);
     --table-odd-rows: rgb(255, 255, 255);
-    --table-thead-tr-color: white;
-    --table-thead-tr-background-color: #0f3443;
+    --table-thead-tr-color: black;
+    --table-thead-tr-background-color: #dceaf6;
 
     /* Fixture Planning */
     --name-col-color: #dfdfdfc7;

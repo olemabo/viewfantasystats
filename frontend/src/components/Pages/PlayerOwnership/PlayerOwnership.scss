@@ -12,6 +12,11 @@
     max-width: 920px;
     margin: auto;
 
+    table thead tr {
+        background-color: var(--table-thead-tr-background-color) !important;
+        color: var(--table-thead-tr-color) !important;
+    }
+
     .name-col {
         padding-left: 10px;
     }
@@ -52,6 +57,14 @@
         height: 20px;
     }
     
+    th, td {
+        border-color: transparent !important;
+    }
+
+    thead {
+        background-color: var(--table-thead-tr-background-color);
+    }
+    
     tbody tr {
         height: 30px;
     }
@@ -84,6 +97,10 @@
         thead tr {
             background-color: var(--table-thead-color);
         }
+
+        tbody tr:first-child td {
+            border-top: 1px solid transparent;
+        }
     }
 
     td {
@@ -107,7 +124,6 @@
       border-top: none;
     }
     
-    
     .name-col {
         text-align: left;
         width: 170px;
@@ -116,7 +132,7 @@
     
     .input-box {
         height: 30px;
-        margin-left: var(--margin-left);
+        // margin-left: var(--margin-left);
         margin-right: var(--margin-right);
     }
     
@@ -161,7 +177,8 @@
         }
 
         select {
-            border: 1px solid var(--black-color);
+            // border: 1px solid var(--black-color);
+            border: 1px solid var(--white-color);
             background-color: var(--white-color);
         }
         
@@ -301,4 +318,8 @@
 .ant-pagination {
     margin-top: 10px;
     margin-bottom: 25px;
+}
+
+.FPL .player-ownership-container table thead tr {
+    background-color: #cce8cf !important;
 }
