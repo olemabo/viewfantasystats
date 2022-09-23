@@ -1,5 +1,5 @@
-from utils.models.Fixtures import Fixtures
-from utils.models.Team import Team
+from utils.dataFetch.Fixtures import Fixtures
+from utils.dataFetch.Team import Team
 
 import pandas as pd
 

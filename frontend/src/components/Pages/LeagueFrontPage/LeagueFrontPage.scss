@@ -1,0 +1,61 @@
+.front-page-container {
+    max-width: 920px;
+    margin: auto;
+
+    h1 {
+        text-align: left;
+    }
+
+    table {
+        background-color: var(--white-color);
+        border-collapse: collapse;
+
+        td, th {
+            min-width: 60px;
+            border: solid;
+            border-width: 1px 1px;
+            border-color: #d1cbcb;
+            text-align: left;
+            padding: 5px;
+        }
+    }
+
+    .most-owned-players {
+        margin-bottom: 20px;
+
+        .position-container {
+            display: flex;
+            justify-content: center;
+
+            .player-container {
+                margin: 10px 20px;
+                font-size: 12px;
+
+                img {
+                    width: 50px;
+                }
+            }
+            
+        }
+        
+    }
+    
+    @media (max-width: 600px) {
+        .most-owned-players {
+            overflow-x: auto;
+
+            .position-container {
+                width: fit-content;
+                
+                .player-container {
+                    margin: 5px 10px !important;
+                    width: 75px;
+
+                    img {
+                        width: 40px !important;
+                    }
+                }
+            }
+        }
+    }
+}

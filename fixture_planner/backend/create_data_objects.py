@@ -1,5 +1,5 @@
 from fixture_planner.backend.read_fixture_planner_data import get_static_and_fixture_data
-from utils.models.Players import Players
+from utils.dataFetch.Players import Players
 import pandas as pd
 
 

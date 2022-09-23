@@ -26,7 +26,7 @@
                 cursor: pointer;
                 font-size: 15px;
                 padding: 1px 15px 2px 15px;
-                background-color: #D6CDCD;
+                background-color: var(--submit-button-color);
                 border: none;
             }
         }
@@ -74,11 +74,11 @@
 
         &.wide {
             width: 33px;
-            color: white;
+            color: var(--white-color);
         }
 
         &.black {
-            color: white;
+            color: var(--white-color);
             width: 22px;
         }
     }

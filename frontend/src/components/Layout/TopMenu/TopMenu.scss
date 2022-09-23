@@ -18,7 +18,7 @@
 
     .top-navbar {
         display: flex;
-        justify-content: space-between;
+        // justify-content: space-between;
         align-items: flex-end;
         max-width: var(--max-width);
         margin: 0 auto;
@@ -28,15 +28,24 @@
         .top-navbar-container {
             margin-right: 15px;
             display: flex;
+            margin-bottom: 5px;
 
 
             .circle-link {
                 display: block;
-                width: 30px;
-                height: 30px;
+                width: 27px;
+                height: 27px;
                 border-radius: 25px;
                 background-color: white; // default circle color
-                margin: 1px 10px;
+                // margin: 1px 10px;
+                
+                box-shadow: 0 0 0 1px #c8c8c8a3;
+                margin: 0 10px 2px 20px;
+                color: white;
+                font-size: 12px;
+                padding-left: 10px;
+                padding-top: 4px;
+                width: 40px !important;
 
                 &.fpl {
                     background: var(--fpl-linear-gradient-second-color);  /* fallback for old browsers */
@@ -87,22 +96,22 @@
     }
 }
 
-.front-page-top-sky::after {
-    content: '';
-    position: absolute;
-    z-index: 1;
-    height: 200px;
-    bottom: -200px;
-    right: 0;
-    left: 0;
-    background: var(--background-color);
-    transform: skewY(var(--skew-Degrees));
-}
+// .front-page-top-sky::after {
+//     content: '';
+//     position: absolute;
+//     z-index: 1;
+//     height: 200px;
+//     bottom: -200px;
+//     right: 0;
+//     left: 0;
+//     background: var(--background-color);
+//     transform: skewY(var(--skew-Degrees));
+// }
 
 
 
 .navbar {
-    height: 70%;
+    height: 60%;
 
     .nav-container {
         display: flex;
@@ -114,8 +123,10 @@
         justify-content: space-between;
 
         .logo {
-            color: var(--title-color);
-            font-size: 30px;
+            a {
+                color: var(--title-color);
+                font-size: var(--font-size-header-title);
+            }
             margin-bottom: 40px;
         }
 
@@ -128,6 +139,11 @@
 
                 button {
                     cursor: auto !important;
+                    color: rgb(11, 13, 14);
+                    letter-spacing: 0em;
+                    font-family: "IBM Plex Sans";
+                    font-weight: 400;
+                    font-style: normal;
                 }
                 
                 .dropbtn {
@@ -149,7 +165,7 @@
                     // text styling
                     color: black;
                     font-family: serif;
-                    font-size: 18px;
+                    font-size: var(--font-size-menu-sub-items);
                     font-style: normal;
                     font-weight: 400;
                     letter-spacing: 0em;
@@ -161,7 +177,7 @@
                 }
                 
                 button.dropbtn {
-                    font-size: 20px;
+                    font-size: var(--font-size-menu-items);
                 }
 
                 a.dropbtn {
@@ -176,15 +192,15 @@
             .dropdown-content {
                 display: none;
                 position: absolute;
-                background-color: #94d8bc;
-                min-width: 200px;
+                // background-color: #94d8bc;
+                min-width: 160px;
                 // box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
                 z-index: 11;
               }
               
               .dropdown-content a {
                 color: black;
-                font-size: 16px;
+                font-size: 15px;
                 padding: 13px 20px;
                 text-decoration: none;
                 display: block;
@@ -232,7 +248,8 @@
         position: absolute;
         background-color: #f9f9f9;
         min-width: 160px;
-        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        // box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.2);
         z-index: 1;
         right: 0 !important;
     }

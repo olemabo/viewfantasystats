@@ -1,144 +1,200 @@
 .container-fdr {
-    max-width: 1200px;
-    margin: 5px 10px 30px 10px !important;
-    display: flex;
+    margin: 10px 10px 40px 10px !important;
     justify-content: center;
+    max-width: 1200px;
+    display: flex;
 
     .fdr-table {
-        display: grid;
+        // background-color: var(--white-color);
         grid-template-rows: 100%;
-        height: 100%;
-        background-color: white;
         justify-content: center;
+        display: grid;
+        height: 100%;
         
         .fdr-team-names {
             grid-row: 1 / 2;
             grid-column: 1 / 1;
+            background-color: var(--page-background-color);
         }
+    }
+  
+    .fdr-team-difficulty {
+        grid-column: 2 / 2;
+        grid-row: 1 / 3;
+        overflow: hidden;
+    }
+
+    // .last {
+    //     grid-column: 3 / 3;
+    //     grid-row: 1 / 3;
+    //     overflow: hidden;
+    // }
+}
+
+.fdr {
+    table {
+        border-collapse: collapse;
+        margin: auto auto auto auto;
+        width: 100%;
+        background-color: none;
+        height: 100%;
+        overflow-x: auto;
+        display: flex;
+        flex-wrap: wrap;
+        align-content: flex-start;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        
+        tr td {
+            min-width: 110px;
+            height: var(--fdr-box-height);
+            border: var(--fdr-box-gap) solid var(--page-background-color);
+            div {
+                border: var(--fdr-box-gap) solid transparent;    
+                padding: var(--fdr-box-padding-width) var(--fdr-box-padding-height);
+            }
+        }
+        
+        th { 
+            height: var(--fdr-box-th-height);
+            border: var(--fdr-box-gap) solid var(--page-background-color);
+            background-color: var(--round-row-color);
+            color: var(--white-color);
+            letter-spacing: 0.5px;
+            padding: 5px;
+        }
+    
+        .fdr-row-gws {
+            // border-bottom: var(--fdr-border-width) solid transparent;
+            color: var(--white-color);
+            
+            .day-month {
+                font-size: 8px;
+            }
+        }
+
+        .name-column-top-corner {
+            background-color: var(--name-column-top-corner);
+            padding-left: 7px;
+            padding-right: 7px;
+            text-align: left;
+            font-weight: 400;
+            color: var(--black-color)
+        }
+    
+        .name-column {
+            // background-color: var(--name-col-color);
+            color: var(--black-color);
+            padding-left: 7px;
+            padding-right: 7px;
+            text-align: left;
+            font-weight: 500;
+    
+            div {
+                padding-left: 0 !important;
+            }
+        }
+    
+        .height-2 {
+            height: 25px;
+            font-size: 11px;
+        }
+        
+        .height-3 {
+            height: 18px;
+            font-size: 10px;
+        }
+        
+        .height-4 {
+            height: 13px;
+            font-size: 7px;
+        }
+        
+        tbody td.color-0, tbody td.color-10, .color-0, .color-10, span.diff-introduction.color-1 {
+            background-color: rgb(0, 0, 0);
+            color: var(--white-color);
+        }
+        
+        tbody td.color-1, .color-1, span.diff-introduction.color-1 {
+            background-color: var(--fdr-color-1);
+            color: var(--white-color);
+        }
+        
+        tbody td.color-2, .color-2, span.diff-introduction.color-2 {
+            background-color: var(--fdr-color-2);
+        }
+        
+        tbody td.color-3, .color-3, span.diff-introduction.color-3 {
+            background-color: var(--fdr-color-3);
+        }
+        
+        tbody td.color-4, .color-4, span.diff-introduction.color-4 {
+            background-color: var(--fdr-color-4);
+            color: var(--white-color);
+        }
+        
+        tbody td.color-5, .color-5, span.diff-introduction.color-5 {
+            background-color: var(--fdr-color-5);
+            color: var(--white-color);
+        }
+        
+        .no-padding {
+            padding: 0;
+        }
+
+
+        // OPTION 1
+        // .multiple-fixtures {
+        //     justify-content: center;
+        //     align-items: center;
+        //     display: flex;
+        //     // width: 100%;
+        //     // height: 100%;
+        // }
+        
+        // .double-border-1 {
+        //     border: var(--fdr-border-width) solid var(--black-color) !important;
+        // }
+        
+        // .double-border-1 div {
+        //     border: var(--fdr-box-gap) solid var(--white-color) !important;
+        //     font-weight: 600;
+        // }
+
+        td, th {
+            div {
+                border: var(--fdr-border-width) solid transparent !important;
+                // font-size: 13px;
+            }
+        }
+        
+
+        // OPTION 2
+        .multiple-fixtures {
+            justify-content: center;
+            align-items: center;
+            display: flex;
+            width: 100%;
+            // height: 100%;
+        }
+        
+        .double-border-1 div {
+            border: var(--fdr-border-width) solid var(--black-color) !important;
+        }
+        
+        .double-border-1 {
+            border: var(--fdr-box-gap) solid var(--page-background-color) !important;
+            font-weight: 600;
+        }
+    }
+
+    .table-adjustment {
+        // padding-bottom: 22px;
+        overflow-x: auto;
+        display: flex;
+        justify-content: start;
     }
 }
 
-.name-column {
-    background-color: #dfdfdfc7 !important;
-    padding-left: 5px !important;
-    text-align: left;
-    width: 130px;
-    color: black;
-    font-weight: 400;
-    min-width: 120px;
-}
 
-div.min-width {
-    min-width: 100px;
-    padding: 9px 5px;
-    width: 113px;
-}
-
-.fdr-team-difficulty {
-    grid-row: 1 / 3;
-    grid-column: 2 / 2;
-    background-color: #EEE;
-    overflow: hidden;
-}
-
-.fdr-row-gws {
-    background-color: #0f3443;
-    color: #ffffff;
-}
-
-.day-month {
-    font-size: 10px;
-}
-
-.height-2 {
-    height: 25px;
-    font-size: 11px;
-}
-
-.height-3 {
-    height: 18px;
-    font-size: 10px;
-}
-
-.height-4 {
-    height: 13px;
-    font-size: 7px;
-}
-
-tbody td.color-0, tbody td.color-10, .color-0, .color-10, span.diff-introduction.color-1 {
-    background-color: rgb(0, 0, 0);
-    color: white;
-}
-
-tbody td.color-1, .color-1, span.diff-introduction.color-1 {
-    background-color: rgb(55, 85, 35);
-    color: white;
-}
-
-tbody td.color-2, .color-2, span.diff-introduction.color-2 {
-    background-color: rgb(1, 252, 122);
-}
-
-tbody td.color-3, .color-3, span.diff-introduction.color-3 {
-    background-color: silver;
-}
-
-tbody td.color-4, .color-4, span.diff-introduction.color-4 {
-    background-color: rgb(255, 23, 81);
-    color: white;
-}
-
-tbody td.color-5, .color-5, span.diff-introduction.color-5 {
-    background-color: rgb(128, 7, 45);
-    color: white;
-}
-
-.no-padding {
-    padding: 0;
-}
-
-table {
-    border-collapse: collapse;
-    margin: auto auto auto auto;
-    width: 100%;
-    background-color: none;
-    height: 100%;
-    overflow-x: scroll;
-    display: flex;
-    flex-wrap: wrap;
-    align-content: flex-start;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-}
-
-.multiple-fixtures {
-    padding: 0px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.double-border-1 div {
-    border: 3px solid black !important;
-}
-
-.double-border-1 {
-    border: 3px solid white !important;
-    font-weight: 600;
-}
-
-th, td {
-    height: 54px;
-    border: 3px solid white;
-}
-
-tbody th {
-    background-color: #0f3443;
-    color: #ffffff;
-    font-size: 16px;
-    letter-spacing: 0.5px;
-    text-align: center;
-    padding: 5px;
-
-}

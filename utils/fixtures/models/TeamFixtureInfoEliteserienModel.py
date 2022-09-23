@@ -1,4 +1,4 @@
-class Team_Fixture_Info_Eliteserien():
+class TeamFixtureInfoEliteserienModel():
     def __init__(self, team_name, team_id, team_short_name, date, opp_team_name_list,
                  opp_team_home_away_list, opp_team_difficulty_score, gw):
         self.team_name = team_name

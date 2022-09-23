@@ -2,7 +2,7 @@ from constants import eliteserien_api_url, premier_league_api_url, premier_leagu
 from player_statistics.backend.read_api_data_to_txt.read_player_statistics import static_json, get_ids
 from player_statistics.db_models.eliteserien.player_statistics_model import EliteserienPlayerStatistic
 from player_statistics.db_models.premier_league.player_statistics_model import PremierLeaguePlayers
-from utils.models.DataFetch import DataFetch
+from utils.dataFetch.DataFetch import DataFetch
 import time
 
 

@@ -24,15 +24,6 @@ def save_all_global_stats_for_current_gw(league_name=premier_league_folder_name)
     
     all_top_x_players = all_top_x_players_eliteserien if league_name == eliteserien_folder_name else all_top_x_players_premier_league
 
-    print("League name: ", league_name, "\n")
-
-    x = input("You will now extract data from the FPL api. It will be for top " +  str(max(all_top_x_players)) + " fpl managers. " +
-            "Time to sleep between each api call is: " + str(time_to_sleep_for_each_iteration) +
-                  " and should be more than 0.2 at least. Will you proceed? (y/n) ")
-
-    if str(x) != "y":
-        return 0
-
     start_time = time.time()
     
     # collect fpl api class for premier league or eliteserien
@@ -43,6 +34,16 @@ def save_all_global_stats_for_current_gw(league_name=premier_league_folder_name)
     season_name = current_season_name_eliteserien if league_name == eliteserien_folder_name else current_season_name_premier_league
 
     print("\nCurrent GW: ", current_gameweek, "\nCurrent season: ", season_name, "\n")
+
+    print("League name: ", league_name, "\n")
+
+    x = input("You will now extract data from the FPL api. It will be for top " +  str(max(all_top_x_players)) + " fpl managers. " +
+            "Time to sleep between each api call is: " + str(time_to_sleep_for_each_iteration) +
+                  " and should be more than 0.2 at least. Will you proceed? (y/n) ")
+
+    if str(x) != "y":
+        return 0
+
 
     # create new directories if not already done
     league_path = path_to_store_local_data + "/" + league_name + "/"

@@ -2,9 +2,9 @@ from fixture_planner.backend.create_data_objects import return_fixture_names_sho
     create_dict_with_team_name_to_team_ids, create_dict_with_team_ids_to_team_name, \
     create_list_with_team_ids_from_list_with_team_names, create_FDR_dict
 from fixture_planner.backend.utility_functions import insertion_sort, create_two_dim_list
-from utils.models.RotationPlannerTeamInfo import RotationPlannerTeamInfo
+from utils.fixtures.models.RotationPlannerTeamInfoModel import RotationPlannerTeamInfoModel
 import fixture_planner.backend.read_fixture_planner_data as read_data
-from utils.models.fixtures.FixtureDifficultyModel import FixtureDifficultyModel
+from utils.fixtures.models.FixtureDifficultyModel import FixtureDifficultyModel
 from itertools import combinations
 import numpy as np
 import json
@@ -155,14 +155,14 @@ def find_best_rotation_combos(data, GW_start, GW_end, teams_to_check=5, teams_to
                     for i in range(gws_this_round):
                         temp_score += data_gw[i][2]
 
-                        team_object_new.append(FixtureDifficultyInfo(team_name=team_name,
+                        team_object_new.append(FixtureDifficultyModel(team_name=team_name,
                                                                      opponent_team_name=data_gw[i][0].upper(),
                                                                      this_difficulty_score=data_gw[i][2],
                                                                      H_A=data_gw[i][1],
                                                                      Use_Not_Use=0).toJson())
                 else:
                     temp_score += data_gw[0][2]
-                    team_object_new.append(FixtureDifficultyInfo(team_name=team_name,
+                    team_object_new.append(FixtureDifficultyModel(team_name=team_name,
                                                                  opponent_team_name=data_gw[0][0].upper(),
                                                                  this_difficulty_score=data_gw[0][2],
                                                                  H_A=data_gw[0][1],
@@ -355,14 +355,14 @@ def find_best_rotation_combos_json(data, GW_start, GW_end, teams_to_check=5, tea
                     for i in range(gws_this_round):
                         temp_score += data_gw[i][2]
 
-                        team_object_new.append(FixtureDifficultyInfo(team_name=team_name,
+                        team_object_new.append(FixtureDifficultyModel(team_name=team_name,
                                                                      opponent_team_name=data_gw[i][0].upper(),
                                                                      this_difficulty_score=data_gw[i][2],
                                                                      H_A=data_gw[i][1],
                                                                      Use_Not_Use=0).toJson())
                 else:
                     temp_score += data_gw[0][2]
-                    team_object_new.append(FixtureDifficultyInfo(team_name=team_name,
+                    team_object_new.append(FixtureDifficultyModel(team_name=team_name,
                                                                  opponent_team_name=data_gw[0][0].upper(),
                                                                  this_difficulty_score=data_gw[0][2],
                                                                  H_A=data_gw[0][1],
@@ -408,7 +408,7 @@ def find_best_rotation_combos_json(data, GW_start, GW_end, teams_to_check=5, tea
 
     for team in combos_with_score_new:
         team1 = [ str(i) for i in team[1]]
-        combos_with_score_json.append(RotationPlannerTeamInfo(team[0], team1, team[2], team[3], team[4], team[5]).toJson())
+        combos_with_score_json.append(RotationPlannerTeamInfoModel(team[0], team1, team[2], team[3], team[4], team[5]).toJson())
 
     return combos_with_score_json
 

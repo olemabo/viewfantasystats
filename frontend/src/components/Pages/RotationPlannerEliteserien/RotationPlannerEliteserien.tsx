@@ -197,7 +197,7 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
             + "Eksempelvis ønsker man å finne to keepere som roterer bra mellom runde 10 og 20. "
             + "'" + props.content.Fixture.gw_start.toString() + "'" + " og " + "'" + props.content.Fixture.gw_end.toString() + "'" + " blir da henholdsvis 10 og 20. "
             + "'" + props.content.Fixture.teams_to_check.toString() + "'" + " blir 2 fordi man skal ha 2 keepere som skal rotere. "
-            + "'" + props.content.Fixture.teams_to_play.toString() + "'" + " blir 1 fordi kun en av de to keeperene skal spille. "
+            + "'" + props.content.Fixture.teams_to_play.toString() + "'" + " blir 1 fordi kun en av de to keeperene skal spille per runde. "
             }>
             Kampprogram, vanskelighetsgrader og farger er hentet fra 
             <a href="https://docs.google.com/spreadsheets/d/168WcZ2mnGbSh-aI-NheJl5OtpTgx3lZL-YFV4bAJRU8/edit?usp=sharing">Excel arket</a>
@@ -213,7 +213,7 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
                     <span style={{backgroundColor: convertFDRtoHex("5", fdrToColor)}} className="diff-introduction-box">5</span>
                     <span style={{backgroundColor: convertFDRtoHex("10", fdrToColor)}} className="diff-introduction-box black">10</span>
                 </p>
-                <p>Lilla bokser markerer en dobbelt runde, mens svarte bokser markerer at laget ikke har kamp den runden.</p></>
+                <p>Lilla bokser markerer en dobbeltrunde, mens svarte bokser markerer at laget ikke har kamp den runden.</p></>
             }
             </Popover>
         </h1>
@@ -291,9 +291,7 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
             </div>
         }
 
-        { loading && 
-            <div style={{ backgroundColor: "#E8E8E8"}}><Spinner /></div>
-        }
+        { loading && <Spinner /> }
 
         { !loading && fdrDataToShow.length > 0 && fdrDataToShow[0].avg_Score != -1 &&
             <ShowRotationData 

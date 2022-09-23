@@ -1,17 +1,17 @@
 from fixture_planner.backend.create_data_objects import create_FDR_dict
 from fixture_planner.backend.utility_functions import insertion_sort, create_two_dim_list
-from utils.models.fixtures.FixtureDifficultyModel import FixtureDifficultyModel
+from utils.fixtures.models.FixtureDifficultyModel import FixtureDifficultyModel
 from fixture_planner.models import PremierLeagueTeamInfo
 from constants import blank_gw_fdr_score
 from itertools import combinations
 import numpy as np
 import json
 
-from utils.models.RotationPlannerTeamInfo import RotationPlannerTeamInfo
+from utils.fixtures.models.RotationPlannerTeamInfoModel import RotationPlannerTeamInfoModel
 
 from fixture_planner.models import KickOffTime
 from constants import total_number_of_gameweeks
-from utils.models.DataFetch import DataFetch
+from utils.dataFetch.DataFetch import DataFetch
 from datetime import date
 import pandas as pd
 
@@ -248,7 +248,7 @@ def find_best_rotation_combos_new(data, gw_start, gw_end, teams_to_check=5, team
 
     for team in combos_with_score_new:
         team1 = [ str(i) for i in team[1]]
-        combos_with_score_json.append(RotationPlannerTeamInfo(team[0], team1, team[2], team[3], team[4], team[5]).toJson())
+        combos_with_score_json.append(RotationPlannerTeamInfoModel(team[0], team1, team[2], team[3], team[4], team[5]).toJson())
 
     return combos_with_score_json
 

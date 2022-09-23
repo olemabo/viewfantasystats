@@ -26,7 +26,7 @@ export const FixturePlannerPage : FunctionComponent<FixturePlannerPageProps> = (
     const min_gw = 1;
     const max_gw = 38;
 
-    const empty: SimpleTeamFDRDataModel[] = [ { team_name: "-", FDR: [], checked: true}];
+    const empty: SimpleTeamFDRDataModel[] = [ { team_name: "-", FDR: [], checked: true, fdr_total_score: 0 }];
     const emptyGwDate: KickOffTimesModel[] = [{gameweek: 0, day_month: "",kickoff_time: "" }];
 
     const [ fdrDataToShow, setFdrDataToShow ] = useState(empty); 
@@ -35,10 +35,10 @@ export const FixturePlannerPage : FunctionComponent<FixturePlannerPageProps> = (
 
     const [ gwStart, setGwStart ] = useState(-1);
     const [ gwEnd, setGwEnd ] = useState(max_gw);
-    const [ maxGw, setMaxGw ] = useState(-1);
     const [ showTeamFilters, setShowTeamFilters ] = useState(false);
     const [ loading, setLoading ] = useState(false);
     const [ minNumFixtures, setMinNumFixtures ] = useState(3);
+    const [ firstloading, setFirstLoading ] = useState(true);
 
     useEffect(() => {
         store.dispatch({type: "league_type", payload: props.league_type});
@@ -86,7 +86,7 @@ export const FixturePlannerPage : FunctionComponent<FixturePlannerPageProps> = (
         axios.post(fixture_planner_api_path, body).then( (x: any) => {
             let apiFDRList: SimpleTeamFDRDataModel[] = [];
             let data = JSON.parse(x.data);
-            
+
             if (data.gw_start != gwStart) { 
                 setGwStart(data.gw_start);
             }
@@ -94,19 +94,17 @@ export const FixturePlannerPage : FunctionComponent<FixturePlannerPageProps> = (
             if (data.gw_end != gwEnd) { 
                 setGwEnd(data.gw_end);
             }
-
-            if (maxGw < 0) { 
-                setMaxGw(data.gws_and_dates.length); 
-            }
             
             data?.fdr_data.forEach((team: any[]) => {
                 let team_name = JSON.parse(team[0][0][0]).team_name;
 
                 let FDR_gw_i: FDR_GW_i[] = [];
+                let fdr_total_score = 0;
                 team.forEach((fdr_for_each_gw: any[]) => {
                     let temp: FDRData[] = [];
                     fdr_for_each_gw.forEach((fdr_in_gw_i: any) => {
                         let fdr_in_gw_i_json = JSON.parse(fdr_in_gw_i);
+                        fdr_total_score = fdr_in_gw_i_json.FDR_score;
                         temp.push({
                             opponent_team_name: fdr_in_gw_i_json.opponent_team_name,
                             difficulty_score: fdr_in_gw_i_json.difficulty_score,
@@ -115,7 +113,7 @@ export const FixturePlannerPage : FunctionComponent<FixturePlannerPageProps> = (
                     });
                     FDR_gw_i.push({fdr_gw_i: temp})
                 });
-                let tempTeamData = { team_name: team_name, FDR: FDR_gw_i, checked: true}
+                let tempTeamData = { team_name: team_name, FDR: FDR_gw_i, checked: true, fdr_total_score: fdr_total_score}
                 apiFDRList.push(tempTeamData);
             });
             
@@ -125,6 +123,7 @@ export const FixturePlannerPage : FunctionComponent<FixturePlannerPageProps> = (
 
             setFdrDataToShow(apiFDRList);
             setLoading(false);
+            setFirstLoading(false);
         })
     }
 
@@ -135,7 +134,7 @@ export const FixturePlannerPage : FunctionComponent<FixturePlannerPageProps> = (
             if (x.team_name == e.currentTarget.value) {
                 checked = !x.checked;
             }
-            temp.push({ team_name: x.team_name, FDR: x.FDR, checked: checked});
+            temp.push({ team_name: x.team_name, FDR: x.FDR, checked: checked, fdr_total_score: x.fdr_total_score });
         });
         setFdrDataToShow(temp);
     }
@@ -152,74 +151,75 @@ export const FixturePlannerPage : FunctionComponent<FixturePlannerPageProps> = (
     return <>
     <DefaultPageContainer pageClassName='fixture-planner-container' heading={title + " - " + store.getState().league_type} description={title}>
         <h1>{title}</h1>
-        { gwStart > 0 && gwEnd > 0 && 
-        <form onSubmit={(e) =>  {updateFDRData(); e.preventDefault()}}>
-            {props.content.Fixture.gw_start}
-            <input 
-                className="form-number-box" 
-                type="number" 
-                min={min_gw}
-                max={max_gw}
-                onInput={(e) => setGwStart(parseInt(e.currentTarget.value))} 
-                value={gwStart} 
-                id="input-form-start-gw" 
-                name="input-form-start-gw">
-            </input>
-            {props.content.Fixture.gw_end}
-            <input 
-                className="form-number-box" 
-                type="number" 
-                min={gwStart}
-                max={max_gw}
-                onInput={(e) => setGwEnd(parseInt(e.currentTarget.value))} 
-                value={gwEnd} 
-                id="input-form-start-gw" 
-                name="input-form-start-gw">
-            </input>
-
-            { props.fixture_planning_type == FixturePlanningType.Periode && 
-                <><br />
-                {props.content.Fixture.min_fixtures}
+        { !firstloading && <>
+            <form onSubmit={(e) =>  {updateFDRData(); e.preventDefault()}}>
+                {props.content.Fixture.gw_start}
                 <input 
-                    className="box" 
+                    className="form-number-box" 
                     type="number" 
-                    min={1} 
-                    max={gwEnd}
-                    value={minNumFixtures} 
-                    onInput={(e) => setMinNumFixtures(parseInt(e.currentTarget.value))} 
-                    id="min_num_fixtures" 
-                    name="min_num_fixtures" /></>
+                    min={min_gw}
+                    max={max_gw}
+                    onInput={(e) => setGwStart(parseInt(e.currentTarget.value))} 
+                    value={gwStart} 
+                    id="input-form-start-gw" 
+                    name="input-form-start-gw">
+                </input>
+                {props.content.Fixture.gw_end}
+                <input 
+                    className="form-number-box" 
+                    type="number" 
+                    min={gwStart}
+                    max={max_gw}
+                    onInput={(e) => setGwEnd(parseInt(e.currentTarget.value))} 
+                    value={gwEnd} 
+                    id="input-form-start-gw" 
+                    name="input-form-start-gw">
+                </input>
+
+                { props.fixture_planning_type == FixturePlanningType.Periode && 
+                    <><br />
+                    {props.content.Fixture.min_fixtures}
+                    <input 
+                        className="box" 
+                        type="number" 
+                        min={1} 
+                        max={gwEnd}
+                        value={minNumFixtures} 
+                        onInput={(e) => setMinNumFixtures(parseInt(e.currentTarget.value))} 
+                        id="min_num_fixtures" 
+                        name="min_num_fixtures" /></>
+                }
+
+                <input className="submit" type="submit" value={props.content.General.search_button_name} />
+            </form>
+            {/* } */}
+
+            <Button buttonText={props.content.Fixture.filter_button_text} 
+                        icon_class={"fa fa-chevron-" + (showTeamFilters ? "up" : "down")} 
+                        onclick={() => setShowTeamFilters(showTeamFilters ? false : true)} />
+
+            { fdrDataToShow != null && fdrDataToShow.length > 0 && fdrDataToShow[0].team_name != "empty" && showTeamFilters &&
+                <div className='filter-teams-container'>
+                    <div className='filter-teams-list'>
+                    { fdrDataToShow.map(team_name =>
+                        <FilterButton fontColor={"1"} backgroundColor={"0"} onclick={(e: any) => toggleCheckbox(e)} buttonText={team_name.team_name} checked={team_name.checked} />
+                    )}
+                    </div>
+                </div>
             }
 
-            <input className="submit" type="submit" value={props.content.General.search_button_name} />
-        </form>}
+            { loading && <Spinner /> }
 
-        <Button buttonText={props.content.Fixture.filter_button_text} 
-                    icon_class={"fa fa-chevron-" + (showTeamFilters ? "up" : "down")} 
-                    onclick={() => setShowTeamFilters(showTeamFilters ? false : true)} />
-
-        { fdrDataToShow != null && fdrDataToShow.length > 0 && fdrDataToShow[0].team_name != "empty" && showTeamFilters &&
-            <div className='filter-teams-container'>
-                <div className='filter-teams-list'>
-                { fdrDataToShow.map(team_name =>
-                    <FilterButton fontColor={"1"} backgroundColor={"0"} onclick={(e: any) => toggleCheckbox(e)} buttonText={team_name.team_name} checked={team_name.checked} />
-                )}
-                </div>
-            </div>
+            { !loading && fdrDataToShow.length > 0 && fdrDataToShow[0].team_name != "-" && kickOffTimesToShow.length > 0 && kickOffTimesToShow[0].gameweek != 0 && (
+                <ShowFDRData 
+                    content={props.content}
+                    fdrData={fdrDataToShow}
+                    kickOffTimes={kickOffTimesToShow}
+                    allowToggleBorder={true}
+                />
+            )}</>
         }
-
-        { loading && 
-            <div style={{ backgroundColor: "#E8E8E8"}}><Spinner /></div>
-        }
-
-        { !loading && fdrDataToShow.length > 0 && fdrDataToShow[0].team_name != "-" && kickOffTimesToShow.length > 0 && kickOffTimesToShow[0].gameweek != 0 && (
-            <ShowFDRData 
-                content={props.content}
-                fdrData={fdrDataToShow}
-                kickOffTimes={kickOffTimesToShow}
-                allowToggleBorder={true}
-            />
-        )}
+        { firstloading && <Spinner /> }
     </DefaultPageContainer>
     </>
 };

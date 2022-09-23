@@ -1,6 +1,6 @@
 from fixture_planner.backend.utility_functions import fixture_score_one_team, calc_score
 from fixture_planner.backend.create_data_objects import create_FDR_dict
-from utils.models.fixtures.FixtureDifficultyModel import FixtureDifficultyModel
+from utils.fixtures.models.FixtureDifficultyModel import FixtureDifficultyModel
 import numpy as np
 
 

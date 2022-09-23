@@ -1,4 +1,4 @@
-class WhichTeamToCheck:
+class WhichTeamToCheckModel:
     def __init__(self, team_name, checked, checked_must_be_in_solution=''):
         ...
         self.team_name = team_name

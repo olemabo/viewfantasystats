@@ -1,4 +1,3 @@
-from math import comb
 from fixture_planner.backend.fixture_planner_best_algorithms import find_best_fixture_with_min_length_each_team
 from fixture_planner.backend.fixture_rotation_algorithms_new import find_best_rotation_combos_new
 from fixture_planner.backend.fixture_rotation_algorithms import find_best_rotation_combos_json
@@ -8,9 +7,6 @@ from constants import total_number_of_gameweeks, initial_extra_gameweeks
 import fixture_planner.backend.read_fixture_planner_data as read_data
 from fixture_planner.backend.utility_functions import calc_score
 from fixture_planner.models import PremierLeagueTeamInfo, KickOffTime
-from utils.models.fixtures.WhichTeamToCheck import WhichTeamToCheck
-from utils.models.fixtures.FixtureDifficultyModel import FixtureDifficultyModel
-from utils.models.KickOffTimeInfo import KickOffTimeInfo
 from django.views.decorators.csrf import csrf_exempt
 from utils.utility_functions import get_current_gw
 from django.http import JsonResponse
@@ -23,9 +19,14 @@ from .serializers import PremierLeagueTeamInfoSerializer
 from .serializers import GetKickOffTimeSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.core import serializers
+
 from utils.util_functions.fixture.get_upcoming_gw import get_upcoming_gw_premier_league
-from utils.models.fixtures.FdrApiResponse import FdrApiResponse
+
+from utils.fixtures.apiResponse.FdrApiResponse import FdrApiResponse
+from utils.fixtures.models.FixtureDifficultyModel import FixtureDifficultyModel
+
+from utils.fixtures.models.WhichTeamToCheckModel import WhichTeamToCheckModel
+from utils.fixtures.models.KickOffTimesModel import KickOffTimesModel
 
 
 class PremierLeagueTeamInfoView(generics.ListAPIView):
@@ -46,7 +47,7 @@ class GetKickOffTimes(APIView):
             kick_off_time_db = KickOffTime.objects.all()
             temp_kick_off_time = []
             for gw_i in range(len(kick_off_time_db)):
-                temp_kick_off_time.append(KickOffTimeInfo(
+                temp_kick_off_time.append(KickOffTimesModel(
                     kick_off_time_db[gw_i].gameweek,
                     kick_off_time_db[gw_i].kickoff_time,
                     kick_off_time_db[gw_i].day_month
@@ -72,13 +73,13 @@ class PostFDRView(APIView):
             end_gw = int(request.data.get("end_gw"))
             min_num_fixtures = int(request.data.get("min_num_fixtures"))
             combinations = str(request.data.get("combinations"))
-            
-            if combinations == "FDR" and start_gw < 0:
+
+            if (combinations == "FDR" or combinations == "Rotation") and start_gw < 0:
                 start_gw = get_upcoming_gw_premier_league()
                 end_gw = start_gw + 6
                 if (end_gw > 38):
                     end_gw = 38
-            
+
             if (combinations == "FDR-best" and start_gw < 0):
                 start_gw = get_upcoming_gw_premier_league()
                 end_gw = 38
@@ -96,7 +97,7 @@ class PostFDRView(APIView):
             fixture_list = [fixture_list_db[i] for i in range(0, number_of_teams)]
 
             for i in range(number_of_teams):
-                team_dict[fixture_list[i].team_name] = WhichTeamToCheck(fixture_list[i].team_name, 'checked')
+                team_dict[fixture_list[i].team_name] = WhichTeamToCheckModel(fixture_list[i].team_name, 'checked')
             
             team_name_list = []
             fixture_list = []
@@ -231,17 +232,17 @@ def fixture_planner(request, start_gw=get_current_gw(), end_gw=get_current_gw() 
     team_dict = {}
     number_of_teams = len(fixture_list_db)
     for i in range(number_of_teams):
-        team_dict[fixture_list_db[i].team_name] = WhichTeamToCheck(fixture_list_db[i].team_name, 'checked')
+        team_dict[fixture_list_db[i].team_name] = WhichTeamToCheckModel(fixture_list_db[i].team_name, 'checked')
 
     fixture_list = [fixture_list_db[i] for i in range(0, number_of_teams)]
     fpl_teams = [-1]
     if request.method == 'POST':
         for i in range(number_of_teams):
-            team_dict[fixture_list[i].team_name] = WhichTeamToCheck(fixture_list[i].team_name, '')
+            team_dict[fixture_list[i].team_name] = WhichTeamToCheckModel(fixture_list[i].team_name, '')
 
         fpl_teams = request.POST.getlist('fpl-teams')
         for fpl_team in fpl_teams:
-            team_dict[fpl_team] = WhichTeamToCheck(team_dict[fpl_team].team_name, 'checked')
+            team_dict[fpl_team] = WhichTeamToCheckModel(team_dict[fpl_team].team_name, 'checked')
 
         # gameweek info
         gw_info = request.POST.getlist('gw-info')
@@ -319,13 +320,13 @@ def get_fdr_data(request):
 
     for i in range(number_of_teams):
         if fpl_teams[0] == -1:
-            team_dict[fixture_list[i].team_name] = WhichTeamToCheck(fixture_list[i].team_name, 'checked')
+            team_dict[fixture_list[i].team_name] = WhichTeamToCheckModel(fixture_list[i].team_name, 'checked')
         else:
-            team_dict[fixture_list[i].team_name] = WhichTeamToCheck(fixture_list[i].team_name, '')
+            team_dict[fixture_list[i].team_name] = WhichTeamToCheckModel(fixture_list[i].team_name, '')
 
     if fpl_teams[0] != -1:
         for fpl_team in fpl_teams:
-            team_dict[fpl_team] = WhichTeamToCheck(team_dict[fpl_team].team_name, 'checked')
+            team_dict[fpl_team] = WhichTeamToCheckModel(team_dict[fpl_team].team_name, 'checked')
 
     fixture_list_db = PremierLeagueTeamInfo.objects.all()
 
@@ -396,68 +397,6 @@ def get_fdr_data(request):
     return JsonResponse(data, safe=False)
 
 
-@csrf_exempt
-def get_rotation_data(request):
-    if request.is_ajax():
-        if request.method == 'POST':
-            my_json = request.body.decode('utf8').replace("'", '"')
-            data = json.loads(my_json)
-    start_gw = data['start_gw']
-    end_gw = data['end_gw']
-    fpl_teams = data['fpl_teams']
-    combinations = data['combinations']
-    teams_to_check = data['teams_to_check']
-    teams_to_play = data['teams_to_play']
-    teams_in_solution = data['teams_in_solution']
-
-    fixture_list_db = PremierLeagueTeamInfo.objects.all()
-    team_dict = {}
-    number_of_teams = len(fixture_list_db)
-
-    fixture_list = [fixture_list_db[i] for i in range(0, number_of_teams)]
-
-    for i in range(number_of_teams):
-        team_dict[fixture_list[i].team_name] = WhichTeamToCheck(fixture_list[i].team_name, '')
-
-    for fpl_team in fpl_teams:
-        team_dict[fpl_team] = WhichTeamToCheck(team_dict[fpl_team].team_name, 'checked')
-
-    team_name_list = []
-    fixture_list = []
-    for i in range(number_of_teams):
-        temp_object = team_dict[fixture_list_db[i].team_name]
-        team_name_list.append(team_dict[fixture_list_db[i].team_name])
-
-        if temp_object.checked == 'checked':
-            fixture_list.append(fixture_list_db[i])
-
-    rotation_data = []
-    if combinations == 'Rotation':
-        remove_these_teams = []
-        for team_sol in teams_in_solution:
-            if team_sol not in fpl_teams:
-                remove_these_teams.append(team_sol)
-        for remove_team in remove_these_teams:
-            teams_in_solution.remove(remove_team)
-        for i in team_name_list:
-            if i.team_name in teams_in_solution:
-                i.checked_must_be_in_solution = 'checked'
-        rotation_data = find_best_rotation_combos(fixture_list_db, start_gw, end_gw,
-                                                       teams_to_check=teams_to_check, teams_to_play=teams_to_play,
-                                                       team_names=fpl_teams, teams_in_solution=teams_in_solution,
-                                                       teams_not_in_solution=[],
-                                                       top_teams_adjustment=False, one_double_up=False,
-                                                       home_away_adjustment=True, include_extra_good_games=False,
-                                                       num_to_print=0)
-        if rotation_data == -1:
-            rotation_data = [['Wrong input', [], [], 0, 0, [[]]]]
-        else:
-            rotation_data = rotation_data[:(min(len(rotation_data), 50))]
-    data = {
-        "fdr_fixture_data": rotation_data
-    }
-    return JsonResponse(data, safe=False)
-
 
 def fill_fixture_planner_and_kick_off_time_db(request):
     """
@@ -468,6 +407,7 @@ def fill_fixture_planner_and_kick_off_time_db(request):
     df, names, short_names, ids = create_data_objects.return_fixture_names_shortnames("api")
     number_of_teams = len(names)
     for team_i in range(number_of_teams):
+        print("Updating team: ", names[team_i])
         oppTeamNameList, oppTeamHomeAwayList, oppTeamDifficultyScore, gw = [], [], [], []
         team_info = df.loc[team_i]
         for j in range(total_number_of_gameweeks):

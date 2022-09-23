@@ -1,8 +1,9 @@
 import { SimpleTeamFDRDataModel, TeamFDRDataModel } from '../../../models/fixturePlanning/TeamFDRData';
 import { KickOffTimesModel } from '../../../models/fixturePlanning/KickOffTimes';
-import React, { FunctionComponent } from 'react';
 import { contrastingColor } from '../../../utils/findContrastColor';
 import { convertFDRtoHex } from '../../../utils/convertFDRtoHex';
+import { lowerCaseText } from '../../../utils/lowerCaseText';
+import React, { FunctionComponent } from 'react';
 import './ShowFDRData.scss';
 
 type ShowFDRProps = {
@@ -27,22 +28,22 @@ export const ShowFDRData : FunctionComponent<ShowFDRProps> = (props) => {
     }
 
     return <>
-        <div className="container-fdr">
+        <div className="container-fdr fdr">
             <div className="fdr-table">
                 <div className="fdr-team-names">
-                    <table>
+                    <table className='table-adjustment'>
                         <tbody id="fdr-names">
                             <tr>
-                                <td className="name-column min-width">
-                                    {props.content.Fixture.team}
-                                </td>
+                                <th className="name-column-top-corner">
+                                    {/* {props.content.Fixture.team} */}
+                                </th>
                             </tr>
                             { props.fdrData.map(fdr => (
                                 <>
                                 { fdr.checked && (
                                     <tr>
-                                        <td className='name-column min-width'>
-                                            {fdr.team_name}
+                                        <td className='name-column'>
+                                            <div>{lowerCaseText(fdr.team_name)}</div>
                                         </td>
                                     </tr>
                                 )}
@@ -52,7 +53,7 @@ export const ShowFDRData : FunctionComponent<ShowFDRProps> = (props) => {
                     </table>
                 </div>
                 <div className="fdr-team-difficulty">
-                    <table>
+                    <table className='table-adjustment'>
                         <tbody>
                             <tr className="fdr-row-gws">
                                 { props.kickOffTimes.map(gw =>
@@ -68,10 +69,10 @@ export const ShowFDRData : FunctionComponent<ShowFDRProps> = (props) => {
                                     { fdr.checked && (
                                     <tr id={"fdr-row-" + fdr.team_name}>
                                         { fdr.FDR.map(f => (
-                                            <td onClick={(e) => toggleBorderLine(e)} scope='col' style={{backgroundColor: convertFDRtoHex(f.fdr_gw_i[0].difficulty_score, props.fdrToColor)}} className={'min-width'
+                                            <td onClick={(e) => toggleBorderLine(e)} scope='col' style={{backgroundColor: convertFDRtoHex(f.fdr_gw_i[0].difficulty_score, props.fdrToColor)}} className={''
                                             + (f.fdr_gw_i.length == 1 ? " color-" + f.fdr_gw_i[0].difficulty_score + " " : " no-padding ") + 'double-border-' + f.fdr_gw_i[0].Use_Not_Use  }>
                                                 { f.fdr_gw_i.map(g => (
-                                                    <div style={{backgroundColor: convertFDRtoHex(f.fdr_gw_i[0].difficulty_score, props.fdrToColor), color: contrastingColor(convertFDRtoHex(f.fdr_gw_i[0].difficulty_score, props.fdrToColor))}} className={'min-width color-' + g.difficulty_score + ' multiple-fixtures height-' + f.fdr_gw_i.length}>
+                                                    <div style={{backgroundColor: convertFDRtoHex(f.fdr_gw_i[0].difficulty_score, props.fdrToColor), color: contrastingColor(convertFDRtoHex(f.fdr_gw_i[0].difficulty_score, props.fdrToColor))}} className={'color-' + g.difficulty_score + ' multiple-fixtures height-' + f.fdr_gw_i.length}>
                                                         { g.opponent_team_name == '-' ? "Blank" : (g.opponent_team_name + " (" + g.H_A + ")") }
                                                     </div>
                                                 ))}
@@ -84,6 +85,27 @@ export const ShowFDRData : FunctionComponent<ShowFDRProps> = (props) => {
                         </tbody>
                     </table>
                 </div>
+                {/* <div className='last'>
+                    <table>
+                        <tbody id="fdr-names">
+                                <tr>
+                                    <th className="name-column-top-corner">
+                                    </th>
+                                </tr>
+                                { props.fdrData.map(fdr => (
+                                    <>
+                                    { fdr.checked && (
+                                        <tr>
+                                            <td className='name-column'>
+                                                <div>{fdr.fdr_total_score}</div>
+                                            </td>
+                                        </tr>
+                                    )}
+                                    </>
+                                ))}
+                            </tbody>
+                    </table>
+                </div> */}
             </div>
         </div>
     </>

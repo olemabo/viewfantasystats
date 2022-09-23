@@ -1,4 +1,4 @@
-from utils.models.Team_Fixture_Info_Eliteserien import Team_Fixture_Info_Eliteserien
+from utils.fixtures.models.TeamFixtureInfoEliteserienModel import TeamFixtureInfoEliteserienModel
 from openpyxl.utils.cell import get_column_letter
 from openpyxl import load_workbook
 import pandas as pd
@@ -32,7 +32,7 @@ def readEliteserienExcelToDBFormat(path=r'stored_data/eliteserien/Eliteserien_fi
                 temp_oppTeamHomeAwayList.append(home_away)
                 temp_oppTeamDifficultyScore.append(fdr)
                 temp_gw.append(value)
-        dbObject = Team_Fixture_Info_Eliteserien(team_name=team_name,
+        dbObject = TeamFixtureInfoEliteserienModel(team_name=team_name,
                                                  team_id=id,
                                                  team_short_name=team_name_short,
                                                  date=dates[value - 1],
@@ -42,8 +42,6 @@ def readEliteserienExcelToDBFormat(path=r'stored_data/eliteserien/Eliteserien_fi
                                                  gw=temp_gw)
         objectList.append(dbObject)
 
-    #for i in objectList:
-    #    print(i.team_name, i.oppTeamDifficultyScore, i.gw)
     return objectList, dates
 
 
@@ -98,7 +96,7 @@ def readEliteserienExcelFromDagFinnToDBFormat(path=r'stored_data/eliteserien/fix
 
         max_gws = max(temp_gw)
         # print(idx, team_name, row, id)
-        dbObject = Team_Fixture_Info_Eliteserien(team_name=team_name,
+        dbObject = TeamFixtureInfoEliteserienModel(team_name=team_name,
                                                  team_id=idss,
                                                  team_short_name=team_name_short,
                                                  date="",

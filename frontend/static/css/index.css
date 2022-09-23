@@ -1,35 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300&display=swap');
 
-/* :root {
-    --primary-color: #076585;
-    --background-color: #FFFFFF;
-    --text-color: #333;*/
-    /* --fpl-linear-gradient-first-color: #0f3443;
-    --fpl-linear-gradient-second-color: #34e89e; */
-    /*--fpl-linear-gradient-first-color: #0F3443;
-    --fpl-linear-gradient-second-color: #8decc4;
-    --eliteserien-linear-gradient-first-color: #41D5F9;
-    --eliteserien-linear-gradient-second-color: #2c3e50;
-    --height-the-gray-box-should-go-into-header: -10px;
-    --height-the-gray-box-should-go-away-from-header: 10px; /* Give this the same value as the var above only opposite sign */
-    /*--size-of-scewY: 30px;
-    --size-of-top-bar: 130px;
-    --size-of-top-bar-mobile: 60px;
-    --skew-Degrees: 0deg;
-    --link-color: black;
-    --title-color: #FFFFFF;
-    --content-color: #E8E8E8;
-    --border-radius-content: 10px;
-    --content-width: 98%;
-    --max-width: 1400px;
-} */
-
 :root {
     --primary-color: #076585;
     --background-color: #FFFFFF;
     --text-color: #333;
     --fpl-linear-gradient-first-color: #0F3443;
     --fpl-linear-gradient-second-color: #8decc4;
+
+    --fpl-linear-gradient-second-color-darker: rgba(15, 97, 63, 0.73);
+
+    --footer-color: #0f3443;
+    --white-color: #FFFFFF;
+    --black-color: #000000;
+    /* --page-background-color: #dfdfdf; */
+    --page-background-color: #eeeeee;
     /* --eliteserien-linear-gradient-first-color: #41D5F9; */
     --eliteserien-linear-gradient-first-color: #37d7feb3;
     /* --eliteserien-linear-gradient-second-color: #2c3e50; */
@@ -37,15 +21,52 @@
     --height-the-gray-box-should-go-into-header: -0px;
     --height-the-gray-box-should-go-away-from-header: 0px; /* Give this the same value as the var above only opposite sign */
     --size-of-scewY: 30px;
-    --size-of-top-bar: 110px;
+    --size-of-top-bar: 100px;
     --size-of-top-bar-mobile: 60px;
     --skew-Degrees: 0deg;
-    --link-color: black;
+    --link-color: var(--black-color);
     --title-color: #FFFFFF;
     --content-color: inherit;
     --border-radius-content: 10px;
     --content-width: 98%;
     --max-width: 1000px;
+
+    /* Header */
+    --font-size-menu-items: 17px;
+    --font-size-menu-sub-items: 15px;
+    --font-size-header-title: 26px;
+
+    /* Components */
+    --submit-button-color: #D6CDCD;
+    --search-box-color: #0f3443;
+
+    /* Statistiscs */
+    --table-border-color: #d1cbcb;
+    --table-thead-color: var(--white-color);
+    --table-even-rows: rgb(248, 249, 249);
+    --table-odd-rows: rgb(255, 255, 255);
+    --table-thead-tr-color: white;
+    --table-thead-tr-background-color: #0f3443;
+
+    /* Fixture Planning */
+    --name-col-color: #dfdfdfc7;
+    --round-row-color: #0f3443;
+    --fdr-color-1: #375523;
+    --fdr-color-2: #01fc7a;
+    --fdr-color-3: #bfbfbf;
+    --fdr-color-4: #ff1751;
+    --fdr-color-5: #80072d;
+    --name-column-top-corner: #fdfdf00;
+    --fdr-box-padding-height: 15px;
+    --fdr-box-padding-width: 12px;
+    --fdr-box-height: 54px;
+    --fdr-box-th-height: 55px;
+    --fdr-border-width: 3px;
+    --fdr-box-gap: 1px;
+
+    /* Footer */
+    --footer-h2-color-eliteserien: #7fd9ff;
+    --footer-h2-color-premier-league: var(--fpl-linear-gradient-second-color);
 } 
 
 * {
@@ -74,12 +95,12 @@ h1, h2 {
     line-height: 1.2;
     font-weight: 300;
     margin: 30px 0 10px 0;
+    font-size: 28px;
 }
 
 p {
     margin: 10px 0;
 }
-
 
 .max-width {
     max-width: 1200px;
@@ -89,23 +110,17 @@ a:hover {
     text-decoration: none;
 }
 
-
-
-.showcasesss {
-    height: 200px;
-    background: #076585;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #fff, #076585);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #fff, #076585); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+.front-page-bottom {
+    background-color: var(--page-background-color);
+    position: relative;
 }
-
-
 
 .start-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     max-width: var(--max-width);
-    margin: 0 auto; /* top/bottum left/right */
+    margin: 0 auto;
 }
 
 .content-container {
@@ -115,41 +130,27 @@ a:hover {
     z-index: 1;
     background: var(--content-color);
     width: var(--content-width);
-    /* align-items: center; */
     border-radius: var(--border-radius-content);
     top: var(--height-the-gray-box-should-go-into-header);
     position: relative;
     text-align: center;
 }
 
-
-.front-page-bottom {
-    position: relative;
-    z-index: 10;
-    background-color: #dfdfdfc7;
+/* table tr:nth-child(even) {
+    background-color: var(--table-even-rows);
 }
 
-
-.front-page-top-moss {
-    height: 120px;
-    background: #34e89e;  /* fallback for old browsers */
-
-    background: -webkit-linear-gradient(to right, #0f3443, #34e89e);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #0f3443, #34e89e); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
-    background: -webkit-linear-gradient(to right, #4ca1af, #c4e0e5);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #4ca1af, #c4e0e5); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
-    /* Moss */
-    background: -webkit-linear-gradient(to right, #134e5e, #71b280);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #134e5e, #71b280); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+table tr:nth-child(odd) {
+    background-color: var(--table-odd-rows);
+} */
 
 
-    background: #076585;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #fff, #076585);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #fff, #076585); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
-    /*position: relative;
-    top: -50px;*/
+h2 {
+    font-size: 24px;
+    margin-bottom: 12px;
 }
 
+/* table thead tr {
+    background-color: var(--table-thead-tr-background-color) !important;
+    color: var(--table-thead-tr-color) !important;
+} */

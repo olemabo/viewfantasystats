@@ -1,6 +1,6 @@
 from constants import total_number_of_gameweeks, premier_league_api_url
 from fixture_planner.models import PremierLeagueTeamInfo, KickOffTime
-from utils.models.DataFetch import DataFetch
+from utils.dataFetch.DataFetch import DataFetch
 from datetime import date
 import pandas as pd
 import json

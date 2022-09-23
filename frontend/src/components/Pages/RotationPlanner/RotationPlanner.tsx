@@ -7,7 +7,6 @@ import React, { useState, useEffect, FunctionComponent } from 'react';
 import { CheckBox } from '../../Shared/CheckBox/CheckBox';
 import { Spinner } from '../../Shared/Spinner/Spinner';
 import { Button } from '../../Shared/Button/Button';
-import "./RotationPlanner.scss";
 import { store } from '../../../store/index';
 import axios from 'axios';
 
@@ -28,7 +27,7 @@ export const RotationPlannerPage : FunctionComponent<LanguageProps> = (props) =>
     const empty: RotationPlannerTeamInfoModel[] = [ { avg_Score: -1, id_list: [], team_name_list: [], extra_fixtures: -1, home_games: -1, fixture_list: [] }];
     const emptyGwDate: KickOffTimesModel[] = [{gameweek: 0, day_month: "",kickoff_time: "" }];
 
-    const [ gwStart, setGwStart ] = useState(min_gw);
+    const [ gwStart, setGwStart ] = useState(-1);
     const [ gwEnd, setGwEnd ] = useState(max_gw);
     const [ fdrDataToShow, setFdrDataToShow ] = useState(empty);
 
@@ -41,6 +40,7 @@ export const RotationPlannerPage : FunctionComponent<LanguageProps> = (props) =>
 
     const [ validationErrorMessage, setValidationErrorMessage ] = useState("");
     const [ loading, setLoading ] = useState(false);
+    const [ firstloading, setFirstLoading ] = useState(true);
 
     const emptyTeamData: TeamCheckedModel[] = [ { team_name: "empty", checked: true, checked_must_be_in_solution: false }];
     const [ teamData, setTeamData ] = useState(emptyTeamData);
@@ -58,26 +58,9 @@ export const RotationPlannerPage : FunctionComponent<LanguageProps> = (props) =>
             }
         })
 
-        var tempStart = 1;
-        var tempEnd = 3;
-
-        // Get kickoff time data from the API
-        axios.get(fixture_planner_kickoff_time_api_path).then(x => {
-            if (x.data?.length > 0) {
-                let temp_KickOffTimes: KickOffTimesModel[] = [];
-                x.data.forEach((kickoff: string) => temp_KickOffTimes.push(JSON.parse(kickoff)));
-                setKickOffTimes(temp_KickOffTimes);
-                setKickOffTimesToShow(temp_KickOffTimes.slice(tempStart - 1, tempEnd));
-            }
-        })
-
-        setGwStart(tempStart);
-        setGwEnd(tempEnd);
-
-        // Get fdr data from the API
         let body = { 
-            start_gw: tempStart,
-            end_gw: tempEnd,
+            start_gw: gwStart,
+            end_gw: gwEnd,
             min_num_fixtures: '1',
             combinations: 'Rotation',
             teams_to_check: teamsToCheck,
@@ -85,16 +68,41 @@ export const RotationPlannerPage : FunctionComponent<LanguageProps> = (props) =>
             teams_in_solution: [],
             fpl_teams: [-1],
         };
-
-        extractFDRData(body)
+        
+        // Get kickoff time data from the API
+        axios.get(fixture_planner_kickoff_time_api_path).then(x => {
+            if (x.data?.length > 0) {
+                let temp_KickOffTimes: KickOffTimesModel[] = [];
+                x.data.forEach((kickoff: string) => temp_KickOffTimes.push(JSON.parse(kickoff)));
+                setKickOffTimes(temp_KickOffTimes);
+                setKickOffTimesToShow(temp_KickOffTimes.slice(body['start_gw'] - 1, body['end_gw']));
+                extractFDRData(body, temp_KickOffTimes);
+            }
+        })
     }, []);
 
-    function extractFDRData(body: any) {
+    function extractFDRData(body: any, kickofftimes?: any) {
+        if (kickofftimes == null) {
+            setKickOffTimesToShow(kickOffTimes.slice(body['start_gw'] - 1, body['end_gw']));
+        }
+
         setLoading(true);
         // Get fdr data from api
         axios.post(fixture_planner_api_path, body).then(x => {
             let RotationPlannerTeamInfoList: RotationPlannerTeamInfoModel[] = [];
             let data = JSON.parse(x.data);
+
+            if (data.gw_start != gwStart) { 
+                setGwStart(data.gw_start);
+            }
+
+            if (data.gw_end != gwEnd) { 
+                setGwEnd(data.gw_end);
+            }
+
+            // if (maxGw < 0) { 
+            //     setMaxGw(data.gws_and_dates.length); 
+            // }
 
             data?.fdr_data.forEach((team: any) => {
                 let team_i_json = JSON.parse(team);
@@ -105,11 +113,13 @@ export const RotationPlannerPage : FunctionComponent<LanguageProps> = (props) =>
                 RotationPlannerTeamInfoList.push(temp);
             })
 
-            if (kickOffTimes.length > 1) {
-                setKickOffTimesToShow(kickOffTimes.slice(body['start_gw'] - 1, body['end_gw']));
-            }
+            if (kickofftimes != null && kickofftimes.length > 0) {
+                setKickOffTimesToShow(kickofftimes.slice(data.gw_start - 1, data.gw_end));
+            };
+
             setFdrDataToShow(RotationPlannerTeamInfoList);
             setLoading(false);
+            setFirstLoading(false);
         })
     }
 
@@ -187,100 +197,99 @@ export const RotationPlannerPage : FunctionComponent<LanguageProps> = (props) =>
             setValidationErrorMessage("");
             extractFDRData(body);
         }
-
     }
 
     return <>
     <DefaultPageContainer pageClassName='fixture-planner-container' heading={props.content.Fixture.RotationPlanner.title + " - " + store.getState().league_type} description={props.content.Fixture.RotationPlanner.title}>
          <h1>{props.content.Fixture.RotationPlanner.title}</h1>
-         <form onSubmit={(e) =>  {updateFDRData(); e.preventDefault()}}>
-            {props.content.Fixture.gw_start}
-            <input 
-                className="form-number-box" 
-                type="number" 
-                min={min_gw}
-                max={max_gw}
-                onInput={(e) => setGwStart(parseInt(e.currentTarget.value))} 
-                value={gwStart} 
-                id="input-form-start-gw" 
-                name="input-form-start-gw">
-            </input>
-            {props.content.Fixture.gw_end}
-            <input 
-                className="form-number-box" 
-                type="number" 
-                min={gwStart}
-                max={max_gw}
-                onInput={(e) => setGwEnd(parseInt(e.currentTarget.value))} 
-                value={gwEnd} 
-                id="input-form-start-gw" 
-                name="input-form-start-gw">
-            </input>
+         { !firstloading && <>
+            <form onSubmit={(e) =>  {updateFDRData(); e.preventDefault()}}>
+                {props.content.Fixture.gw_start}
+                <input 
+                    className="form-number-box" 
+                    type="number" 
+                    min={min_gw}
+                    max={max_gw}
+                    onInput={(e) => setGwStart(parseInt(e.currentTarget.value))} 
+                    value={gwStart} 
+                    id="input-form-start-gw" 
+                    name="input-form-start-gw">
+                </input>
+                {props.content.Fixture.gw_end}
+                <input 
+                    className="form-number-box" 
+                    type="number" 
+                    min={gwStart}
+                    max={max_gw}
+                    onInput={(e) => setGwEnd(parseInt(e.currentTarget.value))} 
+                    value={gwEnd} 
+                    id="input-form-start-gw" 
+                    name="input-form-start-gw">
+                </input>
 
-            <br />
-            {props.content.Fixture.teams_to_check}
-            <input 
-                className="box" 
-                type="number" 
-                min={1} 
-                max={5} 
-                onInput={(e) => setTeamsToCheck(parseInt(e.currentTarget.value))} 
-                value={teamsToCheck} 
-                id="teams_to_check" 
-                name="teams_to_check" />
+                <br />
+                {props.content.Fixture.teams_to_check}
+                <input 
+                    className="box" 
+                    type="number" 
+                    min={1} 
+                    max={5} 
+                    onInput={(e) => setTeamsToCheck(parseInt(e.currentTarget.value))} 
+                    value={teamsToCheck} 
+                    id="teams_to_check" 
+                    name="teams_to_check" />
+                
+                {props.content.Fixture.teams_to_play}
+                <input 
+                    className="box" 
+                    type="number" 
+                    min={1} 
+                    max={5} 
+                    onInput={(e) => setTeamsToPlay(parseInt(e.currentTarget.value))} 
+                    value={teamsToPlay}
+                    id="teams_to_play" 
+                    name="teams_to_play" />
+
+                <input className="submit" type="submit" value={props.content.General.search_button_name}>
+                </input>
+            </form>
+
+            <div style={{ color: "red" }}>{validationErrorMessage}</div>
             
-            {props.content.Fixture.teams_to_play}
-            <input 
-                className="box" 
-                type="number" 
-                min={1} 
-                max={5} 
-                onInput={(e) => setTeamsToPlay(parseInt(e.currentTarget.value))} 
-                value={teamsToPlay}
-                id="teams_to_play" 
-                name="teams_to_play" />
+            <Button buttonText={props.content.Fixture.filter_button_text} 
+                icon_class={"fa fa-chevron-" + (showTeamFilters ? "up" : "down")} 
+                onclick={() => setShowTeamFilters(showTeamFilters ? false : true)} />
 
-            <input className="submit" type="submit" value={props.content.General.search_button_name}>
-            </input>
-        </form>
-
-        <div style={{ color: "red" }}>{validationErrorMessage}</div>
-        
-        <Button buttonText={props.content.Fixture.filter_button_text} 
-            icon_class={"fa fa-chevron-" + (showTeamFilters ? "up" : "down")} 
-            onclick={() => setShowTeamFilters(showTeamFilters ? false : true)} />
-
-        { teamData != null && teamData.length > 0 && teamData[0].team_name != "empty" && showTeamFilters &&
-            <div className='filter-teams-container'>
-                <div className='filter-teams-list'>
-                { teamData.map(team_name =>
-                    <CheckBox 
-                    buttonText={team_name.team_name} 
-                    checked1={team_name.checked} 
-                    checked2={team_name.checked_must_be_in_solution} 
-                    onclickBox1={(e: any) => toggleCheckbox(e)} 
-                    onclickBox2={(e: any) => toggleCheckboxMustBeInSolution(e)} 
-                    useTwoCheckBoxes={true} />
-                )}
+            { teamData != null && teamData.length > 0 && teamData[0].team_name != "empty" && showTeamFilters &&
+                <div className='filter-teams-container'>
+                    <div className='filter-teams-list'>
+                    { teamData.map(team_name =>
+                        <CheckBox 
+                        buttonText={team_name.team_name} 
+                        checked1={team_name.checked} 
+                        checked2={team_name.checked_must_be_in_solution} 
+                        onclickBox1={(e: any) => toggleCheckbox(e)} 
+                        onclickBox2={(e: any) => toggleCheckboxMustBeInSolution(e)} 
+                        useTwoCheckBoxes={true} />
+                    )}
+                    </div>
                 </div>
-            </div>
-        }
+            }
 
-        { loading && 
-            <div style={{ backgroundColor: "#E8E8E8"}}><Spinner /></div>
-        }
+            { loading && <Spinner /> }
 
-        <br ></br>
+            <br ></br>
 
-        { !loading && fdrDataToShow.length > 0 && fdrDataToShow[0].avg_Score != -1 &&
-            <ShowRotationData 
-                content={props.content}
-                fdrData={fdrDataToShow}
-                kickOffTimes={kickOffTimesToShow}    
-            />
+            { !loading && fdrDataToShow.length > 0 && fdrDataToShow[0].avg_Score != -1 &&
+                <ShowRotationData 
+                    content={props.content}
+                    fdrData={fdrDataToShow}
+                    kickOffTimes={kickOffTimesToShow}    
+                />
+            }</>
         }
+        { firstloading && <Spinner /> }
     </DefaultPageContainer></>
-
 };
 
 export default RotationPlannerPage;

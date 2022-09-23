@@ -1,4 +1,5 @@
 import { TeamFDRDataModel, FDR_GW_i, FDRData } from '../../../models/fixturePlanning/TeamFDRData';
+import { DefaultPageContainer } from '../../Layout/DefaultPageContainer/DefaultPageContainer';
 import { FixturePlanningType } from '../../../models/fixturePlanning/FixturePlanningType';
 import { KickOffTimesModel } from '../../../models/fixturePlanning/KickOffTimes';
 import React, { useState, useEffect, FunctionComponent } from 'react';
@@ -28,7 +29,7 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
     const min_gw = 1;
     const max_gw = 30;
     
-    const empty: TeamFDRDataModel[] = [ { team_name: "-", FDR: [], checked: true, font_color: "FFF", background_color: "FFF" }];
+    const empty: TeamFDRDataModel[] = [ { team_name: "-", FDR: [], checked: true, font_color: "FFF", background_color: "FFF", fdr_total_score: 0 }];
     const emptyGwDate: KickOffTimesModel[] = [{gameweek: 0, day_month: "",kickoff_time: "" }];
 
     const [ fdrDataToShow, setFdrDataToShow ] = useState(empty);
@@ -98,12 +99,14 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
             
             data.fdr_data.forEach((team: any[]) => {
                 let team_name = JSON.parse(team[0][0][0]).team_name;
-
+                let fdr_total_score = 0;
                 let FDR_gw_i: FDR_GW_i[] = [];
+                
                 team.forEach((fdr_for_each_gw: any[]) => {
                     let temp: FDRData[] = [];
                     fdr_for_each_gw.forEach((fdr_in_gw_i: any) => {
                         let fdr_in_gw_i_json = JSON.parse(fdr_in_gw_i);
+                        fdr_total_score = fdr_in_gw_i_json.FDR_score;
                         temp.push({
                             opponent_team_name: fdr_in_gw_i_json.opponent_team_name,
                             difficulty_score: fdr_in_gw_i_json.difficulty_score,
@@ -123,7 +126,7 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
                     }    
                     );
                 }
-                let tempTeamData = { team_name: team_name, FDR: FDR_gw_i, checked: true, font_color: font_color, background_color: background_color }
+                let tempTeamData = { team_name: team_name, FDR: FDR_gw_i, checked: true, font_color: font_color, background_color: background_color, fdr_total_score: fdr_total_score }
                 apiFDRList.push(tempTeamData);
             });
 
@@ -139,7 +142,7 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
             if (x.team_name == e.currentTarget.value) {
                 checked = !x.checked;
             }
-            temp.push({ team_name: x.team_name, FDR: x.FDR, checked: checked, font_color: x.font_color, background_color: x.background_color });
+            temp.push({ team_name: x.team_name, FDR: x.FDR, checked: checked, font_color: x.font_color, background_color: x.background_color, fdr_total_score: x.fdr_total_score });
         });
         setFdrDataToShow(temp);
     }
@@ -167,7 +170,7 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
     }
 
     return <>
-    <div className='fixture-planner-container' id="fixture-planner-container">
+    <DefaultPageContainer pageClassName='fixture-planner-container' heading={title + " - " + store.getState().league_type} description={title}>
         <h1>{title}<Popover 
             id={"rotations-planner-id"}
             title=""
@@ -190,7 +193,7 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
                     <span style={{backgroundColor: convertFDRtoHex("5", fdrToColor)}} className="diff-introduction-box">5</span>
                     <span style={{backgroundColor: convertFDRtoHex("10", fdrToColor)}} className="diff-introduction-box black">10</span>
                 </p>
-                <p>Lilla bokser markerer en dobbelt runde, mens svarte bokser markerer at laget ikke har kamp den runden.</p></>
+                <p>Lilla bokser markerer en dobbeltrunde, mens svarte bokser markerer at laget ikke har kamp den runden.</p></>
             }
             </Popover>
         </h1>
@@ -251,9 +254,7 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
             </div>
         }
 
-        { loading && 
-            <div style={{ backgroundColor: "#E8E8E8"}}><Spinner /></div>
-        }
+        { loading && <Spinner /> }
 
         { !loading && fdrDataToShow.length > 0 && fdrDataToShow[0].team_name != "-" && kickOffTimesToShow.length > 0 && kickOffTimesToShow[0].gameweek != 0 && (
             <ShowFDRData 
@@ -263,7 +264,8 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
                 allowToggleBorder={true}
                 fdrToColor={fdrToColor} />
         )}
-     </div> </>
+    </DefaultPageContainer>
+    </>
 };
 
 export default FixturePlannerEliteserienPage;

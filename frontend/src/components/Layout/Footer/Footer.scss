@@ -1,8 +1,8 @@
 .footer {
+    background-color: var(--footer-color);
+    color: var(--white-color);
     position: relative;
     width: 100%;
-    background-color: #0f3443;
-    color: white;
     padding-top: 20px;
     padding-bottom: 35px;
 
@@ -20,6 +20,8 @@
 
         .footer-section-social-media {
             margin-left: auto;
+            margin-right: 20px;
+
             a {
                 display: inline;
                 position: relative;
@@ -33,14 +35,14 @@
         }
 
         a {
-            color: white;
+            color: var(--white-color);
             display: block;
             border-bottom: 1px solid transparent;
             font-size: 13px;
             margin-top: 5px;
 
             &:hover {
-                border-color: white;
+                border-color: var(--white-color);
                 width: fit-content;
             }
         }
@@ -49,12 +51,24 @@
     h2 {
         margin-top: 10px !important;
         font-size: 18px;
-        color: #7fd9ff;
+        color: var(--footer-h2-color-eliteserien);
+    }
+
+    svg {
+        color: var(--footer-h2-color-eliteserien);
+    }
+
+    .footer-section-social-media {
+        margin-top: 15px;
     }
 
     &.FPL {
         h2 {
-            color: var(--fpl-linear-gradient-second-color);
+            color: var(--footer-h2-color-premier-league);
+        }
+
+        svg {
+            color: var(--footer-h2-color-premier-league);
         }
     }
 }

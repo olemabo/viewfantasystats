@@ -20,7 +20,7 @@ const SortType = {
 
 export const TableSortHead : FunctionComponent<TableSortHeadProps> = (props) => {
     const [ sortType, setSortType ] = useState(props.defaultSortType);
-    
+
     useEffect(() => {
         if (props.reset) {
             setSortType(SortType.NotSorted);
@@ -29,10 +29,10 @@ export const TableSortHead : FunctionComponent<TableSortHeadProps> = (props) => 
     }, [props.reset]);
 
     useEffect(() => { 
-        if (props.text == "EO" && props.reset) {
+        if ( (props.text == "EO" || props.text == "Points") && props.reset) {
             setSortType(SortType.NotSorted);
         } 
-        else if (props.text == "EO" && props.defaultSortType && sortType == SortType.NotSorted) {
+        else if ( (props.text == "EO" || props.text == "Points") && props.defaultSortType && sortType == SortType.NotSorted) {
             setSortType(props.defaultSortType);
         }
     });

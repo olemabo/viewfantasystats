@@ -15,12 +15,11 @@
         max-width: 1000px;
         margin: 3px auto;
         display: inline-block;
-        background-color: #dfdfdfc7;
-        border: 0px black solid;
+        background-color: var(-name-col-color);
+        border: 0px var(--black-color) solid;
         height: 1000px;
         overflow-y: auto;
         flex-wrap: wrap;
         justify-content: center;
     }
 }
-

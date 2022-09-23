@@ -1,7 +1,8 @@
-from constants import nationality_delimiter, all_top_x_players_eliteserien, total_chip_usage_txt_file_name, current_season_name_eliteserien, total_number_of_gameweeks_in_eliteserien, global_stats_folder_name, eliteserien_folder_name, name_of_extra_info_file, name_of_nationality_file, path_to_store_local_data, all_top_x_players_eliteserien, name_of_ownership_file, total_number_of_gameweeks
+from constants import ranking_delimiter, nationality_delimiter, all_top_x_players_eliteserien, total_chip_usage_txt_file_name, current_season_name_eliteserien, total_number_of_gameweeks_in_eliteserien, global_stats_folder_name, eliteserien_folder_name, name_of_extra_info_file, name_of_nationality_file, path_to_store_local_data, all_top_x_players_eliteserien, name_of_ownership_file, total_number_of_gameweeks
 from player_statistics.db_models.eliteserien.ownership_statistics_model_eliteserien import EliteserienChipsAndUserInfo, EliteserienGlobalOwnershipStats5000, \
     EliteserienGlobalOwnershipStats1000, EliteserienGlobalOwnershipStats100, EliteserienGwsChecked
 from player_statistics.db_models.eliteserien.nationality_statistics_model_eliteserien import EliteserienNationalityStatistics
+from player_statistics.db_models.eliteserien.rank_and_points_eliteserien import EliteserienRankAndPoints
 import numpy as np
 import datetime
 import os
@@ -13,6 +14,39 @@ def write_global_stats_to_db_eliteserien():
         fill_db_ownership_statistics_eliteserien(gw, file_path)
         fill_db_extra_info_statistics_eliteserien(gw, file_path)
         fill_db_nationality_statistics_eliteserien(gw, file_path)
+        fill_db_rank_and_points_eliteserien(gw, file_path)
+
+
+def fill_db_rank_and_points_eliteserien(gw, file_path):
+    all_top_x_players_eliteserien_reveresed = all_top_x_players_eliteserien[::-1]
+    for top_x_player in all_top_x_players_eliteserien_reveresed:
+        current_path = file_path + "/top_" + str(top_x_player) + "/" + name_of_extra_info_file
+        if (os.path.exists(current_path)):
+            db_data = []
+            points_away_from_first = 0
+            avg_data = np.loadtxt(current_path, dtype="str", delimiter=",", skiprows=4)
+            for i in all_top_x_players_eliteserien:
+                current_idx = i - 1
+                if (current_idx < len(avg_data)):
+                    rank = current_idx + 1
+                    points = int(float(avg_data[current_idx][4]))
+                    if len(db_data) > 0:
+                        points_away_from_first = int(float(db_data[0][1])) - points
+                    db_data.append([rank, points, points_away_from_first])
+
+            db_data_updated = []
+            for i in db_data:
+                list_as_string = str(i).replace(",", ranking_delimiter).replace(" ", "").replace("[", "").replace("]", "")
+                db_data_updated.append(list_as_string)
+
+            if len(EliteserienRankAndPoints.objects.filter(gw = gw)) > 0:
+                fill_model = EliteserienRankAndPoints.objects.filter(gw = gw)
+                fill_model.update(gw=gw, ranking_history=db_data_updated)
+            else:
+                fill_model = EliteserienRankAndPoints(gw=gw, ranking_history=db_data_updated)
+                fill_model.save()
+            print("Filled 'EliteserienRankAndPoints' for gw: ", gw)
+            break
 
 
 def fill_db_ownership_statistics_eliteserien(gw, file_path):

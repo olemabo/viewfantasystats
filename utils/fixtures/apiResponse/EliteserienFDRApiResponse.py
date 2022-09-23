@@ -1,7 +1,7 @@
 import json
 
 
-class EliteserienFDRResponse:
+class EliteserienFDRApiResponse:
     def __init__(self, fdr_data, gws_and_dates, fdr_to_colors_dict, team_name_color, gw_start, gw_end):
         ...
         self.fdr_data = fdr_data

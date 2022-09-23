@@ -1,6 +1,6 @@
 from fixture_planner.backend.utility_functions import calc_score
 from fixture_planner_eliteserien.backend.utility_functions import create_Elitserien_FDR_dict
-from utils.models.fixtures.FixtureDifficultyModel import FixtureDifficultyModel
+from utils.fixtures.models.FixtureDifficultyModel import FixtureDifficultyModel
 
 
 def find_best_fixture_with_min_length_each_team_eliteserien(data, GW_start, GW_end, min_length=5):

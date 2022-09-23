@@ -4,12 +4,14 @@ export interface TeamFDRDataModel {
     font_color: string;
     checked: boolean;
     FDR: FDR_GW_i [];
+    fdr_total_score: number;
 }
 
 export interface SimpleTeamFDRDataModel {
     team_name: string;
     checked: boolean;
     FDR: FDR_GW_i [];
+    fdr_total_score: number;
 }
 
 export interface FDR_GW_i {

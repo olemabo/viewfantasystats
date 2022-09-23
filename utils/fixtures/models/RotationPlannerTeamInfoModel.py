@@ -1,6 +1,6 @@
 import json
 
-class RotationPlannerTeamInfo:
+class RotationPlannerTeamInfoModel:
     def __init__(self, avg_Score, id_list, team_name_list, extra_fixtures, home_games, fixture_list):
         ...
         self.avg_Score = avg_Score

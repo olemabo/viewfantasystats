@@ -1,6 +1,6 @@
 from utils.dictionaries import dict_month_number_to_month_name_short
 from utils.utility_functions import get_static_json_data
-from utils.models.DataFetch import DataFetch
+from utils.dataFetch.DataFetch import DataFetch
 import json
 
 

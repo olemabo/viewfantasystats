@@ -3,11 +3,13 @@ import React, { useState, useEffect, FunctionComponent } from 'react';
 import Pagination from 'rc-pagination';
 import axios from 'axios';
 
+import { DefaultPageContainer } from '../../Layout/DefaultPageContainer/DefaultPageContainer';
 import { TableSortHead } from './../../Shared/TableSortHead/TableSortHead';
 import { RankModel } from '../../../models/RankStatistics/RankStatistics';
 import { LanguageProps } from '../../../models/shared/LanguageProps';
 import { Spinner } from '../../Shared/Spinner/Spinner';
 import { store } from '../../../store/index';
+import OpenInNew from '@material-ui/icons/OpenInNew';
 
 import '../../../components/Shared/Pagination/Pagination.scss';
 import './RankStatistics.scss';
@@ -27,6 +29,8 @@ export const RankStatisticsPage : FunctionComponent<LanguageProps> = (props) => 
     const [ isLoading, setIsLoading ] = useState(false);
     const [ fantasy_manager_url, setFantasy_manager_url ] = useState("");
     const [ number_of_last_years, setNumber_of_last_years ] = useState(0);
+    const [ query, setQuery ] = useState("");
+    const  [ firstLoading, setFirstLoading ] = useState(true);
 
     useEffect(() => {
         if (store.getState()?.league_type != "Eliteserien") {
@@ -63,6 +67,8 @@ export const RankStatisticsPage : FunctionComponent<LanguageProps> = (props) => 
             setRanks(temp);
             setRanksToShow(temp);
             setIsLoading(false);
+            if (query) { searchUsers(query); }
+            if (firstLoading) { setFirstLoading(false); }
         })
     }
 
@@ -80,7 +86,9 @@ export const RankStatisticsPage : FunctionComponent<LanguageProps> = (props) => 
                 temp.push(x);
             }
         })
+        console.log(temp)
         setRanksToShow(temp);
+        setQuery(keyword);
     }
 
     function changeLastXYears(last_x_years: number) {
@@ -122,17 +130,21 @@ export const RankStatisticsPage : FunctionComponent<LanguageProps> = (props) => 
 
     const [ currentSorted, setCurrentSorted ] = useState("Rank");
 
+    let title = props.content.Statistics.RankStatistics.title;
+
     return <>
-     <div className='search-user-name-container' id="rotation-planner-container">
-        <h1>{props.content.Statistics.RankStatistics.title}</h1>
-        
+    <DefaultPageContainer pageClassName='search-user-name-container' heading={title + " - " + store.getState().league_type} description={title}>
+    <h1>{title}</h1>
+        { !firstLoading && <>
+
         <form className="form-stuff text-center">
-            <div className='box-1'>
+            <div className='last-x-seasons-select'>
                 <label>{props.content.Statistics.RankStatistics.last_season}</label>
                 <select onChange={(e) => changeLastXYears(parseInt(e.target.value))} className="input-box" id="sort_on_dropdown" name="sort_on">
                     { Array.from(Array(number_of_last_years), (e, i) => 
                         <option selected={last_x_years == (i + 1)} value={(i + 1).toString()}>
-                            {(i+ 1).toString()}
+                            { i == 0 && props.content.General.previous + " " + props.content.General.season }
+                            { i > 0 && props.content.General.last + " " + (i+ 1).toString() + " " + props.content.General.seasons}
                             </option> )}
                 </select>
             </div>
@@ -143,7 +155,8 @@ export const RankStatisticsPage : FunctionComponent<LanguageProps> = (props) => 
                 <label className='hidden'>Search bar</label>
                 <input onChange={(e) => searchUsers(e.target.value)} placeholder={props.content.Statistics.PlayerOwnership.search_text} className='input-box' type="search" id="site-search" name="q"></input>
             </div>
-        </form>
+        </form></>
+        }
 
         { isLoading && 
             <Spinner />
@@ -170,7 +183,12 @@ export const RankStatisticsPage : FunctionComponent<LanguageProps> = (props) => 
                         <td className="name-col"> <div className="format-name-col">{ x.name }</div> </td>
                         <td className="">{ x.avg_rank }</td>
                         <td className="">{ x.avg_points } </td>
-                        <td className=""><a target="_blank" href={fantasy_manager_url.replace("X", x.user_id)}>{props.content.General.see_team}</a></td>
+                        <td className="">
+                            <a target="_blank" href={fantasy_manager_url.replace("X", x.user_id)}>
+                                {props.content.General.see_team}
+                                <OpenInNew fontSize='small' />
+                            </a>
+                        </td>
                     </tr>
                     )}             
                 </tbody>
@@ -185,7 +203,8 @@ export const RankStatisticsPage : FunctionComponent<LanguageProps> = (props) => 
                     total={ranksToShow.length} /> 
             }
         </>}
-     </div></>
+    </DefaultPageContainer>
+    </>
 };
 
 export default RankStatisticsPage;

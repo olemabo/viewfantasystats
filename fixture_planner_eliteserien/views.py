@@ -4,17 +4,19 @@ from fixture_planner_eliteserien.backend.fixture_algorithms.fixture_planner_alor
 from fixture_planner_eliteserien.backend.read_eliteserien_data import readEliteserienExcelFromDagFinnToDBFormat
 from fixture_planner_eliteserien.models import EliteserienKickOffTime, EliteserienTeamInfo
 from utils.util_functions.fixture.get_upcoming_gw import get_upcoming_gw_eliteserien
-from utils.models.Eliteserien.EliteserienFDRResponse import EliteserienFDRResponse
-from utils.models.fixtures.KickOffTimesModel import KickOffTimesModel
 from utils.dictionaries import dict_month_number_to_month_name_short
-from utils.models.fixtures.WhichTeamToCheck import WhichTeamToCheck
 from django.http import HttpResponse, JsonResponse
-from utils.models.DataFetch import DataFetch
-from rest_framework.response import Response
+from utils.dataFetch.DataFetch import DataFetch
 from constants import eliteserien_api_url, current_season_name_eliteserien, eliteserien_folder_name, path_to_store_local_data, fixture_folder_name
+
+from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from datetime import date
+
+from utils.fixtures.apiResponse.EliteserienFDRApiResponse import EliteserienFDRApiResponse
+from utils.fixtures.models.WhichTeamToCheckModel import WhichTeamToCheckModel
+from utils.fixtures.models.KickOffTimesModel import KickOffTimesModel
 
 class GetKickOffTimesEliteserien(APIView):
 
@@ -57,7 +59,7 @@ class PostEliteserienFDRData(APIView):
             fixture_list = [fixture_list_db[i] for i in range(0, number_of_teams)]
 
             for i in range(number_of_teams):
-                team_dict[fixture_list[i].team_name] = WhichTeamToCheck(fixture_list[i].team_name, 'checked')
+                team_dict[fixture_list[i].team_name] = WhichTeamToCheckModel(fixture_list[i].team_name, 'checked')
             
             team_name_list = []
             fixture_list = []
@@ -132,7 +134,7 @@ class PostEliteserienFDRData(APIView):
                         kick_off_time.day_month
                     ).toJson())
             
-            fdr_and_gws = EliteserienFDRResponse(fdr_fixture_data, temp_kick_off_time, fdr_to_colors_dict, team_name_color, start_gw, end_gw) 
+            fdr_and_gws = EliteserienFDRApiResponse(fdr_fixture_data, temp_kick_off_time, fdr_to_colors_dict, team_name_color, start_gw, end_gw) 
 
             return JsonResponse(fdr_and_gws.toJson(), safe=False)
 

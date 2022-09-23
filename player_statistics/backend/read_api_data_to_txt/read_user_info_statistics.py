@@ -1,6 +1,6 @@
 
 from constants import current_season_name_eliteserien, current_season_name_premier_league, user_stats_special_delimiter, user_stats_folder_name, premier_league_api_url, eliteserien_api_url, eliteserien_folder_name, path_to_store_local_data
-from utils.models.DataFetch import DataFetch
+from utils.dataFetch.DataFetch import DataFetch
 import numpy as np
 import time
 import os 

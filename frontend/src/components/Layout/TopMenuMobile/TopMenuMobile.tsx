@@ -9,6 +9,7 @@ import { content_json } from "../../../language/languageContent";
 
 import { store } from '../../../store/index';
 import { Link } from "react-router-dom";
+import * as urls from '../../../internal_urls/internalUrls';
 
 
 interface TopMenyProps {
@@ -87,8 +88,8 @@ export const TopMenuMobile: React.FunctionComponent<TopMenyProps> = (props) => {
                         <button className={language == english ? "" : "not-chosen"} onClick={() => updateLanguage(english)}>En</button>
                     </div>
                     <div>
-                        { league_type == eliteserien && <Link className="circle-link fpl" onClick={() => updateSoccerLeague(fpl)} to="/fixture-planner/"></Link> }
-                        { league_type == fpl && <Link className="circle-link eliteserien" onClick={() => updateSoccerLeague(eliteserien)} to="/fixture-planner-eliteserien/"></Link> }
+                        { league_type == eliteserien && <Link className="circle-link fpl" onClick={() => updateSoccerLeague(fpl)} to={urls.url_premier_league}></Link> }
+                        { league_type == fpl && <Link className="circle-link eliteserien" onClick={() => updateSoccerLeague(eliteserien)} to={urls.url_elitserien}></Link> }
                     </div>
                 </div>
                 <nav className="mobile-sub-menu-container">
@@ -97,19 +98,22 @@ export const TopMenuMobile: React.FunctionComponent<TopMenyProps> = (props) => {
                             {/* <h2>Fixture Planning</h2> */}
                             <li className="sub-menu-item">
                                 {/* <HomeIcon /> */}
-                                <a onClick={() => closeMenu()} href="../../../fixture-planner-eliteserien/fdr-planner/">{props.content.Fixture.FixturePlanner.title}</a>
+                                <a onClick={() => closeMenu()} href={"../../../" + urls.url_elitserien_fdr_planner}>{props.content.Fixture.FixturePlanner.title}</a>
                             </li>
                             <li className="sub-menu-item">
                                 {/* <SportsSoccerIcon /> */}
-                                <a onClick={() => closeMenu()} href="../../../fixture-planner-eliteserien/rotation-planner/">{props.content.Fixture.RotationPlanner.title}</a>
+                                <a onClick={() => closeMenu()} href={"../../../" + urls.url_eliteserien_rotation_planner}>{props.content.Fixture.RotationPlanner.title}</a>
                             </li>
                             <li onClick={() => closeMenu()} className="sub-menu-item">
                                 {/* <BarChartIcon /> */}
-                                <a href="../../../fixture-planner-eliteserien/periode-planner/">{props.content.Fixture.PeriodPlanner.title}</a>
+                                <a href={"../../../" + urls.url_eliteserien_periode_planner}>{props.content.Fixture.PeriodPlanner.title}</a>
                             </li>
                             {/* <h2>Statistics</h2> */}
                             <li onClick={() => closeMenu()} className="sub-menu-item">
-                                <a href="../../../statistics/player-ownership/">{props.content.Statistics.PlayerOwnership.title}</a>
+                                <a href={"../../../" + urls.url_eliteserien_player_ownership}>{props.content.Statistics.PlayerOwnership.title}</a>
+                            </li>
+                            <li onClick={() => closeMenu()} className="sub-menu-item">
+                                <a href={"../../../" + urls.url_eliteserien_rank_statistics}>{props.content.Statistics.RankStatistics.title}</a>
                             </li>
                             </>
                         }   
@@ -117,18 +121,22 @@ export const TopMenuMobile: React.FunctionComponent<TopMenyProps> = (props) => {
                         { league_type == fpl && <>
                             <li className="sub-menu-item">
                                 {/* <HomeIcon /> */}
-                                <a onClick={() => closeMenu()} href="../../../fixture-planner/fdr-planner/">{props.content.Fixture.FixturePlanner.title}</a>
+                                <a onClick={() => closeMenu()} href={"../../../" + urls.url_premier_league_fdr_planner}>{props.content.Fixture.FixturePlanner.title}</a>
                             </li>
                             <li className="sub-menu-item">
                                 {/* <SportsSoccerIcon /> */}
-                                <a onClick={() => closeMenu()} href="../../../fixture-planner/rotation-planner/">{props.content.Fixture.RotationPlanner.title}</a>
+                                <a onClick={() => closeMenu()} href={"../../../" + urls.url_premier_league_rotation_planner}>{props.content.Fixture.RotationPlanner.title}</a>
                             </li>
                             <li className="sub-menu-item">
                                 {/* <BarChartIcon /> */}
-                                <a onClick={() => closeMenu()} href="../../../fixture-planner/periode-planner/">{props.content.Fixture.PeriodPlanner.title}</a>
+                                <a onClick={() => closeMenu()} href={"../../../" + urls.url_premier_league_periode_planner}>{props.content.Fixture.PeriodPlanner.title}</a>
                             </li>
                             <li onClick={() => closeMenu()} className="sub-menu-item">
-                                <a href="../../../statistics-premier-league/player-ownership/">{props.content.Statistics.PlayerOwnership.title}</a>
+                                <a href={"../../../" + urls.url_premier_league_player_ownership}>{props.content.Statistics.PlayerOwnership.title}</a>
+                            </li>
+
+                            <li onClick={() => closeMenu()} className="sub-menu-item">
+                                <a href={"../../../" + urls.url_premier_league_player_statistics}>{props.content.Statistics.PlayerStatistics.title}</a>
                             </li>
                             </>
                         }

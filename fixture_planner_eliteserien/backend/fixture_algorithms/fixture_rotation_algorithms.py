@@ -1,10 +1,10 @@
 from fixture_planner.backend.utility_functions import fixture_score_one_team, insertion_sort, create_two_dim_list
 from fixture_planner.backend.fixture_planner_best_algorithms import compute_best_fixtures_one_team_db_data
 from constants import total_number_of_eliteserien_teams
-from utils.models.fixtures.FixtureDifficultyModel import FixtureDifficultyModel
+from utils.fixtures.models.FixtureDifficultyModel import FixtureDifficultyModel
 from itertools import combinations
 import numpy as np
-from utils.models.RotationPlannerTeamInfo import RotationPlannerTeamInfo
+from utils.fixtures.models.RotationPlannerTeamInfoModel import RotationPlannerTeamInfoModel
 import json
 
 
@@ -172,7 +172,7 @@ def find_best_rotation_combosEliteserien(data, GW_start, GW_end, teams_to_check=
 
     for team in combos_with_score_new:
         team1 = [ str(i) for i in team[1]]
-        combos_with_score_json.append(RotationPlannerTeamInfo(team[0], team1, team[2], team[3], team[4], team[5]).toJson())
+        combos_with_score_json.append(RotationPlannerTeamInfoModel(team[0], team1, team[2], team[3], team[4], team[5]).toJson())
 
     return combos_with_score_json
 
