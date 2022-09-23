@@ -19,21 +19,21 @@ export const Footer : FunctionComponent<LanguageProps> = (props) => {
           <div className="footer-section">
             <h2>{props.content.Fixture.fixture}</h2>
             <div>
-              <a href={"../../../" + urls.url_premier_league_fdr_planner}>{props.content.Fixture.FixturePlanner.title}</a>
-              <a href={"../../../" + urls.url_premier_league_rotation_planner}>{props.content.Fixture.RotationPlanner.title}</a>
-              <a href={"../../../" + urls.url_premier_league_periode_planner}>{props.content.Fixture.PeriodPlanner.title}</a>
+              <a href={"../../../" + urls.url_premier_league_fdr_planner}>{props.content.Fixture.FixturePlanner?.title}</a>
+              <a href={"../../../" + urls.url_premier_league_rotation_planner}>{props.content.Fixture.RotationPlanner?.title}</a>
+              <a href={"../../../" + urls.url_premier_league_periode_planner}>{props.content.Fixture.PeriodPlanner?.title}</a>
             </div>
           </div>
           <div className="footer-section">
             <h2>{props.content.Statistics.statistic}</h2>
             <div>
-              <a href={"../../../" + urls.url_premier_league_player_ownership}>{props.content.Statistics.PlayerOwnership.title}</a>
-              <a href={"../../../" + urls.url_premier_league_player_statistics}>{props.content.Statistics.PlayerStatistics.title}</a>
-              {/* <a href={"../../../" + urls.url_elitserien_fdr_planner}>{props.content.Fixture.FixturePlanner.title}</a>
-              <a href={"../../../" + urls.url_eliteserien_rotation_planner}>{props.content.Fixture.RotationPlanner.title}</a>
-              <a href={"../../../" + urls.url_eliteserien_periode_planner}>{props.content.Fixture.PeriodPlanner.title}</a>
-              <a href={"../../../" + urls.url_eliteserien_player_ownership}>{props.content.Statistics.PlayerOwnership.title}</a>                      */}
-              {/* <a className="dropbtn" href="../../../statistics/search-user-names/">{props.content.Statistics.SearchUserName.title}</a> */}
+              <a href={"../../../" + urls.url_premier_league_player_ownership}>{props.content.Statistics.PlayerOwnership?.title}</a>
+              <a href={"../../../" + urls.url_premier_league_player_statistics}>{props.content.Statistics.PlayerStatistics?.title}</a>
+              {/* <a href={"../../../" + urls.url_elitserien_fdr_planner}>{props.content.Fixture.FixturePlanner?.title}</a>
+              <a href={"../../../" + urls.url_eliteserien_rotation_planner}>{props.content.Fixture.RotationPlanner?.title}</a>
+              <a href={"../../../" + urls.url_eliteserien_periode_planner}>{props.content.Fixture.PeriodPlanner?.title}</a>
+              <a href={"../../../" + urls.url_eliteserien_player_ownership}>{props.content.Statistics.PlayerOwnership?.title}</a>                      */}
+              {/* <a className="dropbtn" href="../../../statistics/search-user-names/">{props.content.Statistics.SearchUserName?.title}</a> */}
             </div>
           </div>
         </> }
@@ -41,22 +41,22 @@ export const Footer : FunctionComponent<LanguageProps> = (props) => {
           <div className="footer-section">
             <h2>{props.content.Fixture.fixture}</h2>
             <div>
-              <a href={"../../../" + urls.url_elitserien_fdr_planner}>{props.content.Fixture.FixturePlanner.title}</a>
-              <a href={"../../../" + urls.url_eliteserien_rotation_planner}>{props.content.Fixture.RotationPlanner.title}</a>
-              <a href={"../../../" + urls.url_eliteserien_periode_planner}>{props.content.Fixture.PeriodPlanner.title}</a>
+              <a href={"../../../" + urls.url_elitserien_fdr_planner}>{props.content.Fixture.FixturePlanner?.title}</a>
+              <a href={"../../../" + urls.url_eliteserien_rotation_planner}>{props.content.Fixture.RotationPlanner?.title}</a>
+              <a href={"../../../" + urls.url_eliteserien_periode_planner}>{props.content.Fixture.PeriodPlanner?.title}</a>
               </div>
           </div>
           <div className="footer-section">
             <h2>{props.content.Statistics.statistic}</h2>
             <div>
-              <a href={"../../../" + urls.url_eliteserien_player_ownership}>{props.content.Statistics.PlayerOwnership.title}</a>                     
-              <a href={"../../../" + urls.url_eliteserien_rank_statistics}>{props.content.Statistics.RankStatistics.title}</a>                     
+              <a href={"../../../" + urls.url_eliteserien_player_ownership}>{props.content.Statistics.PlayerOwnership?.title}</a>                     
+              <a href={"../../../" + urls.url_eliteserien_rank_statistics}>{props.content.Statistics.RankStatistics?.title}</a>                     
             </div>
           </div>
           {/* <div className="footer-section">
             <h2>{props.content.Statistics.search}</h2>
             <div>
-              <a href={"../../../" + urls.url_eliteserien_search_user_name}>{props.content.Statistics.SearchUserName.title}</a>                     
+              <a href={"../../../" + urls.url_eliteserien_search_user_name}>{props.content.Statistics.SearchUserName?.title}</a>                     
             </div>
           </div> */}
         </> }

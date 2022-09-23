@@ -64,7 +64,7 @@ export const SearchUserNamePage : FunctionComponent<LanguageProps> = (props) => 
     
     return <>
      <div className='search-user-name-container' id="rotation-planner-container">
-         <h1>{props.content.Statistics.SearchUserName.title}</h1>
+         <h1>{props.content.Statistics.SearchUserName?.title}</h1>
         <form className="" onSubmit={(e) => {search(); e.preventDefault()}}>
 
             <div className='search-box'>

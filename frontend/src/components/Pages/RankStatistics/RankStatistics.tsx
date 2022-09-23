@@ -130,7 +130,7 @@ export const RankStatisticsPage : FunctionComponent<LanguageProps> = (props) => 
 
     const [ currentSorted, setCurrentSorted ] = useState("Rank");
 
-    let title = props.content.Statistics.RankStatistics.title;
+    let title = props.content.Statistics.RankStatistics?.title;
 
     return <>
     <DefaultPageContainer pageClassName='search-user-name-container' heading={title + " - " + store.getState().league_type} description={title}>

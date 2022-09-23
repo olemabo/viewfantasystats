@@ -5,6 +5,7 @@ import { Routes, Route } from "react-router-dom";
 import { store } from "../../../store/index";
 import { useSelector } from 'react-redux';
 import { FixturePlanningType } from '../../../models/fixturePlanning/FixturePlanningType';
+import { content_json } from "../../../language/languageContent";
 
 
 import PlayerOwnership from "../../Pages/PlayerOwnership/PlayerOwnership";
@@ -42,6 +43,15 @@ export const DefaultLayout = () => {
             setLangaugeContent(langaugeContentFromRedux);
         }
     }, [langaugeContentFromRedux]);
+
+    useEffect(() => {
+        if (store?.getState()?.language_code == "en") {
+            store.dispatch({type: "language", payload: content_json.English});
+        }
+        else {
+            store.dispatch({type: "language", payload: content_json.Norwegian});
+        }
+    }, [])
 
     return <>
     <div>

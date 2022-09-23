@@ -185,15 +185,15 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
     }
 
     return <>
-    <DefaultPageContainer pageClassName='fixture-planner-container' heading={props.content.Fixture.RotationPlanner.title + " - " + store.getState().league_type} description={props.content.Fixture.RotationPlanner.title}>
-         <h1>{props.content.Fixture.RotationPlanner.title}<Popover 
+    <DefaultPageContainer pageClassName='fixture-planner-container' heading={props.content.Fixture.RotationPlanner?.title + " - " + store.getState().league_type} description={props.content.Fixture.RotationPlanner?.title}>
+         <h1>{props.content.Fixture.RotationPlanner?.title}<Popover 
             id={"rotations-planner-id"}
             title=""
             algin_left={true}
-            popover_title={props.content.Fixture.RotationPlanner.title} 
+            popover_title={props.content.Fixture.RotationPlanner?.title} 
             iconSize={14}
             iconpostition={[-10, 0, 0, 3]}
-            popover_text={ props.content.Fixture.RotationPlanner.title + " viser kombinasjoner av lag som kan roteres for å gi best mulig kampprogram. "
+            popover_text={ props.content.Fixture.RotationPlanner?.title + " viser kombinasjoner av lag som kan roteres for å gi best mulig kampprogram. "
             + "Eksempelvis ønsker man å finne to keepere som roterer bra mellom runde 10 og 20. "
             + "'" + props.content.Fixture.gw_start.toString() + "'" + " og " + "'" + props.content.Fixture.gw_end.toString() + "'" + " blir da henholdsvis 10 og 20. "
             + "'" + props.content.Fixture.teams_to_check.toString() + "'" + " blir 2 fordi man skal ha 2 keepere som skal rotere. "

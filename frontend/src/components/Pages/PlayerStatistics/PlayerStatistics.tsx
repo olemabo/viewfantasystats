@@ -190,8 +190,8 @@ export const PlayerStatisticsPage : FunctionComponent<LanguageProps> = (props) =
     console.log(currentSorted, categories)
 
     return <>
-        <DefaultPageContainer pageClassName='player-ownership-container' heading={props.content.Statistics.PlayerStatistics.title + " - " + store.getState().league_type} description={props.content.Statistics.PlayerStatistics.title}>
-        <h1>{props.content.Statistics.PlayerStatistics.title}</h1>
+        <DefaultPageContainer pageClassName='player-ownership-container' heading={props.content.Statistics.PlayerStatistics?.title + " - " + store.getState().league_type} description={props.content.Statistics.PlayerStatistics?.title}>
+        <h1>{props.content.Statistics.PlayerStatistics?.title}</h1>
         { !firstLoading && <>
             <form className="form-stuff player-stats text-center">
             <div className='box-1'>

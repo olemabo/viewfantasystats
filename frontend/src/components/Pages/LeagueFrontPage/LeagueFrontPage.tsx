@@ -167,7 +167,7 @@ export const FrontPage : FunctionComponent<FrontPageProps> = (props) => {
 
     return <>
     <DefaultPageContainer pageClassName='front-page-container' heading={props.content.Fixture?.RotationPlanner?.title + " - " + store.getState().league_type} description={props.content?.Fixture?.RotationPlanner?.title}>
-        { currentGw > 0 && <h1>{props.content.General.gw} {currentGw}</h1>}
+        { currentGw > 0 && <h1>{props.content.General?.gw} {currentGw}</h1>}
         <h2> {props.content?.Statistics?.PlayerOwnership?.title} (EO) {props.content?.General?.top} {props.league_type == "FPL" ? "10000" : "1000"} </h2>
         <div className='most-owned-players'>
             <div className='position-container'>

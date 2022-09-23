@@ -200,8 +200,8 @@ export const RotationPlannerPage : FunctionComponent<LanguageProps> = (props) =>
     }
 
     return <>
-    <DefaultPageContainer pageClassName='fixture-planner-container' heading={props.content.Fixture.RotationPlanner.title + " - " + store.getState().league_type} description={props.content.Fixture.RotationPlanner.title}>
-         <h1>{props.content.Fixture.RotationPlanner.title}</h1>
+    <DefaultPageContainer pageClassName='fixture-planner-container' heading={props.content.Fixture.RotationPlanner?.title + " - " + store.getState().league_type} description={props.content.Fixture.RotationPlanner?.title}>
+         <h1>{props.content.Fixture.RotationPlanner?.title}</h1>
          { !firstloading && <>
             <form onSubmit={(e) =>  {updateFDRData(); e.preventDefault()}}>
                 {props.content.Fixture.gw_start}
