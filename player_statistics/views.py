@@ -46,7 +46,6 @@ from utils.Statistics.Models.ChipModel import ChipModel
 #from player_statistics.backend.read_api_data_to_txt.read_global_statistics import save_all_global_stats_for_current_gw
 
 
-
 def fill_player_statistics_eliteserien(request):
     if (request.META['HTTP_HOST'] == "127.0.0.1:8000"):
         fill_database_all_players(eliteserien_folder_name)
