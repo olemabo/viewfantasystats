@@ -35,7 +35,7 @@
     }
     
     .container-player-stats {
-        margin: 5px auto;
+        margin: 10px auto;
         display: flex;
         background-color: #EEE;
         justify-content: center;
@@ -122,8 +122,9 @@
     
     .input-box {
         height: 30px;
-        margin-left: var(--margin-left);
+        // margin-left: var(--margin-left);
         margin-right: var(--margin-right);
+        border-color: white;
     }
     
     .form-stuff {
@@ -260,9 +261,9 @@
         grid-template-columns: 1fr !important;
     }
 
-    // .hidden {
-    //     display: none !important;
-    // }
+    .search-user-name-container .hidden {
+        display: none !important;
+    }
 }
  
 .ant-pagination {

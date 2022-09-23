@@ -373,7 +373,7 @@ export const PlayerOwnership : FunctionComponent<LanguageProps> = (props) => {
 
         { !isLoading && ownershipDataToShow?.length > 0 && 
         <div className="container-player-stats">
-            <table>
+            <table className='stat-table'>
             <thead>
                 <tr>
                     <th className="name-col">{props.content.Statistics.PlayerOwnership.player}</th>

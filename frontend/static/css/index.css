@@ -16,6 +16,7 @@
     --page-background-color: #eeeeee;
     /* --eliteserien-linear-gradient-first-color: #41D5F9; */
     --eliteserien-linear-gradient-first-color: #37d7feb3;
+    --eliteserien-linear-gradient-first-color: #7cd9f0b3;
     /* --eliteserien-linear-gradient-second-color: #2c3e50; */
     --eliteserien-linear-gradient-second-color: #1b2f44;
     --height-the-gray-box-should-go-into-header: -0px;
@@ -154,3 +155,20 @@ h2 {
     background-color: var(--table-thead-tr-background-color) !important;
     color: var(--table-thead-tr-color) !important;
 } */
+
+
+.FPL .player-ownership-container table thead tr {
+    background-color: #cce8cf !important;
+}
+
+.Eliteserien table thead tr {
+    background-color: var(--table-thead-tr-background-color) !important;
+}
+
+thead {
+    background-color: var(--table-thead-tr-background-color);
+}
+
+.stat-table th, .stat-table td {
+    border-color: transparent !important;
+}
