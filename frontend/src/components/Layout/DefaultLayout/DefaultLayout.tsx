@@ -24,7 +24,7 @@ export const DefaultLayout = () => {
     const isMenuOpenFromRedux = useSelector((state: any) => state?.isMenuOpen);
     const langaugeContentFromRedux = useSelector((state: any) => state?.language);
     const leagueTypeFromRedux = store.getState()?.league_type;
-    
+    const [ doneFirstLoading, setDoneFirstLoading ] = useState(false);
     const fpl = "FPL";
     const eliteserien = "Eliteserien";
 
@@ -47,13 +47,16 @@ export const DefaultLayout = () => {
     useEffect(() => {
         if (store?.getState()?.language_code == "en") {
             store.dispatch({type: "language", payload: content_json.English});
+            setDoneFirstLoading(true);
         }
         else {
             store.dispatch({type: "language", payload: content_json.Norwegian});
+            setDoneFirstLoading(true);
         }
     }, [])
 
-    return <>
+
+    return <> { doneFirstLoading && 
     <div>
         <TopMenu content={langagueContent} />
         { (!isAnyMenuOpen) && 
@@ -99,5 +102,5 @@ export const DefaultLayout = () => {
             </div>
         )}
     </div>
-    </>
+    }</>
 };
