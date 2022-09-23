@@ -33,31 +33,31 @@
 
             .circle-link {
                 display: block;
-                width: 27px;
-                height: 27px;
+                // width: 27px;
+                height: 20px;
                 border-radius: 25px;
                 background-color: white; // default circle color
                 // margin: 1px 10px;
                 
                 box-shadow: 0 0 0 1px #c8c8c8a3;
-                margin: 0 10px 2px 20px;
+                margin: 0 10px 6px 20px;
                 color: white;
                 font-size: 12px;
                 padding-left: 10px;
-                padding-top: 4px;
+                padding-top: 0px;
                 width: 40px !important;
 
                 &.fpl {
                     background: var(--fpl-linear-gradient-second-color);  /* fallback for old browsers */
                     background: -webkit-linear-gradient(to right, var(--fpl-linear-gradient-first-color), var(--fpl-linear-gradient-second-color));  /* Chrome 10-25, Safari 5.1-6 */
-                    background: linear-gradient(to right, var(--fpl-linear-gradient-first-color), var(--fpl-linear-gradient-second-color)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+                    // background: linear-gradient(to right, var(--fpl-linear-gradient-first-color), var(--fpl-linear-gradient-second-color)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
                     position: relative;
                 }
 
                 &.eliteserien {
                     background: var(--eliteserien-linear-gradient-first-color);  /* fallback for old browsers */
                     background: -webkit-linear-gradient(to left, var(--eliteserien-linear-gradient-first-color), var(--eliteserien-linear-gradient-second-color));  /* Chrome 10-25, Safari 5.1-6 */
-                    background: linear-gradient(to left, var(--eliteserien-linear-gradient-first-color), var(--eliteserien-linear-gradient-second-color)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+                    // background: linear-gradient(to left, var(--eliteserien-linear-gradient-first-color), var(--eliteserien-linear-gradient-second-color)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
                     position: relative;
                 }
             }
@@ -287,7 +287,7 @@
         position: absolute;
         background-color: #f9f9f9;
         min-width: 160px;
-        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.2);
         z-index: 1;
         right: 0 !important;
     }
