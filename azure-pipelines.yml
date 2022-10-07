@@ -5,8 +5,7 @@
 
 trigger:
   - feature/db-updates
-
-# - master
+  - master
 # - feature/implement-react-into-solution
 # - feature/webpage-with-react
 
