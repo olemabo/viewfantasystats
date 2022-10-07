@@ -93,6 +93,7 @@ export const PlayerOwnership : FunctionComponent<LanguageProps> = (props) => {
 
     useEffect(() => {
         store.dispatch({type: "league_type", payload: props.league_type});
+        setIsLoading(true);
 
         axios.get(player_ownership_api_path + "?league_name=" + props.league_type).then(x => {  
             let data = JSON.parse(x?.data);
@@ -110,6 +111,7 @@ export const PlayerOwnership : FunctionComponent<LanguageProps> = (props) => {
             initOwnershipData(data, data.newest_updated_gw);
             setCurrentGw(data.newest_updated_gw);
             setFirstLoading(false);
+            setIsLoading(false);
         })
 
     }, []);
@@ -307,7 +309,7 @@ export const PlayerOwnership : FunctionComponent<LanguageProps> = (props) => {
     }
 
     const [ currentSorted, setCurrentSorted ] = useState("EO");
-
+    
     return <>
     <DefaultPageContainer pageClassName='player-ownership-container' heading={props.content.Statistics.PlayerOwnership.title + " - " + store.getState().league_type} description={props.content.Statistics.PlayerOwnership.title}>
         <h1>{props.content.Statistics.PlayerOwnership.title}</h1>

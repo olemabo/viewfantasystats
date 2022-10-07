@@ -9,7 +9,8 @@ total_number_of_pl_teams = 20
 total_number_of_eliteserien_teams = 16
 
 # where to store local data
-path_to_store_local_data = "C:\\Users\\ole.borge\\PycharmProjects\\FPL-webpage-azure-devops\\FPL-webpage\\stored_data"
+stored_data = "stored_data"
+path_to_store_local_data = "C:\\Users\\ole.borge\\PycharmProjects\\FPL-webpage-azure-devops\\FPL-webpage\\" + stored_data
 
 # link to global ranks
 web_global_league_premier_league = 'https://fantasy.premierleague.com/api/leagues-classic/314/standings/?phase=1&page_new_entries=1&page_standings=X'
@@ -23,6 +24,7 @@ global_stats_folder_name = "global_stats"
 backup_data_folder_name= "backup_data"
 user_stats_folder_name = "user_stats"
 fixture_folder_name = "fixture_data"
+cup_stats_folder_name = "cup_data"
 
 # must change before each season
 current_season_name_premier_league = "2022-2023"
@@ -37,11 +39,13 @@ user_stats_txt_file_name = "user_stats.txt"
 name_of_ownership_file = "complete_ownership.txt"
 name_of_nationality_file = "country_population.txt"
 name_of_extra_info_file = "extra_info.txt"
+# cup_all_ids_processed_file = "cup_all_processed_ids.txt"
 
+# delimiters
 user_stats_special_delimiter = ":;:"
 nationality_delimiter = ":"
 ranking_delimiter = "&"
-
+cup_delimiter = ":;:"
 # wildcard due date NB: MUST BE SET MANUALLY
 eliteserien_wc_due_date = "2022-07-23T13:00:00"
 premier_league_wc_due_date = "2022-07-23T13:00:00"
