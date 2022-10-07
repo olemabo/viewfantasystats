@@ -1,8 +1,8 @@
 from utils.fixtures.models.TeamFixtureInfoEliteserienModel import TeamFixtureInfoEliteserienModel
+from constants import fixture_folder_name, stored_data, eliteserien_folder_name, current_season_name_eliteserien
 from openpyxl.utils.cell import get_column_letter
 from openpyxl import load_workbook
 import pandas as pd
-
 
 def readEliteserienExcelToDBFormat(path=r'stored_data/eliteserien/Eliteserien_fixtures.xlsx'):
     df = pd.read_excel(path, engine='openpyxl')
@@ -45,9 +45,11 @@ def readEliteserienExcelToDBFormat(path=r'stored_data/eliteserien/Eliteserien_fi
     return objectList, dates
 
 
-def readEliteserienExcelFromDagFinnToDBFormat(path=r'stored_data/eliteserien/fixture_data/Eliteserien_fixtures.xlsx'):
+def readEliteserienExcelFromDagFinnToDBFormat():
+    path = stored_data + "/" + eliteserien_folder_name + "/" + current_season_name_eliteserien + "/" + fixture_folder_name + "/" + "Eliteserien_fixtures.xlsx"
     max_teams = 18
     max_games = 30 + 2
+    
     wb = load_workbook(path, data_only=True)
     sheet_names = wb.sheetnames
     ws_fdr = wb[sheet_names[0]]
