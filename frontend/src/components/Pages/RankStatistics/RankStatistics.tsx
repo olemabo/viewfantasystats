@@ -86,7 +86,6 @@ export const RankStatisticsPage : FunctionComponent<LanguageProps> = (props) => 
                 temp.push(x);
             }
         })
-        console.log(temp)
         setRanksToShow(temp);
         setQuery(keyword);
     }
@@ -95,6 +94,7 @@ export const RankStatisticsPage : FunctionComponent<LanguageProps> = (props) => 
         search(last_x_years);
         setLast_x_years(last_x_years);
         setCurrentSorted('Rank');
+        setPaginationNumber(1);
     }
 
     const propComparator = (prop:number, increasing: boolean) =>

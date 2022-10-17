@@ -174,6 +174,7 @@ export const PlayerOwnership : FunctionComponent<LanguageProps> = (props) => {
             initOwnershipData(data, data.newest_updated_gw);
             setIsLoading(false);
         })
+        setPaginationNumber(1);
         setCurrentSorted("EO");
         setTopXPlayers(top_x_players);
     }

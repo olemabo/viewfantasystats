@@ -55,7 +55,7 @@ export const TableSortHead : FunctionComponent<TableSortHeadProps> = (props) => 
         <div className={ (sortType == SortType.NotSorted) ? 'sort-text-adjusted' : 'sort-text'}><>
         { (props.popover_text != '' && props.popover_title != '') ? 
             <Popover
-                id={props.text} 
+                id={props.text}
                 title={props.text}
                 popover_title={props.popover_title ?? ''} 
                 popover_text={props.popover_text ?? ''} /> 
@@ -64,15 +64,18 @@ export const TableSortHead : FunctionComponent<TableSortHeadProps> = (props) => 
         </div> 
         <div onClick={() => sortCell()} className="sort-arrows-container">
             <div className={ sortType == SortType.NotSorted ? 'sort-arrow-top-adjusted' : 'sort-arrow-top'}>
-            { (sortType == SortType.NotSorted || sortType == SortType.Increasing) && 
-                <>&#x25b4;</> 
-            } </div>
+                { (sortType == SortType.NotSorted || sortType == SortType.Increasing) && 
+                    <>&#x25b4;</> 
+                }
+            </div>
+            
             <div className={ sortType == SortType.NotSorted ? 'sort-arrow-bottom-adjusted' : 'sort-arrow-bottom'}>
-            { (sortType == SortType.NotSorted || sortType == SortType.Decreasing) && 
-            <>&#x25be;</> 
-            }
+                { (sortType == SortType.NotSorted || sortType == SortType.Decreasing) && 
+                    <>&#x25be;</> 
+                }
+            </div>
         </div>
-    </div></>
+    </>
 };
 
 export default TableSortHead;

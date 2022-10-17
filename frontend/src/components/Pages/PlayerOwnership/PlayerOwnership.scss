@@ -134,6 +134,8 @@
         height: 30px;
         // margin-left: var(--margin-left);
         margin-right: var(--margin-right);
+        border-radius: 0 !important;
+        background-color: var(--white-color) !important;
     }
     
     .player-input-box {
