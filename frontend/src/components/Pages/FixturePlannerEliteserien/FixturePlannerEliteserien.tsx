@@ -170,7 +170,10 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
     }
 
     return <>
-    <DefaultPageContainer pageClassName='fixture-planner-container' heading={title + " - " + store.getState().league_type} description={title}>
+    <DefaultPageContainer 
+        pageClassName='fixture-planner-container' 
+        heading={title + " - " + store.getState().league_type} 
+        description={'Fixture Difficulty Rating Planner for Eliteserien Fantasy (ESF). '}>
         <h1>{title}<Popover 
             id={"rotations-planner-id"}
             title=""

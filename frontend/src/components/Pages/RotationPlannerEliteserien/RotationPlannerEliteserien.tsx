@@ -185,7 +185,10 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
     }
 
     return <>
-    <DefaultPageContainer pageClassName='fixture-planner-container' heading={props.content.Fixture.RotationPlanner?.title + " - " + store.getState().league_type} description={props.content.Fixture.RotationPlanner?.title}>
+    <DefaultPageContainer 
+        pageClassName='fixture-planner-container' 
+        heading={props.content.Fixture.RotationPlanner?.title + " - " + store.getState().league_type} 
+        description={'Rotation Planner for Eliteserien Fantasy (ESF). '}>
          <h1>{props.content.Fixture.RotationPlanner?.title}<Popover 
             id={"rotations-planner-id"}
             title=""

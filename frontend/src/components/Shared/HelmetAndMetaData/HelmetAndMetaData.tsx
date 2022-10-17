@@ -7,7 +7,6 @@ type HelmetAndMetaDataProps = {
 }
 
 export const HelmetAndMetaData : React.FunctionComponent<HelmetAndMetaDataProps> = (props) => {
-        
     return <Helmet key='page-helmet'>
         <title>{props.heading}</title>
         <meta property='og:title' content={ props.heading }/>
