@@ -21,7 +21,7 @@ export const RankStatisticsPage : FunctionComponent<LanguageProps> = (props) => 
     const player_ownership_api_path = "/statistics/rank-statistics-api/";
     
     const initial_last_x_years = 3;
-    const emptyRanks: RankModel[] = [{ user_id: "", name: "", avg_rank: -1, avg_points: -1, avg_rank_ranking: -1, avg_points_ranking: -1}];
+    const emptyRanks: RankModel[] = [{ user_id: "", name: "", team_name: "", avg_rank: -1, avg_points: -1, avg_rank_ranking: -1, avg_points_ranking: -1}];
     
     const [ ranks, setRanks ] = useState(emptyRanks);
     const [ ranksToShow, setRanksToShow ] = useState(emptyRanks);
@@ -57,6 +57,7 @@ export const RankStatisticsPage : FunctionComponent<LanguageProps> = (props) => 
                 temp.push({
                     user_id: d.user_id,
                     name: d.name,
+                    team_name: d.team_name,
                     avg_rank: d.avg_rank,
                     avg_points: d.avg_points,
                     avg_rank_ranking: d.avg_rank_ranking,
@@ -82,7 +83,7 @@ export const RankStatisticsPage : FunctionComponent<LanguageProps> = (props) => 
     function searchUsers(keyword: string) {
         let temp: RankModel[] = [];
         ranks.map(x => {
-            if (x.name.includes(keyword)) {
+            if (x.name.includes(keyword) || x.team_name.includes(keyword)) {
                 temp.push(x);
             }
         })
@@ -152,7 +153,7 @@ export const RankStatisticsPage : FunctionComponent<LanguageProps> = (props) => 
             <div className='box-4'></div>
 
             <div className='box-5'>
-                <label className='hidden'>Search bar</label>
+                <label htmlFor="site-search" className='hidden'>Search bar</label>
                 <input onChange={(e) => searchUsers(e.target.value)} placeholder={props.content.Statistics.PlayerOwnership.search_text} className='input-box' type="search" id="site-search" name="q"></input>
             </div>
         </form></>
@@ -169,10 +170,10 @@ export const RankStatisticsPage : FunctionComponent<LanguageProps> = (props) => 
                 <thead>
                     <tr>
                         <th className="narrow">{props.content.General.rank}</th>
-                        <th className="name-col">{props.content.General.name}</th>
+                        <th className="name-col">{props.content.General.teamname}</th>
                         <th><TableSortHead defaultSortType={'Increasing'} text={props.content.Statistics.RankStatistics.rank} reset={currentSorted != 'Rank'} onclick={(increase: boolean) => sortRankingData(0, increase)}/></th>
                         <th><TableSortHead text={props.content.Statistics.RankStatistics.points} reset={currentSorted != 'Points'} onclick={(increase: boolean) => sortRankingData(1, increase)}/></th>
-                        <th className="">{props.content.General.see_team}</th>
+                        <th className="see-team">{props.content.General.see_team}</th>
                     </tr>
                 </thead>
 
@@ -180,10 +181,10 @@ export const RankStatisticsPage : FunctionComponent<LanguageProps> = (props) => 
                     { ranksToShow.slice( (pagingationNumber - 1) * numberOfHitsPerPagination, (pagingationNumber - 1) * numberOfHitsPerPagination + numberOfHitsPerPagination).map( (x, index) => 
                     <tr>
                         <td className="narrow">{ currentSorted == "Rank" ? (x.avg_rank_ranking) : (x.avg_points_ranking) }</td>
-                        <td className="name-col"> <div className="format-name-col">{ x.name }</div> </td>
+                        <td className="name-col"> <div className="format-name-col">{ x.team_name }</div> </td>
                         <td className="">{ x.avg_rank }</td>
                         <td className="">{ x.avg_points } </td>
-                        <td className="">
+                        <td className="see-team">
                             <a target="_blank" href={fantasy_manager_url.replace("X", x.user_id)}>
                                 {props.content.General.see_team}
                                 <OpenInNew fontSize='small' />
@@ -200,6 +201,7 @@ export const RankStatisticsPage : FunctionComponent<LanguageProps> = (props) => 
                     className="ant-pagination" 
                     onChange={(number) => paginationUpdate(number)}
                     defaultCurrent={1}   
+                    defaultPageSize={numberOfHitsPerPagination}
                     total={ranksToShow.length} /> 
             }
         </>}

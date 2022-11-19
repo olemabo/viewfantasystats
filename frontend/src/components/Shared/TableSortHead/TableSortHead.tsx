@@ -67,7 +67,7 @@ export const TableSortHead : FunctionComponent<TableSortHeadProps> = (props) => 
             : <>{props.text}</>
         }</>
         </div>
-        <button onClick={() => sortCell()} className="sort-arrows-container">
+        <button title="sort-arrow-button" onClick={() => sortCell()} className="sort-arrows-container">
             { (sortType == SortType.Increasing) &&
                     <ExpandLess fontSize={'inherit'}  />
             }

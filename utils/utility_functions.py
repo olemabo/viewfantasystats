@@ -52,6 +52,14 @@ def get_current_gw():
     return 1
 
 
+def get_current_gw_(DFObject: DataFetch):
+    events = DFObject.get_current_fpl_info()['events']
+    for event in events:
+        if event['is_current']:
+            return int(event['id'])
+    return 1
+
+
 def create_dict_with_team_ids_to_team_name_and_team_name_to_ids_from_db(fixture_list_db):
     team_names = [team_model.team_name for team_model in fixture_list_db]
     team_ids = [team_model.team_id for team_model in fixture_list_db]

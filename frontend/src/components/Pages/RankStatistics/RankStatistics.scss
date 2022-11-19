@@ -19,7 +19,7 @@
     }
 
     .name-col {
-        min-width: 180px !important;
+        min-width: 210px !important;
     }
 
     .team-info {
@@ -32,6 +32,11 @@
 
     .name-col-chips-2 {
         min-width: 145px;
+    }
+
+    .see-team {
+        min-width: 116px;
+        text-align: center;
     }
     
     .container-player-stats {
@@ -75,8 +80,7 @@
     }
     
     thead tr th {
-        height: 40px;
-        font-size: 700;
+        height: var(--table-thead-height);
     }
     
     tbody tr {
@@ -86,7 +90,6 @@
     table {
         width: 100%;
         border-collapse: collapse;
-        background-color: var(--white-color);
         font-size: 14px;
         overflow: auto;
     }
@@ -117,7 +120,7 @@
     
     .name-col {
         text-align: left;
-        width: 170px;
+        width: 200px;
     }
     
     .input-box {

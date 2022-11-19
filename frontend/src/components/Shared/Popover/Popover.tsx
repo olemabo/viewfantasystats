@@ -58,9 +58,9 @@ export const Popover : FunctionComponent<PopoverProps> = (props) => {
     });   
 
     return <>
-    <label id={props.id} className={ "thin-ui-popover " + (props.iconSize != null && props.iconSize > 0 ? "" : "dotted")}>
+    <label htmlFor='popover-content' id={props.id} className={ "thin-ui-popover " + (props.iconSize != null && props.iconSize > 0 ? "" : "dotted")}>
         {props.title}
-        <button name="popover" onClick={() => setShow(true)}>
+        <button id='popover-button' title="popover-button" name="popover" onClick={() => setShow(true)}>
             { props.iconSize != null && props.iconSize > 0 && props.iconpostition != null &&
                 <svg style={{
                     width: props.iconSize.toString() + "px", 
@@ -76,12 +76,13 @@ export const Popover : FunctionComponent<PopoverProps> = (props) => {
                 </svg> }
         </button>
         { show &&
-        <div className={"thin-ui-popover-body " + (props.algin_left ? "adjust-left" : " ")}>
+        <div id="popover-content" className={"thin-ui-popover-body " + (props.algin_left ? "adjust-left" : " ")}>
             <h3>{props.popover_title}</h3>
             <p>{props.popover_text}</p>
             <p>{props.children}</p>
         </div>}
-    </label></>
+    </label>
+    </>
 };
 
 export default Popover;

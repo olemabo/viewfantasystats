@@ -10,6 +10,7 @@
         justify-content: center;
         display: grid;
         height: 100%;
+        font-size: 16px;
         
         .fdr-team-names {
             grid-row: 1 / 2;
@@ -70,7 +71,7 @@
             color: var(--white-color);
             
             .day-month {
-                font-size: 8px;
+                font-size: 10px;
             }
         }
 
@@ -180,7 +181,7 @@
         }
         
         .double-border-1 div {
-            border: var(--fdr-border-width) solid var(--black-color) !important;
+            border: var(--fdr-border-width) solid var(--fdr-border-color) !important;
         }
         
         .double-border-1 {

@@ -20,7 +20,7 @@
     /* --eliteserien-linear-gradient-second-color: #2c3e50; */
     --eliteserien-linear-gradient-second-color: #1b2f44;
     --height-the-gray-box-should-go-into-header: -0px;
-    --height-the-gray-box-should-go-away-from-header: 2px; /* Give this the same value as the var above only opposite sign */
+    --height-the-gray-box-should-go-away-from-header: 0px; /* Give this the same value as the var above only opposite sign */
     --size-of-scewY: 30px;
     --size-of-top-bar: 100px;
     --size-of-top-bar-mobile: 60px;
@@ -33,8 +33,8 @@
     --max-width: 1000px;
 
     /* Header */
-    --font-size-menu-items: 16px;
-    --font-size-menu-sub-items: 14px;
+    --font-size-menu-items: 18px;
+    --font-size-menu-sub-items: 16px;
     --font-size-header-title: 26px;
 
     /* Components */
@@ -47,16 +47,25 @@
     --table-even-rows: rgb(248, 249, 249);
     --table-odd-rows: rgb(255, 255, 255);
     --table-thead-tr-color: black;
-    --table-thead-tr-background-color: #dceaf6;
+    --table-thead-tr-background-color: #cbe5eff7;
+    --table-thead-height: 40px;
+    /* --table-thead-tr-background-color: #dceaf6; */
 
     /* Fixture Planning */
     --name-col-color: #dfdfdfc7;
-    --round-row-color: #0f3443;
+    --round-row-color: #414c50;
+    /* --round-row-color: #0f3443; */
     --fdr-color-1: #375523;
+    --fdr-color-2: #7ce0ac;
+    --fdr-color-3: #bfbfbf;
+    --fdr-color-4: #ff17516b;
+    --fdr-color-5: #80072d66;
+    --fdr-border-color: #00000080;
+    /* --fdr-color-1: #375523;
     --fdr-color-2: #01fc7a;
     --fdr-color-3: #bfbfbf;
     --fdr-color-4: #ff1751;
-    --fdr-color-5: #80072d;
+    --fdr-color-5: #80072d; */
     --name-column-top-corner: #fdfdf00;
     --fdr-box-padding-height: 15px;
     --fdr-box-padding-width: 12px;
@@ -68,6 +77,13 @@
     /* Footer */
     --footer-h2-color-eliteserien: #7fd9ff;
     --footer-h2-color-premier-league: var(--fpl-linear-gradient-second-color);
+
+    /* Pagination */
+    --pagination-item-color: #0F3443;
+    --pagination-item-border-color: #9ea5a8;
+    --pagination-item-hover-color: #0F3443;
+    /* --pagination-item-color: #1890ff;
+    --pagination-item-border-color: #40a9ff; */
 } 
 
 * {

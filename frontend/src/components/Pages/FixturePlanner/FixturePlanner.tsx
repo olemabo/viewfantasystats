@@ -153,7 +153,7 @@ export const FixturePlannerPage : FunctionComponent<FixturePlannerPageProps> = (
         <h1>{title}</h1>
         { !firstloading && <>
             <form onSubmit={(e) =>  {updateFDRData(); e.preventDefault()}}>
-                {props.content.Fixture.gw_start}
+                <label htmlFor='input-form-start-gw'>{props.content.Fixture.gw_start}</label>
                 <input 
                     className="form-number-box" 
                     type="number" 
@@ -164,7 +164,7 @@ export const FixturePlannerPage : FunctionComponent<FixturePlannerPageProps> = (
                     id="input-form-start-gw" 
                     name="input-form-start-gw">
                 </input>
-                {props.content.Fixture.gw_end}
+                <label htmlFor='input-form-end-gw'>{props.content.Fixture.gw_end}</label>
                 <input 
                     className="form-number-box" 
                     type="number" 
@@ -172,13 +172,13 @@ export const FixturePlannerPage : FunctionComponent<FixturePlannerPageProps> = (
                     max={max_gw}
                     onInput={(e) => setGwEnd(parseInt(e.currentTarget.value))} 
                     value={gwEnd} 
-                    id="input-form-start-gw" 
-                    name="input-form-start-gw">
+                    id="input-form-end-gw" 
+                    name="input-form-end-gw">
                 </input>
 
                 { props.fixture_planning_type == FixturePlanningType.Periode && 
                     <><br />
-                    {props.content.Fixture.min_fixtures}
+                    <label htmlFor='min_num_fixtures'>{props.content.Fixture.min_fixtures}</label>
                     <input 
                         className="box" 
                         type="number" 

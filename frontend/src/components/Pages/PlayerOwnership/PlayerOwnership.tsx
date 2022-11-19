@@ -311,7 +311,7 @@ export const PlayerOwnership : FunctionComponent<LanguageProps> = (props) => {
     }
 
     const [ currentSorted, setCurrentSorted ] = useState("EO");
-    
+
     return <>
     <DefaultPageContainer 
         pageClassName='player-ownership-container' 
@@ -383,7 +383,7 @@ export const PlayerOwnership : FunctionComponent<LanguageProps> = (props) => {
             <div className='box-4'></div>
 
             <div className='box-5'>
-                <label className='hidden'>Search bar</label>
+                <label htmlFor='site-search' className='hidden'>Search bar</label>
                 <input onChange={(e) => filterOnPositionAndTeam(sorting_keyword, e.target.value)} placeholder={props.content.Statistics.PlayerOwnership.search_text} className='input-box' type="search" id="site-search" name="q"></input>
             </div>
         </form></>

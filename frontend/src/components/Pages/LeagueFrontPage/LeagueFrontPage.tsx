@@ -117,6 +117,8 @@ export const FrontPage : FunctionComponent<FrontPageProps> = (props) => {
             if (num == 16) return team_id_to_img_shirt_url_premier_league[16];
             if (num == 17) return team_id_to_img_shirt_url_premier_league[17];
             if (num == 18) return team_id_to_img_shirt_url_premier_league[18];
+            if (num == 19) return team_id_to_img_shirt_url_premier_league[19];
+            if (num == 20) return team_id_to_img_shirt_url_premier_league[20];
             return "https://fantasy.premierleague.com/dist/img/shirts/standard/shirt_0-66.webp";
         }
 

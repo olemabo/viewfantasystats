@@ -49,26 +49,29 @@
  .rc-pagination-item a:hover {
     text-decoration: none;
 }
+li.rc-pagination-item a:hover {
+   background-color: var(--white-color) !important;
+}
  .rc-pagination-item:focus, .rc-pagination-item:hover {
-    border-color: #1890ff;
+    border-color: var(--pagination-item-color);
     transition: all 0.3s;
 }
  .rc-pagination-item:focus a, .rc-pagination-item:hover a {
-    color: #1890ff;
+    color: var(--pagination-item-color);
 }
  .rc-pagination-item-active {
     font-weight: 500;
     background: #fff;
-    border-color: #1890ff;
+    border-color: var(--pagination-item-border-color);
 }
  .rc-pagination-item-active a {
-    color: #1890ff;
+    color: var(--pagination-item-color);
 }
  .rc-pagination-item-active:focus, .rc-pagination-item-active:hover {
-    border-color: #40a9ff;
+    border-color: var(--pagination-item-border-color);
 }
  .rc-pagination-item-active:focus a, .rc-pagination-item-active:hover a {
-    color: #40a9ff;
+    color: var(--pagination-item-color);
 }
  .rc-pagination-jump-prev, .rc-pagination-jump-next {
     outline: 0;
@@ -109,7 +112,7 @@
     user-select: none;
 }
  .rc-pagination-prev:hover button, .rc-pagination-next:hover button {
-    border-color: #40a9ff;
+    border-color: var(--pagination-item-border-color);
 }
  .rc-pagination-prev .rc-pagination-item-link, .rc-pagination-next .rc-pagination-item-link {
     display: block;
@@ -124,8 +127,8 @@
     transition: all 0.3s;
 }
  .rc-pagination-prev:focus .rc-pagination-item-link, .rc-pagination-next:focus .rc-pagination-item-link, .rc-pagination-prev:hover .rc-pagination-item-link, .rc-pagination-next:hover .rc-pagination-item-link {
-    color: #1890ff;
-    border-color: #1890ff;
+    color: var(--pagination-item-color);
+    border-color: var(--pagination-item-color);
 }
  .rc-pagination-prev button:after {
     content: '‹';
@@ -203,7 +206,7 @@
     transition: border-color 0.3s;
 }
  .rc-pagination-simple .rc-pagination-simple-pager input:hover {
-    border-color: #1890ff;
+    border-color: var(--pagination-item-color);
 }
  .rc-pagination.rc-pagination-disabled {
     cursor: not-allowed;

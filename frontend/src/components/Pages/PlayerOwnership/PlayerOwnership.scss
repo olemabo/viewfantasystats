@@ -41,8 +41,7 @@
     }
     
     thead tr th {
-        height: 40px;
-        font-size: 700;
+        height: var(--table-thead-height);
     }
     
     th {
