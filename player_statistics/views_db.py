@@ -17,7 +17,7 @@ from player_statistics.backend.read_api_data_to_txt.read_cup_info_statistics imp
 
 
 # Comment out when deploying to PROD
-from player_statistics.backend.read_api_data_to_txt.read_global_statistics import save_all_global_stats_for_current_gw
+# from player_statistics.backend.read_api_data_to_txt.read_global_statistics import save_all_global_stats_for_current_gw
 
 
 
@@ -62,7 +62,7 @@ def fill_db_global_stats(request):
 
 def read_and_fill_db_global_stats(request):
     if (request.META['HTTP_HOST'] == "127.0.0.1:8000"):
-        save_all_global_stats_for_current_gw(eliteserien_folder_name)
+        # save_all_global_stats_for_current_gw(eliteserien_folder_name)
         write_global_stats_to_db_eliteserien()
     return HttpResponse("Read global stats from api and filled Database Global Data (GlobalOwnershipStatsXXXX)")
 
@@ -75,7 +75,7 @@ def fill_db_global_stats_premier_league(request):
 
 def read_and_fill_db_global_stats_premier_league(request):
     if (request.META['HTTP_HOST'] == "127.0.0.1:8000"):
-        save_all_global_stats_for_current_gw(premier_league_folder_name)
+        # save_all_global_stats_for_current_gw(premier_league_folder_name)
         write_global_stats_to_db()
     return HttpResponse("Filled Database Global Data (GlobalOwnershipStatsXXXX)")
 
