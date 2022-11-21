@@ -32,6 +32,19 @@
     // }
 }
 
+@media (max-width: 600px) {
+    .container-fdr {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+    .fdr-table {
+        font-size: 14px !important;
+    }
+    #fdr-names .name-column {
+        min-width: 70px !important;
+    }
+}
+
 .fdr {
     table {
         border-collapse: collapse;
@@ -56,6 +69,12 @@
                 padding: var(--fdr-box-padding-width) var(--fdr-box-padding-height);
             }
         }
+
+        @media (max-width: 600px) {
+            tr td {
+                min-width: 100px;
+            }
+        }
         
         th { 
             height: var(--fdr-box-th-height);
@@ -72,6 +91,7 @@
             
             .day-month {
                 font-size: 10px;
+                border: none !important;
             }
         }
 
@@ -81,7 +101,13 @@
             padding-right: 7px;
             text-align: left;
             font-weight: 400;
-            color: var(--black-color)
+            color: var(--black-color);
+
+            height: var(--fdr-box-th-height);
+            border: var(--fdr-box-gap) solid var(--page-background-color);
+            color: var(--white-color);
+            letter-spacing: .5px;
+            padding: 5px;
         }
     
         .name-column {
