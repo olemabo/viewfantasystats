@@ -82,10 +82,11 @@
         }
     }
 
-    a:hover {
-        border-bottom: 1px solid var(--link-color);
+    .sub-menu-item {
+        a:hover {
+            border-bottom: 1px solid var(--link-color);
+        }
     }
-
 
 
     .top-navbar-langauge-container {
@@ -132,7 +133,13 @@
     }
 
     .mobile-sub-menu {
-        background-color: #9ab3c9 !important;
+        background-color: #d1e2f0 !important;
+    }
+}
+
+.mobile-sub-menu {
+    .circle-link {
+        font-size: 16px;
     }
 }
 
@@ -176,16 +183,15 @@
             
     .circle-link {
         display: block;
-        width: 30px;
-        height: 30px;
+        width: 50px !important;
+        height: 32px;
         border-radius: 25px;
-        background-color: white; // default circle color
-        top: 3px;
+        color: black;
+        top: 5px;
         margin-left: 30px;
+        border: 1px solid #02020269;
+        position: relative;
 
-        &:hover {
-            border-bottom: none !important;
-        }
         &.fpl {
             background: var(--fpl-linear-gradient-second-color);  /* fallback for old browsers */
             background: -webkit-linear-gradient(to right, var(--fpl-linear-gradient-first-color), var(--fpl-linear-gradient-second-color));  /* Chrome 10-25, Safari 5.1-6 */

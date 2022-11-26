@@ -35,6 +35,7 @@ export const content_json = {
             seasons: "seasons",
             season: "season",
             previous: "Previous",
+            teamname: "Team name",
         },
         Fixture: {
             FixturePlanner: {
@@ -142,6 +143,7 @@ export const content_json = {
             seasons: "sesonger",
             season: "sesong",
             previous: "Forrige",
+            teamname: "Lagnavn",
         },
         Fixture: {
             FixturePlanner: {

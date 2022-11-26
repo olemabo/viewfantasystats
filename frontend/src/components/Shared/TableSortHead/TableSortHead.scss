@@ -1,5 +1,7 @@
 .sort-text {
     display: inline;
+    position: relative;
+    bottom: 2px;
 }
 
 .sort-text-adjusted {
@@ -8,13 +10,21 @@
     top: 13px;
 }
 
+
+
 .sort-arrows-container { 
-    float: right;
-    width: 10px;
-    margin-right: 10px;
-    display: grid;
-    vertical-align: middle;
+    background-color: transparent;
+    border: transparent;
+    margin-left: 10px;
+    margin-top: 8px;
+    font-size: 0.85rem;
     cursor: pointer;
+    
+    // float: right;
+    // width: 10px;
+    // margin-right: 10px;
+    // display: grid;
+    // vertical-align: middle;
 
     .sort-arrow-top {
         display: inline-block;

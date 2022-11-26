@@ -170,7 +170,10 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
     }
 
     return <>
-    <DefaultPageContainer pageClassName='fixture-planner-container' heading={title + " - " + store.getState().league_type} description={title}>
+    <DefaultPageContainer 
+        pageClassName='fixture-planner-container' 
+        heading={title + " - " + store.getState().league_type} 
+        description={'Fixture Difficulty Rating Planner for Eliteserien Fantasy (ESF). '}>
         <h1>{title}<Popover 
             id={"rotations-planner-id"}
             title=""
@@ -199,7 +202,7 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
         </h1>
         { maxGw > 0 && 
             <form onSubmit={(e) =>  {updateFDRData(); e.preventDefault()}}>
-                {props.content.Fixture.gw_start}
+                <label htmlFor='input-form-start-gw'>{props.content.Fixture.gw_start}</label>
                 <input 
                     className="form-number-box" 
                     type="number" 
@@ -210,7 +213,7 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
                     id="input-form-start-gw" 
                     name="input-form-start-gw">
                 </input>
-                {props.content.Fixture.gw_end}
+                <label htmlFor='input-form-end-gw'>{props.content.Fixture.gw_end}</label>
                 <input 
                     className="form-number-box" 
                     type="number" 
@@ -218,13 +221,15 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
                     max={maxGw}
                     onInput={(e) => setGwEnd(parseInt(e.currentTarget.value))} 
                     value={gwEnd} 
-                    id="input-form-start-gw" 
-                    name="input-form-start-gw">
+                    id="input-form-end-gw" 
+                    name="input-form-end-gw">
                 </input>
 
                 { props.fixture_planning_type == FixturePlanningType.Periode && 
                 <><br />
-                    {props.content.Fixture.min_fixtures}
+                    <label htmlFor='min_num_fixtures'>
+                        {props.content.Fixture.min_fixtures}
+                    </label>
                     <input 
                         className="box" 
                         type="number" 
@@ -248,7 +253,14 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
             <div className='filter-teams-container'>
                 <div className='filter-teams-list'>
                 { fdrDataToShow.map(team_name => 
-                    <FilterButton fontColor={team_name.font_color} backgroundColor={team_name.background_color}  onclick={(e: any) => toggleCheckbox(e)} buttonText={team_name.team_name} checked={team_name.checked} />
+                    <FilterButton
+                        fontColor='1'
+                        backgroundColor='0' 
+                        // fontColor={team_name.font_color} 
+                        // backgroundColor={team_name.background_color} 
+                        onclick={(e: any) => toggleCheckbox(e)} 
+                        buttonText={team_name.team_name} 
+                        checked={team_name.checked} />
                 )}
                 </div>
             </div>
@@ -262,7 +274,8 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
                 fdrData={fdrDataToShow}
                 kickOffTimes={kickOffTimesToShow}
                 allowToggleBorder={true}
-                fdrToColor={fdrToColor} />
+                fdrToColor={fdrToColor}
+            />
         )}
     </DefaultPageContainer>
     </>

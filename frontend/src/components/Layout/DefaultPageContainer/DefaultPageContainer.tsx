@@ -10,9 +10,10 @@ type DefaultPageContainerProps = {
 
 export const DefaultPageContainer : React.FunctionComponent<DefaultPageContainerProps> = (props) => {  
     const langaugeCodeFromRedux = useSelector((state: any) => state?.language_code);
-
+    document.documentElement.lang = langaugeCodeFromRedux;
+    
     return <>
-        <div className={props.pageClassName} key={props.heading + "-container"} lang={langaugeCodeFromRedux}>
+        <div className={props.pageClassName} key={props.heading + "-container"} lang={langaugeCodeFromRedux.toString()}>
             <HelmetAndMetaData description={props.description} heading={props.heading} />
                 {props.children}
         </div>

@@ -239,8 +239,15 @@ export const PlayerStatisticsPage : FunctionComponent<LanguageProps> = (props) =
             <div className='box-4'></div>
 
             <div className='box-5'>
-                <label className='hidden'>Search bar</label>
-                <input onChange={(e) => filterOnPositionAndTeam(sorting_keyword_teams, sorting_keyword_positions, e.target.value)} placeholder={props.content.Statistics.PlayerOwnership.search_text} className='input-box' type="search" id="site-search" name="q"></input>
+                <label htmlFor='site-search' className='hidden'>Search bar</label>
+                <input 
+                    onChange={(e) => filterOnPositionAndTeam(sorting_keyword_teams, sorting_keyword_positions, e.target.value)} 
+                    placeholder={props.content.Statistics.PlayerOwnership.search_text} 
+                    className='input-box' 
+                    type="search" 
+                    id="site-search" 
+                    name="q">
+                </input>
             </div>
             </form></>
             }

@@ -185,7 +185,10 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
     }
 
     return <>
-    <DefaultPageContainer pageClassName='fixture-planner-container' heading={props.content.Fixture.RotationPlanner?.title + " - " + store.getState().league_type} description={props.content.Fixture.RotationPlanner?.title}>
+    <DefaultPageContainer 
+        pageClassName='fixture-planner-container' 
+        heading={props.content.Fixture.RotationPlanner?.title + " - " + store.getState().league_type} 
+        description={'Rotation Planner for Eliteserien Fantasy (ESF). '}>
          <h1>{props.content.Fixture.RotationPlanner?.title}<Popover 
             id={"rotations-planner-id"}
             title=""
@@ -218,7 +221,7 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
             </Popover>
         </h1>
          <form onSubmit={(e) =>  {updateFDRData(); e.preventDefault()}}>
-            {props.content.Fixture.gw_start}
+            <label htmlFor='input-form-start-gw'>{props.content.Fixture.gw_start}</label>
             <input 
                 className="form-number-box" 
                 type="number" 
@@ -229,8 +232,7 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
                 id="input-form-start-gw" 
                 name="input-form-start-gw">
             </input>
-            
-            {props.content.Fixture.gw_end}
+            <label htmlFor='input-form-end-gw'>{props.content.Fixture.gw_end}</label>
             <input 
                 className="form-number-box" 
                 type="number" 
@@ -238,12 +240,12 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
                 max={maxGw}
                 onInput={(e) => setGwEnd(parseInt(e.currentTarget.value))} 
                 value={gwEnd} 
-                id="input-form-start-gw" 
-                name="input-form-start-gw">
+                id="input-form-end-gw" 
+                name="input-form-end-gw">
             </input>
             
             <br />
-            {props.content.Fixture.teams_to_check}
+            <label htmlFor='teams_to_check'>{props.content.Fixture.teams_to_check}</label>
             <input 
                 className="box" 
                 type="number" 
@@ -254,7 +256,7 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
                 id="teams_to_check" 
                 name="teams_to_check" />
             
-            {props.content.Fixture.teams_to_play}
+            <label htmlFor='teams_to_play'>{props.content.Fixture.teams_to_play}</label>
             <input 
                 className="box" 
                 type="number" 

@@ -39,13 +39,16 @@ user_stats_txt_file_name = "user_stats.txt"
 name_of_ownership_file = "complete_ownership.txt"
 name_of_nationality_file = "country_population.txt"
 name_of_extra_info_file = "extra_info.txt"
-# cup_all_ids_processed_file = "cup_all_processed_ids.txt"
+cup_all_ids_processed_file = "cup_all_processed_ids.txt"
+cup_data_file = "cup_data.txt"
+cup_processed_rounds = "cup_processed_rounds.txt"
 
 # delimiters
 user_stats_special_delimiter = ":;:"
 nationality_delimiter = ":"
 ranking_delimiter = "&"
 cup_delimiter = ":;:"
+cup_db_delimiter = "|-|"
 # wildcard due date NB: MUST BE SET MANUALLY
 eliteserien_wc_due_date = "2022-07-23T13:00:00"
 premier_league_wc_due_date = "2022-07-23T13:00:00"
@@ -70,7 +73,7 @@ time_to_sleep_for_each_iteration = 0.3
 # https://fantasy.tv2.no/entry/417/history fra 2017, update this manually each year
 number_of_years_eliteserien_has_stored_rankings = 5
 
-
+number_of_cup_rounds_eliteserien = 15
 # initial extra gameweeks to add to current gameweek (if this is 5 and current gameweek is gw: 7,
 # then all fixture planning will go from gw: 7 to gw:12
 initial_extra_gameweeks = 5

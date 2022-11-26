@@ -204,7 +204,7 @@ export const RotationPlannerPage : FunctionComponent<LanguageProps> = (props) =>
          <h1>{props.content.Fixture.RotationPlanner?.title}</h1>
          { !firstloading && <>
             <form onSubmit={(e) =>  {updateFDRData(); e.preventDefault()}}>
-                {props.content.Fixture.gw_start}
+                <label htmlFor='input-form-start-gw'>{props.content.Fixture.gw_start}</label>
                 <input 
                     className="form-number-box" 
                     type="number" 
@@ -215,7 +215,7 @@ export const RotationPlannerPage : FunctionComponent<LanguageProps> = (props) =>
                     id="input-form-start-gw" 
                     name="input-form-start-gw">
                 </input>
-                {props.content.Fixture.gw_end}
+                <label htmlFor='input-form-end-gw'>{props.content.Fixture.gw_end}</label>
                 <input 
                     className="form-number-box" 
                     type="number" 
@@ -223,12 +223,12 @@ export const RotationPlannerPage : FunctionComponent<LanguageProps> = (props) =>
                     max={max_gw}
                     onInput={(e) => setGwEnd(parseInt(e.currentTarget.value))} 
                     value={gwEnd} 
-                    id="input-form-start-gw" 
-                    name="input-form-start-gw">
+                    id="input-form-end-gw" 
+                    name="input-form-end-gw">
                 </input>
 
                 <br />
-                {props.content.Fixture.teams_to_check}
+                <label htmlFor='teams_to_check'>{props.content.Fixture.teams_to_check}</label>
                 <input 
                     className="box" 
                     type="number" 
@@ -239,7 +239,7 @@ export const RotationPlannerPage : FunctionComponent<LanguageProps> = (props) =>
                     id="teams_to_check" 
                     name="teams_to_check" />
                 
-                {props.content.Fixture.teams_to_play}
+                <label htmlFor='teams_to_play'>{props.content.Fixture.teams_to_play}</label>
                 <input 
                     className="box" 
                     type="number" 

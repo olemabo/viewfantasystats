@@ -26,9 +26,9 @@ export const ShowRotationData : FunctionComponent<ShowRotationProps> = (props) =
                         <table className="rotation">
                             <tbody>
                                 <tr className="fdr-row-gws">
-                                    <th className="name-column-top-corner">
-                                        {props.content.Fixture.team}
-                                    </th>
+                                    <td className="name-column-top-corner">
+                                        {/* {props.content.Fixture.team} */}
+                                    </td>
                                     { props.kickOffTimes.map(gw =>
                                         <th>{props.content.General.round_short}{gw.gameweek}
                                             <div className="day-month">
@@ -76,7 +76,9 @@ export const ShowRotationData : FunctionComponent<ShowRotationProps> = (props) =
                                 ))}
                             </tbody>
                         </table>
-                        <p> {props.content.Fixture.RotationPlanner.avg_fdr_score} <b> {row.avg_Score} </b></p>
+                        <caption style={{display: 'block'}}>
+                            <p> {props.content.Fixture.RotationPlanner.avg_fdr_score} <b> {row.avg_Score} </b></p>
+                        </caption>
                     </>)}
                     </div>
                 </div>

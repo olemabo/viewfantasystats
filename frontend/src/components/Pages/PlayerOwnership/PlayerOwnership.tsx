@@ -9,6 +9,7 @@ import { TeamNameAndIdModel } from '../../../models/playerOwnership/TeamNameAndI
 import { ChipUsageModel } from '../../../models/playerOwnership/ChipUsageModel';
 import { TableSortHead } from '../../Shared/TableSortHead/TableSortHead';
 import { Spinner } from '../../Shared/Spinner/Spinner';
+import Popover from '../../Shared/Popover/Popover';
 import '../../Shared/Pagination/Pagination.scss';
 import { store } from '../../../store/index';
 import './PlayerOwnership.scss';
@@ -174,6 +175,7 @@ export const PlayerOwnership : FunctionComponent<LanguageProps> = (props) => {
             initOwnershipData(data, data.newest_updated_gw);
             setIsLoading(false);
         })
+        setPaginationNumber(1);
         setCurrentSorted("EO");
         setTopXPlayers(top_x_players);
     }
@@ -309,10 +311,24 @@ export const PlayerOwnership : FunctionComponent<LanguageProps> = (props) => {
     }
 
     const [ currentSorted, setCurrentSorted ] = useState("EO");
-    
+
     return <>
-    <DefaultPageContainer pageClassName='player-ownership-container' heading={props.content.Statistics.PlayerOwnership.title + " - " + store.getState().league_type} description={props.content.Statistics.PlayerOwnership.title}>
-        <h1>{props.content.Statistics.PlayerOwnership.title}</h1>
+    <DefaultPageContainer 
+        pageClassName='player-ownership-container' 
+        heading={props.content.Statistics.PlayerOwnership.title + " - " + store.getState().league_type} 
+        description={'Se eierandelen av ulike spillere fra Eliteserien blant topp 100, 1000 og 5000 managere i Eliteserien Fantasy. Siden viser statistikk rundt EO (Effective Ownership), eierandel, kaptein, visekaptein, benket og total eierandel, samt chips bruk og laginformasjon. Data hentes ut blant topp 100, 1000 og 5000 rett etter byttefrist hver runde. '}>
+        <h1>{props.content.Statistics.PlayerOwnership.title}
+        <Popover 
+            id={"rotations-planner-id"}
+            title=""
+            algin_left={true}
+            popover_title={props.content.Statistics.PlayerOwnership.title} 
+            iconSize={14}
+            iconpostition={[-10, 0, 0, 3]}
+            popover_text=''>
+                Data hentes ut fra de 100, 1000 og 5000 beste ESF-managerne hver runde rett etter byttefrist. 
+            </Popover>
+        </h1>
         { !firstLoading && <>
             <form className="form-stuff text-center">
             <div className='box-1'>
@@ -367,7 +383,7 @@ export const PlayerOwnership : FunctionComponent<LanguageProps> = (props) => {
             <div className='box-4'></div>
 
             <div className='box-5'>
-                <label className='hidden'>Search bar</label>
+                <label htmlFor='site-search' className='hidden'>Search bar</label>
                 <input onChange={(e) => filterOnPositionAndTeam(sorting_keyword, e.target.value)} placeholder={props.content.Statistics.PlayerOwnership.search_text} className='input-box' type="search" id="site-search" name="q"></input>
             </div>
         </form></>

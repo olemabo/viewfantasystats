@@ -7,6 +7,7 @@ from player_statistics.db_models.eliteserien.ownership_statistics_model_eliteser
 from player_statistics.db_models.eliteserien.user_statistics_model_eliteserien import EliteserienUserInfoStatistics
 from player_statistics.db_models.eliteserien.player_statistics_model import EliteserienPlayerStatistic
 from player_statistics.db_models.eliteserien.rank_and_points_eliteserien import EliteserienRankAndPoints
+from player_statistics.db_models.eliteserien.cup_statistics_model_eliteserien import EliteserienCupStatistics
 from django.contrib import admin
 
 
@@ -26,4 +27,5 @@ admin.site.register(EliteserienUserInfoStatistics)
 admin.site.register(EliteserienChipsAndUserInfo)
 admin.site.register(EliteserienPlayerStatistic)
 admin.site.register(EliteserienRankAndPoints)
+admin.site.register(EliteserienCupStatistics)
 admin.site.register(EliteserienGwsChecked)

@@ -1,18 +1,16 @@
-from pickle import FALSE
 from player_statistics.utility_functions.utility_functions_player_statistics import get_player_statistics_from_db, get_dict_sort_on_short_name_to_sort_on_name
-from player_statistics.backend.fill_db_from_txt.fill_db_player_statistics import fill_database_all_players
-from player_statistics.backend.fill_db_from_txt.fill_db_global_statistics import write_global_stats_to_db
 from utils.utility_functions import convert_list_with_strings_to_floats
+from django.db.models import Max, Min
 
-from constants import ranking_delimiter, premier_league_folder_name, total_number_of_gameweeks, eliteserien_folder_name, fantasy_manager_eliteserien_url
+from constants import ranking_delimiter, cup_db_delimiter, total_number_of_gameweeks, eliteserien_folder_name, fantasy_manager_eliteserien_url
 
-import numpy as np
-from django.http import HttpResponse, JsonResponse
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.http import JsonResponse
 from rest_framework import status
+import numpy as np
+from django.db.models import Q
 
-from player_statistics.backend.fill_db_from_txt.fill_db_global_statistics_eliteserien import write_global_stats_to_db_eliteserien
 from player_statistics.db_models.eliteserien.ownership_statistics_model_eliteserien import *
 from player_statistics.db_models.premier_league.ownership_statistics_model import *
 from fixture_planner_eliteserien.models import EliteserienTeamInfo
@@ -20,11 +18,9 @@ from fixture_planner.models import PremierLeagueTeamInfo
 
 from utils.Statistics.Utils.GetLastUpdatedGws import get_last_updated_gw_and_all_gws_eliteserien, get_last_updated_gw_and_all_gws_premier_league
 
-from player_statistics.backend.fill_db_from_txt.fill_db_user_info_statistics_eliteserien import write_user_info_to_db_eliteserien
-from player_statistics.backend.read_api_data_to_txt.read_user_info_statistics import read_user_info_statistics_eliteserien
-
 from player_statistics.db_models.eliteserien.rank_and_points_eliteserien import EliteserienRankAndPoints
 from player_statistics.db_models.eliteserien.user_statistics_model_eliteserien import EliteserienUserInfoStatistics
+from player_statistics.db_models.eliteserien.cup_statistics_model_eliteserien import EliteserienCupStatistics
 from player_statistics.db_models.premier_league.player_statistics_model import PremierLeaguePlayers
 
 from utils.Statistics.ApiResponse.PlayerStatisticsApiResponse import PlayerStatisticsApiResponse
@@ -42,80 +38,115 @@ from utils.Statistics.Models.TeamAndIdModel import TeamAndIdModel
 from utils.Statistics.Models.ChipModel import ChipModel
 
 
-# Comment out when deploying to PROD
-#from player_statistics.backend.read_api_data_to_txt.read_global_statistics import save_all_global_stats_for_current_gw
+class CupStatisticsApiResponse:
+    def __init__(self, cup_start, cup_last_gw, cup_data):
+        ...
+        self.cup_start = cup_start
+        self.cup_last_gw = cup_last_gw
+        self.cup_data = cup_data
+    
+    def toJson(self):
+        return json.dumps(self, default=lambda o: o.__dict__)
+
+class CupSearchHitModel:
+    def __init__(self, user_id, name, team_name, round_lost, cup_round_data, hit_number):
+        ...
+        self.user_id = user_id
+        self.name = name
+        self.team_name = team_name
+        self.round_lost = round_lost
+        self.cup_round_data = cup_round_data
+        self.hit_number = hit_number
+    
+    def toJson(self):
+        return json.dumps(self, default=lambda o: o.__dict__)
+
+class CupRoundHitModel:
+    def __init__(self, opponent_entry_id, opponent_name, opponent_player_name, opponent_points, current_points, winner, current_cup_round):
+        ...
+        self.opponent_entry_id = opponent_entry_id
+        self.opponent_name = opponent_name
+        self.opponent_player_name = opponent_player_name
+        self.opponent_points = opponent_points
+        self.current_points = current_points
+        self.winner = winner
+        self.current_cup_round = current_cup_round
+    
+    def toJson(self):
+        return json.dumps(self, default=lambda o: o.__dict__)
+
+class CupAPIView(APIView):
+
+    def get(self, request):
+        league_name = str(request.GET.get('league_name')).lower()
+        
+        # get cup round start and end and current gw
+        player_ownership_db = EliteserienCupStatistics.objects.all()
+        temp = player_ownership_db
+        cup_last_gw = player_ownership_db.aggregate(Max('round_lost'))['round_lost__max'] + 1
+        cup_start = temp.filter(round_lost__gte=0).aggregate(Min('round_lost'))['round_lost__min']
+
+        response = CupStatisticsApiResponse(cup_start, cup_last_gw, [])
+
+        return JsonResponse(response.toJson(), safe=False)
+
+    def post(self, request, format=None):
+        try:
+            # want to extract cup data for one and one round (gw)
+            # if round 2, then get all games from gw 2, make sure to not return duplicates id:1 agaist id:23 and id:23 against id:1
+            querys = request.data.get("query").lower().split(" ")
+            cup_round = int(request.data.get("cup_round"))
+            player_ownership_db = EliteserienCupStatistics.objects.all()
+            temp = player_ownership_db
+            cup_last_gw = player_ownership_db.aggregate(Max('round_lost'))['round_lost__max']
+            cup_start = temp.filter(round_lost__gte=0).aggregate(Min('round_lost'))['round_lost__min']
+
+            criterion1 = Q(round_lost__gte=cup_round)
+            criterion2 = Q(round_lost=-1)
+            player_ownership_db = player_ownership_db.filter(criterion1 | criterion2)
+            
+            duplicate_ids = []
+            list_of_hits = [] 
+            for hit in player_ownership_db:
+                hit_number = 0
+                cup_data = hit.cup_history[cup_round-cup_start].split(cup_db_delimiter)
+                for query in querys:
+                    if (query.lower() in hit.name.lower() or query.lower() in hit.team_name.lower() or query.lower() in cup_data[1].lower() or query.lower() in cup_data[2].lower()):
+                        hit_number += 1
+                if hit.id not in duplicate_ids and (hit_number > 0 or len(querys) == 0):
+                    cup_data_object = CupRoundHitModel(
+                        cup_data[0],
+                        cup_data[1],
+                        cup_data[2],
+                        cup_data[3],
+                        cup_data[4],
+                        cup_data[5],
+                        cup_data[6])
+                    list_of_hits.append(
+                        CupSearchHitModel(
+                            hit.id, 
+                            hit.name, 
+                            hit.team_name,
+                            hit.round_lost,
+                            cup_data_object.toJson(),
+                            hit_number))
+
+                    duplicate_ids.append(int(hit.id))
+                    duplicate_ids.append(int(cup_data[0]))
+            # newlist = sorted(list_of_hits, key=lambda x: x.name, reverse=True)
+            
+            # list_of_hits = [i.toJson() for i in newlist]
+            # print(len(list_of_hits), len(player_ownership_db))
+            # for i in list_of_hits:
+            #     print(i.name, i.user_id, i.cup_round_data)
+
+            response = CupStatisticsApiResponse(cup_start, cup_last_gw, list_of_hits)
+
+            return JsonResponse(response.toJson(), safe=False)
 
 
-def fill_player_statistics_eliteserien(request):
-    if (request.META['HTTP_HOST'] == "127.0.0.1:8000"):
-        fill_database_all_players(eliteserien_folder_name)
-    return HttpResponse("Filled Database Eliteserien Player Statistics Info (EliteserienPlayerStatistic)")
-
-
-def fill_player_statistics_premier_league(request):
-    if (request.META['HTTP_HOST'] == "127.0.0.1:8000"):
-        fill_database_all_players(premier_league_folder_name)
-    return HttpResponse("Filled Database Premier League Player Statistics Info (EliteserienPlayerStatistic)")
-
-
-def read_and_fill_user_info_to_db_eliteserien(request):
-    if (request.META['HTTP_HOST'] == "127.0.0.1:8000"):
-        read_user_info_statistics_eliteserien()
-        write_user_info_to_db_eliteserien()
-    return HttpResponse("Read and Filled Database User Info (EliteserienUserInfoStatistics)")
-
-
-def fill_user_info_to_db_eliteserien(request):
-    if (request.META['HTTP_HOST'] == "127.0.0.1:8000"):
-        write_user_info_to_db_eliteserien()
-    return HttpResponse("Filled Database User Info (EliteserienUserInfoStatistics)")
-
-
-# DB functions. Should not be accessible in PRODUCTION
-def fill_db_global_stats(request):
-    if (request.META['HTTP_HOST'] == "127.0.0.1:8000"):
-        write_global_stats_to_db_eliteserien()
-    return HttpResponse("Filled Database Global Data (GlobalOwnershipStatsXXXX)")
-
-
-def read_and_fill_db_global_stats(request):
-    if (request.META['HTTP_HOST'] == "127.0.0.1:8000"):
-        #save_all_global_stats_for_current_gw(eliteserien_folder_name)
-        write_global_stats_to_db_eliteserien()
-    return HttpResponse("Read global stats from api and filled Database Global Data (GlobalOwnershipStatsXXXX)")
-
-
-def fill_db_global_stats_premier_league(request):
-    if (request.META['HTTP_HOST'] == "127.0.0.1:8000"):
-        write_global_stats_to_db()
-    return HttpResponse("Filled Database Global Data (GlobalOwnershipStatsXXXX)")
-
-
-def read_and_fill_db_global_stats_premier_league(request):
-    if (request.META['HTTP_HOST'] == "127.0.0.1:8000"):
-        #save_all_global_stats_for_current_gw(premier_league_folder_name)
-        write_global_stats_to_db()
-    return HttpResponse("Filled Database Global Data (GlobalOwnershipStatsXXXX)")
-
-
-def fill_txt_global_stats(request):
-    #if (request.META['HTTP_HOST'] == "127.0.0.1:8000"):
-        #save_all_global_stats_for_current_gw()
-    return HttpResponse("Filled Txt global stats")
-
-
-def fill_player_stat_db(request):
-    #if (request.META['HTTP_HOST'] == "127.0.0.1:8000"):
-        #save_all_global_stats_for_current_gw()
-    return HttpResponse("Filled Database Player Data (PremierLeaguePlayers)")
-
-
-def fill_all_statistics(request):
-    #fill_database_all_players()
-    #save_all_global_stats_for_current_gw()
-    #write_global_stats_to_db()
-    return HttpResponse("Finished all statistics")
-
+        except:
+            return Response({'Bad Request': 'Something went wrong'}, status=status.HTTP_400_BAD_REQUEST)
 
 class PlayerOwnershipAPIView(APIView):
 
@@ -392,6 +423,7 @@ class RankStatisticsAPIView(APIView):
                         RankStatisticsModel(
                             user_id, 
                             hit.user_first_name + " " + hit.user_last_name,
+                            hit.user_team_name,
                             round(avg_rank / last_x_years, 0), 
                             round(avg_points / last_x_years, 1),
                             -1,
@@ -412,7 +444,7 @@ class RankStatisticsAPIView(APIView):
                 list_of_ranks.append(data.toJson())  
 
             fantasy_manager_url = fantasy_manager_eliteserien_url
-            response = RankStatisticsApiResponse(fantasy_manager_url, list_of_ranks, number_of_last_years) 
+            response = RankStatisticsApiResponse(fantasy_manager_url, list_of_ranks[:5000], number_of_last_years) 
 
             return JsonResponse(response.toJson(), safe=False)
 

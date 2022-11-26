@@ -88,8 +88,8 @@ export const TopMenuMobile: React.FunctionComponent<TopMenyProps> = (props) => {
                         <button className={language == english ? "" : "not-chosen"} onClick={() => updateLanguage(english)}>En</button>
                     </div>
                     <div>
-                        { league_type == eliteserien && <Link className="circle-link fpl" onClick={() => updateSoccerLeague(fpl)} to={urls.url_premier_league}></Link> }
-                        { league_type == fpl && <Link className="circle-link eliteserien" onClick={() => updateSoccerLeague(eliteserien)} to={urls.url_elitserien}></Link> }
+                        { league_type == eliteserien && <Link className="circle-link" onClick={() => updateSoccerLeague(fpl)} to={"/" + urls.url_premier_league}>FPL</Link> }
+                        { league_type == fpl && <Link className="circle-link" onClick={() => updateSoccerLeague(eliteserien)} to={"/" + urls.url_elitserien}>ESF</Link> }
                     </div>
                 </div>
                 <nav className="mobile-sub-menu-container">
