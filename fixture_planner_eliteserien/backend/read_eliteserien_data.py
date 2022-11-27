@@ -1,11 +1,11 @@
 from utils.fixtures.models.TeamFixtureInfoEliteserienModel import TeamFixtureInfoEliteserienModel
-from constants import fixture_folder_name, stored_data, eliteserien_folder_name, current_season_name_eliteserien
+from constants import python_anywhere_path, fixture_folder_name, stored_data, eliteserien_folder_name, current_season_name_eliteserien
 from openpyxl.utils.cell import get_column_letter
 from openpyxl import load_workbook
 import pandas as pd
 
 def readEliteserienExcelToDBFormat(path=r'stored_data/eliteserien/2022/fixture_data/Eliteserien_fixtures.xlsx'):
-    print(path, "path")
+    path = python_anywhere_path + "/" + path
     df = pd.read_excel(path, engine='openpyxl')
     print(df, "df")
     objectList = []
