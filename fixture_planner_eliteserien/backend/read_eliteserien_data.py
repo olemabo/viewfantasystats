@@ -4,7 +4,7 @@ from openpyxl.utils.cell import get_column_letter
 from openpyxl import load_workbook
 import pandas as pd
 
-def readEliteserienExcelToDBFormat(path=r'stored_data/eliteserien/Eliteserien_fixtures.xlsx'):
+def readEliteserienExcelToDBFormat(path=r'stored_data/eliteserien/2022/fixture_data/Eliteserien_fixtures.xlsx'):
     df = pd.read_excel(path, engine='openpyxl')
     objectList = []
     dates = df.loc[df[0] == 'Dato'].values.tolist()[0][1:]
