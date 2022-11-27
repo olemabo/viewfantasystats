@@ -6,6 +6,7 @@ import pandas as pd
 
 def readEliteserienExcelToDBFormat(path=r'stored_data/eliteserien/2022/fixture_data/Eliteserien_fixtures.xlsx'):
     path = python_anywhere_path + "/" + path
+    path = "/home/olebo/viewfantasystats/stored_data/eliteserien/2022/fixture_data/Eliteserien_fixtures.xlsx"
     df = pd.read_excel(path, engine='openpyxl')
     print(df, "df")
     objectList = []
@@ -48,7 +49,7 @@ def readEliteserienExcelToDBFormat(path=r'stored_data/eliteserien/2022/fixture_d
 
 
 def readEliteserienExcelFromDagFinnToDBFormat():
-    path = stored_data + "/" + eliteserien_folder_name + "/" + current_season_name_eliteserien + "/" + fixture_folder_name + "/" + "Eliteserien_fixtures.xlsx"
+    path = python_anywhere_path + "/" + stored_data + "/" + eliteserien_folder_name + "/" + current_season_name_eliteserien + "/" + fixture_folder_name + "/" + "Eliteserien_fixtures.xlsx"
     max_teams = 18
     max_games = 30 + 2
     
