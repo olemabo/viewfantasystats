@@ -5,7 +5,9 @@ from openpyxl import load_workbook
 import pandas as pd
 
 def readEliteserienExcelToDBFormat(path=r'stored_data/eliteserien/2022/fixture_data/Eliteserien_fixtures.xlsx'):
+    print(path, "path")
     df = pd.read_excel(path, engine='openpyxl')
+    print(df, "df")
     objectList = []
     dates = df.loc[df[0] == 'Dato'].values.tolist()[0][1:]
 
