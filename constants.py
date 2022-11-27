@@ -1,4 +1,5 @@
 # here all global constants and links will be  stored
+
 # total number of gameweeks
 total_number_of_gameweeks = 38
 total_number_of_gameweeks_in_eliteserien = 30
