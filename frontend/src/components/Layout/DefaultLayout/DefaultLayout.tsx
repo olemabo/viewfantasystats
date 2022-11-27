@@ -24,6 +24,8 @@ export const DefaultLayout = () => {
     const isMenuOpenFromRedux = useSelector((state: any) => state?.isMenuOpen);
     const langaugeContentFromRedux = useSelector((state: any) => state?.language);
     const leagueTypeFromRedux = store.getState()?.league_type;
+    const league_type = useSelector((state: any) => state?.league_type);
+
     const [ doneFirstLoading, setDoneFirstLoading ] = useState(false);
     const fpl = "FPL";
     const eliteserien = "Eliteserien";
@@ -55,6 +57,8 @@ export const DefaultLayout = () => {
         }
     }, [])
 
+    console.log(leagueTypeFromRedux, league_type)
+
 
     return <> { doneFirstLoading && 
     <div>
@@ -62,14 +66,15 @@ export const DefaultLayout = () => {
         { (!isAnyMenuOpen) && 
         <><div className="showcase">
         </div>
-        <div className={"front-page-bottom " + leagueTypeFromRedux}>
+        <div className={"front-page-bottom " + league_type}>
             <div className="start-container">
               <div className="content-container">
                   <div className="col-sm-10 max-width">
                         <Routes>
                             <Route path="/" element={<LeagueFrontPage league_type={eliteserien} content={langagueContent} />} />
 
-                            <Route path="/premier-league/" element={<LeagueFrontPage league_type={fpl} content={langagueContent} />} />
+                            {/* <Route path="/premier-league/" element={<LeagueFrontPage league_type={fpl} content={langagueContent} />} /> */}
+                            <Route path="/premier-league/" element={<FixturePlannerPage fixture_planning_type={FixturePlanningType.FDR} league_type={fpl} content={langagueContent} />} />
                             <Route path="/premier-league/fdr-planner/" element={<FixturePlannerPage fixture_planning_type={FixturePlanningType.FDR} league_type={fpl} content={langagueContent} />} />
                             <Route path="/premier-league/periode-planner/" element={<FixturePlannerPage fixture_planning_type={FixturePlanningType.Periode} league_type={fpl} content={langagueContent} />} />
                             <Route path="/premier-league/rotation-planner/" element={<RotationPlannerPage content={langagueContent} />} />
@@ -77,7 +82,8 @@ export const DefaultLayout = () => {
                             <Route path="/premier-league/player-statistics/" element={<PlayerStatisticsPage league_type={fpl} content={langagueContent} />} />
                             <Route path="/premier-league/player-ownership/" element={<PlayerOwnership top_x_managers_default={10000} league_type={fpl} content={langagueContent} />} />
 
-                            <Route path="/eliteserien/" element={<LeagueFrontPage league_type={eliteserien} content={langagueContent} />} />
+                            {/* <Route path="/eliteserien/" element={<LeagueFrontPage league_type={eliteserien} content={langagueContent} />} /> */}
+                            <Route path="/eliteserien/" element={<PlayerOwnership top_x_managers_default={1000} league_type={eliteserien} content={langagueContent} />} />
                             <Route path="/eliteserien/rotation-planner/" element={<RotationPlannerEliteserienPage content={langagueContent} />} />
                             <Route path="/eliteserien/periode-planner/" element={<FixturePlannerEliteserienPage fixture_planning_type={FixturePlanningType.Periode} league_type={eliteserien} content={langagueContent} />} />                            
                             <Route path="/eliteserien/fdr-planner/" element={<FixturePlannerEliteserienPage fixture_planning_type={FixturePlanningType.FDR} league_type={eliteserien} content={langagueContent} />} />

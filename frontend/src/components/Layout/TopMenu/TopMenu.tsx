@@ -77,7 +77,8 @@ export const TopMenu : FunctionComponent<LanguageProps> = (props) => {
                     <div className="nav-container">
                         <h1 className="logo">
                             <Link to={"/" + (leagueType === "FPL" ? urls.url_premier_league : urls.url_elitserien)}>
-                                {leagueType == "FPL" ? "Premier League" : leagueType}
+                                <div>{"Fantasy Stats "}</div>
+                                { "" +  (leagueType == "FPL" ? "Premier League" : leagueType)}
                             </Link>
                         </h1>
                         { leagueType == fpl && 

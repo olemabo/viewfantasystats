@@ -64,7 +64,7 @@ export const Footer : FunctionComponent<LanguageProps> = (props) => {
           {/* <h2>Sosiale medier</h2> */}
           <div className="">
             <div><Twitter /><a className="" target="_blank" href="https://twitter.com/Ole_Borge">Twitter</a></div>                  
-            <div><Code /><a target="_blank" href="https://dev.azure.com/olemartinbo/_git/FPL-webpage">Open Source Project</a></div>                   
+            <div><Code /><a target="_blank" href="https://github.com/olemabo/viewfantasystats">Code</a></div>                   
           </div>
         </div>
         {/* https://dev.azure.com/olemartinbo/_git/FPL-webpage
