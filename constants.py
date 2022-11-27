@@ -40,9 +40,6 @@
 
 
 
-
-
-
 # here all global constants and links will be stored
 
 ############# GLOBAL STATS ########################
