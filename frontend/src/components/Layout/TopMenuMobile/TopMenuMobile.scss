@@ -176,8 +176,9 @@
 .top-menu-mobile-circle-container {
     padding-top: 20px;
     display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
+    flex-direction: column;
+    row-gap: 12px;
+    align-items: flex-start;
     margin-right: 30px;
     margin-left: 30px;
             

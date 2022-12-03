@@ -26,9 +26,10 @@
         padding: 0 40px;
                 
         .top-navbar-container {
-            margin-right: 15px;
+            margin-right: 10px;
             display: flex;
-            margin-bottom: 6px;
+            margin-bottom: 14px;
+            margin-left: 15px;
 
 
             // .circle-link {
@@ -67,7 +68,7 @@
             // color: white;
             color: var(--black-color);
             position: relative;
-            bottom: 8px;
+            bottom: 14px;
     
             button {
                 color: inherit;
@@ -110,7 +111,7 @@
     // margin: 1px 10px;
     
     // box-shadow: 0 0 0 1px #c8c8c8a3;
-    box-shadow: 0 0 0 1px var(--black-color);
+    box-shadow: 0 0 0 1px #00000082;
     margin: 0 5px 0 20px;
     // color: white;
     color: var(--black-color);

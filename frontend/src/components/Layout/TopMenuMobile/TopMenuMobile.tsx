@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./TopMenuMobile.scss";
 import MenuIcon from '@material-ui/icons/Menu';
 import CloseIcon from '@material-ui/icons/Close';
@@ -10,6 +10,7 @@ import { content_json } from "../../../language/languageContent";
 import { store } from '../../../store/index';
 import { Link } from "react-router-dom";
 import * as urls from '../../../internal_urls/internalUrls';
+import { LanguageSelector, LeagueSelector } from "../../Shared/LeagueAndLanguageSelector/LeagueAndLanguageSelector";
 
 
 interface TopMenyProps {
@@ -19,25 +20,33 @@ interface TopMenyProps {
 }
 
 export const TopMenuMobile: React.FunctionComponent<TopMenyProps> = (props) => {
-    const [ MenuOpen, setMenuOpen ] = useState(false);
     const fpl = "FPL";
     const eliteserien = "Eliteserien";
+    const norwegain = "no";
+    const english = "en";
+    
     function toggleMenu() {
         setMenuOpen(wasOpened => !wasOpened);
         store.dispatch({type: "isMenuOpen", payload: !MenuOpen })
     }
-
+    
     function updateSoccerLeague(soccer_league: string) {
         store.dispatch({type: "league_type", payload: soccer_league});
     }
-
+    
     function closeMenu() {
         store.dispatch({type: "isMenuOpen", payload: false })
     }
-    const [ language, setLanguage] = useState(store.getState().language_code);
 
-    const norwegain = "no";
-    const english = "en";
+    const [ language, setLanguage] = useState(store.getState().language_code);
+    const [ MenuOpen, setMenuOpen ] = useState(false);
+    
+    useEffect(() => {
+        setMenuOpen(false);
+        store.dispatch({type: "isMenuOpen", payload: false })
+    }, [])
+
+    console.log(MenuOpen)
     
     function updateLanguage(lang: string) {
         if (lang == english) {
@@ -84,12 +93,34 @@ export const TopMenuMobile: React.FunctionComponent<TopMenyProps> = (props) => {
             <div className="mobile-sub-menu">
                 <div className="top-menu-mobile-circle-container">
                     <div className="top-navbar-mobile-langauge-container">
-                        <button className={language == norwegain ? "" : "not-chosen"} onClick={() => updateLanguage(norwegain)}>No</button> |
-                        <button className={language == english ? "" : "not-chosen"} onClick={() => updateLanguage(english)}>En</button>
+                        {/* <button className={language == norwegain ? "" : "not-chosen"} onClick={() => updateLanguage(norwegain)}>No</button> |
+                        <button className={language == english ? "" : "not-chosen"} onClick={() => updateLanguage(english)}>En</button> */}
+                        { language == norwegain && 
+                        <LanguageSelector 
+                            text={'English'}
+                            onclick={() => updateLanguage(english)} />
+                        }
+                        { language == english && 
+                        <LanguageSelector 
+                            text={'Norsk'}
+                            onclick={() => updateLanguage(norwegain)}  />
+                        }
                     </div>
                     <div>
-                        { league_type == eliteserien && <Link className="circle-link" onClick={() => updateSoccerLeague(fpl)} to={"/" + urls.url_premier_league}>FPL</Link> }
-                        { league_type == fpl && <Link className="circle-link" onClick={() => updateSoccerLeague(eliteserien)} to={"/" + urls.url_elitserien}>ESF</Link> }
+                        {/* { league_type == eliteserien && <Link className="circle-link" onClick={() => updateSoccerLeague(fpl)} to={"/" + urls.url_premier_league}>FPL</Link> }
+                        { league_type == fpl && <Link className="circle-link" onClick={() => updateSoccerLeague(eliteserien)} to={"/" + urls.url_elitserien}>ESF</Link> } */}
+                        { league_type === eliteserien && 
+                            <LeagueSelector 
+                                text={'FPL'}
+                                onclick={() => updateSoccerLeague(fpl)}
+                                url={"/" + urls.url_premier_league}  />
+                        }
+                        { league_type === fpl && 
+                            <LeagueSelector 
+                                text={'ESF'}
+                                onclick={() => updateSoccerLeague(eliteserien)}
+                                url={"/" + urls.url_elitserien}  />
+                        }
                     </div>
                 </div>
                 <nav className="mobile-sub-menu-container">

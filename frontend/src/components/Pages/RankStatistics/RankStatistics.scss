@@ -58,8 +58,8 @@
     }
 
     table {
-        display: flex;
-        flex-wrap: wrap;
+        // display: flex;
+        // flex-wrap: wrap;
         
         a {
             border-bottom: 1px solid var(--black-color);
@@ -166,6 +166,10 @@
                 height: 35px !important;
             }
         }
+        table {
+            display: flex;
+            flex-wrap: wrap; 
+        }
     }
 
     @media (max-width: 300px) {
@@ -206,6 +210,10 @@
             
             .input-box {
                 height: 35px !important;
+            }
+            
+            .last-x-seasons-select {
+                grid-area: head;
             }
         }
     }

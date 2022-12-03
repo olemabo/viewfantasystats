@@ -7,6 +7,9 @@ import { store } from '../../../store/index';
 import { useSelector } from 'react-redux';
 import { Link } from "react-router-dom";
 import "./TopMenu.scss";
+import PublicIcon from '@material-ui/icons/Public';
+import SportsSoccerIcon from '@material-ui/icons/SportsSoccer';
+import { LanguageSelector, LeagueSelector } from "../../Shared/LeagueAndLanguageSelector/LeagueAndLanguageSelector";
 
 type LanguageProps = {
     content: any;
@@ -65,12 +68,34 @@ export const TopMenu : FunctionComponent<LanguageProps> = (props) => {
             <div className={"front-page-top-sky " + leagueType}>
                 <div className="top-navbar container">
                     <div className="top-navbar-language-container">
-                        <button className={language == norwegain ? "" : "not-chosen"} onClick={() => updateLanguage(norwegain)}>No</button> |
-                        <button className={language == english ? "" : "not-chosen"} onClick={() => updateLanguage(english)}>En</button>
+                        {/* <button className={language == norwegain ? "" : "not-chosen"} onClick={() => updateLanguage(norwegain)}>No</button> |
+                        <button className={language == english ? "" : "not-chosen"} onClick={() => updateLanguage(english)}>En</button> */}
+                        { language === norwegain && 
+                        <LanguageSelector 
+                            text={'English'}
+                            onclick={() => updateLanguage(english)} />
+                        }
+                        { language === english && 
+                        <LanguageSelector 
+                            text={'Norsk'}
+                            onclick={() => updateLanguage(norwegain)}  />
+                        }
                     </div>
                     <div className="top-navbar-container">
-                        { leagueType == eliteserien && <Link className="circle-link fpl" onClick={() => updateSoccerLeague(fpl)} to={"/" + urls.url_premier_league}>FPL</Link>}
-                        { leagueType == fpl &&<Link className="circle-link eliteserien" onClick={() => updateSoccerLeague(eliteserien)} to={"/" + urls.url_elitserien}>ESF</Link>}
+                        {/* { leagueType == eliteserien && <Link className="circle-link fpl" onClick={() => updateSoccerLeague(fpl)} to={"/" + urls.url_premier_league}>FPL</Link>}
+                        { leagueType == fpl &&<Link className="circle-link eliteserien" onClick={() => updateSoccerLeague(eliteserien)} to={"/" + urls.url_elitserien}>ESF</Link>} */}
+                        { leagueType === eliteserien && 
+                        <LeagueSelector 
+                            text={'FPL'}
+                            onclick={() => updateSoccerLeague(fpl)}
+                            url={"/" + urls.url_premier_league}  />
+                        }
+                        { leagueType === fpl && 
+                        <LeagueSelector 
+                            text={'ESF'}
+                            onclick={() => updateSoccerLeague(eliteserien)}
+                            url={"/" + urls.url_elitserien}  />
+                        }
                     </div>
                 </div>
                 <div className="navbar">

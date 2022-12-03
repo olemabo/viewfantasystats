@@ -173,7 +173,7 @@ export const RankStatisticsPage : FunctionComponent<LanguageProps> = (props) => 
                         <th className="name-col">{props.content.General.teamname}</th>
                         <th><TableSortHead defaultSortType={'Increasing'} text={props.content.Statistics.RankStatistics.rank} reset={currentSorted != 'Rank'} onclick={(increase: boolean) => sortRankingData(0, increase)}/></th>
                         <th><TableSortHead text={props.content.Statistics.RankStatistics.points} reset={currentSorted != 'Points'} onclick={(increase: boolean) => sortRankingData(1, increase)}/></th>
-                        <th className="see-team">{props.content.General.see_team}</th>
+                        {/* <th className="see-team">{props.content.General.see_team}</th> */}
                     </tr>
                 </thead>
 
@@ -181,15 +181,19 @@ export const RankStatisticsPage : FunctionComponent<LanguageProps> = (props) => 
                     { ranksToShow.slice( (pagingationNumber - 1) * numberOfHitsPerPagination, (pagingationNumber - 1) * numberOfHitsPerPagination + numberOfHitsPerPagination).map( (x, index) => 
                     <tr>
                         <td className="narrow">{ currentSorted == "Rank" ? (x.avg_rank_ranking) : (x.avg_points_ranking) }</td>
-                        <td className="name-col"> <div className="format-name-col">{ x.team_name }</div> </td>
+                        <td className="name-col">
+                            <a target="_blank" href={fantasy_manager_url.replace("X", x.user_id)} className="format-name-col">
+                                { x.team_name }
+                            </a>
+                        </td>
                         <td className="">{ x.avg_rank }</td>
                         <td className="">{ x.avg_points } </td>
-                        <td className="see-team">
+                        {/* <td className="see-team">
                             <a target="_blank" href={fantasy_manager_url.replace("X", x.user_id)}>
                                 {props.content.General.see_team}
                                 <OpenInNew fontSize='small' />
                             </a>
-                        </td>
+                        </td> */}
                     </tr>
                     )}             
                 </tbody>
