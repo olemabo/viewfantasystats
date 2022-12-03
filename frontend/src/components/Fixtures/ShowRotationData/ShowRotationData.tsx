@@ -47,11 +47,14 @@ export const ShowRotationData : FunctionComponent<ShowRotationProps> = (props) =
                                                 </td>
                                             )}
                                             { team_i_j.length == 1 ?
-                                                <td style={{backgroundColor: convertFDRtoHex(JSON.parse(team_i_j[0]).difficulty_score, props.fdrToColor), color: contrastingColor(convertFDRtoHex(JSON.parse(team_i_j[0]).difficulty_score, props.fdrToColor))}} scope="col" className={"  color-" + JSON.parse(team_i_j[0]).difficulty_score + " double-border-" + JSON.parse(team_i_j[0]).Use_Not_Use}>
+                                                <td 
+                                                    scope="col" 
+                                                    className={" double-border-" + JSON.parse(team_i_j[0]).Use_Not_Use}>
                                                     { team_i_j.map( (team: any) => {
                                                         var num_teams = team_i_j.length;
                                                         var json_team_data = JSON.parse(team); 
-                                                        return <div style={{backgroundColor: convertFDRtoHex(json_team_data.difficulty_score, props.fdrToColor), color: contrastingColor(convertFDRtoHex(json_team_data.difficulty_score, props.fdrToColor))}} className={"color-" + json_team_data.difficulty_score + " multiple-fixtures height-" + num_teams.toString() }>
+                                                        return <div style={{backgroundColor: convertFDRtoHex(json_team_data.difficulty_score, props.fdrToColor), color: contrastingColor(convertFDRtoHex(json_team_data.difficulty_score, props.fdrToColor))}} 
+                                                            className={"color-" + json_team_data.difficulty_score + " height-" + num_teams.toString() + (num_teams > 1 ? ' multiple-fixtures' : '') }>
                                                             { json_team_data.opponent_team_name == '-' ? "Blank" : 
                                                                 json_team_data.opponent_team_name + " (" + json_team_data.H_A + ")"
                                                             }
@@ -59,11 +62,14 @@ export const ShowRotationData : FunctionComponent<ShowRotationProps> = (props) =
 
                                                     })}
                                                 </td> :
-                                                <td style={{backgroundColor: convertFDRtoHex(JSON.parse(team_i_j[0]).difficulty_score, props.fdrToColor), color: contrastingColor(convertFDRtoHex(JSON.parse(team_i_j[0]).difficulty_score, props.fdrToColor))}} scope="col" className={" no-padding double-border-" + JSON.parse(team_i_j[0]).Use_Not_Use}>
+                                                <td 
+                                                    scope="col" 
+                                                    className={" no-padding double-border-" + JSON.parse(team_i_j[0]).Use_Not_Use}>
                                                     { team_i_j.map( (team: any) => {
                                                         var num_teams = team_i_j.length;
                                                         var json_team_data = JSON.parse(team); 
-                                                        return <div style={{backgroundColor: convertFDRtoHex(json_team_data.difficulty_score, props.fdrToColor), color: contrastingColor(convertFDRtoHex(json_team_data.difficulty_score, props.fdrToColor))}}  className={"color-" + json_team_data.difficulty_score + " multiple-fixtures height-" + num_teams.toString() }>
+                                                        return <div style={{backgroundColor: convertFDRtoHex(json_team_data.difficulty_score, props.fdrToColor), color: contrastingColor(convertFDRtoHex(json_team_data.difficulty_score, props.fdrToColor))}} 
+                                                            className={"color-" + json_team_data.difficulty_score + " height-" + num_teams.toString() + (num_teams > 1 ? ' multiple-fixtures' : '') }>
                                                             { json_team_data.opponent_team_name == '-' ? "Blank" : 
                                                                 json_team_data.opponent_team_name + " (" + json_team_data.H_A + ")"
                                                             }

@@ -127,7 +127,7 @@
         }
     
         .height-2 {
-            height: 25px;
+            height: 50%;
             font-size: 11px;
         }
         
@@ -206,6 +206,7 @@
             align-items: center;
             display: flex;
             width: 100%;
+            padding: 0;
             // height: 100%;
         }
         
@@ -215,7 +216,7 @@
         
         .double-border-1 {
             border: var(--fdr-box-gap) solid var(--page-background-color) !important;
-            font-weight: 600;
+            // font-weight: 600;
         }
     }
 

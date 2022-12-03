@@ -69,16 +69,13 @@ export const ShowFDRData : FunctionComponent<ShowFDRProps> = (props) => {
                                     { fdr.checked && (
                                     <tr id={"fdr-row-" + fdr.team_name}>
                                         { fdr.FDR.map(f => (
-                                            <td onClick={(e) => toggleBorderLine(e)} scope='col' style={{
-                                                backgroundColor: convertFDRtoHex(f.fdr_gw_i[0].difficulty_score, props.fdrToColor),
-                                            }} 
-                                                className={''
-                                            + (f.fdr_gw_i.length == 1 ? " color-" + f.fdr_gw_i[0].difficulty_score + " " : " no-padding ") + 'double-border-' + f.fdr_gw_i[0].Use_Not_Use  }>
+                                            <td onClick={(e) => toggleBorderLine(e)} scope='col' className={''
+                                            + (f.fdr_gw_i.length == 1 ? " colors-" + f.fdr_gw_i[0].difficulty_score + " " : " no-padding ") + 'double-border-' + f.fdr_gw_i[0].Use_Not_Use  }>
                                                 { f.fdr_gw_i.map(g => (
                                                     <div style={{
                                                         backgroundColor: convertFDRtoHex(f.fdr_gw_i[0].difficulty_score, props.fdrToColor),
                                                         color: contrastingColor(convertFDRtoHex(f.fdr_gw_i[0].difficulty_score, props.fdrToColor))}} 
-                                                        className={'color-' + g.difficulty_score + ' multiple-fixtures height-' + f.fdr_gw_i.length}>
+                                                        className={'color-' + g.difficulty_score + ' height-' + f.fdr_gw_i.length + (f.fdr_gw_i.length > 1 ? ' multiple-fixtures' : '')}>
                                                         { g.opponent_team_name == '-' ? "Blank" : (g.opponent_team_name + " (" + g.H_A + ")") }
                                                     </div>
                                                 ))}
