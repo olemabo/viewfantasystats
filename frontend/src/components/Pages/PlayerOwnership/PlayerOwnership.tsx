@@ -93,7 +93,7 @@ export const PlayerOwnership : FunctionComponent<LanguageProps> = (props) => {
     }
 
     useEffect(() => {
-        // store.dispatch({type: "league_type", payload: props.league_type});
+        store.dispatch({type: "league_type", payload: props.league_type});
         setIsLoading(true);
 
         axios.get(player_ownership_api_path + "?league_name=" + props.league_type).then(x => {  
