@@ -12,6 +12,7 @@ import { Popover } from '../../Shared/Popover/Popover';
 import { Button } from '../../Shared/Button/Button';
 import { store } from '../../../store/index';
 import axios from 'axios';
+import ThreeStateCheckbox from '../../Shared/FilterButton/ThreeStateCheckbox';
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -41,6 +42,7 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
     const [ teamsToPlay, setTeamsToPlay ] = useState(1);
     const [ validationErrorMessage, setValidationErrorMessage ] = useState("");
     const [ loading, setLoading ] = useState(false);
+    const [ longLoadingTimeText, setLongLoadingTimeText ] = useState('');
 
     useEffect(() => {
         // get all fpl teams   
@@ -116,6 +118,7 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
 
             setFdrDataToShow(RotationPlannerTeamInfoList);
             setLoading(false);
+            setLongLoadingTimeText("");
         })
     }
 
@@ -149,18 +152,23 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
 
     function validateInput(body: any) {
         if (body.start_gw > body.end_gw) { 
-            setValidationErrorMessage("'" + props.content.Fixture.gw_start + "' må være mindre enn '" + props.content.Fixture.gw_end + "'");
+            setValidationErrorMessage(`'${props.content.Fixture.gw_start.replace(":", "")} ${props.content.Fixture.must_be_smaller} '${props.content.Fixture.gw_end.replace(":", "")}'.`);
             return false;
         }
+
         if (body.teams_to_play > body.teams_to_check) { 
-            setValidationErrorMessage("'" + props.content.Fixture.teams_to_play + "' må være mindre enn '" + props.content.Fixture.teams_to_check + "'");
+            setValidationErrorMessage(`'${props.content.Fixture.teams_to_play.replace(":", "")}' ${props.content.Fixture.must_be_smaller} '${props.content.Fixture.teams_to_check.replace(":", "")}'.`);
             return false;
         }
 
         if (body.teams_in_solution.length > body.teams_to_check) {
-            setValidationErrorMessage("'teams_in_solution' must be smaller og equal to 'Teams to check'");
+            const validationText = `'Antall lag' (${body.teams_to_check}) bestemmer hvor mange lag som
+            skal være i løsningen. 'Lag må være i løsningen' kan derfor ikke være ${body.teams_in_solution.length}.`
+            setValidationErrorMessage(validationText);
+            setShowTeamFilters(true);
             return false;
         }
+        
         return true;
     }
     
@@ -184,12 +192,75 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
         }
     }
 
+    function filterTeamData() {
+        let not_in_solution: string[] = [];
+        let must_be_in_solution: string[] = [];
+        teamData.map(team_data => {
+            if (team_data.checked_must_be_in_solution) {
+                must_be_in_solution.push(team_data.team_name)
+            }
+            if (!team_data.checked) {
+                not_in_solution.push(team_data.team_name)
+            }
+        })
+        const number_of_not_in_solution = not_in_solution.length;
+        const number_of_must_be_in_solution = must_be_in_solution.length;
+        const number_can_be_in_solution = teamData.length - number_of_not_in_solution - number_of_must_be_in_solution;
+        return { number_of_not_in_solution: number_of_not_in_solution, number_of_must_be_in_solution:number_of_must_be_in_solution , number_can_be_in_solution: number_can_be_in_solution }
+    }
+
+    function toggleFilterButton(e: React.MouseEvent<HTMLSpanElement, MouseEvent>) {
+        let temp: TeamCheckedModel[] = [];
+        const classList = e.currentTarget.classList;
+        const elementId = e.currentTarget.id;
+        let newClassName = '';
+        let currentClasslist = '';
+        console.log(e, e.currentTarget.id, e.currentTarget.classList)
+        if (classList.contains('can-be-in-solution')) {
+            currentClasslist = 'can-be-in-solution';
+            newClassName = 'must-be-in-solution';
+        }
+        else if (classList.contains('must-be-in-solution')) {
+            currentClasslist = 'must-be-in-solution';
+            newClassName = 'not-in-solution';
+        }
+        else if (classList.contains('not-in-solution')) {
+            currentClasslist = 'not-in-solution';
+            newClassName = 'can-be-in-solution';
+        }
+
+        teamData.forEach(x => {
+            let clickedOnCurrent = x.team_name == elementId;
+            let canBeInSolution = x.checked;
+            let mustBeInSolution = x.checked_must_be_in_solution;
+            if (newClassName == 'can-be-in-solution' && clickedOnCurrent) {
+                canBeInSolution = true;
+                mustBeInSolution = false;
+            }
+            if (newClassName == 'must-be-in-solution' && clickedOnCurrent) {
+                canBeInSolution = true;
+                mustBeInSolution = true;
+            }
+            if (newClassName == 'not-in-solution' && clickedOnCurrent) {
+                canBeInSolution = false;
+                mustBeInSolution = false;
+            }
+            temp.push({ team_name: x.team_name, checked: canBeInSolution, checked_must_be_in_solution: mustBeInSolution });
+        });
+        
+        setTeamData(temp);
+        
+        classList.replace(currentClasslist, newClassName)
+    }
+
+    const { number_of_not_in_solution, number_of_must_be_in_solution, number_can_be_in_solution } = filterTeamData();
+
     return <>
     <DefaultPageContainer 
         pageClassName='fixture-planner-container' 
         heading={props.content.Fixture.RotationPlanner?.title + " - " + store.getState().league_type} 
         description={'Rotation Planner for Eliteserien Fantasy (ESF). '}>
-         <h1>{props.content.Fixture.RotationPlanner?.title}<Popover 
+        <h1>{props.content.Fixture.RotationPlanner?.title}<Popover 
             id={"rotations-planner-id"}
             title=""
             algin_left={true}
@@ -271,7 +342,9 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
             </input>
         </form>
 
-        <div style={{ color: "red" }}>{validationErrorMessage}</div>
+        <div style={{ display: "flex", justifyContent: 'center' }}>
+            <span style={{ color: "red", maxWidth: '375px' }}>{validationErrorMessage}</span>
+        </div>
         
         <Button buttonText={props.content.Fixture.filter_button_text} 
             icon_class={"fa fa-chevron-" + (showTeamFilters ? "up" : "down")} 
@@ -279,21 +352,35 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
 
         { teamData != null && teamData.length > 0 && teamData[0].team_name != "empty" && showTeamFilters &&
             <div className='filter-teams-container'>
-                <div className='filter-teams-list'>
-                { teamData.map(team_name => 
-                    <CheckBox 
-                        buttonText={team_name.team_name} 
-                        checked1={team_name.checked} 
-                        checked2={team_name.checked_must_be_in_solution} 
-                        onclickBox1={(e: any) => toggleCheckbox(e)} 
-                        onclickBox2={(e: any) => toggleCheckboxMustBeInSolution(e)} 
-                        useTwoCheckBoxes={true} />
-                )}
-                </div>
+                <div className='filter-teams-description'>
+                        <div><span className="dot can-be-in-solution"></span>{`Lag kan være i løsning (${number_can_be_in_solution})`}</div>
+                        <div><span className="dot must-be-in-solution"></span>{`Lag må være i løsning (${number_of_must_be_in_solution})`}</div>
+                        <div><span className="dot not-in-solution"></span>{`Lag er ikke i løsning (${number_of_not_in_solution})`}</div>
+                    </div>
+                    <div className='filter-teams-list'>
+                        { teamData.map(team_name =>
+                            <ThreeStateCheckbox 
+                                checked={team_name.checked}
+                                checked_must_be_in_solution={team_name.checked_must_be_in_solution}
+                                onclick={(e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => toggleFilterButton(e)} 
+                                buttonText={team_name.team_name} />
+                        )}
+                        <div>
+                        </div>
+                    </div>
             </div>
         }
 
-        { loading && <Spinner /> }
+        { loading && <div>
+            <Spinner />
+            { longLoadingTimeText && 
+                <div style={{ display: 'flex', justifyContent: 'center'}}>
+                    <p style={{ width: '300px', textAlign: 'center'}}>
+                        { longLoadingTimeText }
+                    </p>
+                </div> 
+            }
+        </div> }
 
         { !loading && fdrDataToShow.length > 0 && fdrDataToShow[0].avg_Score != -1 &&
             <ShowRotationData 

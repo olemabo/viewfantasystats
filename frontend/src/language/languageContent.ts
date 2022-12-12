@@ -36,6 +36,7 @@ export const content_json = {
             season: "season",
             previous: "Previous",
             teamname: "Team name",
+            and: 'and',
         },
         Fixture: {
             FixturePlanner: {
@@ -43,11 +44,14 @@ export const content_json = {
             }, 
             RotationPlanner: {
                 title: "Rotation Planner",
-                avg_fdr_score: "Gj. snittlig FDR score:",
+                avg_fdr_score: "Avg FDR score:",
+                teams_in_solution: "Team(s) that must be in solution: ",
+                not_in_solution: "Team(s) removed from solution: ",
             },
             PeriodPlanner: {
                 title: "Period Planner",
             }, 
+            must_be_smaller: 'must be smaller than',
             fixture: "Fixture Planning",
             gw_start: "GW start:",
             gw_end: "GW end:",
@@ -144,6 +148,7 @@ export const content_json = {
             season: "sesong",
             previous: "Forrige",
             teamname: "Lagnavn",
+            and: 'og',
         },
         Fixture: {
             FixturePlanner: {
@@ -152,10 +157,13 @@ export const content_json = {
             RotationPlanner: {
                 title: "Rotasjonsplanlegger",
                 avg_fdr_score: "Gj. snittlig FDR score:",
+                teams_in_solution: "Lag som må være i løsningene: ",
+                not_in_solution: "Lag som blir fjernet fra løsningene: ",
             },
             PeriodPlanner: {
                 title: "Periodeplanlegger",
             },
+            must_be_smaller: 'må være mindre enn',
             fixture: "Kampprogram",
             gw_start: "Fra runde",
             gw_end: "til runde",

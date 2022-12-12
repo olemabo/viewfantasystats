@@ -9,6 +9,7 @@ import { Button } from '../../Shared/Button/Button';
 import Spinner from '../../Shared/Spinner/Spinner';
 import { store } from '../../../store/index';
 import axios from 'axios';
+import Popover from '../../Shared/Popover/Popover';
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -139,18 +140,79 @@ export const FixturePlannerPage : FunctionComponent<FixturePlannerPageProps> = (
         setFdrDataToShow(temp);
     }
 
-    var title_fixture_planner = props.content.Fixture.FixturePlanner?.title
-    var title_rotation_planner = props.content.Fixture.RotationPlanner?.title
-    var title_period_planner = props.content.Fixture.PeriodPlanner?.title
+    function filterTeamData() {
+        let not_in_solution: string[] = [];
+        let must_be_in_solution: string[] = [];
+        fdrDataToShow.map(team_data => {
+            if (!team_data.checked) {
+                not_in_solution.push(team_data.team_name)
+            }
+        })
+        const number_of_not_in_solution = not_in_solution.length;
+        const number_of_must_be_in_solution = must_be_in_solution.length;
+        const number_can_be_in_solution = fdrDataToShow.length - number_of_not_in_solution - number_of_must_be_in_solution;
+        return { number_of_not_in_solution: number_of_not_in_solution, number_of_must_be_in_solution:number_of_must_be_in_solution , number_can_be_in_solution: number_can_be_in_solution }
+    }
 
-    var title = title_fixture_planner;
+    const title_fixture_planner = props.content.Fixture.FixturePlanner?.title
+    const title_rotation_planner = props.content.Fixture.RotationPlanner?.title
+    const title_period_planner = props.content.Fixture.PeriodPlanner?.title
+
+    let title = title_fixture_planner;
 
     if (props.fixture_planning_type == FixturePlanningType.Rotation) { title = title_rotation_planner}
     if (props.fixture_planning_type == FixturePlanningType.Periode) { title = title_period_planner}
 
+    let description = "";
+    
+    if (props.fixture_planning_type == FixturePlanningType.FDR) { 
+        title = title_fixture_planner;
+        description = title + " (Fixture Difficulty Rating) rangerer lag etter best kampprogram mellom to runder " +
+        "('" + props.content.Fixture.gw_start.toString() + "'" + " og " + "'" + props.content.Fixture.gw_end.toString() + "')" + 
+        ". Lag med best kampprogram havner øverst og dårligst nederst. ";
+    }
+
+    if (props.fixture_planning_type == FixturePlanningType.Periode) { 
+        title = title_period_planner;
+        description = title + " markerer perioden et lag har best kampprogram mellom to runder. Beste rekke med kamper er markert med svart kantfarger. "
+        + "Eksempelvis ønsker man å finne ut hvilken periode mellom runde 1 og 20 hvert lag har best kamper. "
+        + "'" + props.content.Fixture.gw_start.toString() + "'" + " og " + "'" + props.content.Fixture.gw_end.toString() + "'" + " blir da henholdsvis 1 og 20. "
+        + "'" + props.content.Fixture.min_fixtures.toString() + "'" + " er minste antall etterfølgende kamper et lag må ha. ";
+    }
+
+    const { number_of_not_in_solution, number_of_must_be_in_solution, number_can_be_in_solution } = filterTeamData();
+
     return <>
-    <DefaultPageContainer pageClassName='fixture-planner-container' heading={title + " - " + store.getState().league_type} description={title}>
-        <h1>{title}</h1>
+    <DefaultPageContainer 
+        pageClassName='fixture-planner-container' 
+        heading={title + " - " + store.getState().league_type} 
+        description={title}>
+        <h1>
+            {title}
+            <Popover 
+                id={"rotations-planner-id"}
+                title=""
+                algin_left={true}
+                popover_title={title} 
+                iconSize={14}
+                iconpostition={[-10, 0, 0, 3]}
+                popover_text={ description }>
+                Kampprogram og vanskelighetsgrader er hentet fra
+                <a href="https://fantasy.premierleague.com/">Fantasy Premier League.</a>
+                <><p className='diff-introduction-container'>
+                    FDR verdier: 
+                    <span className="diff-introduction-box diff-1">1</span>
+                    <span className="diff-introduction-box diff-2">2</span>
+                    <span className="diff-introduction-box diff-3">3</span>
+                    <span className="diff-introduction-box diff-4">4</span>
+                    <span className="diff-introduction-box diff-5">5</span>
+                    <span className="diff-introduction-box black">10</span>
+                </p>
+                </>
+            </Popover>
+        </h1>
+        
+        
         { !firstloading && <>
             <form onSubmit={(e) =>  {updateFDRData(); e.preventDefault()}}>
                 <label htmlFor='input-form-start-gw'>{props.content.Fixture.gw_start}</label>
@@ -200,9 +262,13 @@ export const FixturePlannerPage : FunctionComponent<FixturePlannerPageProps> = (
 
             { fdrDataToShow != null && fdrDataToShow.length > 0 && fdrDataToShow[0].team_name != "empty" && showTeamFilters &&
                 <div className='filter-teams-container'>
+                    {/* <div className='filter-teams-description'>
+                        <div><span className="dot can-be-in-solution"></span>{`Vis lag (${number_can_be_in_solution})`}</div>
+                        <div><span className="dot not-in-solution"></span>{`Fjern lag (${number_of_not_in_solution})`}</div>
+                    </div> */}
                     <div className='filter-teams-list'>
                     { fdrDataToShow.map(team_name =>
-                        <FilterButton fontColor={"1"} backgroundColor={"0"} onclick={(e: any) => toggleCheckbox(e)} buttonText={team_name.team_name} checked={team_name.checked} />
+                        <FilterButton onclick={(e: any) => toggleCheckbox(e)} buttonText={team_name.team_name} checked={team_name.checked} />
                     )}
                     </div>
                 </div>

@@ -444,7 +444,7 @@ class RankStatisticsAPIView(APIView):
                 list_of_ranks.append(data.toJson())  
 
             fantasy_manager_url = fantasy_manager_eliteserien_url
-            response = RankStatisticsApiResponse(fantasy_manager_url, list_of_ranks[:5000], number_of_last_years) 
+            response = RankStatisticsApiResponse(fantasy_manager_url, list_of_ranks[:1000], number_of_last_years) 
 
             return JsonResponse(response.toJson(), safe=False)
 

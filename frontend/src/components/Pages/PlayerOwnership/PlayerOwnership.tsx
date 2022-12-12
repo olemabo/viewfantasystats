@@ -326,8 +326,8 @@ export const PlayerOwnership : FunctionComponent<LanguageProps> = (props) => {
             iconSize={14}
             iconpostition={[-10, 0, 0, 3]}
             popover_text=''>
-                Data hentes ut fra de 100, 1000 og 5000 beste ESF-managerne hver runde rett etter byttefrist. 
-            </Popover>
+            Data hentes ut fra de 100, 1000 og 5000 beste ESF-managerne hver runde rett etter byttefrist. 
+        </Popover>
         </h1>
         { !firstLoading && <>
             <form className="form-stuff text-center">

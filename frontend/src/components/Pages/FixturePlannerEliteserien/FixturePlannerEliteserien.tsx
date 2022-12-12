@@ -163,7 +163,7 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
 
     if (props.fixture_planning_type == FixturePlanningType.Periode) { 
         title = title_period_planner;
-        description = title + " markerer perioden et lag har best kampprogram mellom to runder. Beste rekke med kamper er markert svart kantfarger. "
+        description = title + " markerer perioden et lag har best kampprogram mellom to runder. Beste rekke med kamper er markert med svart kantfarger. "
         + "Eksempelvis ønsker man å finne ut hvilken periode mellom runde 1 og 20 hvert lag har best kamper. "
         + "'" + props.content.Fixture.gw_start.toString() + "'" + " og " + "'" + props.content.Fixture.gw_end.toString() + "'" + " blir da henholdsvis 1 og 20. "
         + "'" + props.content.Fixture.min_fixtures.toString() + "'" + " er minste antall etterfølgende kamper et lag må ha. ";
@@ -174,30 +174,32 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
         pageClassName='fixture-planner-container' 
         heading={title + " - " + store.getState().league_type} 
         description={'Fixture Difficulty Rating Planner for Eliteserien Fantasy (ESF). '}>
-        <h1>{title}<Popover 
-            id={"rotations-planner-id"}
-            title=""
-            algin_left={true}
-            popover_title={title} 
-            iconSize={14}
-            iconpostition={[-10, 0, 0, 3]}
-            popover_text={ description }>
-            Kampprogram, vanskelighetsgrader og farger er hentet fra 
-            <a href="https://docs.google.com/spreadsheets/d/168WcZ2mnGbSh-aI-NheJl5OtpTgx3lZL-YFV4bAJRU8/edit?usp=sharing">Excel arket</a>
-            til Dagfinn Thon.
-            { fdrToColor != null && 
-                <><p className='diff-introduction-container'>
-                    FDR verdier: 
-                    <span style={{backgroundColor: convertFDRtoHex("0.5", fdrToColor)}} className="diff-introduction-box wide">0.25</span>
-                    <span style={{backgroundColor: convertFDRtoHex("1", fdrToColor)}} className="diff-introduction-box">1</span>
-                    <span style={{backgroundColor: convertFDRtoHex("2", fdrToColor)}} className="diff-introduction-box">2</span>
-                    <span style={{backgroundColor: convertFDRtoHex("3", fdrToColor)}} className="diff-introduction-box">3</span>
-                    <span style={{backgroundColor: convertFDRtoHex("4", fdrToColor)}} className="diff-introduction-box">4</span>
-                    <span style={{backgroundColor: convertFDRtoHex("5", fdrToColor)}} className="diff-introduction-box">5</span>
-                    <span style={{backgroundColor: convertFDRtoHex("10", fdrToColor)}} className="diff-introduction-box black">10</span>
-                </p>
-                <p>Lilla bokser markerer en dobbeltrunde, mens svarte bokser markerer at laget ikke har kamp den runden.</p></>
-            }
+        <h1>
+            {title}
+            <Popover 
+                id={"rotations-planner-id"}
+                title=""
+                algin_left={true}
+                popover_title={title} 
+                iconSize={14}
+                iconpostition={[-10, 0, 0, 3]}
+                popover_text={ description }>
+                Kampprogram, vanskelighetsgrader og farger er hentet fra 
+                <a href="https://docs.google.com/spreadsheets/d/168WcZ2mnGbSh-aI-NheJl5OtpTgx3lZL-YFV4bAJRU8/edit?usp=sharing">Excel arket</a>
+                til Dagfinn Thon.
+                { fdrToColor != null && 
+                    <><p className='diff-introduction-container'>
+                        FDR verdier: 
+                        <span style={{backgroundColor: convertFDRtoHex("0.5", fdrToColor)}} className="diff-introduction-box wide">0.25</span>
+                        <span style={{backgroundColor: convertFDRtoHex("1", fdrToColor)}} className="diff-introduction-box">1</span>
+                        <span style={{backgroundColor: convertFDRtoHex("2", fdrToColor)}} className="diff-introduction-box">2</span>
+                        <span style={{backgroundColor: convertFDRtoHex("3", fdrToColor)}} className="diff-introduction-box">3</span>
+                        <span style={{backgroundColor: convertFDRtoHex("4", fdrToColor)}} className="diff-introduction-box">4</span>
+                        <span style={{backgroundColor: convertFDRtoHex("5", fdrToColor)}} className="diff-introduction-box">5</span>
+                        <span style={{backgroundColor: convertFDRtoHex("10", fdrToColor)}} className="diff-introduction-box black">10</span>
+                    </p>
+                    <p>Lilla bokser markerer en dobbeltrunde, mens svarte bokser markerer at laget ikke har kamp den runden.</p></>
+                }
             </Popover>
         </h1>
         { maxGw > 0 && 
