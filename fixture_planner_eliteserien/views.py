@@ -46,11 +46,12 @@ class PostEliteserienFDRData(APIView):
             fdr_fixture_data = []
             xlsx_path = path_to_store_local_data  + "/" + eliteserien_folder_name + "/" + current_season_name_eliteserien + "/" + fixture_folder_name + "/" + "Eliteserien_fixtures.xlsx"
             fixture_list_db, dates, fdr_to_colors_dict, team_name_color = readEliteserienExcelFromDagFinnToDBFormat()
-            
             if start_gw < 0:
                 start_gw = get_upcoming_gw_eliteserien()
                 end_gw = start_gw + 5
                 if (end_gw > len(dates)):
+                    end_gw = len(dates)
+                if (start_gw == 1):
                     end_gw = len(dates)
             
             team_dict = {}

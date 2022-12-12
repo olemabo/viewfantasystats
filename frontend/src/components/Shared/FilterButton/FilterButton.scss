@@ -11,17 +11,19 @@
     }
 
     span {
-        background-color: white;
-        border-color: #acbbc6;
         border-radius: 25px;
         padding: 4px 20px 5px 20px;
         cursor: pointer;
         margin: 0 5px;
         font-size: 14px;
         font-weight: 500;
-
+        border: 1px solid;
+        border-color: #dc4e4e;
+        background-color: #dc4e4e26;
+        
         &.checked {
             background-color: white;
+            border-color: #acbbc6;
         }
     }
     
@@ -32,8 +34,88 @@
     }
     
     span:hover {
-        box-shadow: #1a1c1d 0px 0px 0px 1px inset;
-        background-color: rgb(234, 242, 247);
+        box-shadow: #e8758d 0px 0px 0px 1px inset;
+        
+        &.checked {
+            box-shadow: #1a1c1dba 0px 0px 0px 1px inset;
+        }
     }
 }
+
+.three-state-checkbox-container {
+    display: inline-block;
+    margin-bottom: 15px;
+    
+    span {
+        background-color: white;
+        border-color: #acbbc6;
+        border-radius: 25px;
+        padding: 4px 20px 5px 20px;
+        cursor: pointer;
+        margin: 0 5px;
+        font-size: 14px;
+        font-weight: 500;
+    }
+    
+    @media screen and (max-width: 400px) {
+        span {
+            padding: 5px 10px !important;
+        }   
+    } 
+    .checkbox {
+        border: 1px solid;
+    }
+
+    .can-be-in-solution {
+        border-color: rgb(205, 211, 243);
+    }
+    
+    .must-be-in-solution {
+        border-color: #4aca65;
+        background-color: #4aca6526;
+    }
+    
+    .not-in-solution {
+        border-color: #dc4e4e;
+        background-color: #dc4e4e26;
+    }
+}
+
+
+.filter-teams-description {
+    margin: -10px 0 16px 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    flex-direction: column;
+
+    .dot {
+        height: 16px;
+        width: 16px;
+        border-radius: 50%;
+        display: inline-block;
+        border: 1px solid;
+        position: relative;
+        top: 3px;
+        margin-right: 6px;
+        margin-left: 6px;
+    
+        &.can-be-in-solution {
+            border-color: rgb(205, 211, 243);
+            background-color: var(--white-color);
+        }
+        
+        &.must-be-in-solution {
+            border-color: #4aca65;
+            background-color: #4aca6526;
+        }
+        
+        &.not-in-solution {
+            border-color: #dc4e4e;
+            background-color: #dc4e4e26;
+        }
+    }    
+}
+
 
