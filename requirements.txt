@@ -9,4 +9,3 @@ django-mysql
 openpyxl
 requests
 djangorestframework
-python-decouple
