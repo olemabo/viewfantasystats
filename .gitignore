@@ -3,6 +3,9 @@
 
 stored_data
 backup.py
+tests.py
+
+.env
 
 *.txt
 *.pyc
