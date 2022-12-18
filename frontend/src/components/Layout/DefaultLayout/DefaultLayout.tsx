@@ -71,7 +71,8 @@ export const DefaultLayout = () => {
               <div className="content-container">
                   <div className="col-sm-10 max-width">
                         <Routes>
-                            <Route path="/" element={<PlayerOwnership top_x_managers_default={1000} league_type={eliteserien} content={langagueContent} />} />
+                            <Route path="/" element={<FixturePlannerPage fixture_planning_type={FixturePlanningType.FDR} league_type={fpl} content={langagueContent} />} />
+                            {/* <Route path="/" element={<PlayerOwnership top_x_managers_default={1000} league_type={eliteserien} content={langagueContent} />} /> */}
 
                             {/* <Route path="/premier-league/" element={<LeagueFrontPage league_type={fpl} content={langagueContent} />} /> */}
                             <Route path="/premier-league/" element={<FixturePlannerPage fixture_planning_type={FixturePlanningType.FDR} league_type={fpl} content={langagueContent} />} />
