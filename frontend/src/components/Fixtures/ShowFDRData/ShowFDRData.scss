@@ -142,7 +142,7 @@
         }
         
         tbody td.color-0, tbody td.color-10, .color-0, .color-10, span.diff-introduction.color-1 {
-            background-color: rgb(0, 0, 0);
+            background-color: var(--fdr-color-blank);
             color: var(--white-color);
         }
         
