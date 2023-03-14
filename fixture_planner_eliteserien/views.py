@@ -1,13 +1,13 @@
 from fixture_planner_eliteserien.backend.fixture_algorithms.fixture_periode_algorithm import find_best_fixture_with_min_length_each_team_eliteserien
 from fixture_planner_eliteserien.backend.fixture_algorithms.fixture_rotation_algorithms import find_best_rotation_combosEliteserien
 from fixture_planner_eliteserien.backend.fixture_algorithms.fixture_planner_alortihm import fdr_planner_eliteserien
-from fixture_planner_eliteserien.backend.read_eliteserien_data import readEliteserienExcelFromDagFinnToDBFormat
+from fixture_planner_eliteserien.backend.read_eliteserien_data import read_eliteserien_excel_to_db_format
 from fixture_planner_eliteserien.models import EliteserienKickOffTime, EliteserienTeamInfo
 from utils.util_functions.fixture.get_upcoming_gw import get_upcoming_gw_eliteserien
 from utils.dictionaries import dict_month_number_to_month_name_short
+from constants import eliteserien_api_url, local_host_url
 from django.http import HttpResponse, JsonResponse
 from utils.dataFetch.DataFetch import DataFetch
-from constants import eliteserien_api_url, current_season_name_eliteserien, eliteserien_folder_name, path_to_store_local_data, fixture_folder_name
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -18,12 +18,13 @@ from utils.fixtures.apiResponse.EliteserienFDRApiResponse import EliteserienFDRA
 from utils.fixtures.models.WhichTeamToCheckModel import WhichTeamToCheckModel
 from utils.fixtures.models.KickOffTimesModel import KickOffTimesModel
 
-class GetKickOffTimesEliteserien(APIView):
+class KickoffTimes(APIView):
 
-    def get(self, request, format=None):
+    def get(self):
         response_list = []
         
         kick_off_times_db = EliteserienKickOffTime.objects.all()
+        
         for kick_of_time in kick_off_times_db:
             response_list.append(KickOffTimesModel(
                 gameweek=kick_of_time.gameweek,
@@ -34,48 +35,31 @@ class GetKickOffTimesEliteserien(APIView):
         return JsonResponse(response_list, safe=False)
  
 
-class PostEliteserienFDRData(APIView):
+class FDRData(APIView):
 
-    def post(self, request, format=None):
+    def post(self, request):
         try:
-            start_gw = int(request.data.get("start_gw"))
-            end_gw = int(request.data.get("end_gw"))
-            min_num_fixtures = int(request.data.get("min_num_fixtures"))
-            combinations = str(request.data.get("combinations"))
-
-            fdr_fixture_data = []
-            xlsx_path = path_to_store_local_data  + "/" + eliteserien_folder_name + "/" + current_season_name_eliteserien + "/" + fixture_folder_name + "/" + "Eliteserien_fixtures.xlsx"
-            fixture_list_db, dates, fdr_to_colors_dict, team_name_color = readEliteserienExcelFromDagFinnToDBFormat()
-            if start_gw < 0:
-                start_gw = get_upcoming_gw_eliteserien()
-                end_gw = start_gw + 5
-                if (end_gw > len(dates)):
-                    end_gw = len(dates)
-                if (start_gw == 1):
-                    end_gw = len(dates)
+            fixture_list_db, dates, fdr_to_colors_dict, team_name_color = read_eliteserien_excel_to_db_format()
             
-            team_dict = {}
+            start_gw, end_gw, min_num_fixtures, combinations = get_data_from_body(request, dates)
 
             number_of_teams = len(fixture_list_db)
             fixture_list = [fixture_list_db[i] for i in range(0, number_of_teams)]
 
+            team_dict = {}
             for i in range(number_of_teams):
                 team_dict[fixture_list[i].team_name] = WhichTeamToCheckModel(fixture_list[i].team_name, 'checked')
             
             team_name_list = []
             fixture_list = []
+            fdr_fixture_data = []
 
             for i in range(number_of_teams):
                 temp_object = team_dict[fixture_list_db[i].team_name]
                 team_name_list.append(team_dict[fixture_list_db[i].team_name])
                 if temp_object.checked == 'checked':
                     fixture_list.append(fixture_list_db[i])
-
-            if (max(dates) + 1 < end_gw):
-                end_gw = max(dates) + 1
                         
-            fdr_fixture_data = []
-             
             if combinations == 'FDR':
                 fdr_fixture_data = fdr_planner_eliteserien(fixture_list, start_gw, end_gw)
                 
@@ -93,31 +77,32 @@ class PostEliteserienFDRData(APIView):
                     min_length=min_num_fixtures)
             
             if combinations == 'Rotation':
-                teams_to_check = int(request.data.get("teams_to_check"))
-                teams_to_play = int(request.data.get("teams_to_play"))
+                teams_to_check = get_request_body(request, "teams_to_check", int)
+                teams_to_play = get_request_body(request, "teams_to_play", int)
                 teams_in_solution = request.data.get("teams_in_solution")
                 fpl_teams = request.data.get("fpl_teams")
 
                 rotation_data = []
                 remove_these_teams = []
+                
                 for team_sol in teams_in_solution:
                     if team_sol not in fpl_teams:
                         remove_these_teams.append(team_sol)
+                
                 for remove_team in remove_these_teams:
                     teams_in_solution.remove(remove_team)
+                
                 for i in team_name_list:
                     if i.team_name in teams_in_solution:
                         i.checked_must_be_in_solution = 'checked'
 
-                rotation_data = find_best_rotation_combosEliteserien(fixture_list_db, start_gw, end_gw,
-                                                            teams_to_check=teams_to_check, teams_to_play=teams_to_play,
-                                                            team_names=fpl_teams, 
-                                                            teams_in_solution=teams_in_solution,
-                                                            teams_not_in_solution=[],
-                                                            top_teams_adjustment=False, one_double_up=False,
-                                                            home_away_adjustment=True, include_extra_good_games=False,
-                                                            num_to_print=0)
-
+                rotation_data = find_best_rotation_combosEliteserien(
+                    fixture_list_db, start_gw, end_gw, teams_to_check=teams_to_check, 
+                    teams_to_play=teams_to_play, team_names=fpl_teams, 
+                    teams_in_solution=teams_in_solution, teams_not_in_solution=[],
+                    top_teams_adjustment=False, one_double_up=False,
+                    home_away_adjustment=True, include_extra_good_games=False)
+                
                 if rotation_data == -1:
                     rotation_data = [['Wrong input', [], [], 0, 0, [[]]]]
                 else:
@@ -127,6 +112,7 @@ class PostEliteserienFDRData(APIView):
             
             kick_off_times_db = EliteserienKickOffTime.objects.all()
             temp_kick_off_time = []
+            
             for kick_off_time in kick_off_times_db:
                 if (kick_off_time.gameweek - 1 in dates):
                     temp_kick_off_time.append(KickOffTimesModel(
@@ -134,7 +120,7 @@ class PostEliteserienFDRData(APIView):
                         kick_off_time.kickoff_time,
                         kick_off_time.day_month
                     ).toJson())
-            
+
             fdr_and_gws = EliteserienFDRApiResponse(fdr_fixture_data, temp_kick_off_time, fdr_to_colors_dict, team_name_color, start_gw, end_gw) 
 
             return JsonResponse(fdr_and_gws.toJson(), safe=False)
@@ -143,44 +129,83 @@ class PostEliteserienFDRData(APIView):
             return Response({'Bad Request': 'Something went wrong'}, status=status.HTTP_400_BAD_REQUEST)
 
 
+def fill_eliteserien_kickoff_times_and_team_info_db(request):
+    if (request.META['HTTP_HOST'] == local_host_url):
+        eliteserien_client = DataFetch(eliteserien_api_url)
+        static_bootstrap = eliteserien_client.get_current_fpl_info()
+        teams = static_bootstrap['teams']
+        
+        if (len(teams) > 0):
+            EliteserienTeamInfo.objects.all().delete()
 
-def FillEliteserienKickOffTimesAndTeamInfoDB(request):
-    elObject = DataFetch(eliteserien_api_url)
-    static_bootstrap = elObject.get_current_fpl_info()
-    teams = static_bootstrap['teams']
-    if (len(teams) > 0):
-        for team in teams:
-            if not team['unavailable']:
-                if len(EliteserienTeamInfo.objects.filter(team_id=team['id'])) > 0:
-                    fill_model = EliteserienTeamInfo.objects.filter(team_id=team['id'])
-                    fill_model.update(
-                        team_name = team['name'], 
-                        team_short_name = team['short_name'],
-                        date = date.today()
-                    )
-                    print("Updated: ", team['name'], " whit team id: ", team['id'])
-                else:
-                    fill_model = EliteserienTeamInfo(
-                        team_id = team['id'],
-                        team_name = team['name'], 
-                        team_short_name =  team['short_name'],
-                        date = date.today()
-                    )
-                    fill_model.save()
-                    print("Added: ", team['name'], " whit team id: ", team['id'])
-    
-    number_of_gws = len(static_bootstrap['events'])
-    kick_off_time_info = []
-    for gw in range(number_of_gws):
-        gw_info = static_bootstrap['events'][gw]
-        kick_off_time = gw_info['deadline_time']
-        month = int(kick_off_time.split("-")[1])
-        day = str(kick_off_time.split("T")[0].split("-")[2])
-        kick_off_time_short = day + " " + dict_month_number_to_month_name_short[str(month)]
-        kick_off_time_info.append([gw + 1, kick_off_time, kick_off_time_short])
-    
-    for gw_info in kick_off_time_info:
-        fill_kick_off_time_model = EliteserienKickOffTime(gameweek=gw_info[0], kickoff_time=gw_info[1], day_month=gw_info[2])
-        fill_kick_off_time_model.save()
+            for team in teams:
+                if not team['unavailable']:
+                    if len(EliteserienTeamInfo.objects.filter(team_id=team['id'])) > 0:
+                        fill_model = EliteserienTeamInfo.objects.filter(team_id=team['id'])
+                        fill_model.update(
+                            team_name = team['name'], 
+                            team_short_name = team['short_name'],
+                            date = date.today()
+                        )
+                        print("Updated: ", team['name'], " whit team id: ", team['id'])
+                    else:
+                        fill_model = EliteserienTeamInfo(
+                            team_id = team['id'],
+                            team_name = team['name'], 
+                            team_short_name =  team['short_name'],
+                            date = date.today()
+                        )
+                        fill_model.save()
+                        print("Added: ", team['name'], " whit team id: ", team['id'])
+        
+        number_of_gws = len(static_bootstrap['events'])
+        kick_off_time_info = []
+        
+        for gw in range(number_of_gws):
+            gw_info = static_bootstrap['events'][gw]
+            kick_off_time = gw_info['deadline_time']
+            month = int(kick_off_time.split("-")[1])
+            day = str(kick_off_time.split("T")[0].split("-")[2])
+            kick_off_time_short = day + " " + dict_month_number_to_month_name_short[str(month)]
+            kick_off_time_info.append([gw + 1, kick_off_time, kick_off_time_short])
+        
+        for gw_info in kick_off_time_info:
+            fill_kick_off_time_model = EliteserienKickOffTime(gameweek=gw_info[0], kickoff_time=gw_info[1], day_month=gw_info[2])
+            fill_kick_off_time_model.save()
 
-    return HttpResponse("Successfully filled 'EliteserienTeamInfo' and 'EliteserienKickOffTime' Databases")
+        return HttpResponse("Successfully filled 'EliteserienTeamInfo' and 'EliteserienKickOffTime' Databases")
+
+    return HttpResponse("")
+
+
+def get_data_from_body(request, dates):
+    start_gw = get_request_body(request, "start_gw", int)
+    end_gw = get_request_body(request, "end_gw", int)
+    min_num_fixtures = get_request_body(request, "min_num_fixtures", int)
+    combinations = get_request_body(request, "combinations", str)
+     
+    if start_gw < 0:
+        start_gw = get_upcoming_gw_eliteserien()
+        end_gw = start_gw + 5
+        if (end_gw > len(dates)):
+            end_gw = len(dates)
+        if (start_gw == 1):
+            end_gw = len(dates)
+    
+    end_gw = max(dates) + 1 if (max(dates) + 1 < end_gw) else end_gw
+
+    start_gw = 1 if start_gw > end_gw else start_gw    
+    
+    return start_gw, end_gw, min_num_fixtures, combinations
+
+
+def get_request_body(request, parameter_name, parameter_type):
+    return parse_input(request.data.get(parameter_name), parameter_type)
+
+def parse_input(input_str, data_type):
+    try:
+        parsed_input = data_type(input_str)
+        return parsed_input
+    except ValueError:
+        print("Error: could not parse input as", data_type.__name__)
+        return None

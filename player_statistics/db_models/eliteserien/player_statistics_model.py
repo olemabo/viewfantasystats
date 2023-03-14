@@ -134,6 +134,8 @@ class EliteserienPlayerStatistic(models.Model):
     # Metadata
     class Meta:
         ordering = ['player_id', 'player_name', 'player_team_id', 'player_position_id']
+        verbose_name = "ESF - Player stat"
+        verbose_name_plural = "ESF - Player stats"
 
     # Methods
     def get_absolute_url(self):

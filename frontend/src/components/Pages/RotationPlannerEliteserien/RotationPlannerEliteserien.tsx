@@ -83,6 +83,14 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
         axios.post(fixture_planner_api_path, body).then(x => {
             let RotationPlannerTeamInfoList: RotationPlannerTeamModel[] = [];
             let data = JSON.parse(x.data);
+            
+            if (data.gw_start != gwStart) { 
+                setGwStart(data.gw_start);
+            }
+
+            if (data.gw_end != gwEnd) { 
+                setGwEnd(data.gw_end);
+            }
 
             if (maxGw < 0) { 
                 setMaxGw(data.gws_and_dates.length); 
@@ -94,8 +102,8 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
             if (data?.gws_and_dates?.length > 0) {
                 let temp_KickOffTimes: KickOffTimesModel[] = [];
                 data?.gws_and_dates.forEach((kickoff: string) => temp_KickOffTimes.push(JSON.parse(kickoff)));
-                setKickOffTimesToShow(temp_KickOffTimes.slice(gwStart - 1, body['end_gw']));
-                setGwEnd(body['end_gw']); 
+                setKickOffTimesToShow(temp_KickOffTimes.slice(gwStart - 1, data.gw_end));
+                setGwEnd(data.gw_end); 
             }
 
             var emptyTeamData: TeamCheckedModel[] = [];

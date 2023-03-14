@@ -17,6 +17,8 @@ class EliteserienRankAndPoints(models.Model):
     # Metadata
     class Meta:
         ordering = ['gw']
+        verbose_name = "ESF - Ranking stat"
+        verbose_name_plural = "ESF - Ranking stats"
 
     # Methods
     def get_absolute_url(self):

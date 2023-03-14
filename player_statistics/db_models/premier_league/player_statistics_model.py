@@ -159,7 +159,9 @@ class PremierLeaguePlayers(models.Model):
     # Metadata
     class Meta:
         ordering = ['player_id', 'player_name', 'player_team_id', 'player_position_id']
-
+        verbose_name = "PL - Player stat"
+        verbose_name_plural = "PL - Player stats"
+        
     # Methods
     def get_absolute_url(self):
         """Returns the url to access a particular instance of MyModelName."""

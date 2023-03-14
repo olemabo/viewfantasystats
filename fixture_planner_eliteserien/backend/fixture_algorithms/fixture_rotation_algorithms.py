@@ -9,9 +9,8 @@ import json
 
 
 def find_best_rotation_combosEliteserien(data, GW_start, GW_end, teams_to_check=5, teams_to_play=3, team_names=[-1],
-                              teams_in_solution=[], teams_not_in_solution=[],
-                              top_teams_adjustment=False, one_double_up=False, home_away_adjustment=True,
-                              include_extra_good_games=False, num_to_print=20):
+            teams_in_solution=[], teams_not_in_solution=[], include_extra_good_games=False, 
+            one_double_up=False, home_away_adjustment=True, top_teams_adjustment=False):
     """
     Find the best rotation combo for "teams_to_check" number of team where "team_to_play" number of them must play each gameweek.
     :param GW_start: start count from this gameweek
@@ -25,6 +24,7 @@ def find_best_rotation_combosEliteserien(data, GW_start, GW_end, teams_to_check=
     :param num_to_print: how many of the best results to print to screen
     :return: combos_with_score [[score, [team_ids], [team_names]], ... ]   ([22.2, [1, 4, 11], ['Arsenal', 'Burnley', 'Liverpool']])
     """
+
     if team_names[0] != -1:
         if teams_to_check > len(team_names):
             print("Teams to check must be >= to number of input teams")
@@ -58,7 +58,6 @@ def find_best_rotation_combosEliteserien(data, GW_start, GW_end, teams_to_check=
     
     dict_with_team_ids_to_team_name = dict()
     for team in data:
-        # print(team.team_id, data)
         dict_with_team_ids_to_team_name[team.team_id] = team.team_name
 
     # ids for the teams that must be in the solution
@@ -94,6 +93,7 @@ def find_best_rotation_combosEliteserien(data, GW_start, GW_end, teams_to_check=
     unique_team_ids = temp_unique_team_ids
 
     combos_with_score_new = []
+
     for team_combos in unique_team_ids:
         # team_combos = [1, 3]
         team_total_score = 0
@@ -167,7 +167,6 @@ def find_best_rotation_combosEliteserien(data, GW_start, GW_end, teams_to_check=
 
     # sort all the combos by the team_total_score. Best fixture will be first element and so on.
     insertion_sort(combos_with_score_new, len(combos_with_score_new), element_to_sort=0, min_max="min")
-    
     combos_with_score_json = []
 
     for team in combos_with_score_new:
@@ -205,6 +204,7 @@ def compute_best_fixtures_one_team(df, gw_start, gw_end, team_idx, min_length):
                 if temp_score != max_score:
                     ii, jj, length = i+1, j+1, temp_len
                     max_score = temp_score
+    
     return fixture_score_one_team(df, team_idx, ii, jj)
 
 

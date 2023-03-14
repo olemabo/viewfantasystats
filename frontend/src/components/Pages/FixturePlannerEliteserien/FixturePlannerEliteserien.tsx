@@ -77,6 +77,7 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
         axios.post(fixture_planner_api_path, body).then((x: any) => {
             let apiFDRList: TeamFDRDataModel[] = [];
             let data = JSON.parse(x.data);
+
             if (data.gw_start != gwStart) { 
                 setGwStart(data.gw_start);
             }
@@ -215,6 +216,7 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
                     id="input-form-start-gw" 
                     name="input-form-start-gw">
                 </input>
+                
                 <label htmlFor='input-form-end-gw'>{props.content.Fixture.gw_end}</label>
                 <input 
                     className="form-number-box" 
@@ -256,12 +258,8 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
                 <div className='filter-teams-list'>
                 { fdrDataToShow.map(team_name => 
                     <FilterButton
-                        fontColor='1'
-                        backgroundColor='0' 
-                        // fontColor={team_name.font_color} 
-                        // backgroundColor={team_name.background_color} 
                         onclick={(e: any) => toggleCheckbox(e)} 
-                        buttonText={team_name.team_name} 
+                        buttonText={team_name.team_name.at(0) + team_name.team_name.substring(1).toLocaleLowerCase()} 
                         checked={team_name.checked} />
                 )}
                 </div>
@@ -276,7 +274,7 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
                 fdrData={fdrDataToShow}
                 kickOffTimes={kickOffTimesToShow}
                 allowToggleBorder={true}
-                fdrToColor={fdrToColor}
+                // fdrToColor={fdrToColor}
             />
         )}
     </DefaultPageContainer>

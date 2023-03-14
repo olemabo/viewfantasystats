@@ -12,7 +12,6 @@ urlpatterns = [
     path('premier-league/rotation-planner/', index),
     path('premier-league/periode-planner/', index),
 
-
     path('eliteserien/', index),
     path('eliteserien/fdr-planner/', index),
     path('eliteserien/rotation-planner/', index),
@@ -29,6 +28,7 @@ urlpatterns = [
     path('fixture-planner-eliteserien/rotation-planner/', index),
     path('fixture-planner-eliteserien/fdr-planner/', index),
     path('fixture-planner-eliteserien/periode-planner/', index),
+    
     path('statistics/player-ownership/', index),
     path('statistics-premier-league/player-ownership/', index),
     path('statistics/search-user-names/', index),

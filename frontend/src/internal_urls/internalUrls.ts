@@ -1,4 +1,6 @@
 // internal urls
+
+// premier league
 export const url_premier_league = 'premier-league/';
 export const url_premier_league_fdr_planner = url_premier_league + 'fdr-planner/';
 export const url_premier_league_rotation_planner =  url_premier_league + 'rotation-planner/';
@@ -6,7 +8,7 @@ export const url_premier_league_periode_planner =  url_premier_league + 'periode
 export const url_premier_league_player_ownership = url_premier_league + 'player-ownership/';
 export const url_premier_league_player_statistics = url_premier_league + 'player-statistics/';
 
-
+// eliteserien
 export const url_elitserien = 'eliteserien/';
 export const url_elitserien_fdr_planner = url_elitserien + 'fdr-planner/';
 export const url_eliteserien_rotation_planner =  url_elitserien + 'rotation-planner/';

@@ -7,7 +7,6 @@ import json
 class EliteserienGlobalOwnershipStats5000(models.Model):
     # one stat for each gameweek + 1 total stat for all gws
     number_of_gws = total_number_of_gameweeks
-    top_x = 10000
     number_of_ownership_stats = 7 # [starting and not captain, starting and captain, starting and vice captain, owners, benched, total ownership]
     player_id = models.IntegerField(primary_key=True, help_text='Enter team id (1) ')
     player_team_id = models.IntegerField(help_text='Enter team id for this player (1)  ')
@@ -202,6 +201,8 @@ class EliteserienGlobalOwnershipStats5000(models.Model):
     # Metadata
     class Meta:
         ordering = ['player_id', 'player_name', 'player_team_id', 'player_position_id']
+        verbose_name = "ESF - Ownership stat (5000)"
+        verbose_name_plural = "ESF - Ownership stats (5000)"
 
     # Methods
     def get_absolute_url(self):
@@ -219,7 +220,6 @@ class EliteserienGlobalOwnershipStats5000(models.Model):
 class EliteserienGlobalOwnershipStats1000(models.Model):
     # one stat for each gameweek + 1 total stat for all gws
     number_of_gws = total_number_of_gameweeks
-    top_x = 1000
     number_of_ownership_stats = 7  # [starting and not captain, starting and captain, starting and vice captain, owners, benched, total ownership]
     player_id = models.IntegerField(primary_key=True, help_text='Enter team id (1) ')
     player_team_id = models.IntegerField(help_text='Enter team id for this player (1)  ')
@@ -414,6 +414,8 @@ class EliteserienGlobalOwnershipStats1000(models.Model):
     # Metadata
     class Meta:
         ordering = ['player_id', 'player_name', 'player_team_id', 'player_position_id']
+        verbose_name = "ESF - Ownership stat (1000)"
+        verbose_name_plural = "ESF - Ownership stats (1000)"
 
     # Methods
     def get_absolute_url(self):
@@ -430,7 +432,6 @@ class EliteserienGlobalOwnershipStats1000(models.Model):
 class EliteserienGlobalOwnershipStats100(models.Model):
     # one stat for each gameweek + 1 total stat for all gws
     number_of_gws = total_number_of_gameweeks
-    top_x = 100
     number_of_ownership_stats = 7  # [starting and not captain, starting and captain, starting and vice captain, owners, benched]
     player_id = models.IntegerField(primary_key=True, help_text='Enter team id (1) ')
     player_team_id = models.IntegerField(help_text='Enter team id for this player (1)  ')
@@ -625,6 +626,8 @@ class EliteserienGlobalOwnershipStats100(models.Model):
     # Metadata
     class Meta:
         ordering = ['player_id', 'player_name', 'player_team_id', 'player_position_id']
+        verbose_name = "ESF - Ownership stat (100)"
+        verbose_name_plural = "ESF - Ownership stats (100)"
 
     # Methods
     def get_absolute_url(self):
@@ -710,6 +713,8 @@ class EliteserienChipsAndUserInfo(models.Model):
     # Metadata
     class Meta:
         ordering = ['gw']
+        verbose_name = "ESF - Chip and User stat"
+        verbose_name_plural = "ESF - Chip and User stats"
 
     # Methods
     def get_absolute_url(self):
@@ -747,6 +752,8 @@ class EliteserienGwsChecked(models.Model):
     # Metadata
     class Meta:
         ordering = ['id']
+        verbose_name = "ESF - Updated GW"
+        verbose_name_plural = "ESF - Updated GWs"
 
     # Methods
     def get_absolute_url(self):

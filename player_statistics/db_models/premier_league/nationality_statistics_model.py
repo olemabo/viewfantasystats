@@ -15,6 +15,8 @@ class PremierLeagueNationalityStatistics(models.Model):
     # Metadata
     class Meta:
         ordering = ['country_name', 'number_of_managers_from_this_country', 'country_code']
+        verbose_name = "PL - Nationality stat"
+        verbose_name_plural = "PL - Nationality stats"
 
     # Methods
     def get_absolute_url(self):

@@ -34,9 +34,16 @@ class PremierLeagueTeamInfo(models.Model):
         size=total_number_of_gameweeks,  # Maximum of 100 ids in list
     )
 
+    possibleBlank = ListTextField(
+        base_field=models.CharField(max_length=3, help_text='+90'),
+        size=total_number_of_gameweeks,  # Maximum of 100 ids in list
+    )
+
     # Metadata
     class Meta:
         ordering = ['team_id', '-team_name', 'team_short_name']
+        verbose_name = "PL - Fixturedata"
+        verbose_name_plural = "PL - Fixturedata"
 
     # Methods
     def get_absolute_url(self):
@@ -67,8 +74,10 @@ class KickOffTime(models.Model):
 
     class Meta:
         ordering = ['gameweek']
+        verbose_name = "PL - Kickoff Time"
+        verbose_name_plural = "PL - Kickoff Times"
 
     def __str__(self):
         """String for representing the MyModelName object (in Admin site etc.)."""
-        return f'{self.gameweek}, {self.kickoff_time}'
+        return f'GW {self.gameweek} - {self.day_month}'
 

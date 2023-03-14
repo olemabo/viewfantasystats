@@ -1,7 +1,6 @@
-from datetime import date
-import imp
 from fixture_planner_eliteserien.models import EliteserienKickOffTime
 from fixture_planner.models import KickOffTime
+from datetime import date
 
 
 def get_upcoming_gw_eliteserien():
@@ -11,16 +10,9 @@ def get_upcoming_gw_eliteserien():
     
     :return: current gameweek (int: 1)
     """
-    # find current gw
-    today_date = date.today()
     kick_off_time_db = EliteserienKickOffTime.objects.all()
-    for idx, kick_of_data_i in enumerate(kick_off_time_db):
-        current_gw = idx + 1
-        dates = kick_of_data_i.kickoff_time.split("T")[0].split("-")
-        gw_i_date = date(int(dates[0]), int(dates[1]), int(dates[2]))
-        if gw_i_date > today_date:
-            return current_gw
-    return 1
+    
+    return get_current_gw_from_kickoff_times(kick_off_time_db)
 
 
 def get_upcoming_gw_premier_league():
@@ -30,13 +22,27 @@ def get_upcoming_gw_premier_league():
     
     :return: current gameweek (int: 1)
     """
-    # find current gw
-    today_date = date.today()
     kick_off_time_db = KickOffTime.objects.all()
-    for idx, kick_of_data_i in enumerate(kick_off_time_db):
+    
+    return get_current_gw_from_kickoff_times(kick_off_time_db)
+
+
+def get_current_gw_from_kickoff_times(kick_off_times_db):
+    """
+    Find out which is the upcoming gw. 
+    Uses kick_off_times_db and compares with current date
+    
+    :param kick_off_times_db: list of all kickoff time db objects
+    :return: current gameweek (int: 1)
+    """
+
+    today_date = date.today()
+
+    for idx, kick_of_data_i in enumerate(kick_off_times_db):
         current_gw = idx + 1
         dates = kick_of_data_i.kickoff_time.split("T")[0].split("-")
         gw_i_date = date(int(dates[0]), int(dates[1]), int(dates[2]))
         if gw_i_date > today_date:
             return current_gw
+    
     return 1

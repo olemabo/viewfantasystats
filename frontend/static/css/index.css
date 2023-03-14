@@ -56,6 +56,7 @@
     --round-row-color: #414c50;
     /* --round-row-color: #0f3443; */
     --fdr-color-blank: #000000ab;
+    --fdr-color-0: #d3caca;
     --fdr-color-1: #375523;
     --fdr-color-2: #7ce0ac;
     --fdr-color-3: #bfbfbf;
@@ -190,4 +191,29 @@ thead {
 
 .stat-table th, .stat-table td {
     border-color: transparent !important;
+}
+
+.Eliteserien .no-padding .height-2.multiple-fixtures {
+    background-color: #c6a4d6 !important;
+}
+
+.Eliteserien .color-1 {
+    background-color: #506d3ced !important;
+    color: white !important;
+}
+
+.Eliteserien .color-2 {
+    background-color: #a4c2a9 !important;
+}
+
+.Eliteserien .color-3 {
+    background-color: #a79c8578 !important;
+}
+
+.Eliteserien .color-4 {
+    background-color: #ff376996 !important;
+}
+
+.Eliteserien .color-5 {
+    background-color: #7810318c !important;
 }
