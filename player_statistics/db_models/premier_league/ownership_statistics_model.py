@@ -212,6 +212,8 @@ class PremierLeagueGlobalOwnershipStats10000(models.Model):
     # Metadata
     class Meta:
         ordering = ['player_id', 'player_name', 'player_team_id', 'player_position_id']
+        verbose_name = "PL - Ownership stat (10000)"
+        verbose_name_plural = "PL - Ownership stats (10000)"
 
     # Methods
     def get_absolute_url(self):
@@ -433,6 +435,8 @@ class PremierLeagueGlobalOwnershipStats1000(models.Model):
     # Metadata
     class Meta:
         ordering = ['player_id', 'player_name', 'player_team_id', 'player_position_id']
+        verbose_name = "PL - Ownership stat (1000)"
+        verbose_name_plural = "PL - Ownership stats (1000)"
 
     # Methods
     def get_absolute_url(self):
@@ -649,6 +653,8 @@ class PremierLeagueGlobalOwnershipStats100(models.Model):
     # Metadata
     class Meta:
         ordering = ['player_id', 'player_name', 'player_team_id', 'player_position_id']
+        verbose_name = "PL - Ownership stat (100)"
+        verbose_name_plural = "PL - Ownership stats (100)"
 
     # Methods
     def get_absolute_url(self):
@@ -729,6 +735,8 @@ class PremierLeagueChipsAndUserInfo(models.Model):
     # Metadata
     class Meta:
         ordering = ['gw']
+        verbose_name = "PL - Chip and User stat"
+        verbose_name_plural = "PL - Chip and User stats"
 
     # Methods
     def get_absolute_url(self):
@@ -769,6 +777,8 @@ class PremierLeagueGwsChecked(models.Model):
     # Metadata
     class Meta:
         ordering = ['id']
+        verbose_name = "PL - Updated GW"
+        verbose_name_plural = "PL - Updated GWs"
 
     # Methods
     def get_absolute_url(self):

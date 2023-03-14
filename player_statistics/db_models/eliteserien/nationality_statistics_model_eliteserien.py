@@ -12,6 +12,8 @@ class EliteserienNationalityStatistics(models.Model):
     # Metadata
     class Meta:
         ordering = ['country_name', 'number_of_managers_from_this_country', 'country_code']
+        verbose_name = "ESF - Nationality stat"
+        verbose_name_plural = "ESF - Nationality stats"
 
     # Methods
     def get_absolute_url(self):

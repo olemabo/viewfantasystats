@@ -110,6 +110,7 @@ export const FixturePlannerPage : FunctionComponent<FixturePlannerPageProps> = (
                             opponent_team_name: fdr_in_gw_i_json.opponent_team_name,
                             difficulty_score: fdr_in_gw_i_json.difficulty_score,
                             H_A: fdr_in_gw_i_json.H_A,
+                            double_blank: fdr_in_gw_i_json.double_blank,
                             Use_Not_Use: fdr_in_gw_i_json.Use_Not_Use})
                     });
                     FDR_gw_i.push({fdr_gw_i: temp})
@@ -181,7 +182,6 @@ export const FixturePlannerPage : FunctionComponent<FixturePlannerPageProps> = (
     }
 
     const { number_of_not_in_solution, number_of_must_be_in_solution, number_can_be_in_solution } = filterTeamData();
-
     return <>
     <DefaultPageContainer 
         pageClassName='fixture-planner-container' 

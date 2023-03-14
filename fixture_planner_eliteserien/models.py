@@ -3,7 +3,6 @@ from django_mysql.models import ListTextField
 from django.urls import reverse
 from django.db import models
 from datetime import date
-# Create your models here.
 
 
 class EliteserienTeamInfo(models.Model):
@@ -38,6 +37,8 @@ class EliteserienTeamInfo(models.Model):
     # Metadata
     class Meta:
         ordering = ['team_id', '-team_name', 'team_short_name']
+        verbose_name = "ESF - Fixturedata"
+        verbose_name_plural = "ESF - Fixturedata"
 
     # Methods
     def get_absolute_url(self):
@@ -46,7 +47,7 @@ class EliteserienTeamInfo(models.Model):
 
     def __str__(self):
         """String for representing the MyModelName object (in Admin site etc.)."""
-        return f'{self.team_name}, {self.team_id}'
+        return f'{self.team_name} ({self.team_short_name})'
 
     def as_json(self):
         return dict(
@@ -68,7 +69,9 @@ class EliteserienKickOffTime(models.Model):
 
     class Meta:
         ordering = ['gameweek']
+        verbose_name = "ESF - Kickoff Time"
+        verbose_name_plural = "ESF - Kickoff Times"
 
     def __str__(self):
         """String for representing the MyModelName object (in Admin site etc.)."""
-        return f'{self.gameweek}, {self.kickoff_time}'
+        return f'GW {self.gameweek} - {self.day_month} {self.kickoff_time[:4]}'

@@ -1,22 +1,15 @@
 from fixture_planner.backend.fixture_planner_best_algorithms import find_best_fixture_with_min_length_each_team
-from fixture_planner.backend.fixture_rotation_algorithms_new import find_best_rotation_combos_new
-from fixture_planner.backend.fixture_rotation_algorithms import find_best_rotation_combos_json
 from fixture_planner.backend.fixture_rotation_algorithms import find_best_rotation_combos
 import fixture_planner.backend.create_data_objects as create_data_objects
-from constants import total_number_of_gameweeks, initial_extra_gameweeks
-import fixture_planner.backend.read_fixture_planner_data as read_data
+from fixture_planner.models import PremierLeagueTeamInfo, KickOffTime
 from fixture_planner.backend.utility_functions import calc_score
-from fixture_planner.models import PremierLeagueTeamInfo, KickOffTime
 from django.views.decorators.csrf import csrf_exempt
-from utils.utility_functions import get_current_gw
+from constants import total_number_of_gameweeks
 from django.http import JsonResponse
-from django.http import HttpResponse
-from django.shortcuts import render
 import json
+from .serializers import PremierLeagueTeamInfoSerializer, GetKickOffTimeSerializer
+
 from rest_framework import generics, status
-from fixture_planner.models import PremierLeagueTeamInfo, KickOffTime
-from .serializers import PremierLeagueTeamInfoSerializer
-from .serializers import GetKickOffTimeSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
@@ -127,10 +120,15 @@ class PostFDRView(APIView):
                     for j in range(len(team_i.gw)):
                         temp_gw = temp_gws[j]
                         if temp_gw in gw_numbers:
+                            possible_blank = ""
+                            if len(team_i.possibleBlank) >= j:
+                                 possible_blank = team_i.possibleBlank[j]
+                            
                             temp_list2[gw_numbers.index(temp_gw)].append([
                                 FixtureDifficultyModel(team_name=team_i.team_name,
                                                       opponent_team_name=team_i.oppTeamNameList[j],
                                                       this_difficulty_score=team_i.oppTeamDifficultyScore[j],
+                                                      double_blank=possible_blank,
                                                       total_fdr_score=FDR_score,
                                                       H_A=team_i.oppTeamHomeAwayList[j],
                                                       Use_Not_Use=0).toJson()])
@@ -163,10 +161,6 @@ class PostFDRView(APIView):
                 teams_to_play = int(request.data.get("teams_to_play"))
                 teams_in_solution = request.data.get("teams_in_solution")
                 fpl_teams = request.data.get("fpl_teams")
-                # print("teams_to_check: ", teams_to_check)
-                # print("teams_to_play: ", teams_to_play)
-                # print("teams_in_solution: ", teams_in_solution)
-                # print("fpl_teams: ", fpl_teams)
 
                 fdr_fixture_data = []
 
@@ -181,21 +175,8 @@ class PostFDRView(APIView):
                 for i in team_name_list:
                     if i.team_name in teams_in_solution:
                         i.checked_must_be_in_solution = 'checked'
-                # print(" \n teams_in_solution after: ", teams_in_solution)
-                # print("fpl_teams after: ", fpl_teams, fixture_list_db)
-                # print("fixture_list_db: ", fixture_list_db)
-                # rotation_data = find_best_rotation_combos(fixture_list_db, start_gw, end_gw,
-                #                                             teams_to_check=teams_to_check, 
-                #                                             teams_to_play=teams_to_play,
-                #                                             team_names=fpl_teams, 
-                #                                             teams_in_solution=teams_in_solution,
-                #                                             teams_not_in_solution=[],
-                #                                             top_teams_adjustment=False, 
-                #                                             one_double_up=False,
-                #                                             home_away_adjustment=True, 
-                #                                             include_extra_good_games=False,
-                #                                             num_to_print=0)
-                rotation_data = find_best_rotation_combos_new(fixture_list_db, start_gw, end_gw,
+
+                rotation_data = find_best_rotation_combos(fixture_list_db, start_gw, end_gw,
                                                             teams_to_check=teams_to_check, 
                                                             teams_to_play=teams_to_play,
                                                             team_names=fpl_teams, 
@@ -220,77 +201,6 @@ class PostFDRView(APIView):
 
         except:
             return Response({'Bad Request': 'Something went wrong'}, status=status.HTTP_400_BAD_REQUEST)
-
-
-def fixture_planner(request, start_gw=get_current_gw(), end_gw=get_current_gw() + initial_extra_gameweeks, combinations="FDR", teams_to_check=2, teams_to_play=1, min_num_fixtures=4):
-    if end_gw > total_number_of_gameweeks:
-        end_gw = total_number_of_gameweeks
-    # collect data from database [[PremierLeagueTeamInfo], [PremierLeagueTeamInfo], ... ]
-    fixture_list_db = PremierLeagueTeamInfo.objects.all()
-    team_name_list = []
-    teams_in_solution = []
-    team_dict = {}
-    number_of_teams = len(fixture_list_db)
-    for i in range(number_of_teams):
-        team_dict[fixture_list_db[i].team_name] = WhichTeamToCheckModel(fixture_list_db[i].team_name, 'checked')
-
-    fixture_list = [fixture_list_db[i] for i in range(0, number_of_teams)]
-    fpl_teams = [-1]
-    if request.method == 'POST':
-        for i in range(number_of_teams):
-            team_dict[fixture_list[i].team_name] = WhichTeamToCheckModel(fixture_list[i].team_name, '')
-
-        fpl_teams = request.POST.getlist('fpl-teams')
-        for fpl_team in fpl_teams:
-            team_dict[fpl_team] = WhichTeamToCheckModel(team_dict[fpl_team].team_name, 'checked')
-
-        # gameweek info
-        gw_info = request.POST.getlist('gw-info')
-        start_gw = int(gw_info[0])
-        end_gw = int(gw_info[1])
-
-        combinations = request.POST.getlist('combination')[0]
-
-        min_num_fixtures = int(request.POST.getlist('min_num_fixtures')[0])
-
-        teams_to_check = int(request.POST.getlist('teams_to_check')[0])
-        teams_to_play = int(request.POST.getlist('teams_to_play')[0])
-
-        teams_in_solution = request.POST.getlist('fpl-teams-in-solution')
-
-    if end_gw < start_gw:
-        end_gw = start_gw + 1
-
-    number_of_gws = end_gw - start_gw + 1
-    kick_off_time_db = KickOffTime.objects.filter(gameweek__range=(start_gw, end_gw))
-
-    fixture_list = []
-    for i in range(number_of_teams):
-        temp_object = team_dict[fixture_list_db[i].team_name]
-        team_name_list.append(team_dict[fixture_list_db[i].team_name])
-
-        if temp_object.checked == 'checked':
-            fixture_list.append(fixture_list_db[i])
-
-    for team_i in team_name_list:
-        if team_i.team_name in teams_in_solution:
-            team_i.checked_must_be_in_solution = 'checked'
-
-    context = {
-        'gws': number_of_gws,
-        'gw_numbers': kick_off_time_db,
-        'gw_start': start_gw,
-        'gw_end': end_gw,
-        'combinations': combinations,
-        'teams_to_play': teams_to_play,
-        'teams_to_check': teams_to_check,
-        'min_num_fixtures': min_num_fixtures,
-        'team_name_list': team_name_list,
-        'fixture_list': fixture_list,
-        'fpl_teams': json.dumps(fpl_teams),
-        'teams_in_solution': json.dumps(teams_in_solution),
-    }
-    return render(request, 'fixture_planner.html', context=context)
 
 
 @csrf_exempt
@@ -394,41 +304,5 @@ def get_fdr_data(request):
     data = {
         "fdr_fixture_data": fdr_fixture_data
     }
+
     return JsonResponse(data, safe=False)
-
-
-
-def fill_fixture_planner_and_kick_off_time_db(request):
-    """
-    Fill fixture planner db (PremierLeagueTeamInfo) and kick off times db (KickOffTime)
-    :param request:
-    :return:
-    """
-    df, names, short_names, ids = create_data_objects.return_fixture_names_shortnames("api")
-    number_of_teams = len(names)
-    for team_i in range(number_of_teams):
-        print("Updating team: ", names[team_i])
-        oppTeamNameList, oppTeamHomeAwayList, oppTeamDifficultyScore, gw = [], [], [], []
-        team_info = df.loc[team_i]
-        for j in range(total_number_of_gameweeks):
-            gw_info_TEAM_HA_SCORE_GW = team_info.iloc[j + 1]
-            oppTeamNameList.append(gw_info_TEAM_HA_SCORE_GW[0])
-            oppTeamHomeAwayList.append(gw_info_TEAM_HA_SCORE_GW[1])
-            oppTeamDifficultyScore.append(gw_info_TEAM_HA_SCORE_GW[2])
-            gw.append(gw_info_TEAM_HA_SCORE_GW[3])
-
-        fill_fixture_planner_model = PremierLeagueTeamInfo(team_name=names[team_i],
-                                                    team_id=ids[team_i],
-                                                    team_short_name=short_names[team_i],
-                                                    oppTeamDifficultyScore=oppTeamDifficultyScore,
-                                                    oppTeamHomeAwayList=oppTeamHomeAwayList,
-                                                    oppTeamNameList=oppTeamNameList,
-                                                    gw=gw)
-        fill_fixture_planner_model.save()
-
-    kick_off_time_info = read_data.return_kick_off_time("api")
-    for gw_info in kick_off_time_info:
-        fill_kick_off_time_model = KickOffTime(gameweek=gw_info[0], kickoff_time=gw_info[1], day_month=gw_info[2])
-        fill_kick_off_time_model.save()
-
-    return HttpResponse("Successfully filled 'PremierLeagueTeamInfo' and 'KickOffTime' Databases")

@@ -1,5 +1,5 @@
 /frontend/node_modules/
-**/migrations
+# **/migrations
 
 stored_data
 backup.py
@@ -22,7 +22,6 @@ fplwebpage/__pycache__/settings.cpython-39.pyc
 fplwebpage/__pycache__/urls.cpython-39.pyc
 fplwebpage/__pycache__/wsgi.cpython-39.pyc
 
-*/*/*/__pycache__/
-*/*/__pycache__/
-*/__pycache__/
-
+# */*/*/__pycache__/
+# */*/__pycache__/
+# */__pycache__/

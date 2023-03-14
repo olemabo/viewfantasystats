@@ -23,6 +23,8 @@ class EliteserienCupStatistics(models.Model):
     # Metadata
     class Meta:
         ordering = ['name', 'team_name']
+        verbose_name = "ESF - Cup stat"
+        verbose_name_plural = "ESF - Cup stats"
 
     # Methods
     def get_absolute_url(self):

@@ -25,10 +25,11 @@ class EliteserienUserInfoStatistics(models.Model):
     )
     # {"season_name":"2017","total_points":1424,"rank":5410},{"season_name":"2018","total_points":1475,"rank":6816},{"season_name":"2019","total_points":1524,"rank":12364},{"season_name":"2020","total_points":1620,"rank":14859},{"season_name":"2021","total_points":1595,"rank":8051}
     
-    
     # Metadata
     class Meta:
         ordering = ['user_id', 'user_first_name', 'user_last_name', 'user_team_name']
+        verbose_name = "ESF - User stat"
+        verbose_name_plural = "ESF - User stats"
 
     # Methods
     def get_absolute_url(self):
@@ -37,7 +38,7 @@ class EliteserienUserInfoStatistics(models.Model):
 
     def __str__(self):
         """String for representing the MyModelName object (in Admin site etc.)."""
-        return f'{self.user_id}, {self.user_team_name}'
+        return f'{self.user_id} - {self.user_team_name}'
 
     def toJson(self):
         return json.dumps(self, default=lambda o: o.__dict__)

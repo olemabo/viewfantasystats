@@ -1,10 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import './Spinner.scss';
 
-type CheckBoxProps = {
-}
-
-export const Spinner : FunctionComponent<CheckBoxProps> = (props) => {
+export const Spinner : FunctionComponent = () => {
 
     return <div id="spinner-box" className="boxs">
     <div className="shadow"></div>
@@ -15,7 +12,3 @@ export const Spinner : FunctionComponent<CheckBoxProps> = (props) => {
 };
 
 export default Spinner;
-
-
-Spinner.defaultProps = {
-}

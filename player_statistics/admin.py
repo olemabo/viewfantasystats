@@ -11,21 +11,40 @@ from player_statistics.db_models.eliteserien.cup_statistics_model_eliteserien im
 from django.contrib import admin
 
 
-admin.site.register(PremierLeagueGlobalOwnershipStats10000)
-admin.site.register(PremierLeagueGlobalOwnershipStats1000)
-admin.site.register(PremierLeagueGlobalOwnershipStats100)
-admin.site.register(PremierLeagueNationalityStatistics)
-admin.site.register(PremierLeagueChipsAndUserInfo)
-admin.site.register(PremierLeagueGwsChecked)
-admin.site.register(PremierLeaguePlayers)
+class CupAdmin(admin.ModelAdmin):
+    list_display = ('__str__', 'round_lost', 'qualification_rank')
 
-admin.site.register(EliteserienGlobalOwnershipStats5000)
-admin.site.register(EliteserienGlobalOwnershipStats1000)
-admin.site.register(EliteserienGlobalOwnershipStats100)
-admin.site.register(EliteserienNationalityStatistics)
-admin.site.register(EliteserienUserInfoStatistics)
+
+class NationalityAdmin(admin.ModelAdmin):
+    list_display = ('__str__', 'number_of_managers_from_this_country') 
+
+class OwnershipAdmin(admin.ModelAdmin):
+    list_display = ('__str__', 'player_team_id', 'player_position_id', 'player_id') 
+
+class PlayerAdmin(admin.ModelAdmin):
+    list_display = ('__str__', 'player_team_id', 'player_position_id', 'player_id')
+
+class GWCheckedAdmin(admin.ModelAdmin):
+    list_display = ('__str__', 'date_modified')
+
+class UserAdmin(admin.ModelAdmin):
+    list_display = ('user_first_name', 'user_last_name', 'user_team_name', 'user_id')
+
+admin.site.register(PremierLeagueNationalityStatistics, NationalityAdmin)
+admin.site.register(PremierLeagueGlobalOwnershipStats10000, OwnershipAdmin)
+admin.site.register(PremierLeagueGlobalOwnershipStats1000, OwnershipAdmin)
+admin.site.register(PremierLeagueGlobalOwnershipStats100, OwnershipAdmin)
+admin.site.register(PremierLeagueGwsChecked, GWCheckedAdmin)
+admin.site.register(PremierLeaguePlayers, PlayerAdmin)
+admin.site.register(PremierLeagueChipsAndUserInfo)
+
+admin.site.register(EliteserienNationalityStatistics, NationalityAdmin)
+admin.site.register(EliteserienGlobalOwnershipStats5000, OwnershipAdmin)
+admin.site.register(EliteserienGlobalOwnershipStats1000, OwnershipAdmin)
+admin.site.register(EliteserienGlobalOwnershipStats100, OwnershipAdmin)
+admin.site.register(EliteserienUserInfoStatistics, UserAdmin)
+admin.site.register(EliteserienPlayerStatistic, PlayerAdmin)
+admin.site.register(EliteserienGwsChecked, GWCheckedAdmin)
+admin.site.register(EliteserienCupStatistics, CupAdmin)
 admin.site.register(EliteserienChipsAndUserInfo)
-admin.site.register(EliteserienPlayerStatistic)
 admin.site.register(EliteserienRankAndPoints)
-admin.site.register(EliteserienCupStatistics)
-admin.site.register(EliteserienGwsChecked)

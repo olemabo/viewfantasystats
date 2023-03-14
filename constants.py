@@ -1,4 +1,7 @@
-# here all global constants and links will be  stored
+# here all global constants and links will be stored
+
+# local host
+local_host_url = "127.0.0.1:8000"
 
 # total number of gameweeks
 total_number_of_gameweeks = 38
@@ -10,7 +13,7 @@ total_number_of_eliteserien_teams = 16
 
 # where to store local data
 stored_data = "stored_data"
-path_to_store_local_data = "C:\\Users\\ole.borge\\PycharmProjects\\FPL-webpage-azure-devops\\FPL-webpage\\" + stored_data
+path_to_store_local_data = "C:\\Users\\ole.borge\\source\\repos\\django\\viewfantasystats\\" + stored_data
 
 # link to global ranks
 web_global_league_premier_league = 'https://fantasy.premierleague.com/api/leagues-classic/314/standings/?phase=1&page_new_entries=1&page_standings=X'
@@ -28,7 +31,7 @@ cup_stats_folder_name = "cup_data"
 
 # must change before each season
 current_season_name_premier_league = "2022-2023"
-current_season_name_eliteserien = "2022"
+current_season_name_eliteserien = "2023"
 
 # txt file names 
 country_population_txt_file_name = "country_population.txt"
@@ -82,5 +85,5 @@ initial_extra_gameweeks = 5
 blank_gw_fdr_score = 10
 
 # pythonanywhere
-python_anywhere_path = "/home/olebo/viewfantasystats/"
-# python_anywhere_path = ""
+# python_anywhere_path = "/home/olebo/viewfantasystats/"
+python_anywhere_path = ""

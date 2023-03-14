@@ -1,5 +1,5 @@
-from rest_framework import serializers
 from .models import PremierLeagueTeamInfo, KickOffTime
+from rest_framework import serializers
 
 class GetKickOffTimeSerializer(serializers.ModelSerializer):
     class Meta:

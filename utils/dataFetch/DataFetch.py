@@ -3,27 +3,11 @@ import requests
 import json
 import os
 
-
 # https://medium.com/@bram.vanherle1/fantasy-premier-league-api-authentication-guide-2f7aeb2382e4
 # eliteserien: https://fantasy.tv2.no
 # fpl: https://fantasy.premierleague.com
 
-class DataFetch:
-    # def __init__(self) -> None:
-    #     self.web_page = 'https://fantasy.premierleague.com/api/bootstrap-static/'
-    #     self.web_page_fixtures = 'https://fantasy.premierleague.com/api/fixtures/'
-    #     self.web_page_gameweek = 'https://fantasy.premierleague.com/api/event/X/live/'
-    #     self.web_page_individual_player = 'https://fantasy.premierleague.com/api/element-summary/X/'
-    #     self.web_page_league = 'https://fantasy.premierleague.com/api/leagues-classic/X/standings/'
-    #     self.web_page_member_rank = 'https://fantasy.premierleague.com/api/entry/X/history/'
-    #     self.web_page_invidual_team = 'https://fantasy.premierleague.com/api/entry/X/event/Y/picks/'
-    #     self.web_page_cup = 'https://fantasy.premierleague.com/api/entry/X/cup/'
-    #     self.web_page_fpl_player = "https://fantasy.premierleague.com/api/entry/X/"
-    #     self.web_page_latest_transfers = "https://fantasy.premierleague.com/api/entry/X/transfers/"
-    #     self.local_path = 'fpl.json'
-    #     self.global_path = ''
-    #     self.investigate_path()
-    
+class DataFetch:    
     def __init__(self, league_url='https://fantasy.premierleague.com') -> None:
         self.web_page = league_url + '/api/bootstrap-static/'
         self.web_page_fixtures = league_url + '/api/fixtures/'
@@ -60,10 +44,8 @@ class DataFetch:
 
     def get_current_fpl_info(self) -> dict:
         r = requests.get(self.web_page)
-        # try:
         jsonResponse = r.json()
         return jsonResponse
-        # except simplejson.errors.JSONDecodeError:
 
     def get_current_fixtures(self) -> dict:
         r = requests.get(self.web_page_fixtures)
