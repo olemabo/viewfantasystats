@@ -140,7 +140,7 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
         let temp: TeamFDRDataModel[] = [];
         fdrDataToShow.forEach(x => {
             let checked = x.checked;
-            if (x.team_name == e.currentTarget.value) {
+            if (x.team_name.toLowerCase() == e.currentTarget.value.toLowerCase()) {
                 checked = !x.checked;
             }
             temp.push({ team_name: x.team_name, FDR: x.FDR, checked: checked, font_color: x.font_color, background_color: x.background_color, fdr_total_score: x.fdr_total_score });
