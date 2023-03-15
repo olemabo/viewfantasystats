@@ -137,7 +137,6 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
     }
 
     function toggleCheckbox(e: any) {
-        console.log(e, fdrDataToShow, e.currentTarget.value)
         let temp: TeamFDRDataModel[] = [];
         fdrDataToShow.forEach(x => {
             let checked = x.checked;
