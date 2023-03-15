@@ -85,5 +85,5 @@ initial_extra_gameweeks = 5
 blank_gw_fdr_score = 10
 
 # pythonanywhere
-# python_anywhere_path = "/home/olebo/viewfantasystats/"
-python_anywhere_path = ""
+python_anywhere_path = "/home/olebo/viewfantasystats/"
+# python_anywhere_path = ""
