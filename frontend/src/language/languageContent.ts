@@ -1,6 +1,8 @@
 export const content_json = {
     English: {
         General: {
+            fdr: "FDR",
+            defence: "Defence",
             search_button_name: "Search",
             all_players: "All Players",
             all_teams: "All Teams",
@@ -113,6 +115,8 @@ export const content_json = {
     },
     Norwegian: {
         General: {
+            fdr: "FDR",
+            defence: "Defensivt",
             search_button_name: "Søk",
             all_players: "Alle spiller",
             all_teams: "Alle lag",

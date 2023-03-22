@@ -39,7 +39,9 @@ class FDRData(APIView):
 
     def post(self, request):
         try:
-            fixture_list_db, dates, fdr_to_colors_dict, team_name_color = read_eliteserien_excel_to_db_format()
+            show_defensivt = get_request_body(request, "show_defensivt", bool)
+
+            fixture_list_db, dates, fdr_to_colors_dict, team_name_color = read_eliteserien_excel_to_db_format(show_defensivt)
             
             start_gw, end_gw, min_num_fixtures, combinations = get_data_from_body(request, dates)
 

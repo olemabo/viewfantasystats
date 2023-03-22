@@ -13,6 +13,7 @@ import { Button } from '../../Shared/Button/Button';
 import { store } from '../../../store/index';
 import axios from 'axios';
 import ThreeStateCheckbox from '../../Shared/FilterButton/ThreeStateCheckbox';
+import ToggleButton from '../../Shared/ToggleButton/ToggleButton';
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -33,6 +34,7 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
     const [ fdrDataToShow, setFdrDataToShow ] = useState(empty);
     const [ kickOffTimesToShow, setKickOffTimesToShow ] = useState(emptyGwDate);
     const [ showTeamFilters, setShowTeamFilters ] = useState(false);
+    const [ showDefensivt, SetShowDefensivt ] = useState(false);
 
     const emptyTeamData: TeamCheckedModel[] = [ { team_name: "empty", checked: true, checked_must_be_in_solution: false }];
     const [ teamData, setTeamData ] = useState(emptyTeamData);
@@ -60,6 +62,7 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
             teams_to_play: teamsToPlay,
             teams_in_solution: [],
             fpl_teams: [-1],
+            show_defensivt: showDefensivt,
         };
 
         extractFDRData(body)
@@ -192,12 +195,18 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
             teams_to_play: teamsToPlay,
             teams_in_solution: teamsANDteamsinsolution[1],
             fpl_teams: teamsANDteamsinsolution[0],
+            show_defensivt: showDefensivt,
         };
 
         if (validateInput(body)) {
             setValidationErrorMessage("");
             extractFDRData(body);
         }
+    }
+
+    function changeXlsxSheet(show_defensivt: boolean) {
+        SetShowDefensivt(show_defensivt);
+        updateFDRData()
     }
 
     function filterTeamData() {
@@ -357,6 +366,11 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
         <Button buttonText={props.content.Fixture.filter_button_text} 
             icon_class={"fa fa-chevron-" + (showTeamFilters ? "up" : "down")} 
             onclick={() => setShowTeamFilters(showTeamFilters ? false : true)} />
+
+        <ToggleButton 
+            onclick={(checked: boolean) => changeXlsxSheet(checked)} 
+            on_text={props.content.General.defence} of_text={props.content.General.fdr} />
+
 
         { teamData != null && teamData.length > 0 && teamData[0].team_name != "empty" && showTeamFilters &&
             <div className='filter-teams-container'>
