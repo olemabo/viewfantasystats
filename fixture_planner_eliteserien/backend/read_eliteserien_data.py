@@ -4,8 +4,11 @@ from openpyxl.utils.cell import get_column_letter
 from openpyxl import load_workbook
 
 
-def read_eliteserien_excel_to_db_format():
-    path = python_anywhere_path + stored_data + "/" + eliteserien_folder_name + "/" + current_season_name_eliteserien + "/" + fixture_folder_name + "/" + "Eliteserien_fixtures.xlsx"
+def read_eliteserien_excel_to_db_format(defensivt=False):
+    xlsx_file = "Eliteserien_fixtures" + ("" if defensivt else "_defensivt") + ".xlsx"
+    
+    path = python_anywhere_path + stored_data + "/" + eliteserien_folder_name + "/" + current_season_name_eliteserien + \
+        "/" + fixture_folder_name + "/" + xlsx_file
 
     max_teams = total_number_of_eliteserien_teams
     max_games = total_number_of_gameweeks_in_eliteserien + 2
@@ -112,48 +115,3 @@ def get_list_of_column_letters_from_int_range(start, stop):
 
 def get_list_of_row_numbers_from_int_range(start, stop):
     return [idx for idx in range(start, stop)]
-
-
-# Not in use anymore. Uses excel sheet with (VIF,H,2) format
-
-# def readEliteserienExcelToDBFormat(path=r'stored_data/eliteserien/2022/fixture_data/Eliteserien_fixtures.xlsx'):
-#     path = python_anywhere_path + "/" + path
-#     path = "/home/olebo/viewfantasystats/stored_data/eliteserien/2022/fixture_data/Eliteserien_fixtures.xlsx"
-#     df = pd.read_excel(path, engine='openpyxl')
-#     objectList = []
-#     dates = df.loc[df[0] == 'Dato'].values.tolist()[0][1:]
-
-#     for id, row in df.iterrows():
-#         if id == 0:
-#             continue
-#         temp_oppTeamNameList = []
-#         temp_oppTeamHomeAwayList = []
-#         temp_oppTeamDifficultyScore = []
-#         temp_gw = []
-#         team_name = row[0].split("(")[0]
-#         team_name_short = row[0].split("(")[1][:-1]
-#         for value in range(1, len(row)):
-#             fixtures = row[value]
-#             if pd.isnull(fixtures):
-#                 continue
-#             check_fixtures = fixtures.split(";")
-#             for fixture in check_fixtures:
-#                 info = fixture.split(",")
-#                 opponent = info[0]
-#                 home_away = info[1]
-#                 fdr = int(info[2])
-#                 temp_oppTeamNameList.append(opponent)
-#                 temp_oppTeamHomeAwayList.append(home_away)
-#                 temp_oppTeamDifficultyScore.append(fdr)
-#                 temp_gw.append(value)
-#         dbObject = TeamFixtureInfoEliteserienModel(team_name=team_name,
-#                                                  team_id=id,
-#                                                  team_short_name=team_name_short,
-#                                                  date=dates[value - 1],
-#                                                  opp_team_name_list=temp_oppTeamNameList,
-#                                                  opp_team_home_away_list=temp_oppTeamHomeAwayList,
-#                                                  opp_team_difficulty_score=temp_oppTeamDifficultyScore,
-#                                                  gw=temp_gw)
-#         objectList.append(dbObject)
-
-#     return objectList, dates
