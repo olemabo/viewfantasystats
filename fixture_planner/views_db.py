@@ -2,7 +2,13 @@ import fixture_planner.backend.create_data_objects as create_data_objects
 import fixture_planner.backend.read_fixture_planner_data as read_data
 from fixture_planner.models import PremierLeagueTeamInfo, KickOffTime
 from constants import total_number_of_gameweeks, local_host_url
+from utils.dataFetch.DataFetch import DataFetch
 from django.http import HttpResponse
+
+
+def test(request):
+    static_info = DataFetch().get_current_fpl_info()
+    return HttpResponse(static_info["element_types"])
 
 
 def fill_fixture_planner_and_kick_off_time_db(request):
