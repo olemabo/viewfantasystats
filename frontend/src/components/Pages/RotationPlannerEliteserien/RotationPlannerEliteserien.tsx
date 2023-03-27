@@ -34,8 +34,7 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
     const [ fdrDataToShow, setFdrDataToShow ] = useState(empty);
     const [ kickOffTimesToShow, setKickOffTimesToShow ] = useState(emptyGwDate);
     const [ showTeamFilters, setShowTeamFilters ] = useState(false);
-    const [ showDefensivt, SetShowDefensivt ] = useState(false);
-
+    const [ fdrType, SetFdrType ] = useState("");
     const emptyTeamData: TeamCheckedModel[] = [ { team_name: "empty", checked: true, checked_must_be_in_solution: false }];
     const [ teamData, setTeamData ] = useState(emptyTeamData);
     const [ fdrToColor, setFdrToColor ] = useState({0.5: "0.5", 1: "1", 2: "2", 3: "3", 4: "4", 5: "5"});
@@ -62,7 +61,7 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
             teams_to_play: teamsToPlay,
             teams_in_solution: [],
             fpl_teams: [-1],
-            show_defensivt: showDefensivt,
+            fdr_type: fdrType,
         };
 
         extractFDRData(body)
@@ -101,11 +100,10 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
             }
 
             setFdrToColor(data.fdr_to_colors_dict);
-
             if (data?.gws_and_dates?.length > 0) {
                 let temp_KickOffTimes: KickOffTimesModel[] = [];
                 data?.gws_and_dates.forEach((kickoff: string) => temp_KickOffTimes.push(JSON.parse(kickoff)));
-                setKickOffTimesToShow(temp_KickOffTimes.slice(gwStart - 1, data.gw_end));
+                setKickOffTimesToShow(temp_KickOffTimes.slice(data.gw_start - 1, data.gw_end));
                 setGwEnd(data.gw_end); 
             }
 
@@ -195,7 +193,7 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
             teams_to_play: teamsToPlay,
             teams_in_solution: teamsANDteamsinsolution[1],
             fpl_teams: teamsANDteamsinsolution[0],
-            show_defensivt: showDefensivt,
+            fdr_type: fdrType,
         };
 
         if (validateInput(body)) {
@@ -204,8 +202,8 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
         }
     }
 
-    function changeXlsxSheet(show_defensivt: boolean) {
-        SetShowDefensivt(show_defensivt);
+    function changeXlsxSheet(fdr_type: string) {
+        SetFdrType(fdr_type);
         updateFDRData()
     }
 
@@ -232,7 +230,7 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
         const elementId = e.currentTarget.id;
         let newClassName = '';
         let currentClasslist = '';
-        console.log(e, e.currentTarget.id, e.currentTarget.classList)
+
         if (classList.contains('can-be-in-solution')) {
             currentClasslist = 'can-be-in-solution';
             newClassName = 'must-be-in-solution';
@@ -363,13 +361,19 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
             <span style={{ color: "red", maxWidth: '375px' }}>{validationErrorMessage}</span>
         </div>
         
+        <ToggleButton 
+            onclick={(checked: string) => changeXlsxSheet(checked)} 
+            toggleButtonName="FDR-toggle"
+            toggleList={[ 
+                { name: "Defensivt", value: "_defensivt", checked: false, classname: "defensiv" },
+                { name: "FDR", value: "", checked: true, classname: "fdr" },
+                { name: "Offensivt", value: "_offensivt", checked: false, classname: "offensiv"}
+            ]}
+        />
+
         <Button buttonText={props.content.Fixture.filter_button_text} 
             icon_class={"fa fa-chevron-" + (showTeamFilters ? "up" : "down")} 
             onclick={() => setShowTeamFilters(showTeamFilters ? false : true)} />
-
-        <ToggleButton 
-            onclick={(checked: boolean) => changeXlsxSheet(checked)} 
-            on_text={props.content.General.defence} of_text={props.content.General.fdr} />
 
 
         { teamData != null && teamData.length > 0 && teamData[0].team_name != "empty" && showTeamFilters &&

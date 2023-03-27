@@ -4,8 +4,8 @@ from openpyxl.utils.cell import get_column_letter
 from openpyxl import load_workbook
 
 
-def read_eliteserien_excel_to_db_format(defensivt=False):
-    xlsx_file = "Eliteserien_fixtures" + ("" if defensivt else "_defensivt") + ".xlsx"
+def read_eliteserien_excel_to_db_format(defensivt=""):
+    xlsx_file = "Eliteserien_fixtures" + defensivt + ".xlsx"
     
     path = python_anywhere_path + stored_data + "/" + eliteserien_folder_name + "/" + current_season_name_eliteserien + \
         "/" + fixture_folder_name + "/" + xlsx_file
