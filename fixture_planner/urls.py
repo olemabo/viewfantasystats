@@ -1,13 +1,7 @@
-from . import views
-from . import views_db
 from django.urls import path
+from . import views
 
 urlpatterns = [
-    # path to read and fill db (uses the fpl and eliteserien api's! )
-    
-    path("read-and-fill-db-fixture-and-kickoff-times-premier-league/", views_db.fill_fixture_planner_and_kick_off_time_db, name='fill_db'),
-    path("test/", views_db.test, name='test'),
-
     # api-s used in react
     path("get-fdr-data/", views.get_fdr_data, name='get-fdr-data'),
     path("data-fdr-ui/", views.PremierLeagueTeamInfoView.as_view()),
