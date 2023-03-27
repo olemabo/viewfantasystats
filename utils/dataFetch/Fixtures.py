@@ -36,12 +36,12 @@ class Fixtures:
                 if math.isnan(home):
                     #home_matches.at[home_matches.iloc[j].name, ['gameweek', 'difficulty']] = min(
                     #    home_matches.iloc[j + 1]['gameweek'], away) - 1, 0
-                    home_matches.at[home_matches.iloc[j].name, ['gameweek']] = 0
+                    home_matches.at[home_matches.iloc[j].name, 'gameweek'] = 0
 
                 if math.isnan(away):
                     #away_matches.at[away_matches.iloc[j].name, ['gameweek', 'difficulty']] = min(
                     #    away_matches.iloc[j + 1]['gameweek'], home) - 1, 0
-                    away_matches.at[away_matches.iloc[j].name, ['gameweek']] = 0
+                    away_matches.at[away_matches.iloc[j].name, 'gameweek'] = 0
 
             temp = temp.append(home_matches[final_features])
             temp = temp.append(away_matches[final_features])
