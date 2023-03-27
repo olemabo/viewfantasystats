@@ -62,13 +62,13 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
     }, []);
 
 
-    function updateFDRData() {
+    function updateFDRData(currentFdrType: string) {
         var body = {
             start_gw: gwStart,
             end_gw: gwEnd,
             min_num_fixtures: minNumFixtures,
             combinations: props.fixture_planning_type,
-            fdr_type: fdrType,
+            fdr_type: currentFdrType,
         };
 
         extractFDRData(body);
@@ -154,7 +154,7 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
 
     function changeXlsxSheet(fdr_type: string) {
         SetFdrType(fdr_type);
-        updateFDRData()
+        updateFDRData(fdr_type)
     }
 
     var title_fixture_planner = props.content.Fixture.FixturePlanner?.title
@@ -213,7 +213,7 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
             </Popover>
         </h1>
         { maxGw > 0 && 
-            <form onSubmit={(e) =>  {updateFDRData(); e.preventDefault()}}>
+            <form onSubmit={(e) =>  {updateFDRData(fdrType); e.preventDefault()}}>
                 <label htmlFor='input-form-start-gw'>{props.content.Fixture.gw_start}</label>
                 <input 
                     className="form-number-box" 

@@ -181,7 +181,7 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
         return true;
     }
     
-    function updateFDRData() {
+    function updateFDRData(currentFdrType: string) {
         let teamsANDteamsinsolution = extractTeamsToUseAndTeamsInSolution();
         
         var body = {
@@ -193,7 +193,7 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
             teams_to_play: teamsToPlay,
             teams_in_solution: teamsANDteamsinsolution[1],
             fpl_teams: teamsANDteamsinsolution[0],
-            fdr_type: fdrType,
+            fdr_type: currentFdrType,
         };
 
         if (validateInput(body)) {
@@ -204,7 +204,7 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
 
     function changeXlsxSheet(fdr_type: string) {
         SetFdrType(fdr_type);
-        updateFDRData()
+        updateFDRData(fdr_type)
     }
 
     function filterTeamData() {
@@ -306,7 +306,7 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
             }
             </Popover>
         </h1>
-         <form onSubmit={(e) =>  {updateFDRData(); e.preventDefault()}}>
+         <form onSubmit={(e) =>  {updateFDRData(fdrType); e.preventDefault()}}>
             <label htmlFor='input-form-start-gw'>{props.content.Fixture.gw_start}</label>
             <input 
                 className="form-number-box" 
