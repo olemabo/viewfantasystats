@@ -43,7 +43,7 @@ class Fixtures:
                     #    away_matches.iloc[j + 1]['gameweek'], home) - 1, 0
                     away_matches.at[away_matches.iloc[j].name, 'gameweek'] = 0
 
-            temp = temp.concat(home_matches[final_features])
-            temp = temp.concat(away_matches[final_features])
+            temp = pd.concat([temp, home_matches[final_features]])
+            temp = pd.concat([temp, away_matches[final_features]])
             temp = temp.sort_values('gameweek', ascending=True)
             self.list_teams.append(temp)

@@ -12,7 +12,7 @@ import { Button } from '../../Shared/Button/Button';
 import Popover from '../../Shared/Popover/Popover';
 import { store } from '../../../store/index';
 import axios from 'axios';
-import ToggleButton from '../../Shared/ToggleButton/ToggleButton';
+import ToggleButton, { ToggleButton2 } from '../../Shared/ToggleButton/ToggleButton';
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -44,7 +44,7 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
     const [ showTeamFilters, setShowTeamFilters ] = useState(false);
     const [ loading, setLoading ] = useState(false);
     const [ minNumFixtures, setMinNumFixtures ] = useState(3);
-    const [ showDefensivt, SetShowDefensivt ] = useState(false);
+    const [ fdrType, SetFdrType ] = useState("");
 
     useEffect(() => {
         store.dispatch({type: "league_type", payload: props.league_type});
@@ -55,7 +55,7 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
             end_gw: max_gw,
             min_num_fixtures: minNumFixtures,
             combinations: props.fixture_planning_type,
-            show_defensivt: showDefensivt,
+            fdr_type: fdrType,
         };
         
         extractFDRData(body);
@@ -68,7 +68,7 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
             end_gw: gwEnd,
             min_num_fixtures: minNumFixtures,
             combinations: props.fixture_planning_type,
-            show_defensivt: showDefensivt,
+            fdr_type: fdrType,
         };
 
         extractFDRData(body);
@@ -152,8 +152,8 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
         setFdrDataToShow(temp);
     }
 
-    function changeXlsxSheet(show_defensivt: boolean) {
-        SetShowDefensivt(show_defensivt);
+    function changeXlsxSheet(fdr_type: string) {
+        SetFdrType(fdr_type);
         updateFDRData()
     }
 
@@ -257,15 +257,21 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
                 <input className="submit" type="submit" value={props.content.General.search_button_name} />
             </form> 
         }
+
+        <ToggleButton 
+            onclick={(checked: string) => changeXlsxSheet(checked)} 
+            toggleButtonName="FDR-toggle"
+            toggleList={[ 
+                { name: "Defensivt", value: "_defensivt", checked: false, classname: "defensiv" },
+                { name: "FDR", value: "", checked: true, classname: "fdr" },
+                { name: "Offensivt", value: "_offensivt", checked: false, classname: "offensiv"}
+            ]}
+        />
      
         <Button buttonText={props.content.Fixture.filter_button_text} 
             icon_class={"fa fa-chevron-" + (showTeamFilters ? "up" : "down")} 
             onclick={() => setShowTeamFilters(showTeamFilters ? false : true)} />
         
-        <ToggleButton 
-            onclick={(checked: boolean) => changeXlsxSheet(checked)} 
-            on_text={props.content.General.defence} of_text={props.content.General.fdr} />
-
         { fdrDataToShow != null && fdrDataToShow.length > 0 && fdrDataToShow[0].team_name != "empty" && showTeamFilters &&
             <div className='filter-teams-container'>
                 <div className='filter-teams-list'>
