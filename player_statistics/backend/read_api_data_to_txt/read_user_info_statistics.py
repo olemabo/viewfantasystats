@@ -74,8 +74,13 @@ def check_if_txt_file_exist(league_name, localhost=True):
         f.close()
 
     start_id = 0
-    data_allready_stored = np.loadtxt(txt_file_path, dtype="str", delimiter="\n", skiprows=1, encoding="utf-8")
-    for data in data_allready_stored:
+    
+    # data_allready_stored = np.loadtxt(txt_file_path, dtype="str", delimiter="\n", skiprows=1, encoding="utf-8")
+    
+    with open(txt_file_path, encoding="utf-8") as f:
+        data_allready_stored = f.read().splitlines()
+    
+    for data in data_allready_stored[1:]:
         start_id = max(start_id, int(data.split(user_stats_special_delimiter)[0]))
     
     return start_id + 1, txt_file_path
