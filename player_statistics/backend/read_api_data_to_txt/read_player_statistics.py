@@ -10,6 +10,7 @@ def get_ids(use_api_or_local, api_url=premier_league_api_url):
     ids = []
     for info in static_info:
         status = info['status']
+        
         if status != "u":
             ids.append(info['id'])
 
