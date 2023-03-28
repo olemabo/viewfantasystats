@@ -31,6 +31,6 @@ urlpatterns += [
     # path('fill-db-global-stats-premier-league/', views_db.fill_db_global_stats_premier_league, name='fill_txt_global_stats_premier_league'),
     
     # # player stats
-    path('read-and-fill-db-player-statistics-eliteserien/', views_db.fill_player_statistics_eliteserien, name='read_and_fill_player_statistics_eliteserien'),
-    path('read-and-fill-db-player-statistics-premier-league/', views_db.fill_player_statistics_premier_league, name='read_and_fill_player_statistics_premier_league'),
+    # path('read-and-fill-db-player-statistics-eliteserien/', views_db.fill_player_statistics_eliteserien, name='read_and_fill_player_statistics_eliteserien'),
+    # path('read-and-fill-db-player-statistics-premier-league/', views_db.fill_player_statistics_premier_league, name='read_and_fill_player_statistics_premier_league'),
 ]
