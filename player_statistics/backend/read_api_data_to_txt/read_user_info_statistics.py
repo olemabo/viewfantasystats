@@ -1,5 +1,5 @@
 from constants import current_season_name_premier_league, current_season_name_eliteserien, path_to_store_local_data
-from constants import premier_league_api_url, eliteserien_api_url, python_anywhere_path
+from constants import premier_league_api_url, eliteserien_api_url, python_anywhere_path, stored_data
 from constants import user_stats_special_delimiter, user_stats_special_delimiter
 from constants import user_stats_folder_name, eliteserien_folder_name
 
@@ -51,24 +51,28 @@ def read_user_info_statistics_eliteserien(league_name=eliteserien_folder_name, m
 
 
 def check_if_txt_file_exist(league_name, localhost=True):
-    local_path = path_to_store_local_data + "/" if localhost else python_anywhere_path
+    local_path = path_to_store_local_data + "/" if localhost else python_anywhere_path + stored_data + "/" 
     
     league_path = local_path + league_name + "/"
     
     if not os.path.isdir(league_path):
+        print("Create folder: ", league_path)
         os.mkdir(league_path)
 
     season_name = current_season_name_eliteserien if league_name == eliteserien_folder_name else current_season_name_premier_league
     season_path = league_path + "/" + season_name + "/"
     if not os.path.isdir(season_path):
+        print("Create folder: ", season_path)
         os.mkdir(season_path)
 
     user_stat_path = season_path + "/" + user_stats_folder_name
     if not os.path.isdir(user_stat_path):
+        print("Create folder: ", user_stat_path)
         os.mkdir(user_stat_path)
 
     txt_file_path = user_stat_path + "/" + user_stats_folder_name + ".txt"
     if not os.path.exists(txt_file_path):
+        print("Create file: ", txt_file_path)
         f = open(txt_file_path, "w", encoding="utf-8")
         f.write("id, joined_time, started_event, favourite_team, name,  player_first_name, player_last_name, player_region_id, player_region_name, player_region_iso_code_long, ranking \n")
         f.close()
