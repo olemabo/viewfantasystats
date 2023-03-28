@@ -17,6 +17,7 @@ import './RankStatistics.scss';
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
+
 export const RankStatisticsPage : FunctionComponent<LanguageProps> = (props) => {
     const player_ownership_api_path = "/statistics/rank-statistics-api/";
     
@@ -38,7 +39,7 @@ export const RankStatisticsPage : FunctionComponent<LanguageProps> = (props) => 
         }
 
         search(initial_last_x_years);
-
+        
     }, []);
 
     function search(last_x_years: number) {

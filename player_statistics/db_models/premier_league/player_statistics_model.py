@@ -16,6 +16,13 @@ class PremierLeaguePlayers(models.Model):
     player_web_name = models.CharField(max_length=40, help_text='Enter player web name (Fernandes) ')
     chance_of_playing = models.CharField(max_length=5, help_text='Enter chance of playing next round (75%) ')
 
+    expected_goals_per_90 = models.CharField(max_length=6, help_text='Enter expected goals per 90 min (0.11) ', blank=True, null=True)
+    expected_assists_per_90 = models.CharField(max_length=6, help_text='Enter expected assists per 90 min (0.72) ', blank=True, null=True)
+    expected_goal_involvements_per_90 = models.CharField(max_length=6, help_text='Enter expected goal involvements per 90 min (0.31) ', blank=True, null=True)
+    expected_goals_conceded_per_90 = models.CharField(max_length=6, help_text='Enter expected goals conceded per 90 min (1.11) ', blank=True, null=True)
+    goals_conceded_per_90  = models.CharField(max_length=6, help_text='Enter goals conceded per 90 min (0.41) ', blank=True, null=True)
+    saves_per_90 = models.CharField(max_length=6, help_text='Enter saves per 90 min (0) ', blank=True, null=True)
+
     assists_list = ListTextField(
         base_field=models.IntegerField(help_text='Enter number of assist (2)'),
         size=number_of_gws,  # Maximum of 100 ids in list
@@ -155,6 +162,31 @@ class PremierLeaguePlayers(models.Model):
         base_field=models.IntegerField(help_text='Number of yellow_cards (1)'),
         size=number_of_gws,  # Maximum of 100 ids in list
     )
+
+    expected_goals_list = ListTextField(
+        base_field=models.CharField(max_length=4, help_text='Enter number of expected_goals (0.36)'),
+        size=number_of_gws,  # Maximum of 100 ids in list
+        blank=True, null=True
+    )
+
+    expected_assists_list = ListTextField(
+        base_field=models.CharField(max_length=4, help_text='Enter number of expected_assists (0.06)'),
+        size=number_of_gws,  # Maximum of 100 ids in list
+        blank=True, null=True
+    )
+
+    expected_goal_involvements_list = ListTextField(
+        base_field=models.CharField(max_length=4, help_text='Enter number of expected_goal_involvements (0.20)'),
+        size=number_of_gws,  # Maximum of 100 ids in list
+        blank=True, null=True
+    )
+
+    expected_goals_conceded_list = ListTextField(
+        base_field=models.CharField(max_length=4, help_text='Enter number of expected_goals_conceded (1.6)'),
+        size=number_of_gws,  # Maximum of 100 ids in list
+        blank=True, null=True
+    )
+
 
     # Metadata
     class Meta:

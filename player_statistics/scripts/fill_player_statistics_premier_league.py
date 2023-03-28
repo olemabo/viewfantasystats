@@ -1,3 +1,14 @@
+import django
+import sys
+import os
+
+prod = "/home/olebo/viewfantasystats/"
+local = os.path.abspath('../..')
+
+sys.path.append(prod)
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'fplwebpage.settings')
+django.setup()
+
 from constants import eliteserien_api_url, premier_league_api_url, premier_league_folder_name, eliteserien_folder_name
 from player_statistics.backend.read_api_data_to_txt.read_player_statistics import static_json, get_ids
 from player_statistics.db_models.eliteserien.player_statistics_model import EliteserienPlayerStatistic
@@ -6,7 +17,7 @@ from utils.dataFetch.DataFetch import DataFetch
 import time
 
 
-def fill_database_all_players(league_name=premier_league_folder_name):
+def fill_database_all_players(league_name):
     api_url = eliteserien_api_url if league_name == eliteserien_folder_name else premier_league_api_url
     static_data = static_json("api", api_url)
     ids = get_ids("api", api_url)
@@ -19,8 +30,9 @@ def fill_database_all_players(league_name=premier_league_folder_name):
         print("Filling db for player: ", name, " with id: ", id, " ... (",
               idx, "/", len(ids), ")")
         fill_database_for_one_player(player_data, static_data, id, league_name)
-        time.sleep(0.7)
-    print("Filled db for all ", str(len(ids)), " players. \n")
+        time.sleep(0.5)
+    
+    print("\nFilled db for all ", str(len(ids)), " players. \n")
 
 
 def fill_database_for_one_player(player_data_json, static_data, id, league_name):
@@ -35,6 +47,10 @@ def fill_database_for_one_player(player_data_json, static_data, id, league_name)
     temp_team_h_score = [0]
     temp_team_a_score = [0]
     temp_round = [0]
+    player_name = static_data[element_id][0] + " & " + static_data[element_id][1]
+    
+    player_position_id = static_data[element_id][2]
+    chance_of_playing = static_data[element_id][3]
     temp_value = [static_data[element_id][4]]
     temp_total_points = [static_data[element_id][7]]
     temp_minutes = [static_data[element_id][8]]
@@ -58,16 +74,22 @@ def fill_database_for_one_player(player_data_json, static_data, id, league_name)
     temp_selected = [0]
     temp_transfers_in = [static_data[element_id][33]]
     temp_transfers_out = [static_data[element_id][34]]
-
     team_id = static_data[element_id][35]
-    player_name = static_data[element_id][0] + " & " + static_data[element_id][1]
     web_name = static_data[element_id][36]
-    player_position_id = static_data[element_id][2]
-    chance_of_playing = static_data[element_id][3]
 
-    if chance_of_playing is None:
-        chance_of_playing = "None"
+    temp_expected_goals = [static_data[element_id][37]]
+    temp_expected_goals_per_90 = static_data[element_id][38]
+    temp_expected_assists = [static_data[element_id][39]]
+    temp_expected_assists_per_90 = static_data[element_id][40]
+    temp_expected_goal_involvements = [static_data[element_id][41]]
+    temp_expected_goal_involvements_per_90 = static_data[element_id][42]
+    temp_expected_goals_conceded = [static_data[element_id][43]]
+    temp_expected_goals_conceded_per_90 = static_data[element_id][44]
+    temp_goals_conceded_per_90 = static_data[element_id][45]
+    temp_saves_per_90 = static_data[element_id][46]
 
+    chance_of_playing = "None" if chance_of_playing is None else chance_of_playing
+    
     # fill in gw data
     player_all_current_gws_data = player_data_json['history']
 
@@ -89,12 +111,18 @@ def fill_database_for_one_player(player_data_json, static_data, id, league_name)
         temp_yellow_cards.append(gw_i_data['yellow_cards'])
         temp_saves.append(gw_i_data['saves'])
         temp_bonus.append(gw_i_data['bonus'])
+
         if (league_name == premier_league_folder_name):
             temp_bps.append(gw_i_data['bps'])
             temp_influence.append(gw_i_data['influence'])
             temp_creativity.append(gw_i_data['creativity'])
             temp_threat.append(gw_i_data['threat'])
             temp_ict_index.append(gw_i_data['ict_index'])
+            temp_expected_goals.append(gw_i_data['expected_goals'])
+            temp_expected_assists.append(gw_i_data['expected_assists'])
+            temp_expected_goal_involvements.append(gw_i_data['expected_goal_involvements'])
+            temp_expected_goals_conceded.append(gw_i_data['expected_goals_conceded'])
+
         temp_transfers_balance.append(gw_i_data['transfers_balance'])
         temp_selected.append(gw_i_data['selected'])
         temp_transfers_in.append(gw_i_data['transfers_in'])
@@ -137,7 +165,19 @@ def fill_database_for_one_player(player_data_json, static_data, id, league_name)
             transfers_out_list=temp_transfers_out,
             value_list=temp_value,
             was_home_list=temp_was_home,
-            yellow_cards_list=temp_yellow_cards)
+            yellow_cards_list=temp_yellow_cards,
+            expected_goals_list=temp_expected_goals,
+            expected_assists_list=temp_expected_assists,
+            expected_goal_involvements_list=temp_expected_goal_involvements,
+            expected_goals_conceded_list=temp_expected_goals_conceded,
+            expected_goals_per_90=temp_expected_goals_per_90,
+            expected_assists_per_90=temp_expected_assists_per_90,
+            expected_goal_involvements_per_90=temp_expected_goal_involvements_per_90,
+            expected_goals_conceded_per_90=temp_expected_goals_conceded_per_90,
+            goals_conceded_per_90=temp_goals_conceded_per_90,
+            saves_per_90=temp_saves_per_90,
+        )
+
         fill_model.save()
     
     if league_name == eliteserien_folder_name:
@@ -171,4 +211,8 @@ def fill_database_for_one_player(player_data_json, static_data, id, league_name)
             value_list=temp_value,
             was_home_list=temp_was_home,
             yellow_cards_list=temp_yellow_cards)
+        
         fill_model.save()
+
+
+fill_database_all_players(premier_league_folder_name)
