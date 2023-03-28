@@ -1,7 +1,7 @@
 from constants import current_season_name_premier_league, current_season_name_eliteserien, path_to_store_local_data
+from constants import premier_league_api_url, eliteserien_api_url, python_anywhere_path
 from constants import user_stats_special_delimiter, user_stats_special_delimiter
 from constants import user_stats_folder_name, eliteserien_folder_name
-from constants import premier_league_api_url, eliteserien_api_url
 
 from utils.dataFetch.DataFetch import DataFetch
 import numpy as np
@@ -9,12 +9,12 @@ import time
 import os
 
 
-def read_user_info_statistics_eliteserien(league_name=eliteserien_folder_name, max_time=60 * 60 * 24):
+def read_user_info_statistics_eliteserien(league_name=eliteserien_folder_name, max_time=60 * 60 * 24, localhost=True):
     api_url = eliteserien_api_url if league_name == eliteserien_folder_name else premier_league_api_url
     DFObject = DataFetch(api_url)
     
     # create a folder to store data in txt files, and return data if allready exists
-    start_id, path_to_file = check_if_txt_file_exist(league_name)
+    start_id, path_to_file = check_if_txt_file_exist(league_name, localhost)
     print("\n\nRead data from API | User statistics\n")
     print("Start at id: ", start_id, "\n")
     
@@ -50,8 +50,11 @@ def read_user_info_statistics_eliteserien(league_name=eliteserien_folder_name, m
 
 
 
-def check_if_txt_file_exist(league_name):
-    league_path = path_to_store_local_data + "/" + league_name + "/"
+def check_if_txt_file_exist(league_name, localhost=True):
+    local_path = path_to_store_local_data + "/" if localhost else python_anywhere_path
+    
+    league_path = local_path + league_name + "/"
+    
     if not os.path.isdir(league_path):
         os.mkdir(league_path)
 

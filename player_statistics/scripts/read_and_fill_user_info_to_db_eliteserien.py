@@ -17,7 +17,7 @@ from constants import eliteserien_folder_name
 
 if __name__ == '__main__':
     number_of_minutes_to_run = 5
-    response = read_user_info_statistics_eliteserien(eliteserien_folder_name, 60 * number_of_minutes_to_run)
+    response = read_user_info_statistics_eliteserien(eliteserien_folder_name, 60 * number_of_minutes_to_run, False)
     print("\nNot finished scraping all user info to txt files") if response == -1 else print("\nFinished scraping all user info to txt files")
     
     if response == 1:
