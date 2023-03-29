@@ -16,16 +16,23 @@ def read_cup_info_statistics_eliteserien(league_name=eliteserien_folder_name):
     
     cup_start = static_bootstrap['game_settings']['cup_start_event_id']
     cup_end = static_bootstrap['game_settings']['cup_stop_event_id']
+
+    if cup_start is None or cup_end is None:
+        print("Cup start or/end has not been set yet")
+        return 0
+    
     current_gameweek = get_current_gw_(DFObject)
     total_number_of_participants = 2**(cup_end - cup_start + 1) 
 
+    print("Cup start: ", cup_start)
+    print("Cup end: ", cup_end)
+
     if current_gameweek < cup_start:
-        print("Cup not started")
+        print("Cup not started. Current gw: ", current_gameweek, " and cup start: ", cup_start)
         return 0
         
     number_of_fantasy_players = DFObject.get_current_fpl_info()['total_players']
     ids_to_check, processed_path, store_cup_data_path, rounds_path, update = check_if_txt_file_exist(league_name, total_number_of_participants, number_of_fantasy_players, cup_start)
-
 
     number_of_ids_to_check = len(ids_to_check)
     print("\nNumber of ids to check: ", number_of_ids_to_check)
@@ -102,7 +109,7 @@ def read_cup_info_statistics_eliteserien(league_name=eliteserien_folder_name):
     # update cup_processed rounds
     wrtie_to_file(','.join(str(x) for x in range(cup_start, current_gameweek)), rounds_path, "w")
 
-    return 0
+    return 1
 
 
 def get_cup_history_data(cup_matches, id, cup_start):
@@ -136,15 +143,18 @@ def check_if_txt_file_exist(league_name, total_number_of_participants, number_of
     update = False
     league_path = path_to_store_local_data + "/" + league_name + "/"
     if not os.path.isdir(league_path):
+        print("Create folder: ", league_path)
         os.mkdir(league_path)
 
     season_name = current_season_name_eliteserien if league_name == eliteserien_folder_name else current_season_name_premier_league
     season_path = league_path + "/" + season_name + "/"
     if not os.path.isdir(season_path):
+        print("Create folder: ", league_path)
         os.mkdir(season_path)
 
     user_stat_path = season_path + "/" + cup_stats_folder_name
     if not os.path.isdir(user_stat_path):
+        print("Create folder: ", league_path)
         os.mkdir(user_stat_path)   
     
     gws_allready_checked_path = user_stat_path + "/" + cup_processed_rounds
@@ -152,11 +162,13 @@ def check_if_txt_file_exist(league_name, total_number_of_participants, number_of
     
     store_cup_data_path = user_stat_path + "/" + cup_data_file
     if not os.path.exists(store_cup_data_path):
+        print("Create file: ", store_cup_data_path)
         f = open(store_cup_data_path, "w", encoding="utf-8")
         f.close()
 
     processed_path = user_stat_path + "/" + cup_all_ids_processed_file
     if not os.path.exists(processed_path):
+        print("Create file: ", processed_path)
         f = open(processed_path, "w", encoding="utf-8")
         f.close()
         return all_ids_list, processed_path, store_cup_data_path, gws_allready_checked_path, update

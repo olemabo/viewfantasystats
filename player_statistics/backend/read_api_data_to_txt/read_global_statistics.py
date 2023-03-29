@@ -37,30 +37,33 @@ def save_all_global_stats_for_current_gw(league_name=premier_league_folder_name)
 
     print("League name: ", league_name, "\n")
 
-    x = input("You will now extract data from the FPL api. It will be for top " +  str(max(all_top_x_players)) + " fpl managers. " +
-            "Time to sleep between each api call is: " + str(time_to_sleep_for_each_iteration) +
-                  " and should be more than 0.2 at least. Will you proceed? (y/n) ")
-
-    if str(x) != "y":
+    print("You will now extract data from the FPL api. It will be for top " +  str(max(all_top_x_players)) + " fpl managers. " +
+             "Time to sleep between each api call is: " + str(time_to_sleep_for_each_iteration) + "\n")
+    
+    if time_to_sleep_for_each_iteration < 0.2:
+        print("Team to sleep should be over 0.2, now it is ", time_to_sleep_for_each_iteration)
         return 0
-
-
+        
     # create new directories if not already done
     league_path = path_to_store_local_data + "/" + league_name + "/"
     if not os.path.isdir(league_path):
+        print("Created path: ", league_path)
         os.mkdir(league_path)
 
     season_path = league_path + "/" + season_name + "/"
     if not os.path.isdir(season_path):
+        print("Created path: ", season_path)
         os.mkdir(season_path)
     
     global_stats_path = season_path + "/" + global_stats_folder_name + "/"
     if not os.path.isdir(global_stats_path):
+        print("Created path: ", global_stats_path)
         os.mkdir(global_stats_path)
 
     # create new directories if not already done
     gw_path = global_stats_path + "/" + str(current_gameweek)
     if not os.path.isdir(gw_path):
+        print("Created path: ", gw_path)
         os.mkdir(gw_path)
 
     # find max top_x players to check
@@ -75,7 +78,7 @@ def save_all_global_stats_for_current_gw(league_name=premier_league_folder_name)
 
     # create dict where each key is the soccer player id
     ids_dict = create_dict(ids)
-    
+
     # check if we allready have the ids downlaoded in top_x_players_ids_backup.txt file
     id_s = []
     path_ids_txt_file = gw_path + "/" + top_x_players_ids_backup_file_name
@@ -87,7 +90,11 @@ def save_all_global_stats_for_current_gw(league_name=premier_league_folder_name)
     
     # find the team ids from the top x fpl players on global rank
     if len(id_s) != top_x_players:
-        id_s = find_team_ids_from_top_x_players(top_x_players, league_name, )
+        id_s = find_team_ids_from_top_x_players(top_x_players, league_name)
+        
+        if id_s == -1:
+            return -1
+        
         f_ids = open(path_ids_txt_file, "w", encoding="utf-8")
         for id in id_s:
             f_ids.write(str(id) + "\n")
@@ -95,6 +102,7 @@ def save_all_global_stats_for_current_gw(league_name=premier_league_folder_name)
 
     # should not return duplicate ids and should be equal top 'top_x_players'
     if has_list_duplicates(id_s) or len(id_s) != top_x_players:
+        print("Has duplicates")
         return 0
     
     print("All ids successfully extracted for gw ", str(current_gameweek), "\n")
@@ -306,6 +314,8 @@ def save_all_global_stats_for_current_gw(league_name=premier_league_folder_name)
     end_time = time.time()
     print("\nTotal time to collect data for top " + str(top_x_players) + " players: ", (end_time - start_time) / 60, " min")
 
+    return 1
+
 
 def get_season_name(DFObject):
     fixture = DFObject.get_current_fixtures()
@@ -315,6 +325,7 @@ def get_season_name(DFObject):
         return str(min_year)
     else:
         return str(min_year) + "-" + str(max_year)
+
 
 def data_fetch(num, league_type):
     """
@@ -354,16 +365,25 @@ def find_team_ids_from_top_x_players(top_x_players, league_type):
     while True:
         data = data_fetch(idx + 1, league_type)
         data_pd = pd.DataFrame(data['standings'])
+    
         for j in range(len(data_pd)):
             id_s.append(data_pd['results'][j]['entry'])
             if len(id_s) == top_x_players:
-                print("\n Collected all ids from all fpl players. Total ids: ", str(len(id_s)))
+                print("\nCollected all ids from all fpl players. Total ids: ", str(len(id_s)))
                 return id_s
         idx += 1
         percentage = idx / (top_x_players / 50) * 100
         if percentage > _percentage:
             print(percentage, "%")
             _percentage += 10
+
+        if percentage > 101:
+            print("Percentage above 100%")
+            return -1
+
+        if len(data_pd) == 0:
+            print("No results yet")
+            return -1
 
 
 def create_dict(players, things_to_store=12):

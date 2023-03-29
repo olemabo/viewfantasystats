@@ -13,7 +13,8 @@ total_number_of_eliteserien_teams = 16
 
 # where to store local data
 stored_data = "stored_data"
-path_to_store_local_data = "C:\\Users\\ole.borge\\source\\repos\\django\\viewfantasystats\\" + stored_data
+# path_to_store_local_data = "C:\\Users\\ole.borge\\source\\repos\\django\\viewfantasystats\\" + stored_data
+path_to_store_local_data = "/home/olebo/viewfantasystats/" + stored_data
 
 # link to global ranks
 web_global_league_premier_league = 'https://fantasy.premierleague.com/api/leagues-classic/314/standings/?phase=1&page_new_entries=1&page_standings=X'

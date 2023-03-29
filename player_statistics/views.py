@@ -8,8 +8,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.http import JsonResponse
 from rest_framework import status
-import numpy as np
 from django.db.models import Q
+import numpy as np
 
 from player_statistics.db_models.eliteserien.ownership_statistics_model_eliteserien import *
 from player_statistics.db_models.premier_league.ownership_statistics_model import *
