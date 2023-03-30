@@ -49,7 +49,7 @@ def read_user_info_statistics_eliteserien(league_name=eliteserien_folder_name, m
 
 
 def check_if_txt_file_exist(league_name):    
-    league_path = path_to_store_local_data + league_name + "/"
+    league_path = path_to_store_local_data + "/" + league_name + "/"
     
     if not os.path.isdir(league_path):
         print("Create folder: ", league_path)
