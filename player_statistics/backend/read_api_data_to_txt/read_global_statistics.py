@@ -1,4 +1,4 @@
-from constants import current_season_name_eliteserien, all_top_x_players_eliteserien_nationality, all_top_x_players_eliteserien_total_chips, all_top_x_players_premier_league_total_chips, all_top_x_players_premier_league_nationality, top_x_players_ids_backup_file_name, backup_data_txt_file_name, current_season_name_premier_league, backup_data_folder_name, how_often_do_back_up_of_global_data, nationality_delimiter, name_of_nationality_file, global_stats_folder_name, eliteserien_wc_due_date, premier_league_wc_due_date, total_chip_usage_txt_file_name, country_population_txt_file_name, global_stats_folder_name, premier_league_api_url, eliteserien_api_url, web_global_league_eliteserien, eliteserien_folder_name, premier_league_folder_name, name_of_extra_info_file, path_to_store_local_data, web_global_league_premier_league, all_top_x_players_premier_league, all_top_x_players_eliteserien, time_to_sleep_for_each_iteration, name_of_ownership_file
+from constants import current_season_name_eliteserien, finished_file_name, all_top_x_players_eliteserien_nationality, all_top_x_players_eliteserien_total_chips, all_top_x_players_premier_league_total_chips, all_top_x_players_premier_league_nationality, top_x_players_ids_backup_file_name, backup_data_txt_file_name, current_season_name_premier_league, backup_data_folder_name, how_often_do_back_up_of_global_data, nationality_delimiter, name_of_nationality_file, global_stats_folder_name, eliteserien_wc_due_date, premier_league_wc_due_date, total_chip_usage_txt_file_name, country_population_txt_file_name, global_stats_folder_name, premier_league_api_url, eliteserien_api_url, web_global_league_eliteserien, eliteserien_folder_name, premier_league_folder_name, name_of_extra_info_file, path_to_store_local_data, web_global_league_premier_league, all_top_x_players_premier_league, all_top_x_players_eliteserien, time_to_sleep_for_each_iteration, name_of_ownership_file
 from utils.dataFetch.DataFetch import DataFetch
 from tqdm import tqdm
 import pandas as pd
@@ -66,6 +66,10 @@ def save_all_global_stats_for_current_gw(league_name=premier_league_folder_name)
         print("Created path: ", gw_path)
         os.mkdir(gw_path)
 
+    path_ids_txt_file = gw_path + "/" + finished_file_name
+    if os.path.exists(path_ids_txt_file):
+        return -1
+    
     # find max top_x players to check
     top_x_players = max(all_top_x_players)
     all_top_x_player_nationality = all_top_x_players_eliteserien_nationality if league_name == eliteserien_folder_name else all_top_x_players_premier_league_nationality
@@ -313,6 +317,11 @@ def save_all_global_stats_for_current_gw(league_name=premier_league_folder_name)
 
     end_time = time.time()
     print("\nTotal time to collect data for top " + str(top_x_players) + " players: ", (end_time - start_time) / 60, " min")
+
+    path_ids_txt_file = gw_path + "/" + finished_file_name
+    if not os.path.exists(path_ids_txt_file):
+        f_finished = open(path_ids_txt_file, "w", encoding="utf-8")
+        f_finished.close()
 
     return 1
 

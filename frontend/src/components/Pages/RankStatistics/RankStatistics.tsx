@@ -84,7 +84,7 @@ export const RankStatisticsPage : FunctionComponent<LanguageProps> = (props) => 
     function searchUsers(keyword: string) {
         let temp: RankModel[] = [];
         ranks.map(x => {
-            if (x.name.includes(keyword) || x.team_name.includes(keyword)) {
+            if (x.name.toLowerCase().includes(keyword.toLowerCase()) || x.team_name.toLowerCase().includes(keyword.toLowerCase())) {
                 temp.push(x);
             }
         })
