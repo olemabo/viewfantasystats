@@ -8,7 +8,7 @@ import json
 
 def write_user_info_to_db_eliteserien():
     path = path_to_store_local_data + "/" + eliteserien_folder_name + "/" + current_season_name_eliteserien + "/" + user_stats_folder_name + "/" + user_stats_txt_file_name
-    user_info_data = np.loadtxt(path, dtype="str", comments="&&&&&&&&&&&", delimiter=user_stats_special_delimiter, skiprows=1, encoding="utf-8")
+    user_info_data = np.genfromtxt(path, dtype="str", comments="&&&&&&&&&&&", delimiter=user_stats_special_delimiter, skip_header=1, encoding="utf-8")
     new, update = 0, 0
     print("\n")
     
