@@ -294,87 +294,88 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
             { fdrToColor != null && 
                 <><p className='diff-introduction-container'>
                     FDR verdier: 
-                    <span style={{backgroundColor: convertFDRtoHex("0.5", fdrToColor)}} className="diff-introduction-box wide">0.25</span>
-                    <span style={{backgroundColor: convertFDRtoHex("1", fdrToColor)}} className="diff-introduction-box">1</span>
-                    <span style={{backgroundColor: convertFDRtoHex("2", fdrToColor)}} className="diff-introduction-box">2</span>
-                    <span style={{backgroundColor: convertFDRtoHex("3", fdrToColor)}} className="diff-introduction-box">3</span>
-                    <span style={{backgroundColor: convertFDRtoHex("4", fdrToColor)}} className="diff-introduction-box">4</span>
-                    <span style={{backgroundColor: convertFDRtoHex("5", fdrToColor)}} className="diff-introduction-box">5</span>
+                    <span style={{backgroundColor: "#1d3557bf" }} className="diff-introduction-box wide">0.25</span>
+                    <span style={{ backgroundColor: "#47abd89e" }}className="diff-introduction-box">1</span>
+                    <span style={{ backgroundColor: "#95d2ec8f" }}className="diff-introduction-box">2</span>
+                    <span style={{backgroundColor: "#e7f9ff7a" }}className="diff-introduction-box">3</span>
+                    <span style={{backgroundColor: "#ff4242a3" }}className="diff-introduction-box">4</span>
+                    <span style={{backgroundColor: "#d01b1bb5" }}className="diff-introduction-box">5</span>
                     <span style={{backgroundColor: convertFDRtoHex("10", fdrToColor)}} className="diff-introduction-box black">10</span>
                 </p>
                 <p>Lilla bokser markerer en dobbeltrunde, mens svarte bokser markerer at laget ikke har kamp den runden.</p></>
             }
             </Popover>
         </h1>
-         <form onSubmit={(e) =>  {updateFDRData(fdrType); e.preventDefault()}}>
-            <label htmlFor='input-form-start-gw'>{props.content.Fixture.gw_start}</label>
-            <input 
-                className="form-number-box" 
-                type="number" 
-                min={min_gw}
-                max={gwEnd}
-                onInput={(e) => setGwStart(parseInt(e.currentTarget.value))} 
-                value={gwStart} 
-                id="input-form-start-gw" 
-                name="input-form-start-gw">
-            </input>
-            <label htmlFor='input-form-end-gw'>{props.content.Fixture.gw_end}</label>
-            <input 
-                className="form-number-box" 
-                type="number" 
-                min={gwStart}
-                max={maxGw}
-                onInput={(e) => setGwEnd(parseInt(e.currentTarget.value))} 
-                value={gwEnd} 
-                id="input-form-end-gw" 
-                name="input-form-end-gw">
-            </input>
-            
-            <br />
-            <label htmlFor='teams_to_check'>{props.content.Fixture.teams_to_check}</label>
-            <input 
-                className="box" 
-                type="number" 
-                min={1} 
-                max={5} 
-                onInput={(e) => setTeamsToCheck(parseInt(e.currentTarget.value))} 
-                value={teamsToCheck} 
-                id="teams_to_check" 
-                name="teams_to_check" />
-            
-            <label htmlFor='teams_to_play'>{props.content.Fixture.teams_to_play}</label>
-            <input 
-                className="box" 
-                type="number" 
-                min={1} 
-                max={5} 
-                onInput={(e) => setTeamsToPlay(parseInt(e.currentTarget.value))} 
-                value={teamsToPlay}
-                id="teams_to_play" 
-                name="teams_to_play" />
+        { maxGw > 0 && <>
+            <form onSubmit={(e) =>  {updateFDRData(fdrType); e.preventDefault()}}>
+                <label htmlFor='input-form-start-gw'>{props.content.Fixture.gw_start}</label>
+                <input 
+                    className="form-number-box" 
+                    type="number" 
+                    min={min_gw}
+                    max={gwEnd}
+                    onInput={(e) => setGwStart(parseInt(e.currentTarget.value))} 
+                    value={gwStart} 
+                    id="input-form-start-gw" 
+                    name="input-form-start-gw">
+                </input>
+                <label htmlFor='input-form-end-gw'>{props.content.Fixture.gw_end}</label>
+                <input 
+                    className="form-number-box" 
+                    type="number" 
+                    min={gwStart}
+                    max={maxGw}
+                    onInput={(e) => setGwEnd(parseInt(e.currentTarget.value))} 
+                    value={gwEnd} 
+                    id="input-form-end-gw" 
+                    name="input-form-end-gw">
+                </input>
+                
+                <br />
+                <label htmlFor='teams_to_check'>{props.content.Fixture.teams_to_check}</label>
+                <input 
+                    className="box" 
+                    type="number" 
+                    min={1} 
+                    max={5} 
+                    onInput={(e) => setTeamsToCheck(parseInt(e.currentTarget.value))} 
+                    value={teamsToCheck} 
+                    id="teams_to_check" 
+                    name="teams_to_check" />
+                
+                <label htmlFor='teams_to_play'>{props.content.Fixture.teams_to_play}</label>
+                <input 
+                    className="box" 
+                    type="number" 
+                    min={1} 
+                    max={5} 
+                    onInput={(e) => setTeamsToPlay(parseInt(e.currentTarget.value))} 
+                    value={teamsToPlay}
+                    id="teams_to_play" 
+                    name="teams_to_play" />
 
-            <input className="submit" type="submit" value={props.content.General.search_button_name}>
-            </input>
-        </form>
+                <input className="submit" type="submit" value={props.content.General.search_button_name}>
+                </input>
+            </form>
 
-        <div style={{ display: "flex", justifyContent: 'center' }}>
-            <span style={{ color: "red", maxWidth: '375px' }}>{validationErrorMessage}</span>
-        </div>
+            <div style={{ display: "flex", justifyContent: 'center' }}>
+                <span style={{ color: "red", maxWidth: '375px' }}>{validationErrorMessage}</span>
+            </div>
         
-        <ToggleButton 
-            onclick={(checked: string) => changeXlsxSheet(checked)} 
-            toggleButtonName="FDR-toggle"
-            toggleList={[ 
-                { name: "Defensivt", value: "_defensivt", checked: false, classname: "defensiv" },
-                { name: "FDR", value: "", checked: true, classname: "fdr" },
-                { name: "Offensivt", value: "_offensivt", checked: false, classname: "offensiv"}
-            ]}
-        />
+            <ToggleButton 
+                onclick={(checked: string) => changeXlsxSheet(checked)} 
+                toggleButtonName="FDR-toggle"
+                toggleList={[ 
+                    { name: "Defensivt", value: "_defensivt", checked: fdrType==="_defensivt", classname: "defensiv" },
+                    { name: "FDR", value: "", checked:  fdrType==="", classname: "fdr" },
+                    { name: "Offensivt", value: "_offensivt", checked:  fdrType==="_offensivt", classname: "offensiv"}
+                ]}
+            />
 
-        <Button buttonText={props.content.Fixture.filter_button_text} 
-            icon_class={"fa fa-chevron-" + (showTeamFilters ? "up" : "down")} 
-            onclick={() => setShowTeamFilters(showTeamFilters ? false : true)} />
-
+            <Button buttonText={props.content.Fixture.filter_button_text} 
+                icon_class={"fa fa-chevron-" + (showTeamFilters ? "up" : "down")} 
+                onclick={() => setShowTeamFilters(showTeamFilters ? false : true)} />
+        </> }
 
         { teamData != null && teamData.length > 0 && teamData[0].team_name != "empty" && showTeamFilters &&
             <div className='filter-teams-container'>

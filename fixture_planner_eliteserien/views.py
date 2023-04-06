@@ -57,7 +57,7 @@ class FDRData(APIView):
                 team_name_list.append(team_dict[fixture_list_db[i].team_name])
                 if temp_object.checked == 'checked':
                     fixture_list.append(fixture_list_db[i])
-                        
+            
             if combinations == 'FDR':
                 fdr_fixture_data = fdr_planner_eliteserien(fixture_list, start_gw, end_gw)
                 
@@ -133,19 +133,16 @@ def get_data_from_body(request, dates):
     end_gw = get_request_body(request, "end_gw", int)
     min_num_fixtures = get_request_body(request, "min_num_fixtures", int)
     combinations = get_request_body(request, "combinations", str)
-     
     if start_gw < 0:
         start_gw = get_upcoming_gw_eliteserien()
         end_gw = start_gw + 5
         if (end_gw > len(dates)):
             end_gw = len(dates)
-        if (start_gw == 1):
-            end_gw = len(dates)
-    
-    end_gw = max(dates) + 1 if (max(dates) + 1 < end_gw) else end_gw
+        # if (start_gw == 1):
+        #     end_gw = len(dates)
+    end_gw = max(dates) + 1 if max(dates) + 1 < 5 else 5 if (max(dates) + 1 < end_gw) else end_gw
 
     start_gw = 1 if start_gw > end_gw else start_gw    
-    
     return start_gw, end_gw, min_num_fixtures, combinations
 
 

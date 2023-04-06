@@ -200,12 +200,12 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
                 { fdrToColor != null && 
                     <><p className='diff-introduction-container'>
                         FDR verdier: 
-                        <span style={{backgroundColor: convertFDRtoHex("0.5", fdrToColor)}} className="diff-introduction-box wide">0.25</span>
-                        <span style={{backgroundColor: convertFDRtoHex("1", fdrToColor)}} className="diff-introduction-box">1</span>
-                        <span style={{backgroundColor: convertFDRtoHex("2", fdrToColor)}} className="diff-introduction-box">2</span>
-                        <span style={{backgroundColor: convertFDRtoHex("3", fdrToColor)}} className="diff-introduction-box">3</span>
-                        <span style={{backgroundColor: convertFDRtoHex("4", fdrToColor)}} className="diff-introduction-box">4</span>
-                        <span style={{backgroundColor: convertFDRtoHex("5", fdrToColor)}} className="diff-introduction-box">5</span>
+                        <span style={{backgroundColor: "#1d3557bf" }} className="diff-introduction-box wide">0.25</span>
+                        <span style={{ backgroundColor: "#47abd89e" }} className="diff-introduction-box">1</span>
+                        <span style={{ backgroundColor: "#95d2ec8f" }} className="diff-introduction-box">2</span>
+                        <span style={{backgroundColor: "#e7f9ff7a" }} className="diff-introduction-box">3</span>
+                        <span style={{backgroundColor: "#ff4242a3" }} className="diff-introduction-box">4</span>
+                        <span style={{backgroundColor: "#d01b1bb5" }} className="diff-introduction-box">5</span>
                         <span style={{backgroundColor: convertFDRtoHex("10", fdrToColor)}} className="diff-introduction-box black">10</span>
                     </p>
                     <p>Lilla bokser markerer en dobbeltrunde, mens svarte bokser markerer at laget ikke har kamp den runden.</p></>
@@ -258,19 +258,20 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
             </form> 
         }
 
-        <ToggleButton 
-            onclick={(checked: string) => changeXlsxSheet(checked)} 
-            toggleButtonName="FDR-toggle"
-            toggleList={[ 
-                { name: "Defensivt", value: "_defensivt", checked: false, classname: "defensiv" },
-                { name: "FDR", value: "", checked: true, classname: "fdr" },
-                { name: "Offensivt", value: "_offensivt", checked: false, classname: "offensiv"}
-            ]}
-        />
-     
-        <Button buttonText={props.content.Fixture.filter_button_text} 
-            icon_class={"fa fa-chevron-" + (showTeamFilters ? "up" : "down")} 
-            onclick={() => setShowTeamFilters(showTeamFilters ? false : true)} />
+        { maxGw > 0 && <>
+            <ToggleButton 
+                onclick={(checked: string) => changeXlsxSheet(checked)} 
+                toggleButtonName="FDR-toggle"
+                toggleList={[ 
+                    { name: "Defensivt", value: "_defensivt", checked: fdrType==="_defensivt", classname: "defensiv" },
+                    { name: "FDR", value: "", checked: fdrType==="", classname: "fdr" },
+                    { name: "Offensivt", value: "_offensivt", checked: fdrType==="_offensivt", classname: "offensiv"}
+                ]}
+            />
+            <Button buttonText={props.content.Fixture.filter_button_text} 
+                icon_class={"fa fa-chevron-" + (showTeamFilters ? "up" : "down")} 
+                onclick={() => setShowTeamFilters(showTeamFilters ? false : true)} />
+        </> }
         
         { fdrDataToShow != null && fdrDataToShow.length > 0 && fdrDataToShow[0].team_name != "empty" && showTeamFilters &&
             <div className='filter-teams-container'>
