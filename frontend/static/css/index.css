@@ -39,6 +39,8 @@
 
     /* Components */
     --submit-button-color: #D6CDCD;
+    --submit-button-color: #1b2f44;
+    --submit-button-text-color: var(--white-color);
     --search-box-color: #0f3443;
 
     /* Statistiscs */
@@ -195,25 +197,54 @@ thead {
 
 .Eliteserien .no-padding .height-2.multiple-fixtures {
     background-color: #c6a4d6 !important;
+    background-color: #1d3557bf !important;
+    color: white !important;
 }
 
 .Eliteserien .color-1 {
     background-color: #506d3ced !important;
+    background-color: #47abd89e  !important;
     color: white !important;
+    color: black !important;
 }
 
 .Eliteserien .color-2 {
     background-color: #a4c2a9 !important;
+    background-color: #95d2ec8f !important;
 }
 
 .Eliteserien .color-3 {
     background-color: #a79c8578 !important;
+    background-color: #e7f9ff7a !important;
 }
+
+/* #47abd8 47abd899 */
+/* #95D2EC 95d2ec8f */
+/* #e7f9ff e7f9ff7a */
+/* #FFFFFF */
+/* #FF4242 ff4242a3 */
+/* #D01B1B d01b1bb5 */
 
 .Eliteserien .color-4 {
     background-color: #ff376996 !important;
+    background-color: #ff4242a3 !important;
 }
 
 .Eliteserien .color-5 {
     background-color: #7810318c !important;
+    background-color: #d01b1bb5 !important;
+}
+
+.Eliteserien .rotation .double-border-0 div {
+    background-color: #d5d4d4 !important;
+    color: black !important;
+}
+
+.Eliteserien .fdr table.rotation .double-border-1 div {
+    border-color: transparent !important;
+}
+
+.Eliteserien .rotation .double-border-0 div.height-2.multiple-fixtures {
+    background-color: #d5d4d4 !important;
+    color: black !important;
 }

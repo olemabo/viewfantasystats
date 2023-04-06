@@ -28,10 +28,10 @@ export const ToggleButton : FunctionComponent<ToggleButtonProps> = (props) => {
     }, [props.toggleList]);
 
     function updateCheckedState(value: string) {
-        toggleList.map(x => {
-            x.checked = false;
-            if (value === x.value) { x.checked = true; }
-        });
+        // toggleList.map(x => {
+        //     x.checked = false;
+        //     if (value === x.value) { x.checked = true; }
+        // });
     }
     
     
@@ -40,7 +40,7 @@ export const ToggleButton : FunctionComponent<ToggleButtonProps> = (props) => {
         {props.toggleList.map(btn => 
             <li className={btn.classname}>
                 <input tabIndex={-1} type="radio" id={btn.name} name={props.toggleButtonName} />
-                <label className={"thin " + (btn.value === checkedValue ? "checked" : "")} 
+                <label className={"thin " + (btn.checked ? "checked" : "")} 
                     tabIndex={0} 
                     onClick={ () => { 
                         updateCheckedState(btn.value);
