@@ -216,104 +216,37 @@ def save_all_global_stats_for_current_gw(league_name=premier_league_folder_name)
                     else:
                         dict_total_chip_usage_to_index[chip][1] += 1
 
-        # store data when it reach player limits found in all_top_x_players (1, 10, 100, 1000 ...) or when we do backup
-        if (player_i + 1) in all_top_x_players or ((player_i + 1) % how_often_do_back_up_of_global_data == 0):
-            top_x_players_i = player_i + 1
+        top_x_players_i = player_i + 1
+
+        if ((player_i + 1) % how_often_do_back_up_of_global_data == 0):
+            print("\nDo backup data for first ", top_x_players_i, " players\n")
             
-            if (player_i + 1) in all_top_x_players:
-                print("Store data for top: ", player_i + 1)
-                general_folder_path = gw_path + "/top_" + str(top_x_players_i)
-                if not os.path.isdir(general_folder_path):
-                    os.mkdir(general_folder_path)
-
-            if ((player_i + 1) % how_often_do_back_up_of_global_data == 0):
-                print("Do backup data for first ", player_i + 1, " players")
-                general_folder_path = gw_path + "/" + backup_data_folder_name
-                if not os.path.isdir(general_folder_path):
-                    os.mkdir(general_folder_path)
-                f_current_id = open(general_folder_path + "/" + backup_data_txt_file_name, "w", encoding="utf-8")
-                f_current_id.write(str(user_id) + "," + str(top_x_players_i))
-                f_current_id.close()
+            general_folder_path = gw_path + "/" + backup_data_folder_name
+            if not os.path.isdir(general_folder_path):
+                os.mkdir(general_folder_path)
             
+            f_current_id = open(general_folder_path + "/" + backup_data_txt_file_name, "w", encoding="utf-8")
+            f_current_id.write(str(user_id) + "," + str(top_x_players_i))
+            f_current_id.close()
 
-            # write data to complete ownership txt file
-            store_file = general_folder_path + "/" + name_of_ownership_file
-            f = open(store_file, "w", encoding="utf-8")
-            f.write("player_id, "
-                    "player_team_id, "
-                    "player_position_id, "
-                    "player_name, "
-                    "starting and not captain, "
-                    "starting and captain, "
-                    "starting and triple captain,"
-                    "starting and vice captain, "
-                    "owners, "
-                    "benched,"
-                    "total_percentage \n")
+            write_date_to_files(general_folder_path, ids, ids_dict, 
+                       league_name, fpl_player_chip_info, top_x_players_i, 
+                       event_fpl_team_info, player_i, top_x_players_nationality,
+                       regions_dict, top_x_players_total_chips, dict_total_chip_usage_to_index)
 
-            for id in ids[:, 0]:
-                f.write(
-                    str(int(id)) + "," + 
-                    str(ids_dict[int(id)][7]) + "," + 
-                    str(ids_dict[int(id)][6]) + "," +
-                    str(ids_dict[int(id)][0]) + "," + 
-                    str(ids_dict[int(id)][1]) + "," + 
-                    str(ids_dict[int(id)][2]) + "," + 
-                    str(ids_dict[int(id)][11]) + "," + 
-                    str(ids_dict[int(id)][3]) + "," + 
-                    str(ids_dict[int(id)][4]) + "," + 
-                    str(ids_dict[int(id)][5]) + "," + 
-                    str(ids_dict[int(id)][10]) + "\n")
-            f.close()
 
-            # write data to chips and user info txt file
-            store_extra_info = general_folder_path + "/" + name_of_extra_info_file
-
-            f2 = open(store_extra_info, "w", encoding="utf-8")
-            first_line = "Rich Uncle, Forward Rush, 2 Captains, Wildcard, None\n" if league_name == eliteserien_folder_name else "Freehit, Bench Boost, Triple Captain, Wildcard, None\n"
-            f2.write(first_line)
-            f2.write(str(fpl_player_chip_info[0]) + "," + 
-                str(fpl_player_chip_info[1]) + "," + str(fpl_player_chip_info[2]) + "," + 
-                str(fpl_player_chip_info[3]) + "," + str(fpl_player_chip_info[4]) + "\n\n")
-            f2.write("Overall rank, team value, event transfers, event transfer cost, total points, bank\n")
+        if top_x_players_i in all_top_x_players:
+            print("\nStore data for top: ", top_x_players_i, "\n")
             
-            for n in range(top_x_players_i):
-                f2.write(str(n) + "," + 
-                str(event_fpl_team_info[n, 0]) + "," + 
-                str(event_fpl_team_info[n, 1]) + "," + 
-                str(event_fpl_team_info[n, 2]) + "," +
-                str(event_fpl_team_info[n, 3]) + "," + 
-                str(event_fpl_team_info[n, 4]) + "\n")
-            f2.close()
+            general_folder_path = gw_path + "/top_" + str(top_x_players_i)
+            if not os.path.isdir(general_folder_path):
+                os.mkdir(general_folder_path)
+            
+            write_date_to_files(general_folder_path, ids, ids_dict, 
+                       league_name, fpl_player_chip_info, top_x_players_i, 
+                       event_fpl_team_info, player_i, top_x_players_nationality,
+                       regions_dict, top_x_players_total_chips, dict_total_chip_usage_to_index)
 
-            # write data to nationlaity text file
-            if (player_i + 1) <= top_x_players_nationality:
-                store_nationality_path = general_folder_path + "/" + country_population_txt_file_name
-
-                f3 = open(store_nationality_path, "w", encoding="utf-8")
-                f3.write("Country name, number of fpl players from this country \n")
-                for key in regions_dict.keys():
-                    f3.write(str(key) + nationality_delimiter + str(regions_dict[key][1]) + nationality_delimiter + str(regions_dict[key][0]) + "\n")
-                f3.close()
-
-            # write data to total chip usage txt file
-            if (player_i + 1) <= top_x_players_total_chips:
-                store_total_chips_usage_path = general_folder_path + "/" + total_chip_usage_txt_file_name
-                first_line, data_line = "", ""
-                for idx, chip_key in enumerate(dict_total_chip_usage_to_index.keys()):
-                    if (chip_key == "wildcard"):
-                        first_line += "wildcard_1, wildcard_2"
-                        data_line += str(dict_total_chip_usage_to_index["wildcard"][0]) + "," + str(dict_total_chip_usage_to_index["wildcard"][1])
-                    else:
-                        first_line += chip_key
-                        data_line += str(dict_total_chip_usage_to_index[chip_key])
-                    if (idx != len(dict_total_chip_usage_to_index.keys()) - 1):
-                        first_line += "," 
-                        data_line += "," 
-                f4 = open(store_total_chips_usage_path, "w", encoding="utf-8")
-                f4.write(first_line + "\n")
-                f4.write(data_line + "\n")
-                f4.close()
 
     end_time = time.time()
     print("\nTotal time to collect data for top " + str(top_x_players) + " players: ", round((end_time - start_time) / 60, 3), " min")
@@ -350,6 +283,91 @@ def data_fetch(num, league_type):
     
     json_response = r.json()
     return json_response
+
+
+def write_date_to_files(general_folder_path, ids, ids_dict, 
+                       league_name, fpl_player_chip_info, top_x_players_i, 
+                       event_fpl_team_info, player_i, top_x_players_nationality,
+                       regions_dict, top_x_players_total_chips, dict_total_chip_usage_to_index,
+                       ):
+    # write data to complete ownership txt file
+    store_file = general_folder_path + "/" + name_of_ownership_file
+    f = open(store_file, "w", encoding="utf-8")
+    f.write("player_id, "
+            "player_team_id, "
+            "player_position_id, "
+            "player_name, "
+            "starting and not captain, "
+            "starting and captain, "
+            "starting and triple captain,"
+            "starting and vice captain, "
+            "owners, "
+            "benched,"
+            "total_percentage \n")
+
+    for id in ids[:, 0]:
+        f.write(
+            str(int(id)) + "," + 
+            str(ids_dict[int(id)][7]) + "," + 
+            str(ids_dict[int(id)][6]) + "," +
+            str(ids_dict[int(id)][0]) + "," + 
+            str(ids_dict[int(id)][1]) + "," + 
+            str(ids_dict[int(id)][2]) + "," + 
+            str(ids_dict[int(id)][11]) + "," + 
+            str(ids_dict[int(id)][3]) + "," + 
+            str(ids_dict[int(id)][4]) + "," + 
+            str(ids_dict[int(id)][5]) + "," + 
+            str(ids_dict[int(id)][10]) + "\n")
+    f.close()
+
+    # write data to chips and user info txt file
+    store_extra_info = general_folder_path + "/" + name_of_extra_info_file
+
+    f2 = open(store_extra_info, "w", encoding="utf-8")
+    first_line = "Rich Uncle, Forward Rush, 2 Captains, Wildcard, None\n" if league_name == eliteserien_folder_name else "Freehit, Bench Boost, Triple Captain, Wildcard, None\n"
+    f2.write(first_line)
+    f2.write(str(fpl_player_chip_info[0]) + "," + 
+        str(fpl_player_chip_info[1]) + "," + str(fpl_player_chip_info[2]) + "," + 
+        str(fpl_player_chip_info[3]) + "," + str(fpl_player_chip_info[4]) + "\n\n")
+    f2.write("Overall rank, team value, event transfers, event transfer cost, total points, bank\n")
+    
+    for n in range(top_x_players_i):
+        f2.write(str(n) + "," + 
+        str(event_fpl_team_info[n, 0]) + "," + 
+        str(event_fpl_team_info[n, 1]) + "," + 
+        str(event_fpl_team_info[n, 2]) + "," +
+        str(event_fpl_team_info[n, 3]) + "," + 
+        str(event_fpl_team_info[n, 4]) + "\n")
+    f2.close()
+
+    # write data to nationlaity text file
+    if (player_i + 1) <= top_x_players_nationality:
+        store_nationality_path = general_folder_path + "/" + country_population_txt_file_name
+
+        f3 = open(store_nationality_path, "w", encoding="utf-8")
+        f3.write("Country name, number of fpl players from this country \n")
+        for key in regions_dict.keys():
+            f3.write(str(key) + nationality_delimiter + str(regions_dict[key][1]) + nationality_delimiter + str(regions_dict[key][0]) + "\n")
+        f3.close()
+
+    # write data to total chip usage txt file
+    if (player_i + 1) <= top_x_players_total_chips:
+        store_total_chips_usage_path = general_folder_path + "/" + total_chip_usage_txt_file_name
+        first_line, data_line = "", ""
+        for idx, chip_key in enumerate(dict_total_chip_usage_to_index.keys()):
+            if (chip_key == "wildcard"):
+                first_line += "wildcard_1, wildcard_2"
+                data_line += str(dict_total_chip_usage_to_index["wildcard"][0]) + "," + str(dict_total_chip_usage_to_index["wildcard"][1])
+            else:
+                first_line += chip_key
+                data_line += str(dict_total_chip_usage_to_index[chip_key])
+            if (idx != len(dict_total_chip_usage_to_index.keys()) - 1):
+                first_line += "," 
+                data_line += "," 
+        f4 = open(store_total_chips_usage_path, "w", encoding="utf-8")
+        f4.write(first_line + "\n")
+        f4.write(data_line + "\n")
+        f4.close()
 
 
 def get_current_gw(DFObject: DataFetch):
