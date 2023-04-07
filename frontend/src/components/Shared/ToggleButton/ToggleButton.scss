@@ -115,8 +115,10 @@
 
         .checked {
             // font-weight: 600;
-            background-color: #1b2f44;
-            color: white;
+            // background-color: #1b2f44;
+            // color: white;
+            border: 1px solid #1b2f44;
+            color: #1b2f44;
         }
 
         label {

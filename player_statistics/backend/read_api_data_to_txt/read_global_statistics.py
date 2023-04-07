@@ -139,7 +139,7 @@ def save_all_global_stats_for_current_gw(league_name=premier_league_folder_name)
         dict_total_chip_usage_to_index = read_dict_total_chip_usage_to_index(dict_total_chip_usage_to_index, current_data_path + "/" + total_chip_usage_txt_file_name)
         regions_dict = read_regions_dict(current_data_path + "/" + name_of_nationality_file)
         ids_dict = read_complete_ownership(current_data_path + "/" + name_of_ownership_file, ids_dict)
-        id_s, current_number_stored = get_id_s(current_data_path + "/" + backup_data_txt_file_name, id_s)
+        id_s, current_number_stored = get_id_s(current_data_path + "/" + backup_data_txt_file_name, id_s, top_x_players)
         print("Extract data from backup. Start from player number: ", current_number_stored)
         if (len(id_s) + current_number_stored != top_x_players):
             print("Wrong input data")
@@ -216,7 +216,6 @@ def save_all_global_stats_for_current_gw(league_name=premier_league_folder_name)
                     else:
                         dict_total_chip_usage_to_index[chip][1] += 1
 
-
         # store data when it reach player limits found in all_top_x_players (1, 10, 100, 1000 ...) or when we do backup
         if (player_i + 1) in all_top_x_players or ((player_i + 1) % how_often_do_back_up_of_global_data == 0):
             top_x_players_i = player_i + 1
@@ -226,7 +225,8 @@ def save_all_global_stats_for_current_gw(league_name=premier_league_folder_name)
                 general_folder_path = gw_path + "/top_" + str(top_x_players_i)
                 if not os.path.isdir(general_folder_path):
                     os.mkdir(general_folder_path)
-            else:
+
+            if ((player_i + 1) % how_often_do_back_up_of_global_data == 0):
                 print("Do backup data for first ", player_i + 1, " players")
                 general_folder_path = gw_path + "/" + backup_data_folder_name
                 if not os.path.isdir(general_folder_path):
@@ -316,14 +316,14 @@ def save_all_global_stats_for_current_gw(league_name=premier_league_folder_name)
                 f4.close()
 
     end_time = time.time()
-    print("\nTotal time to collect data for top " + str(top_x_players) + " players: ", (end_time - start_time) / 60, " min")
+    print("\nTotal time to collect data for top " + str(top_x_players) + " players: ", round((end_time - start_time) / 60, 3), " min")
 
     path_ids_txt_file = gw_path + "/" + finished_file_name
     if not os.path.exists(path_ids_txt_file):
         f_finished = open(path_ids_txt_file, "w", encoding="utf-8")
         f_finished.close()
 
-    return 1
+    return current_gameweek
 
 
 def get_season_name(DFObject):
@@ -489,15 +489,17 @@ def read_complete_ownership(path, ids_dict):
     return ids_dict
 
 
-def get_id_s(path, id_s):
+def get_id_s(path, id_s, top_x_players):
     current_data = np.loadtxt(path, encoding="utf-8", dtype="str", delimiter=",", skiprows=0)
     current_number_stored = int(current_data[1])
+    
+    # if all data is stored
+    if current_number_stored == top_x_players:
+        return [], current_number_stored
+    
     next_id = np.where(id_s == id_s[current_number_stored])[0]
     new_id_s_list = id_s[int(next_id):]
+    
     return new_id_s_list, current_number_stored
 
-
-#if __name__ == "__main__":
-    # save_all_global_stats_for_current_gw(premier_league_folder_name)
-    # save_all_global_stats_for_current_gw(eliteserien_folder_name)
 

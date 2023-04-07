@@ -13,8 +13,8 @@ from player_statistics.backend.read_api_data_to_txt.read_global_statistics impor
 from player_statistics.backend.fill_db_from_txt.fill_db_global_statistics import write_global_stats_to_db
 from constants import premier_league_folder_name
 
-response = save_all_global_stats_for_current_gw(premier_league_folder_name)
-if response == -1:
+current_gw = save_all_global_stats_for_current_gw(premier_league_folder_name)
+if current_gw == -1:
     print("Data allready updated for current gw")
 else:
-    write_global_stats_to_db() if response == 1 else print("\nDid not successfully read all global stats data")
+    write_global_stats_to_db(current_gw) if current_gw > 0 else print("\nDid not successfully read all global stats data")
