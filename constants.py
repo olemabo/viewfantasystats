@@ -46,6 +46,7 @@ name_of_extra_info_file = "extra_info.txt"
 cup_all_ids_processed_file = "cup_all_processed_ids.txt"
 cup_data_file = "cup_data.txt"
 cup_processed_rounds = "cup_processed_rounds.txt"
+finished_file_name = "finished.txt"
 
 # delimiters
 user_stats_special_delimiter = ":;:"
