@@ -7,8 +7,10 @@ import datetime
 import os
 
 
-def write_global_stats_to_db():
+def write_global_stats_to_db(current_gw=0):
     gws = [gw + 1 for gw in range(total_number_of_gameweeks)]
+    gws = [current_gw] if current_gw > 0 else gws 
+    
     for gw in gws:
         file_path = path_to_store_local_data + "/" + premier_league_folder_name + "/" + current_season_name_premier_league + "/" + global_stats_folder_name + "/" + str(gw)
         
