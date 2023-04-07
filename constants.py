@@ -55,8 +55,8 @@ ranking_delimiter = "&"
 cup_delimiter = ":;:"
 cup_db_delimiter = "|-|"
 # wildcard due date NB: MUST BE SET MANUALLY
-eliteserien_wc_due_date = "2022-07-23T13:00:00"
-premier_league_wc_due_date = "2022-07-23T13:00:00"
+eliteserien_wc_due_date = "2023-07-22T15:55:00"
+premier_league_wc_due_date = "2022-11-12T11:00:00"
 
 # urls
 eliteserien_api_url = "https://fantasy.tv2.no"
