@@ -1,6 +1,6 @@
 
 .front-page-top-sky {
-    height: var(--size-of-top-bar);
+    // height: var(--size-of-top-bar);
     position: relative;
     
     &.FPL {
@@ -151,7 +151,8 @@
 
 
 .navbar {
-    height: 60%;
+    // height: 60%;
+    height: 41px;
 
     .nav-container {
         display: flex;
