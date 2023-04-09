@@ -11,7 +11,7 @@
     padding: 4px;
     svg {
         font-size: 18px;
-        margin-right: 4px;
+        margin-right: 6px;
         width: 16px;
         height: 16px;
     }
@@ -27,19 +27,19 @@
         bottom: 3px;
     }
     .adjust-height {
-        height: 16px;
+        height: 18px;
         line-height: 16px;
         text-align: center;
     }
     .adjust-height-lang {
-        height: 15px;
-        line-height: 15px;
+        height: 18px;
+        line-height: 16px;
         text-align: center;
     }
     span {
         display: inline !important;
         font-weight: 700;
         font-family: 'Lato';
-        font-size: 14px;
+        font-size: 15px;
     }
 }

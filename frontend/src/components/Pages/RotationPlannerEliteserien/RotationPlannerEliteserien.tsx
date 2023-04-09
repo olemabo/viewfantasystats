@@ -288,7 +288,7 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
             + "'" + props.content.Fixture.teams_to_check.toString() + "'" + " blir 2 fordi man skal ha 2 keepere som skal rotere. "
             + "'" + props.content.Fixture.teams_to_play.toString() + "'" + " blir 1 fordi kun en av de to keeperene skal spille per runde. "
             }>
-            Kampprogram, vanskelighetsgrader og farger er hentet fra 
+            Kampprogram og vanskelighetsgrader er hentet fra 
             <a href="https://docs.google.com/spreadsheets/d/168WcZ2mnGbSh-aI-NheJl5OtpTgx3lZL-YFV4bAJRU8/edit?usp=sharing">Excel arket</a>
             til Dagfinn Thon.
             { fdrToColor != null && 
@@ -302,7 +302,7 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
                     <span style={{backgroundColor: "#d01b1bb5" }}className="diff-introduction-box">5</span>
                     <span style={{backgroundColor: convertFDRtoHex("10", fdrToColor)}} className="diff-introduction-box black">10</span>
                 </p>
-                <p>Lilla bokser markerer en dobbeltrunde, mens svarte bokser markerer at laget ikke har kamp den runden.</p></>
+                <p>Mørkeblå bokser markerer en dobbeltrunde, mens svarte bokser markerer at laget ikke har kamp den runden.</p></>
             }
             </Popover>
         </h1>

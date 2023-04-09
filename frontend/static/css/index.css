@@ -19,6 +19,7 @@
     --eliteserien-linear-gradient-first-color: #7cd9f0b3;
     /* --eliteserien-linear-gradient-second-color: #2c3e50; */
     --eliteserien-linear-gradient-second-color: #1b2f44;
+    --eliteserien-linear-gradient-first-color-darker: #47abd8;
     --height-the-gray-box-should-go-into-header: -0px;
     --height-the-gray-box-should-go-away-from-header: 0px; /* Give this the same value as the var above only opposite sign */
     --size-of-scewY: 30px;
