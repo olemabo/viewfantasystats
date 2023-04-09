@@ -41,6 +41,7 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
     const [ gwStart, setGwStart ] = useState(-1);
     const [ gwEnd, setGwEnd ] = useState(max_gw);
     const [ maxGw, setMaxGw ] = useState(-1);
+    const [ excludeGws, setExcludeGws ] = useState([-1]);
     const [ showTeamFilters, setShowTeamFilters ] = useState(false);
     const [ loading, setLoading ] = useState(false);
     const [ minNumFixtures, setMinNumFixtures ] = useState(3);
@@ -48,6 +49,22 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
 
     useEffect(() => {
         store.dispatch({type: "league_type", payload: props.league_type});
+        
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const exclude_gws = urlParams.getAll('exclude_gws')
+
+        var temp: number[] = [];
+        if (exclude_gws !== null && Array.isArray(exclude_gws)) {
+            exclude_gws.forEach((x: string) => {
+                const myNumber = Number(x);
+                if (!isNaN(myNumber)) {
+                    temp.push(myNumber)
+                }
+
+            })
+            setExcludeGws(temp)
+        }
 
         // Get fdr data from the API
         let body = { 
@@ -56,6 +73,7 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
             min_num_fixtures: minNumFixtures,
             combinations: props.fixture_planning_type,
             fdr_type: fdrType,
+            excludeGws: temp,
         };
         
         extractFDRData(body);
@@ -69,6 +87,7 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
             min_num_fixtures: minNumFixtures,
             combinations: props.fixture_planning_type,
             fdr_type: currentFdrType,
+            excludeGws: excludeGws,
         };
 
         extractFDRData(body);
@@ -91,7 +110,7 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
             }
 
             if (maxGw < 0) { 
-                setMaxGw(data.gws_and_dates.length); 
+                setMaxGw(data.max_gw); 
             }
             
             setFdrToColor(data.fdr_to_colors_dict);
@@ -99,7 +118,8 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
             if (data?.gws_and_dates?.length > 0) {
                 let temp_KickOffTimes: KickOffTimesModel[] = [];
                 data?.gws_and_dates.forEach((kickoff: string) => temp_KickOffTimes.push(JSON.parse(kickoff)));
-                setKickOffTimesToShow(temp_KickOffTimes.slice(data.gw_start - 1, data.gw_end));
+                // setKickOffTimesToShow(temp_KickOffTimes.slice(data.gw_start - 1, data.gw_end));
+                setKickOffTimesToShow(temp_KickOffTimes);
             }
             
             data.fdr_data.forEach((team: any[]) => {
