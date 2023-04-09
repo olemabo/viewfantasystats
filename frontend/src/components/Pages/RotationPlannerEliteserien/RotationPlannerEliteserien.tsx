@@ -45,10 +45,29 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
     const [ loading, setLoading ] = useState(false);
     const [ longLoadingTimeText, setLongLoadingTimeText ] = useState('');
 
+
+    const [ excludeGws, setExcludeGws ] = useState([-1]);
+
     useEffect(() => {
         // get all fpl teams   
         if (store.getState()?.league_type != "Eliteserien") {
             store.dispatch({type: "league_type", payload: "Eliteserien"});
+        }
+
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const exclude_gws = urlParams.getAll('exclude_gws')
+
+        var temp: number[] = [];
+        if (exclude_gws !== null && Array.isArray(exclude_gws)) {
+            exclude_gws.forEach((x: string) => {
+                const myNumber = Number(x);
+                if (!isNaN(myNumber)) {
+                    temp.push(myNumber)
+                }
+
+            })
+            setExcludeGws(temp)
         }
         
         // Get fdr data from the API
@@ -62,6 +81,7 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
             teams_in_solution: [],
             fpl_teams: [-1],
             fdr_type: fdrType,
+            excludeGws: temp,
         };
 
         extractFDRData(body)
@@ -95,7 +115,7 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
             }
 
             if (maxGw < 0) { 
-                setMaxGw(data.gws_and_dates.length); 
+                setMaxGw(data.max_gw); 
                 setGwEnd(data.gws_and_dates.length); 
             }
 
@@ -103,7 +123,8 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
             if (data?.gws_and_dates?.length > 0) {
                 let temp_KickOffTimes: KickOffTimesModel[] = [];
                 data?.gws_and_dates.forEach((kickoff: string) => temp_KickOffTimes.push(JSON.parse(kickoff)));
-                setKickOffTimesToShow(temp_KickOffTimes.slice(data.gw_start - 1, data.gw_end));
+                // setKickOffTimesToShow(temp_KickOffTimes.slice(data.gw_start - 1, data.gw_end));
+                setKickOffTimesToShow(temp_KickOffTimes);
                 setGwEnd(data.gw_end); 
             }
 
@@ -194,6 +215,7 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
             teams_in_solution: teamsANDteamsinsolution[1],
             fpl_teams: teamsANDteamsinsolution[0],
             fdr_type: currentFdrType,
+            excludeGws: excludeGws,
         };
 
         if (validateInput(body)) {

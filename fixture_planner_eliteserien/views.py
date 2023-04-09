@@ -1,6 +1,6 @@
 from fixture_planner_eliteserien.backend.fixture_algorithms.fixture_periode_algorithm import find_best_fixture_with_min_length_each_team_eliteserien
-from fixture_planner_eliteserien.backend.fixture_algorithms.fixture_rotation_algorithms import find_best_rotation_combosEliteserien
-from fixture_planner_eliteserien.backend.fixture_algorithms.fixture_planner_alortihm import fdr_planner_eliteserien
+from fixture_planner_eliteserien.backend.fixture_algorithms.fixture_rotation_algorithms import find_best_rotation_combosEliteserien, find_best_rotation_combosEliteserien_gw_list
+from fixture_planner_eliteserien.backend.fixture_algorithms.fixture_planner_alortihm import fdr_planner_eliteserien, fdr_planner_eliteserien_gw_list
 from fixture_planner_eliteserien.backend.read_eliteserien_data import read_eliteserien_excel_to_db_format
 from utils.util_functions.fixture.get_upcoming_gw import get_upcoming_gw_eliteserien
 from fixture_planner_eliteserien.models import EliteserienKickOffTime
@@ -40,6 +40,12 @@ class FDRData(APIView):
             fixture_list_db, dates, fdr_to_colors_dict, team_name_color = read_eliteserien_excel_to_db_format(fdr_type)
 
             start_gw, end_gw, min_num_fixtures, combinations = get_data_from_body(request, dates)
+            
+            excludeGws = request.data.get("excludeGws")
+
+            current_gws = [gw for gw in range(start_gw, end_gw + 1)]
+            if (excludeGws is not None):
+                current_gws = [x for x in current_gws if x not in excludeGws]
 
             number_of_teams = len(fixture_list_db)
             fixture_list = [fixture_list_db[i] for i in range(0, number_of_teams)]
@@ -59,7 +65,8 @@ class FDRData(APIView):
                     fixture_list.append(fixture_list_db[i])
             
             if combinations == 'FDR':
-                fdr_fixture_data = fdr_planner_eliteserien(fixture_list, start_gw, end_gw)
+                # fdr_fixture_data = fdr_planner_eliteserien(fixture_list, start_gw, end_gw)
+                fdr_fixture_data = fdr_planner_eliteserien_gw_list(fixture_list, current_gws)
                 
             if abs(min_num_fixtures) > (end_gw - start_gw):
                 min_num_fixtures = abs(end_gw - start_gw) + 1
@@ -94,13 +101,13 @@ class FDRData(APIView):
                     if i.team_name in teams_in_solution:
                         i.checked_must_be_in_solution = 'checked'
 
-                rotation_data = find_best_rotation_combosEliteserien(
-                    fixture_list_db, start_gw, end_gw, teams_to_check=teams_to_check, 
+                rotation_data = find_best_rotation_combosEliteserien_gw_list(
+                    fixture_list_db, current_gws, teams_to_check=teams_to_check, 
                     teams_to_play=teams_to_play, team_names=fpl_teams, 
                     teams_in_solution=teams_in_solution, teams_not_in_solution=[],
                     top_teams_adjustment=False, one_double_up=False,
                     home_away_adjustment=True, include_extra_good_games=False)
-                
+
                 if rotation_data == -1:
                     rotation_data = [['Wrong input', [], [], 0, 0, [[]]]]
                 else:
@@ -112,15 +119,17 @@ class FDRData(APIView):
             temp_kick_off_time = []
             
             for kick_off_time in kick_off_times_db:
-                if (kick_off_time.gameweek - 1 in dates):
+                if (kick_off_time.gameweek in current_gws):
                     temp_kick_off_time.append(KickOffTimesModel(
                         kick_off_time.gameweek,
                         kick_off_time.kickoff_time,
                         kick_off_time.day_month
                     ).toJson())
-
-            fdr_and_gws = EliteserienFDRApiResponse(fdr_fixture_data, temp_kick_off_time, fdr_to_colors_dict, team_name_color, start_gw, end_gw) 
-
+            
+            max_gw = len(dates)
+            
+            fdr_and_gws = EliteserienFDRApiResponse(fdr_fixture_data, temp_kick_off_time, fdr_to_colors_dict, team_name_color, start_gw, end_gw, max_gw) 
+            
             return JsonResponse(fdr_and_gws.toJson(), safe=False)
 
         except:

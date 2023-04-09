@@ -112,3 +112,26 @@ def calc_score(fdr_dict, gw_start, gw_end):
         score += temp_score / gws_this_round ** 2
     return score
 
+
+def calc_score_from_list(fdr_dict, gw_list):
+    """
+    Calculate fdr score for one team between gw_start and gw_end.
+    :param fdr_dict: dict where keys are gw number and values are list of opponent name, home/away and fdr score.
+     {0: [], 1: [['LEI', 'A', 3]], 2: [['TOT', 'H', 3]], 3: [['MUN', 'H', 4]], 4: [['WAT', 'A', 2], ['LIV', 'H', 4]], ... }
+    :param gw_start: first gameweek (1-38)
+    :param gw_end: last gameweek (1-38)
+    :return: FDR score for a team between gw_start and gw_end (12)
+    """
+    score = 0
+    for gw in gw_list:
+        data = fdr_dict[gw]
+        gws_this_round = len(data)
+        temp_score = 0
+        if gws_this_round > 1:
+            for i in range(gws_this_round):
+                temp_score += data[i][2]
+        else:
+            temp_score += data[0][2]
+        score += temp_score / gws_this_round ** 2
+    return score
+
