@@ -87,7 +87,8 @@ def save_all_global_stats_for_current_gw(league_name=premier_league_folder_name)
     id_s = []
     path_ids_txt_file = gw_path + "/" + top_x_players_ids_backup_file_name
     if (os.path.exists(path_ids_txt_file)):
-        ids_allready_stored = np.loadtxt(path_ids_txt_file, encoding="utf-8", delimiter="\n", dtype="int")
+        with open(path_ids_txt_file, encoding="utf-8") as f:
+            ids_allready_stored = f.read().splitlines()
         if (len(ids_allready_stored) == top_x_players):
             print("\nWill use ids from " + top_x_players_ids_backup_file_name + " file") 
             id_s = ids_allready_stored
