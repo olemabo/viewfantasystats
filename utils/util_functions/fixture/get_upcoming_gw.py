@@ -1,6 +1,6 @@
 from fixture_planner_eliteserien.models import EliteserienKickOffTime
 from fixture_planner.models import KickOffTime
-from datetime import date
+from datetime import date, datetime
 
 
 def get_upcoming_gw_eliteserien():
@@ -36,13 +36,14 @@ def get_current_gw_from_kickoff_times(kick_off_times_db):
     :return: current gameweek (int: 1)
     """
 
-    today_date = date.today()
+    today_date = datetime.today()
 
     for idx, kick_of_data_i in enumerate(kick_off_times_db):
         current_gw = idx + 1
-        dates = kick_of_data_i.kickoff_time.split("T")[0].split("-")
-        gw_i_date = date(int(dates[0]), int(dates[1]), int(dates[2]))
-        if gw_i_date > today_date:
+        # dates = kick_of_data_i.kickoff_time.split("T")[0].split("-")
+        # gw_i_date = date(int(dates[0]), int(dates[1]), int(dates[2]))
+        datetime_obj = datetime.fromisoformat(kick_of_data_i.kickoff_time.replace("Z", ".000000"))
+        if datetime_obj > today_date:
             return current_gw
     
     return 1
