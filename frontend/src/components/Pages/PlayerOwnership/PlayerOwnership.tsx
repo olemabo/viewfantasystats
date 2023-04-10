@@ -47,6 +47,7 @@ export const PlayerOwnership : FunctionComponent<LanguageProps> = (props) => {
 
     const [ query, setQuery ] = useState("");
     const [ isLoading, setIsLoading ] = useState(false);
+    const [ emptyDataMessage, setEmptyDataMessage ] = useState("");
 
     const  [ firstLoading, setFirstLoading ] = useState(true);
     
@@ -97,6 +98,10 @@ export const PlayerOwnership : FunctionComponent<LanguageProps> = (props) => {
         setIsLoading(true);
 
         axios.get(player_ownership_api_path + "?league_name=" + props.league_type).then(x => {  
+            if (x?.data?.length === 0) {
+                setEmptyDataMessage("Fant ingen data for årets sesong")
+                setIsLoading(false);
+            }
             let data = JSON.parse(x?.data);
             data?.chip_data?.map((x: ChipUsageModel) => {
                 if (x.gw == data.newest_updated_gw) {
@@ -329,6 +334,10 @@ export const PlayerOwnership : FunctionComponent<LanguageProps> = (props) => {
             Data hentes ut fra de 100, 1000 og 5000 beste ESF-managerne hver runde rett etter byttefrist. 
         </Popover>
         </h1>
+        { emptyDataMessage && <>
+            <div className='info-box'>
+            <p>{emptyDataMessage}</p></div>
+        </>}
         { !firstLoading && <>
             <form className="form-stuff text-center">
             <div className='box-1'>

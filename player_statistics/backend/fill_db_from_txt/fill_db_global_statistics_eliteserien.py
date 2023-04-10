@@ -7,8 +7,11 @@ import numpy as np
 import datetime
 import os
 
-def write_global_stats_to_db_eliteserien():
+
+def write_global_stats_to_db_eliteserien(current_gw=0):
     gws = [gw + 1 for gw in range(total_number_of_gameweeks_in_eliteserien)]
+    gws = [current_gw] if current_gw > 0 else gws 
+
     for gw in gws:
         file_path = path_to_store_local_data + "/" + eliteserien_folder_name + "/" + current_season_name_eliteserien + "/" + global_stats_folder_name + "/" + str(gw)
         fill_db_ownership_statistics_eliteserien(gw, file_path)
