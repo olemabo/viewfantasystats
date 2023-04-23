@@ -131,6 +131,16 @@ class EliteserienPlayerStatistic(models.Model):
         size=number_of_gws,  # Maximum of 100 ids in list
     )
 
+    opta_index_list = ListTextField(
+        base_field=models.CharField(max_length=10, help_text='Opta index ("47.810070")', blank=True, null=True),
+        size=number_of_gws,  # Maximum of 100 ids in list
+    )
+
+    fixture_id_list = ListTextField(
+        base_field=models.IntegerField(help_text='Fixture id (9)', blank=True, null=True),
+        size=number_of_gws,  # Maximum of 100 ids in list
+    )
+
     # Metadata
     class Meta:
         ordering = ['player_id', 'player_name', 'player_team_id', 'player_position_id']

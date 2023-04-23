@@ -25,7 +25,7 @@
     margin: auto;
 
     table thead tr {
-        background-color: var(--table-thead-tr-background-color) !important;
+        background-color: var(--table-thead-tr-background-color-eliteserien) !important;
         color: var(--table-thead-tr-color) !important;
     }
 
@@ -105,9 +105,9 @@
             background-color: var(--table-odd-rows);
         }
 
-        thead tr {
-            background-color: var(--table-thead-color);
-        }
+        // thead tr {
+        //     background-color: var(--table-thead-color);
+        // }
 
         tbody tr:first-child td {
             border-top: 1px solid transparent;
@@ -117,7 +117,7 @@
     td {
       border: solid;
       border-width: 1px 1px;
-      border-color: var(--table-border-color);
+    //   border-color: var(--table-border-color);
       text-align: left;
       padding: 5px;
     }
@@ -125,7 +125,7 @@
     th {
         border: solid;
         border-width: 1px 1px;
-        border-color: var(--table-border-color);
+        // border-color: var(--table-border-color);
         text-align: left;
         padding-left: 7px;
         border-bottom: 1px solid var(--black-color);
@@ -338,5 +338,5 @@
 }
 
 .FPL .player-ownership-container table thead tr {
-    background-color: #cce8cf !important;
+    background-color: var(--table-thead-tr-background-color-fpl) !important;
 }

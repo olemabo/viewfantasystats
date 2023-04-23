@@ -187,6 +187,11 @@ class PremierLeaguePlayers(models.Model):
         blank=True, null=True
     )
 
+    fixture_id_list = ListTextField(
+        base_field=models.IntegerField(help_text='Fixture id (9)', blank=True, null=True),
+        size=number_of_gws,  # Maximum of 100 ids in list
+    )
+
 
     # Metadata
     class Meta:

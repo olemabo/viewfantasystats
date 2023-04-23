@@ -10,4 +10,5 @@ urlpatterns = [
     path('rank-and-points-api/', views.RankAndPointsAPIView.as_view(), name='rank_and_points'),
     path('most-owned-team/', views.MostOwnedPlayersLineUpAPIView.as_view(), name='most_owned_team'),
     path('cup-statistics-api/', views.CupAPIView.as_view(), name='cup_statistics'),
+    path('live-fixtures-api/', views.LiveFixturesAPIView.as_view(), name='live_fixtures'),
 ]

@@ -1,0 +1,220 @@
+
+.live-fixtures-container {
+    max-width: 920px;
+    margin: auto;
+
+    .fixture-boxes-container {
+        margin-bottom: 42px;
+
+        .fixture-date {
+            margin-top: 20px;
+            margin-bottom: 2px;
+            font-size: 14px;
+        }
+    
+        .fixture-container {
+            background-color: var(--white-color);
+            border-top: 1px solid var(--page-background-color);
+            border-bottom: 1px solid var(--page-background-color);
+            padding: 12px 0;
+    
+            display: flex;
+            justify-content: space-between;
+    
+            .home {
+                flex-basis: 47%;
+                text-align: right;
+                margin-right: 10px;
+            }
+            
+            .result {
+                flex-basis: 6%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: #1b2f44;
+                color: var(--white-color);
+                padding: 2px 0 4px 0;
+                border-radius: 16px;
+            }
+    
+            .away {
+                flex-basis: 47%;
+                text-align: left;
+                margin-left: 10px;
+            }
+
+            @media (max-width: 970px) {
+                .result {
+                    flex-basis: 12%;
+                }
+            }
+
+            @media (max-width: 600px) {
+                .result {
+                    flex-basis: 20%;
+                }
+            }
+        }
+        
+        .fixture-info-container {
+            display: flex;
+            flex-wrap: wrap;
+            background-color: var(--white-color);
+            column-gap: 12px;
+            
+            
+            table {
+                width: 100%;
+                
+                margin-bottom: 25px;
+                font-size: 14px;
+
+                thead {
+                    text-align: left;
+
+                    tr {
+                        background-color: var(--table-thead-tr-background-color-eliteserien) !important;
+                        // background-color: #dcdbdbf7 !important;
+                        // background-color: #e7e7e7f7 !important;
+                    }
+                }
+
+                .name {
+                    text-align: left;
+                    width: 170px;
+                }
+
+                tr:nth-child(even) {
+                    background-color: var(--table-even-rows);
+                }
+                tr:nth-child(odd) {
+                    background-color: var(--table-odd-rows);
+                }
+
+                tbody tr:first-child td {
+                    border-top: 1px solid transparent;
+                }
+
+                th, td {
+                    border-color: transparent !important;
+                    min-width: 60px;
+                }
+
+                td {
+                    border: solid;
+                    border-width: 1px 1px;
+                    text-align: left;
+                    padding: 4px;
+                }
+              
+                th {
+                    border: solid;
+                    border-width: 1px 1px;
+                    text-align: left;
+                    padding-left: 5px;
+                    border-bottom: 1px solid var(--black-color);
+                    width: 55px;
+                    height: 20px;
+                }
+
+                tbody tr {
+                    height: 30px;
+                }
+
+                thead tr th {
+                    height: 30px;
+                }
+            }
+
+            table {
+                margin-top: 12px;
+            }
+
+            .game-stats {
+                flex-basis: 36%;
+
+                .h, .a {
+                    min-width: 30px !important;
+                }
+
+                .identifier {
+                    min-width: 40px !important;
+                }
+
+                th {
+                    text-align: center;
+                    // min-width: 109px !important;
+                }
+
+                .team-col {
+                    width: 95px;
+                    min-width: 120px;
+                }
+
+                td {
+                    text-align: center !important;
+                    width: 33%;
+                }
+            }
+
+            
+            .stats {
+                margin-bottom: 0;
+            }
+            
+            .bonus-list {
+                .h, .a {
+                    width: 50%;
+                }
+
+                
+                td.h, td.a {
+                    width: 50% !important;
+                    min-width: 165px !important;
+                }
+                
+                th {
+                    min-width: 165px !important;
+                }
+            }
+            
+            .away-players {
+                margin-right: 12px;
+                flex-basis: 30%;
+            }
+
+            .home-players {
+                margin-left: 12px;
+                flex-basis: 30%;
+            }
+
+            .home-players, .away-players, .game-stats {
+                flex: 1;
+            }
+
+            @media (max-width: 970px) {
+                .game-stats {
+                    order: 1;
+                    margin: 0 12px;
+                }
+            }
+
+            @media (max-width: 600px) {
+                .home-players {
+                    margin-right: 12px;
+                }
+                .away-players {
+                    margin-left: 12px;
+                }
+            }
+        }
+
+        @media (max-width: 900px) {
+            .fixture-info {
+                flex-direction: column;
+                flex-wrap: wrap;
+            }
+        }
+    }
+}
