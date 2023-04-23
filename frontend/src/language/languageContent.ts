@@ -39,6 +39,15 @@ export const content_json = {
             previous: "Previous",
             teamname: "Team name",
             and: 'and',
+            goal: 'Goal',
+            assists: 'Assist',
+            yellow_cards: 'Yellow cards',
+            red_cards: 'Red cards',
+            saves: 'Saves',
+            bonus: 'Bonus',
+            penalties_saved: 'Penalties saved',
+            penalties_missed: 'Penalties missed',
+            own_goals: 'Own goals',
         },
         Fixture: {
             FixturePlanner: {
@@ -109,6 +118,9 @@ export const content_json = {
                 influence: "Influence",
                 creativity: "Creativity",
             },
+            LiveFixtures: {
+                title: "Live Fixtures",
+            },
             statistic: "Statistics",
             search: "Search",
         }
@@ -153,6 +165,15 @@ export const content_json = {
             previous: "Forrige",
             teamname: "Lagnavn",
             and: 'og',
+            goal: 'Mål',
+            assists: 'Målgivende passning',
+            yellow_cards: 'Gule kort',
+            red_cards: 'Røde kort',
+            saves: 'Redninger',
+            bonus: 'Bonus',
+            penalties_saved: 'Strafferedning',
+            penalties_missed: 'Straffebom',
+            own_goals: 'Selvmål',
         },
         Fixture: {
             FixturePlanner: {
@@ -221,6 +242,9 @@ export const content_json = {
                 influence: "Influence",
                 creativity: "Creativity",
                 points: "Points",
+            },
+            LiveFixtures: {
+                title: "Live Fixtures",
             },
             statistic: "Statistikk",
             search: "Søk",

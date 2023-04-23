@@ -65,7 +65,9 @@ def fill_database_for_one_player(player_data_json, static_data, id, league_name)
     temp_transfers_out = [static_data[element_id][34]]
     team_id = static_data[element_id][35]
     web_name = static_data[element_id][36]
+    temp_fixture_ids = [static_data[element_id][48]]
 
+    # FPL stats
     temp_expected_goals = [static_data[element_id][37]]
     temp_expected_goals_per_90 = static_data[element_id][38]
     temp_expected_assists = [static_data[element_id][39]]
@@ -76,6 +78,9 @@ def fill_database_for_one_player(player_data_json, static_data, id, league_name)
     temp_expected_goals_conceded_per_90 = static_data[element_id][44]
     temp_goals_conceded_per_90 = static_data[element_id][45]
     temp_saves_per_90 = static_data[element_id][46]
+    
+    # ESF stats
+    temp_opta_index = [static_data[element_id][47]]
 
     chance_of_playing = "None" if chance_of_playing is None else chance_of_playing
     
@@ -111,6 +116,9 @@ def fill_database_for_one_player(player_data_json, static_data, id, league_name)
             temp_expected_assists.append(gw_i_data['expected_assists'])
             temp_expected_goal_involvements.append(gw_i_data['expected_goal_involvements'])
             temp_expected_goals_conceded.append(gw_i_data['expected_goals_conceded'])
+        
+        if (league_name == eliteserien_folder_name):
+            temp_opta_index.append(gw_i_data["opta_index"])
 
         temp_transfers_balance.append(gw_i_data['transfers_balance'])
         temp_selected.append(gw_i_data['selected'])
@@ -118,6 +126,7 @@ def fill_database_for_one_player(player_data_json, static_data, id, league_name)
         temp_transfers_out.append(gw_i_data['transfers_out'])
         temp_value.append(gw_i_data['value'])
         temp_red_cards.append(gw_i_data['red_cards'])
+        temp_fixture_ids.append(gw_i_data['fixture'])
 
     if league_name == premier_league_folder_name:
         fill_model = PremierLeaguePlayers(
@@ -165,6 +174,7 @@ def fill_database_for_one_player(player_data_json, static_data, id, league_name)
             expected_goals_conceded_per_90=temp_expected_goals_conceded_per_90,
             goals_conceded_per_90=temp_goals_conceded_per_90,
             saves_per_90=temp_saves_per_90,
+            fixture_id_list=temp_fixture_ids,
         )
 
         fill_model.save()
@@ -199,6 +209,8 @@ def fill_database_for_one_player(player_data_json, static_data, id, league_name)
             transfers_out_list=temp_transfers_out,
             value_list=temp_value,
             was_home_list=temp_was_home,
-            yellow_cards_list=temp_yellow_cards)
+            yellow_cards_list=temp_yellow_cards,
+            opta_index_list=temp_opta_index,
+            fixture_id_list=temp_fixture_ids)
         
         fill_model.save()

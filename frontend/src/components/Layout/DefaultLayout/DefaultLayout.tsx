@@ -17,6 +17,8 @@ import FixturePlannerEliteserienPage from '../../Pages/FixturePlannerEliteserien
 import RotationPlannerEliteserienPage from '../../Pages/RotationPlannerEliteserien/RotationPlannerEliteserien';
 import LeagueFrontPage from "../../Pages/LeagueFrontPage/LeagueFrontPage";
 import PlayerStatisticsPage from "../../Pages/PlayerStatistics/PlayerStatistics";
+import LiveFixturesPage from "../../Pages/LiveFixtures/LiveFixtures";
+import * as urls from '../../../internal_urls/internalUrls';
 
 export const DefaultLayout = () => {
     const [ isAnyMenuOpen, setIsMenuOpen ] = useState(false);
@@ -91,8 +93,8 @@ export const DefaultLayout = () => {
                             <Route path="/eliteserien/player-ownership/" element={<PlayerOwnership top_x_managers_default={1000} league_type={eliteserien} content={langagueContent} />} />
                             <Route path="/eliteserien/search-user-names/" element={<SearchUserNamePage content={langagueContent} />} />
                             <Route path="/eliteserien/rank-statistics/" element={<RankStatisticsPage content={langagueContent} />} />
-                            
-                            
+                            <Route path={urls.url_eliteserien_live_fixtures} element={<LiveFixturesPage league_type={eliteserien} content={langagueContent} />} />
+                                                        
                             
                             <Route path="/statistics/player-ownership/" element={<PlayerOwnership top_x_managers_default={1000} league_type={eliteserien} content={langagueContent} />} />
                         

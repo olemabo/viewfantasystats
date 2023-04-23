@@ -19,6 +19,7 @@ urlpatterns = [
     path('eliteserien/player-ownership/', index),
     path('eliteserien/search-user-names/', index),
     path('eliteserien/rank-statistics/', index),
+    path('eliteserien/live-fixtures/', index),
 
     path('fixture-planner/', index),
     path('fixture-planner/fdr-planner/', index),

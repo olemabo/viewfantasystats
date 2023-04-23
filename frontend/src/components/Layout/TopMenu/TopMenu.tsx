@@ -136,6 +136,7 @@ export const TopMenu : FunctionComponent<LanguageProps> = (props) => {
                                             <a className="dropbtn" href={"../../../" + urls.url_eliteserien_player_ownership}>{props.content.Statistics.PlayerOwnership?.title}</a>
                                             {/* <a className="dropbtn" href={"../../../" + urls.url_eliteserien_search_user_name}>{props.content.Statistics.SearchUserName?.title}</a> */}
                                             <a className="dropbtn" href={"../../../" + urls.url_eliteserien_rank_statistics}>{props.content.Statistics.RankStatistics?.title}</a>
+                                            {/* <a className="dropbtn" href={"../../../" + urls.url_eliteserien_live_fixtures}>{props.content.Statistics.LiveFixtures?.title}</a> */}
                                         </div>
                                     </li>
                                     <li className="dropdown">

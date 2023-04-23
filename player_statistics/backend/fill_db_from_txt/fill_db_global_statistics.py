@@ -365,18 +365,18 @@ def fill_and_update_model(data_i, gw, fill_model):
         if gw == 30:
             fill_model.update(gw_30 = data)
         if gw == 31:
-            fill_model.update(gw_30 = data)
+            fill_model.update(gw_31 = data)
         if gw == 32:
-            fill_model.update(gw_30 = data)
+            fill_model.update(gw_32 = data)
         if gw == 33:
-            fill_model.update(gw_30 = data)
+            fill_model.update(gw_33 = data)
         if gw == 34:
-            fill_model.update(gw_30 = data)
+            fill_model.update(gw_34 = data)
         if gw == 35:
-            fill_model.update(gw_30 = data)
+            fill_model.update(gw_35 = data)
         if gw == 36:
-            fill_model.update(gw_30 = data)
+            fill_model.update(gw_36 = data)
         if gw == 37:
-            fill_model.update(gw_30 = data)
+            fill_model.update(gw_37 = data)
         if gw == 38:
-            fill_model.update(gw_30 = data)
+            fill_model.update(gw_38 = data)

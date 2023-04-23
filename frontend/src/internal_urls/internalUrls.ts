@@ -17,3 +17,4 @@ export const url_eliteserien_player_ownership = url_elitserien + 'player-ownersh
 export const url_eliteserien_player_statistics = url_elitserien + 'player-statistics/';
 export const url_eliteserien_search_user_name = url_elitserien + 'search-user-names/';
 export const url_eliteserien_rank_statistics = url_elitserien + 'rank-statistics/';
+export const url_eliteserien_live_fixtures = url_elitserien + 'live-fixtures/';

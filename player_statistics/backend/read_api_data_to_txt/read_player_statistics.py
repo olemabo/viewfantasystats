@@ -1,5 +1,5 @@
+from constants import premier_league_api_url, eliteserien_api_url
 from utils.utility_functions import get_static_json_data
-from constants import premier_league_api_url
 
 
 def get_ids(use_api_or_local, api_url=premier_league_api_url):
@@ -74,6 +74,8 @@ def static_json(use_api_or_local="local", api_url=premier_league_api_url):
             player['expected_goals_conceded_per_90'] if api_url == premier_league_api_url else 0, # 44
             player['goals_conceded_per_90'] if api_url == premier_league_api_url else 0, # 45
             player['saves_per_90'] if api_url == premier_league_api_url else 0, # 46
+            player['opta_index'] if api_url == eliteserien_api_url else 0, # 47
+            0, # 48
         ]
 
     return player_dict

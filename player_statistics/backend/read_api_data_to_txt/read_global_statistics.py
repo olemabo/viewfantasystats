@@ -108,6 +108,8 @@ def save_all_global_stats_for_current_gw(league_name=premier_league_folder_name)
     # should not return duplicate ids and should be equal top 'top_x_players'
     if has_list_duplicates(id_s) or len(id_s) != top_x_players:
         print("Has duplicates")
+        print("len(id_s)", len(id_s))
+        print("top_x_players", top_x_players)
         return 0
     
     print("All ids successfully extracted for gw ", str(current_gameweek), "\n")

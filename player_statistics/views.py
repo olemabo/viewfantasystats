@@ -18,6 +18,8 @@ from fixture_planner.models import PremierLeagueTeamInfo
 
 from utils.Statistics.Utils.GetLastUpdatedGws import get_last_updated_gw_and_all_gws_eliteserien, get_last_updated_gw_and_all_gws_premier_league
 
+from player_statistics.backend.read_api_live.live_fixture_data import live_fixtures
+
 from player_statistics.db_models.eliteserien.rank_and_points_eliteserien import EliteserienRankAndPoints
 from player_statistics.db_models.eliteserien.user_statistics_model_eliteserien import EliteserienUserInfoStatistics
 from player_statistics.db_models.eliteserien.cup_statistics_model_eliteserien import EliteserienCupStatistics
@@ -147,6 +149,7 @@ class CupAPIView(APIView):
 
         except:
             return Response({'Bad Request': 'Something went wrong'}, status=status.HTTP_400_BAD_REQUEST)
+
 
 class PlayerOwnershipAPIView(APIView):
 
@@ -558,6 +561,25 @@ class RankAndPointsAPIView(APIView):
                 response_list.append(split_rank_and_point)
 
             response = RankAndPointsApiResponse(rank_and_points_db.gw, response_list) 
+            return JsonResponse(response.toJson(), safe=False)
+
+        except:
+            return Response({'Bad Request': 'Something went wrong'}, status=status.HTTP_400_BAD_REQUEST)
+        
+
+class LiveFixturesAPIView(APIView):
+
+    def get(self, request):
+        league_name = str(request.GET.get('league_name')).lower()
+
+        return JsonResponse([], safe=False)
+
+    def post(self, request, format=None):
+        try:
+            league_name = str(request.data.get("league_name")).lower()
+            
+            response = live_fixtures()
+
             return JsonResponse(response.toJson(), safe=False)
 
         except:
