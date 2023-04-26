@@ -13,6 +13,8 @@
         }
     
         .fixture-container {
+            border-radius: 5px;
+            cursor: pointer;
             background-color: var(--white-color);
             border-top: 1px solid var(--page-background-color);
             border-bottom: 1px solid var(--page-background-color);
@@ -61,7 +63,7 @@
             display: flex;
             flex-wrap: wrap;
             background-color: var(--white-color);
-            column-gap: 12px;
+            column-gap: 10px;
             
             
             table {
@@ -98,7 +100,7 @@
 
                 th, td {
                     border-color: transparent !important;
-                    min-width: 60px;
+                    // min-width: 60px;
                 }
 
                 td {
@@ -180,12 +182,12 @@
             }
             
             .away-players {
-                margin-right: 12px;
+                margin-right: 6px;
                 flex-basis: 30%;
             }
 
             .home-players {
-                margin-left: 12px;
+                margin-left: 6px;
                 flex-basis: 30%;
             }
 
@@ -215,6 +217,92 @@
                 flex-direction: column;
                 flex-wrap: wrap;
             }
+        }
+    }
+}
+
+.opta-box {
+    position: absolute;
+    left: 46.5%;
+    
+    p {
+        font-size: 12px;
+        border-radius: 25px;
+        color: white;
+        background-color: #1b2f44;
+        margin-top: 5px;
+        padding: 0 6px 2px 6px;
+    }
+}
+
+.round-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 30px;
+
+    h2 {
+        flex-basis: 20%;
+        margin: 0 !important;
+    }
+    
+    .toggle-button {
+        flex-basis: 40%;
+        position: relative;
+        display: flex;
+        top: 30px;
+
+        button {
+            border-radius: 15px;
+            cursor: pointer;
+            color: #6c757d;
+            border-color: #dee2e6;
+            padding: 5px 10px;
+            // line-height: 1.25;
+            // color: #007bff;
+            background-color: #fff;
+            border: 1px solid #dee2e6;
+            
+            svg {
+                width: 15px;
+                height: 15px;
+            }
+            
+            span {
+                position: relative;
+                bottom: 1px;
+            }
+        }
+    
+        &.left {
+            justify-content: start;
+
+            span {
+                margin-right: 6px;
+            }
+
+            svg {
+                margin-right: 10px;
+            }
+        }
+    
+        &.right {
+            justify-content: end;
+
+            span {
+                margin-left: 6px;
+            }
+
+            svg {
+                margin-left: 10px;
+            }
+        }
+    }
+
+    @media (max-width: 500px) {
+        .toggle-button {
+            top: 0;
         }
     }
 }

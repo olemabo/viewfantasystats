@@ -577,8 +577,10 @@ class LiveFixturesAPIView(APIView):
     def post(self, request, format=None):
         try:
             league_name = str(request.data.get("league_name")).lower()
-            
-            response = live_fixtures()
+
+            gw = int(request.data.get("gw"))
+
+            response = live_fixtures(league_name, gw)
 
             return JsonResponse(response.toJson(), safe=False)
 
