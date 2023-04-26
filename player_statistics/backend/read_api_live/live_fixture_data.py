@@ -45,7 +45,7 @@ class GwFixturesModel:
 
 import os
 
-def live_fixtures(league_name=eliteserien_folder_name):
+def live_fixtures(league_name=eliteserien_folder_name, gw=0):
     api_url = eliteserien_api_url if league_name == eliteserien_folder_name else premier_league_api_url
     DFObject = DataFetch(api_url)
 
@@ -56,7 +56,9 @@ def live_fixtures(league_name=eliteserien_folder_name):
     #     fixture_data = json.load(json_data)
     
     current_gameweek = get_current_gw_(DFObject)
-    
+
+    if (gw > 0 and gw < current_gameweek):
+        current_gameweek = gw
     fixtures_this_round = [] #[convertApiJson(data).toJson() for data in fixture_data if data["event"] == current_gameweek]
     
     player_dict = createPlayerIdToPlayerNameDict()
@@ -129,9 +131,10 @@ def live_fixtures(league_name=eliteserien_folder_name):
                         total_points -= gw_i_total_points
                         
                         fixture_id_to_player_list_dict[fixture_id].append([name, gw_i_minutes, gw_i_opta_index, gw_i_total_points, postition, team_id, stats])
-            
-    previous_gw = min_gw if min_gw < current_gameweek else -1
-    next_gw = max_gw if max_gw > current_gameweek else -1
+    
+
+    previous_gw = current_gameweek - 1 if min_gw < current_gameweek else -1
+    next_gw = current_gameweek + 1 if max_gw > current_gameweek else -1
 
     fixture_json = []
     fixture: FixtureModel

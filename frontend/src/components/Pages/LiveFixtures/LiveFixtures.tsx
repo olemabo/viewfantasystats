@@ -14,6 +14,9 @@ import '../../Shared/Pagination/Pagination.scss';
 import { store } from '../../../store/index';
 import './LiveFixtures.scss';
 import { content_json } from '../../../language/languageContent';
+import ArrowBack from '@material-ui/icons/ArrowBack';
+import ArrowForward from '@material-ui/icons/ArrowForward';
+
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -83,21 +86,31 @@ export const LiveFixturesPage : FunctionComponent<LanguageProps> = (props) => {
     const [ isLoading, setIsLoading ] = useState(false);
 
     useEffect(() => {
-        setIsLoading(true);
-
         store.dispatch({type: "league_type", payload: props.league_type});
         
+        getLiveFixtureData(0);
+
+    }, [props.league_type]);
+
+
+    function getLiveFixtureData(gw: number) {
+        setIsLoading(true);
+
         var body = {
             league_name: props.league_type,
+            gw: gw,
         };
 
         axios.post(live_fixtures_api_path, body).then(x => { 
             let data = JSON.parse(x?.data);
+            
             setPreviousGW(data?.previous_gw); 
             setCurrentGW(data?.current_gameweek);
             setNextGW(data?.next_gw); 
 
             let fixture_data_list: FixtureModel[] = [];
+
+            let hasSetLiveStatus = false;
 
             data?.fixture_data.map( (fixture: any) => {
                 let fixture_parsed = JSON.parse(fixture);
@@ -118,7 +131,10 @@ export const LiveFixturesPage : FunctionComponent<LanguageProps> = (props) => {
                     bonus_list: [],
                 };
 
-                if (fixture_parsed?.is_live) { setFixtureInfoId(fixture_parsed?.id)}
+                if (fixture_parsed?.is_live && !hasSetLiveStatus) { 
+                    setFixtureInfoId(fixture_parsed?.id);
+                    hasSetLiveStatus = true; 
+                }
 
                 fixture_data_list.push(temp_fixture);
             });
@@ -184,9 +200,8 @@ export const LiveFixturesPage : FunctionComponent<LanguageProps> = (props) => {
             
             setFixtureData(listOfLists);
             setIsLoading(false);
-        })
-
-    }, [props.league_type]);
+        });
+    }
 
     function convertDateToString(date: string) {
         const dateToTime = (date: any) => date.toLocaleString('no', {
@@ -298,7 +313,25 @@ export const LiveFixturesPage : FunctionComponent<LanguageProps> = (props) => {
             <Spinner />
         }
         { !isLoading && fixtureData?.length > 0 && <>
-            <h2>Runde {currentGW}</h2>
+            <div className='round-container'>
+                <div className='toggle-button left'>
+                { previousGW > 0 && 
+                    <button onClick={() => getLiveFixtureData(previousGW)}>
+                        <ArrowBack />
+                        <span>Runde {previousGW}</span>
+                    </button>
+                }
+                </div> 
+                <h2>Runde {currentGW}</h2>
+                <div className='toggle-button right'>
+                { nextGW > 0 && 
+                    <button onClick={() => getLiveFixtureData(nextGW)}>
+                        <span>Runde {nextGW}</span>
+                        <ArrowForward />
+                    </button>
+                }
+                </div> 
+            </div>
             <div className='fixture-boxes-container'>
                 { fixtureData.map( (fixture_date: any[]) => (
                     <div>
@@ -319,6 +352,7 @@ export const LiveFixturesPage : FunctionComponent<LanguageProps> = (props) => {
                             </div>
                             <>
                             { (fixtureInfoId === fixture?.id) &&
+                            <div>
                                 <div className='fixture-info-container'>
                                     <div className='home-players'>
                                         <table>
@@ -372,6 +406,7 @@ export const LiveFixturesPage : FunctionComponent<LanguageProps> = (props) => {
                                                 <tr>
                                                     <th>{fixture.team_h_name}</th>
                                                     <th>{fixture.team_a_name}</th>
+                                                    {/* <div className='opta-box'><p>Opta index</p></div> */}
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -408,6 +443,7 @@ export const LiveFixturesPage : FunctionComponent<LanguageProps> = (props) => {
                                             </tbody>
                                         </table>
                                     </div>
+                                </div>
                                 </div>
                             }
                             </>
