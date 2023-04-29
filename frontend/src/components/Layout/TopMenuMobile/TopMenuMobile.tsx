@@ -144,6 +144,9 @@ export const TopMenuMobile: React.FunctionComponent<TopMenyProps> = (props) => {
                                 <a href={"../../../" + urls.url_eliteserien_player_ownership}>{props.content.Statistics.PlayerOwnership?.title}</a>
                             </li>
                             <li onClick={() => closeMenu()} className="sub-menu-item">
+                                <a href={"../../../" + urls.url_eliteserien_live_fixtures}>{props.content.Statistics.LiveFixtures?.title}</a>
+                            </li>
+                            <li onClick={() => closeMenu()} className="sub-menu-item">
                                 <a href={"../../../" + urls.url_eliteserien_rank_statistics}>{props.content.Statistics.RankStatistics?.title}</a>
                             </li>
                             </>

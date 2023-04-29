@@ -119,7 +119,7 @@ export const content_json = {
                 creativity: "Creativity",
             },
             LiveFixtures: {
-                title: "Live Fixtures",
+                title: "Fixture Statistics",
             },
             statistic: "Statistics",
             search: "Search",
@@ -244,7 +244,7 @@ export const content_json = {
                 points: "Points",
             },
             LiveFixtures: {
-                title: "Live Fixtures",
+                title: "Kampstatistikk",
             },
             statistic: "Statistikk",
             search: "Søk",
