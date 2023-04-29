@@ -156,6 +156,12 @@
                     min-width: 120px;
                 }
 
+                @media (max-width: 900px) {
+                    .team-col {
+                        min-width: 60px;
+                    }
+                }
+
                 td {
                     text-align: center !important;
                     width: 33%;
@@ -200,16 +206,16 @@
             @media (max-width: 970px) {
                 .game-stats {
                     order: 1;
-                    margin: 0 12px;
+                    margin: 0 6px;
                 }
             }
 
             @media (max-width: 600px) {
                 .home-players {
-                    margin-right: 12px;
+                    margin-right: 6px;
                 }
                 .away-players {
-                    margin-left: 12px;
+                    margin-left: 6px;
                 }
             }
         }
