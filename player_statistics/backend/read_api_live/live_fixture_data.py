@@ -122,10 +122,10 @@ def live_fixtures(league_name=eliteserien_folder_name, gw=0):
                             if fixture_id_i == fixture_id:
                                 gw_idx = idx
                         
-                        gw_i_minutes = minutes_list[gw_idx]
-                        gw_i_opta_index = float(opta_index_list[gw_idx])
-                        gw_i_total_points = total_points_list[gw_idx]
-                        
+                        gw_i_minutes = minutes_list[gw_idx] if gw_idx > 0 else total_minutes
+                        gw_i_opta_index = float(opta_index_list[gw_idx]) if gw_idx > 0 else total_opta_index
+                        gw_i_total_points = total_points_list[gw_idx] if gw_idx > 0 else total_points
+                                                
                         total_minutes -= gw_i_minutes
                         total_opta_index -= gw_i_opta_index
                         total_points -= gw_i_total_points
