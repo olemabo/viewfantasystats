@@ -50,6 +50,7 @@ export const Footer : FunctionComponent<LanguageProps> = (props) => {
             <h2>{props.content.Statistics.statistic}</h2>
             <div>
               <a href={"../../../" + urls.url_eliteserien_player_ownership}>{props.content.Statistics.PlayerOwnership?.title}</a>                     
+              <a href={"../../../" + urls.url_eliteserien_live_fixtures}>{props.content.Statistics.LiveFixtures?.title}</a>                     
               <a href={"../../../" + urls.url_eliteserien_rank_statistics}>{props.content.Statistics.RankStatistics?.title}</a>                     
             </div>
           </div>

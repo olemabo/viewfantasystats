@@ -296,17 +296,17 @@ export const LiveFixturesPage : FunctionComponent<LanguageProps> = (props) => {
     <DefaultPageContainer 
         pageClassName='live-fixtures-container' 
         heading={props.content.Statistics.LiveFixtures.title + " - " + store.getState().league_type} 
-        description={'Live Fixtures'}>
+        description={'Live statistikk for blant annet opta index, minutter spilt og poeng for spillere i de ulike kampene.'}>
         <h1>{props.content.Statistics.LiveFixtures.title}
         <Popover 
-            id={"rotations-planner-id"}
+            id={"live-fixture-id"}
             title=""
             algin_left={true}
             popover_title={props.content.Statistics.LiveFixtures.title} 
             iconSize={14}
             iconpostition={[-10, 0, 0, 3]}
             popover_text=''>
-             
+            Statistikk rundt blant annet opta index, minutter spilt og poeng for spillere i de ulike kampene.
         </Popover>
         </h1>
         { isLoading && 
@@ -318,15 +318,15 @@ export const LiveFixturesPage : FunctionComponent<LanguageProps> = (props) => {
                 { previousGW > 0 && 
                     <button onClick={() => getLiveFixtureData(previousGW)}>
                         <ArrowBack />
-                        <span>Runde {previousGW}</span>
+                        <span>{props.content.General.gw} {previousGW}</span>
                     </button>
                 }
                 </div> 
-                <h2>Runde {currentGW}</h2>
+                <h2>{props.content.General.gw} {currentGW}</h2>
                 <div className='toggle-button right'>
                 { nextGW > 0 && 
                     <button onClick={() => getLiveFixtureData(nextGW)}>
-                        <span>Runde {nextGW}</span>
+                        <span>{props.content.General.gw} {nextGW}</span>
                         <ArrowForward />
                     </button>
                 }
