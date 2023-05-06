@@ -203,8 +203,7 @@ def save_all_global_stats_for_current_gw(league_name=premier_league_folder_name)
             else:
                 regions_dict[region_name][0] += 1
 
-            # extract total chip usage info 
-        
+        # extract total chip usage info
         if player_i < top_x_players_total_chips:
             chip_usage = DFObject.get_current_member(user_id)["chips"]
             for chips_used in chip_usage:
