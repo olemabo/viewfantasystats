@@ -338,7 +338,7 @@ export const LiveFixturesPage : FunctionComponent<LanguageProps> = (props) => {
                         <div className='fixture-date'>{fixture_date[0]}</div>
                         { fixture_date[1].map((fixture: FixtureModel) => (
                             <>
-                            <div className='fixture-container' onClick={() => { if (fixture?.started) { toggleFixtureBox(fixture?.id)} } }>
+                            <div className={fixture?.started ? 'fixture-container' : 'fixture-container not-started'} onClick={() => { if (fixture?.started) { toggleFixtureBox(fixture?.id)} } }>
                                 <div className='home'>{fixture.team_h_name}</div>
                                 { fixture.started ? 
                                     <div className='result'>
