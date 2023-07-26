@@ -254,8 +254,11 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
                 <form onSubmit={(e) =>  {updateFDRData(fdrType); e.preventDefault()}}>
                     <TextInput 
                         htmlFor='input-form-team-id'
+                        min={0}
+                        max={100000}
                         minWidth={80}
-                        onInput={(e: number) => setTeamId(e)}>
+                        onInput={(e: number) => setTeamId(e)}
+                        defaultValue={0} >
                         {props.content.Fixture.teamId}
                     </TextInput>
 
