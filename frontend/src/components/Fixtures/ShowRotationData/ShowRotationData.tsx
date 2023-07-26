@@ -1,11 +1,9 @@
 import { RotationPlannerTeamInfoModel } from '../../../models/fixturePlanning/RotationPlannerTeamInfo';
 import { KickOffTimesModel } from '../../../models/fixturePlanning/KickOffTimes';
-import React, { FunctionComponent } from 'react';
-
-import { contrastingColor } from '../../../utils/findContrastColor';
-import { convertFDRtoHex } from '../../../utils/convertFDRtoHex';
 import { lowerCaseText } from '../../../utils/lowerCaseText';
+import React, { FunctionComponent, useState } from 'react';
 import '../ShowFDRData/ShowFDRData.scss';
+import Pagination from 'rc-pagination';
 import './ShowRotationData.scss';
 
 type ShowRotationProps = {
@@ -15,22 +13,35 @@ type ShowRotationProps = {
     fdrToColor?: any;
 }
 
-export const ShowRotationData : FunctionComponent<ShowRotationProps> = (props) => {
+export const ShowRotationData : FunctionComponent<ShowRotationProps> = ({
+    content,
+    fdrData,
+    kickOffTimes,
+    fdrToColor = null
+}) => {
+
+    const [ pagingationNumber, setPaginationNumber ] = useState(1);
+    const [ numberOfHitsPerPagination, setNumberOfHitsPerPagination ] = useState(10);
+    const [ numberOfHits, setNumberOfHits ] = useState(fdrData?.length);
+    
+    function paginationUpdate(pageNumber: number) {
+        setPaginationNumber(pageNumber);
+    }
     
     return <>
     <div id="data-box" className="text-center mt-3">
         <div className="big-container">
             <div className="container-rotation fdr">
                 <div>
-                    { props.fdrData.map(row =><>
+                    { fdrData.slice( (pagingationNumber - 1) * numberOfHitsPerPagination, (pagingationNumber - 1) * numberOfHitsPerPagination + numberOfHitsPerPagination).map(row =><>
                         <table className="rotation">
                             <tbody>
                                 <tr className="fdr-row-gws">
                                     <td className="name-column-top-corner">
-                                        {/* {props.content.Fixture.team} */}
+                                        {content.Fixture.team}
                                     </td>
-                                    { props.kickOffTimes.map(gw =>
-                                        <th>{props.content.General.round_short}{gw.gameweek}
+                                    { kickOffTimes.map(gw =>
+                                        <th>{content.General.round_short}{gw.gameweek}
                                             <div className="day-month">
                                                 { gw.day_month }
                                             </div>
@@ -53,7 +64,7 @@ export const ShowRotationData : FunctionComponent<ShowRotationProps> = (props) =
                                                     { team_i_j.map( (team: any) => {
                                                         var num_teams = team_i_j.length;
                                                         var json_team_data = JSON.parse(team); 
-                                                        return <div style={{backgroundColor: convertFDRtoHex(json_team_data.difficulty_score, props.fdrToColor), color: contrastingColor(convertFDRtoHex(json_team_data.difficulty_score, props.fdrToColor))}} 
+                                                        return <div 
                                                             className={"color-" + json_team_data.difficulty_score + " height-" + num_teams.toString() + (num_teams > 1 ? ' multiple-fixtures' : '') }>
                                                             { json_team_data.opponent_team_name == '-' ? "Blank" : 
                                                                 json_team_data.opponent_team_name + " (" + json_team_data.H_A + ")"
@@ -68,8 +79,7 @@ export const ShowRotationData : FunctionComponent<ShowRotationProps> = (props) =
                                                     { team_i_j.map( (team: any) => {
                                                         var num_teams = team_i_j.length;
                                                         var json_team_data = JSON.parse(team); 
-                                                        return <div style={{backgroundColor: convertFDRtoHex(json_team_data.difficulty_score, props.fdrToColor), color: contrastingColor(convertFDRtoHex(json_team_data.difficulty_score, props.fdrToColor))}} 
-                                                            className={"color-" + json_team_data.difficulty_score + " height-" + num_teams.toString() + (num_teams > 1 ? ' multiple-fixtures' : '') }>
+                                                        return <div className={"color-" + json_team_data.difficulty_score + " height-" + num_teams.toString() + (num_teams > 1 ? ' multiple-fixtures' : '') }>
                                                             { json_team_data.opponent_team_name == '-' ? "Blank" : 
                                                                 json_team_data.opponent_team_name + " (" + json_team_data.H_A + ")"
                                                             }
@@ -83,9 +93,15 @@ export const ShowRotationData : FunctionComponent<ShowRotationProps> = (props) =
                             </tbody>
                         </table>
                         <caption style={{display: 'block'}}>
-                            <p> {props.content.Fixture.RotationPlanner.avg_fdr_score} <b> {row.avg_Score} </b></p>
+                            <p> {content.Fixture.RotationPlanner.avg_fdr_score} <b> {row.avg_Score} </b></p>
                         </caption>
                     </>)}
+                    <Pagination 
+                        className="ant-pagination" 
+                        onChange={(number) => paginationUpdate(number)}
+                        defaultCurrent={1} 
+                        defaultPageSize={numberOfHitsPerPagination}  
+                        total={numberOfHits} /> 
                     </div>
                 </div>
             </div>
@@ -94,7 +110,3 @@ export const ShowRotationData : FunctionComponent<ShowRotationProps> = (props) =
 };
 
 export default ShowRotationData;
-
-ShowRotationData.defaultProps = {
-    fdrToColor: null,
-}

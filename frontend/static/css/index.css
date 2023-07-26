@@ -1,23 +1,39 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300&display=swap');
 
 :root {
-    /* disse brukes faktisk */
-
     /* Default styles */
     --background-color: #FFFFFF;
     --white-color: #FFFFFF;
     --black-color: #000000;
     --text-color: #333;
 
+    --font-family: 'Lato';
+    --max-width: 1000px;
+    /* --page-background-color: #eeeeee; */
+    --page-background-color: #f5f5f5;
+    --size-of-top-bar-mobile: 60px;
+    --link-color: var(--black-color);
+    --border-color: #b9b9b9;
+    
     /* Layout */
     --fpl-linear-gradient-first-color: #0F3443;
     --fpl-linear-gradient-second-color: #8decc4;
     --fpl-linear-gradient-second-color-darker: rgba(15, 97, 63, 0.73);
-
+    
     --eliteserien-linear-gradient-first-color: #37d7feb3;
     --eliteserien-linear-gradient-first-color: #7cd9f0b3;
     --eliteserien-linear-gradient-second-color: #1b2f44;
     --eliteserien-linear-gradient-first-color-darker: #47abd8;
+    
+    --eliteserien-linear-gradient-first-color: #7cd9f0b3;
+    --eliteserien-linear-gradient-second-color: #1b2f44;
+    
+    /* Header */
+    --logo-color: var(--white-color);
+    --top-menu-items-color: var(--black-color);
+    --font-size-menu-items: 18px;
+    --font-size-menu-sub-items: 16px;
+    --font-size-header-title: 26px;
 
     /* Footer */
     --footer-background-color: #0f3443;
@@ -26,21 +42,44 @@
 
     /* Fixture Planning */
     --fdr-premier-league-1: #375523;
+    /* --fdr-premier-league-1: #A9D3CA; */
     --fdr-premier-league-2: #7ce0ac;
+    /* --fdr-premier-league-2: #DAECE8; */
     --fdr-premier-league-3: #bfbfbf;
+    /* --fdr-premier-league-3: #F3E7DA; */
     --fdr-premier-league-4: #fa0c4896;
+    /* --fdr-premier-league-4: #F7D9E3; */
     --fdr-premier-league-5: #7004268c;
+    /* --fdr-premier-league-5: #F2BFCF; */
 
     --fdr-eliteserien-1: #47abd89e;
+    --fdr-eliteserien-1: #87C5E1;
     --fdr-eliteserien-2: #95d2ec8f;
+    --fdr-eliteserien-2: #BDDFED;
     --fdr-eliteserien-3: #e7f9ff87;
+    --fdr-eliteserien-3: #EAF4F7;
     --fdr-eliteserien-4: #ff4242a3;
+    --fdr-eliteserien-4: #F98080;
     --fdr-eliteserien-5: #d01b1bb5;
+    --fdr-eliteserien-5: #D95858;
+    --fdr-eliteserien-double: #1d3557bf;
+    --fdr-eliteserien-double: #52647D;
 
-    /* Pagination */
-    --pagination-item-color: #0F3443;
-    --pagination-item-border-color: #9ea5a8;
-    --pagination-item-hover-color: #0F3443;
+    --fdr-color-blank: #000000ab;
+    --fdr-color-blank: #4E4E4E;
+    --fdr-greyed-box: #d5d4d4;
+    --round-row-color: #414c50;
+    --fdr-border-color: #00000080;
+    --name-column-top-corner: var(--round-row-color);
+
+    --fdr-box-padding-height: 12px;
+    --fdr-box-padding-width: 15px;
+    --fdr-box-padding-width-small-screen: 5px;
+    --fdr-box-height: 54px;
+    --fdr-box-th-height: 55px;
+    --fdr-border-width: 3px;
+    --fdr-box-gap: 1px;
+    --fdr-box-min-width-small-screen: 95px;
 
     /* Statistiscs */
     --table-even-rows: #F8F9F9;
@@ -49,195 +88,19 @@
     --table-thead-tr-background-color-eliteserien: #cbe5eff7;
     --table-thead-tr-background-color-fpl: #cce8cf;
     --table-thead-height: 40px;
-
-
-
-
-
-
-    /* Disse er ikke dobbelsjekekt */
+    --table-thead-height-compact: 30px;
     
-    --page-background-color: #eeeeee;
-    --height-the-gray-box-should-go-into-header: -0px;
-    --height-the-gray-box-should-go-away-from-header: 0px; /* Give this the same value as the var above only opposite sign */
-    --size-of-scewY: 30px;
-    --size-of-top-bar: 100px;
-    --size-of-top-bar-mobile: 60px;
-    --skew-Degrees: 0deg;
-    --link-color: var(--black-color);
-    --title-color: var(--white-color);
-    --content-color: inherit;
-    --border-radius-content: 10px;
-    --content-width: 98%;
-    --max-width: 1000px;
-
-    /* Header */
-    --font-size-menu-items: 18px;
-    --font-size-menu-sub-items: 16px;
-    --font-size-header-title: 26px;
-
     /* Components */
     --submit-button-color: #1b2f44;
     --submit-button-text-color: var(--white-color);
     --search-box-color: #0f3443;
 
-    /* Fixture Planning */
-    --name-col-color: #dfdfdfc7;
-    --round-row-color: #414c50;
-    --fdr-color-blank: #000000ab;
-    --fdr-border-color: #00000080;
-    --name-column-top-corner: #fdfdf00;
-    --fdr-box-padding-height: 15px;
-    --fdr-box-padding-width: 12px;
-    --fdr-box-height: 54px;
-    --fdr-box-th-height: 55px;
-    --fdr-border-width: 3px;
-    --fdr-box-gap: 1px;
-} 
-
-* {
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
+    --filter-all-background-color: transparent;
+    --filter-all-color: var(--black-color);
+    
+    /* Pagination */
+    --pagination-item-color: #0F3443;
+    --pagination-item-border-color: #9ea5a8;
+    --pagination-item-hover-color: #0F3443;
 }
 
-body {
-    font-family: 'Lato';
-    background-color: var(--background-color);
-    color: var(--text-color);
-    line-height: 1.6;
-}
-
-ul {
-    list-style-type: none;
-}
-
-a {
-    text-decoration: none;
-    color: var(--text-color);
-}
-
-h1, h2 {
-    line-height: 1.2;
-    font-weight: 300;
-    margin: 30px 0 10px 0;
-    font-size: 28px;
-}
-
-h2 {
-    font-size: 18px;
-    font-weight: 600;
-    margin-bottom: 12px;
-}
-
-p {
-    margin: 10px 0;
-}
-
-.max-width {
-    max-width: 1200px;
-}
-
-a:hover {
-    text-decoration: none;
-}
-
-.front-page-bottom {
-    background-color: var(--page-background-color);
-    position: relative;
-}
-
-.start-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    max-width: var(--max-width);
-    margin: 0 auto;
-}
-
-.content-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    z-index: 1;
-    background: var(--content-color);
-    width: var(--content-width);
-    border-radius: var(--border-radius-content);
-    top: var(--height-the-gray-box-should-go-into-header);
-    position: relative;
-    text-align: center;
-}
-
-
-
-
-.FPL .player-ownership-container table thead tr {
-    background-color: #cce8cf !important;
-}
-
-.Eliteserien table thead tr {
-    background-color: var(--table-thead-tr-background-color-eliteserien) !important;
-}
-
-thead {
-    background-color: var(--table-thead-tr-background-color-eliteserien);
-}
-
-.stat-table th, .stat-table td {
-    border-color: transparent !important;
-}
-
-.Eliteserien .no-padding .height-2.multiple-fixtures {
-    background-color: #c6a4d6 !important;
-    background-color: #1d3557bf !important;
-    color: white !important;
-}
-
-.Eliteserien .color-1 {
-    background-color: #506d3ced !important;
-    background-color: #47abd89e  !important;
-    color: white !important;
-    color: black !important;
-}
-
-.Eliteserien .color-2 {
-    background-color: #a4c2a9 !important;
-    background-color: #95d2ec8f !important;
-}
-
-.Eliteserien .color-3 {
-    background-color: #a79c8578 !important;
-    background-color: #e7f9ff7a !important;
-    background-color: #e7f9ff87 !important;
-}
-
-/* #47abd8 47abd899 */
-/* #95D2EC 95d2ec8f */
-/* #e7f9ff e7f9ff7a */
-/* #FFFFFF */
-/* #FF4242 ff4242a3 */
-/* #D01B1B d01b1bb5 */
-
-.Eliteserien .color-4 {
-    background-color: #ff376996 !important;
-    background-color: #ff4242a3 !important;
-}
-
-.Eliteserien .color-5 {
-    background-color: #7810318c !important;
-    background-color: #d01b1bb5 !important;
-}
-
-.Eliteserien .rotation .double-border-0 div {
-    background-color: #d5d4d4 !important;
-    color: black !important;
-}
-
-.Eliteserien .fdr table.rotation .double-border-1 div {
-    border-color: transparent !important;
-}
-
-.Eliteserien .rotation .double-border-0 div.height-2.multiple-fixtures {
-    background-color: #d5d4d4 !important;
-    color: black !important;
-}

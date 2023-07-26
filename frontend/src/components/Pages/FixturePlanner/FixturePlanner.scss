@@ -4,117 +4,45 @@
     
     .fixture-planner-container {
         
-        form {
-        
-            input {
-                margin: 7px 5px 0 5px;
-                width: 40px;
-                font-size: 16px;
-                border-width: inherit;
-                line-height: 28px;
-                padding-left: 4px;
-                border: transparent;
-            }
-
-            input[type=number] { 
-                -moz-appearance: textfield;
-                appearance: textfield;
-            }
-
-            .submit {
-                width: fit-content;
-                cursor: pointer;
-                font-size: 15px;
-                padding: 1px 15px 0 15px;
-                background-color: var(--submit-button-color);
-                color: var(--submit-button-text-color);
-                border: none;
-            }
-        }
-        
-        .filter-teams-container {
+        .input-row-container {
+            margin-top: 20px;
             display: flex;
-            flex-wrap: wrap;
+            padding: 0 10px;
             justify-content: center;
-            margin: 20px 0 10px 0;
-
-            .filter-teams-list {
-                max-width: 600px;
-                
-                .filter-check-box {
-                    margin-right: 3px;
-                    top: 1px;
-                    clip: rect(0px, 0px, 0px, 0px);
-                    position: absolute;
+            max-width: var(--max-width);
+            gap: 12px;
+            align-items: end;
+            
+            form {
+                display: flex;
+                gap: 8px;
+                align-items: flex-end;
+    
+                .submit {
+                    width: fit-content;
+                    cursor: pointer;
+                    font-size: 15px;
+                    height: fit-content;
+                    padding: 5.5px 15px;
+                    background-color: var(--submit-button-color);
+                    color: var(--submit-button-text-color);
+                    border: none;
                 }
-
-                .filter-team {
-                    display: inline-block;
-                }
-                
-                p {
-                    display: inline;
-                    margin-right: 15px;
-                }
-            }
+            } 
         } 
-    }
-}
 
-.diff-introduction-container {
-    margin-top: 25px;
+        @media screen and (max-width: 500px) {
+            .input-row-container {
+                align-content: center;
+                flex-wrap: wrap;
+                flex-direction: column-reverse;
+                align-items: center;
 
-    span:nth-of-type(1) {
-        margin-left: 5px;
-    }
-
-    .diff-introduction-box {
-        width: 18px;
-        display: inline-block;
-        text-align: center;
-
-        &.wide {
-            width: 33px;
-            color: var(--white-color);
-        }
-
-        &.black {
-            color: var(--white-color);
-            width: 22px;
-        }
-
-        &.diff-1 {
-            background-color: var(--fdr-premier-league-1);
-            color: var(--white-color);
-        }
-
-        &.diff-2 {
-            background-color: var(--fdr-premier-league-2);
-        }
-
-        &.diff-3 {
-            background-color: var(--fdr-premier-league-3);
-        }
-
-        &.diff-4 {
-            background-color: var(--fdr-premier-league-4);
-            color: var(--white-color);
-        }
-
-        &.diff-5 {
-            background-color: var(--fdr-premier-league-5);
-            color: var(--white-color);
+                button {
+                    margin-top: 0;
+                }
+            }   
         }
     }
 }
 
-.text {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%,-50%);
-}
-
-.text-center {
-    text-align: center;
-}

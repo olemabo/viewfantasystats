@@ -1,89 +1,30 @@
-import React, { useState, useEffect, FunctionComponent } from 'react';
-
-import Pagination from 'rc-pagination';
-import axios from 'axios';
-
+import { StatsModel, BonusModel, PlayerModel, FixtureModel } from '../../../models/liveFixtures/FixtureModel';
 import { DefaultPageContainer } from '../../Layout/DefaultPageContainer/DefaultPageContainer';
-import { PlayerOwnershipModel } from '../../../models/playerOwnership/PlayerOwnershipModel';
-import { TeamNameAndIdModel } from '../../../models/playerOwnership/TeamNameAndIdModel';
-import { ChipUsageModel } from '../../../models/playerOwnership/ChipUsageModel';
-import { TableSortHead } from '../../Shared/TableSortHead/TableSortHead';
+import Table, { TableBody, TableRow, TableCell, TableHead } from '../../Shared/Table/Table';
+import React, { useState, useEffect, FunctionComponent } from 'react';
+import { PageProps, fpl } from '../../../models/shared/PageProps';
+import ArrowForward from '@mui/icons-material/ArrowForward';
+import * as urls from '../../../static_urls/internalUrls';
 import { Spinner } from '../../Shared/Spinner/Spinner';
+import ArrowBack from '@mui/icons-material/ArrowBack';
 import Popover from '../../Shared/Popover/Popover';
-import '../../Shared/Pagination/Pagination.scss';
 import { store } from '../../../store/index';
 import './LiveFixtures.scss';
-import { content_json } from '../../../language/languageContent';
-import ArrowBack from '@material-ui/icons/ArrowBack';
-import ArrowForward from '@material-ui/icons/ArrowForward';
+import axios from 'axios';
 
 
-axios.defaults.xsrfCookieName = 'csrftoken';
-axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-
-type LanguageProps = {
-    content: any;
-    league_type: string;
-}
-
-type StatsModel = {
-    identifier: string;
-    points: number;
-    value: number;
-}
-
-type PlayerModel = {
-    name: string;
-    minutes: number;
-    opta_index: number;
-    total_points: number;
-    position_id: number;
-    team_id: number;
-    stats: StatsModel[];
-}
-
-type BonusModel = {
-    home_player_name: string;
-    home_opta: number;
-    away_player_name: string;
-    away_opta: number;
-}
-
-type FixtureModel = {
-    team_a_name: string;
-    team_h_name: string;
-    team_a_score: number;
-    team_h_score: number;
-    is_live: boolean;
-    id: string;
-    started: boolean;
-    finished: boolean;
-    kickoff_time: string;
-    stats: any;
-    players_h: PlayerModel[];
-    players_a: PlayerModel[];
-    bonus_list: BonusModel[];
-}
-
-type GwFixturesModel = {
-    previous_gw: number;
-    next_gw: number;
-    current_gameweek: number;
-    fixture_data: FixtureModel[];
-}
-
-export const LiveFixturesPage : FunctionComponent<LanguageProps> = (props) => {
+export const LiveFixturesPage : FunctionComponent<PageProps> = (props) => {
     const live_fixtures_api_path = "/statistics/live-fixtures-api/";
 
     const [ currentGW, setCurrentGW ] = useState(0);
     const [ previousGW, setPreviousGW ] = useState(0);
     const [ nextGW, setNextGW ] = useState(0);
 
-    const emptyChipModel: FixtureModel[] = []
     const emptyAvailableGws: any[] = []
     const [ fixtureData, setFixtureData ] = useState(emptyAvailableGws);
     const [ fixtureInfoId, setFixtureInfoId ] = useState("");
     const [ isLoading, setIsLoading ] = useState(false);
+    const [ hasOwnershipData, setHasOwnershipData ] = useState(false);
 
     useEffect(() => {
         store.dispatch({type: "league_type", payload: props.league_type});
@@ -106,7 +47,8 @@ export const LiveFixturesPage : FunctionComponent<LanguageProps> = (props) => {
             
             setPreviousGW(data?.previous_gw); 
             setCurrentGW(data?.current_gameweek);
-            setNextGW(data?.next_gw); 
+            setNextGW(data?.next_gw);
+            setHasOwnershipData(data?.has_ownership_data);
 
             let fixture_data_list: FixtureModel[] = [];
 
@@ -239,6 +181,7 @@ export const LiveFixturesPage : FunctionComponent<LanguageProps> = (props) => {
                 position_id: player[4],
                 team_id: player[5],
                 stats: extractStats(player[6]),
+                EO: player[7],
             };
         
             temp_players_list.push(temp_player);
@@ -247,10 +190,10 @@ export const LiveFixturesPage : FunctionComponent<LanguageProps> = (props) => {
         return temp_players_list;
     }
 
-    function extractStats(stats: any[]) {
+    function extractStats(stats: StatsModel[]) {
         let temp_stats_list: StatsModel[] = [];
         
-        stats.map( (stat: any) => {
+        stats.map( (stat: StatsModel) => {
             let temp_stat: StatsModel = {
                 identifier: stat?.identifier,
                 points: stat?.points,
@@ -273,7 +216,7 @@ export const LiveFixturesPage : FunctionComponent<LanguageProps> = (props) => {
         list.map(el => {
             temp.push(el?.element + " (" + el?.value + ")")
         })
-
+        
         const myString = temp.join(", ");
 
         return myString;
@@ -289,13 +232,17 @@ export const LiveFixturesPage : FunctionComponent<LanguageProps> = (props) => {
         if (identifier === "penalties_saved") return props.content.General.penalties_saved;
         if (identifier === "penalties_missed") return props.content.General.penalties_missed;
         if (identifier === "own_goals") return props.content.General.own_goals;
+        if (identifier === "bps") return props.content.Statistics.PlayerStatistics.bps;
         return identifier;
     }
+
+    console.log(fixtureData)
+    const playerNameMinWidth = 120;
 
     return <>
     <DefaultPageContainer 
         pageClassName='live-fixtures-container' 
-        heading={props.content.Statistics.LiveFixtures.title + " - " + store.getState().league_type} 
+        heading={props.content.Statistics.LiveFixtures.title + " - " + (store.getState().league_type === "fpl" ? "Premier League" : "Eliteserien")} 
         description={'Live statistikk for blant annet opta index, minutter spilt og poeng for spillere i de ulike kampene.'}>
         <h1>{props.content.Statistics.LiveFixtures.title}
         <Popover 
@@ -355,93 +302,156 @@ export const LiveFixturesPage : FunctionComponent<LanguageProps> = (props) => {
                             <div>
                                 <div className='fixture-info-container'>
                                     <div className='home-players'>
-                                        <table>
-                                            <thead>
-                                                <tr>
-                                                    <th className='name'>Player</th>
-                                                    <th>MP</th>
-                                                    <th>Opta</th>
-                                                    <th>Pts</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
+                                        <Table tableLayoutType={props.league_type}>
+                                            <TableHead tableHeight='compact'>
+                                                <TableRow>
+                                                    <TableCell cellType='head' minWidth={playerNameMinWidth}>Player</TableCell>
+                                                    <TableCell cellType='head'>
+                                                        <Popover
+                                                            id={'Mp-home'}
+                                                            title={'MP'}
+                                                            popover_title={'Minutes Played'}
+                                                            popover_text={`Antall minutter spilt. Antall minutter oppdateres live mens kampene spilles. `} 
+                                                        /> 
+                                                    </TableCell>
+                                                    <TableCell cellType='head'>
+                                                        <Popover
+                                                            id={'Opta-home'}
+                                                            title={props.league_type === fpl ? 'BPS' : 'Opta'}
+                                                            popover_title={props.league_type === fpl ? 'BPS' : 'Opta Index'}
+                                                            popover_text={``} 
+                                                        />
+                                                    </TableCell>
+                                                    <TableCell cellType='head'>
+                                                        <Popover
+                                                            id={'Pts-home'}
+                                                            title={'Pts'}
+                                                            popover_title={'Points'}
+                                                            popover_text={`Antall poeng spilleren har fått denne runden. Poengene oppdateres live mens kampene spilles. `} 
+                                                        /> 
+                                                    </TableCell>
+                                                    { hasOwnershipData && 
+                                                        <TableCell cellType='head'><Popover
+                                                                id={'EO-home'}
+                                                                title={'EO'}
+                                                                popover_title={'Effective Ownership'}
+                                                                popover_text={`EO (%) for topp 1000 managere fra runde ${currentGW}.`}> 
+                                                                For mer info og fullstendig statistikk, se
+                                                                <a href={urls.url_eliteserien_player_ownership}>her</a>.     
+                                                            </Popover>
+                                                        </TableCell>
+                                                    }
+                                                </TableRow>
+                                            </TableHead>
+                                            <TableBody>
                                                 { fixture.players_h.map(h => (
-                                                    <tr>
-                                                        <td className='name'>{h.name}</td>
-                                                        <td>{h.minutes}</td>
-                                                        <td>{h.opta_index.toFixed(2)}</td>
-                                                        <td>{h.total_points}</td>
-                                                    </tr>
+                                                    <TableRow>
+                                                        <TableCell cellType='data' minWidth={playerNameMinWidth}>{h.name}</TableCell>
+                                                        <TableCell cellType='data'>{h.minutes}</TableCell>
+                                                        <TableCell cellType='data'>{h.opta_index.toFixed(props.league_type === fpl ? 0 : 1)}</TableCell>
+                                                        <TableCell cellType='data'>{h.total_points}</TableCell>
+                                                        { hasOwnershipData && <TableCell cellType='data'>{h.EO}</TableCell> }
+                                                    </TableRow>
                                                 ))}
-                                            </tbody>
-                                        </table>
+                                            </TableBody>
+                                        </Table>
                                     </div>
                                     <div className='game-stats'>
-                                        <table className='stats'>
-                                            <thead>
-                                                <tr>
-                                                    <th className='team-col'>{fixture.team_h_name}</th>
-                                                    <th></th>
-                                                    <th className='team-col'>{fixture.team_a_name}</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
+                                        <Table tableLayoutType={props.league_type} className='stats'>
+                                            <TableHead tableHeight='compact'>
+                                                <TableRow>
+                                                    <TableCell cellType='head' className='team-col'>{fixture.team_h_name}</TableCell>
+                                                    <TableCell cellType='head' />
+                                                    <TableCell cellType='head' className='team-col'>{fixture.team_a_name}</TableCell>
+                                                </TableRow>
+                                            </TableHead>
+                                            <TableBody>
                                                 { fixture.stats.map((stat: any) => (
                                                     <>
-                                                    { (stat?.h?.length > 0 || stat?.a?.length) > 0 && (
-                                                        <>
-                                                            <tr>
-                                                                <td className='h'>{convertListToString(stat?.h)}</td>
-                                                                <td className='identifier'>{convertIdentifierToReadableName(stat?.identifier)}</td>
-                                                                <td className='a'>{convertListToString(stat?.a)}</td>
-                                                            </tr>
-                                                        </>)
+                                                    { (stat?.h?.length > 0 || stat?.a?.length > 0) && stat?.identifier !== 'bps' && (
+                                                        <TableRow>
+                                                            <TableCell cellType='data' className='h'>{convertListToString(stat?.h)}</TableCell>
+                                                            <TableCell cellType='data' className='identifier'>{convertIdentifierToReadableName(stat?.identifier)}</TableCell>
+                                                            <TableCell cellType='data' className='a'>{convertListToString(stat?.a)}</TableCell>
+                                                        </TableRow>
+                                                        )
                                                     }
                                                     </>
                                                 ))}
-                                            </tbody>
-                                        </table>
-                                        <table className='bonus-list'>
-                                            <thead>
-                                                <tr>
-                                                    <th>{fixture.team_h_name}</th>
-                                                    <th>{fixture.team_a_name}</th>
+                                            </TableBody>
+                                        </Table>
+                                        <Table tableLayoutType={props.league_type} className='bonus-list'>
+                                            <TableHead tableHeight='compact'>
+                                                <TableRow>
+                                                    <TableCell cellType='head'>{fixture.team_h_name}</TableCell>
+                                                    <TableCell cellType='head'>{fixture.team_a_name}</TableCell>
                                                     {/* <div className='opta-box'><p>Opta index</p></div> */}
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                { fixture.bonus_list.map((bonus: BonusModel) => (
-                                                    <>
-                                                        <tr>
-                                                            <td className='h'>{bonus.home_player_name+" ("+bonus.home_opta.toFixed(1) +")"}</td>
-                                                            <td className='a'>{bonus.away_player_name+" ("+bonus.away_opta.toFixed(1) +")"}</td>
-                                                        </tr>
-                                                    </>
-                                                ))}
-                                            </tbody>
-                                        </table>
+                                                </TableRow>
+                                            </TableHead>
+                                            <TableBody>
+                                                { fixture.bonus_list.map((bonus: BonusModel) => ( <>
+                                                    <TableRow>
+                                                        <TableCell cellType='data' className='h'>{bonus.home_player_name+" ("+bonus.home_opta.toFixed(1) +")"}</TableCell>
+                                                        <TableCell cellType='data' className='a'>{bonus.away_player_name+" ("+bonus.away_opta.toFixed(1) +")"}</TableCell>
+                                                    </TableRow>
+                                                </>))}
+                                            </TableBody>
+                                        </Table>
                                     </div>
                                     <div className='away-players'>
-                                        <table>
-                                            <thead>
-                                                <tr>
-                                                    <th className='name'>Player</th>
-                                                    <th>MP</th>
-                                                    <th>Opta</th>
-                                                    <th>Pts</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
+                                        <Table tableLayoutType={props.league_type}>
+                                            <TableHead tableHeight='compact'>
+                                                <TableRow>
+                                                    <TableCell cellType='head' minWidth={playerNameMinWidth}>Player</TableCell>
+                                                    <TableCell cellType='head'>
+                                                        <Popover
+                                                            id={'Mp-away'}
+                                                            title={'MP'}
+                                                            popover_title={'Minutes Played'}
+                                                            popover_text={`Antall minutter spilt. Antall minutter oppdateres live mens kampene spilles. `} 
+                                                        /> 
+                                                    </TableCell>
+                                                    <TableCell cellType='head'>
+                                                        <Popover
+                                                            id={'Opta-away'}
+                                                            title={props.league_type === fpl ? 'BPS' : 'Opta'}
+                                                            popover_title={props.league_type === fpl ? 'BPS' : 'Opta Index'}
+                                                            popover_text={``} 
+                                                        />
+                                                    </TableCell>
+                                                    <TableCell cellType='head'>
+                                                        <Popover
+                                                            id={'Pts-away'}
+                                                            title={'Pts'}
+                                                            popover_title={'Points'}
+                                                            popover_text={`Antall poeng spilleren har fått denne runden. Poengene oppdateres live mens kampene spilles. `} 
+                                                        />     
+                                                    </TableCell>
+                                                    { hasOwnershipData && 
+                                                        <TableCell cellType='head'><Popover
+                                                                id={'EO-away'}
+                                                                title={'EO'}
+                                                                popover_title={'Effective Ownership'}
+                                                                popover_text={`EO (%) for topp 1000 managere fra runde ${currentGW}.`}> 
+                                                                For mer info og fullstendig statistikk, se
+                                                                <a href={urls.url_eliteserien_player_ownership}>her</a>.     
+                                                            </Popover>
+                                                        </TableCell> 
+                                                    }
+                                                </TableRow>
+                                            </TableHead>
+                                            <TableBody>
                                                 { fixture.players_a.map(a => (
-                                                    <tr>
-                                                        <td className='name'>{a.name}</td>
-                                                        <td>{a.minutes}</td>
-                                                        <td>{a.opta_index.toFixed(2)}</td>
-                                                        <td>{a.total_points}</td>
-                                                    </tr>
+                                                    <TableRow>
+                                                        <TableCell cellType='data' minWidth={playerNameMinWidth}>{a.name}</TableCell>
+                                                        <TableCell cellType='data'>{a.minutes}</TableCell>
+                                                        <TableCell cellType='data'>{a.opta_index.toFixed(props.league_type === fpl ? 0 : 1)}</TableCell>
+                                                        <TableCell cellType='data'>{a.total_points}</TableCell>
+                                                        { hasOwnershipData && <TableCell cellType='data'>{a.EO}</TableCell> }
+                                                    </TableRow>
                                                 ))}
-                                            </tbody>
-                                        </table>
+                                            </TableBody>
+                                        </Table>
                                     </div>
                                 </div>
                                 </div>

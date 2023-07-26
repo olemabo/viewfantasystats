@@ -1,11 +1,11 @@
-from constants import current_season_name_eliteserien,cup_db_delimiter, user_stats_folder_name, ranking_delimiter, cup_delimiter, user_stats_special_delimiter, cup_stats_folder_name, cup_data_file, user_stats_txt_file_name, eliteserien_folder_name, name_of_extra_info_file, name_of_nationality_file, path_to_store_local_data, all_top_x_players_eliteserien, name_of_ownership_file, total_number_of_gameweeks
+from constants import current_season_name_eliteserien,cup_db_delimiter, cup_delimiter, cup_stats_folder_name, cup_data_file, esf, path_to_store_local_data
 from player_statistics.db_models.eliteserien.cup_statistics_model_eliteserien import EliteserienCupStatistics
 import numpy as np
 import json
 
 
 def write_cup_statistics_to_db_eliteserien():
-    path = path_to_store_local_data + "/" + eliteserien_folder_name + "/" + current_season_name_eliteserien + "/" + cup_stats_folder_name + "/" + cup_data_file
+    path = path_to_store_local_data + "/" + esf + "/" + current_season_name_eliteserien + "/" + cup_stats_folder_name + "/" + cup_data_file
     cup_statistics_data = np.loadtxt(path, dtype="str", comments="&&&&&&&&&&&", delimiter=cup_delimiter, skiprows=0, encoding="utf-8")
     new = 0
     update = 0

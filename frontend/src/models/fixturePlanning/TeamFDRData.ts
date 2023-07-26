@@ -7,6 +7,11 @@ export interface TeamFDRDataModel {
     fdr_total_score: number;
 }
 
+export interface TeamIdFDRModel {
+    team_name_short: string;
+    FDR: FDR_GW_i [];
+}
+
 export interface SimpleTeamFDRDataModel {
     team_name: string;
     checked: boolean;

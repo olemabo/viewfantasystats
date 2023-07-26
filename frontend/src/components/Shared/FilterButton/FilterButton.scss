@@ -25,7 +25,18 @@
             background-color: white;
             border-color: #acbbc6;
         }
+        
     }
+    
+    &.toggle-all span {
+        background-color: var(--filter-all-background-color);
+        color: var(--filter-all-color);
+
+        &:hover {
+            border-color: var(--filter-all-color);
+        }
+    }
+
     
     @media screen and (max-width: 400px) {
         span {

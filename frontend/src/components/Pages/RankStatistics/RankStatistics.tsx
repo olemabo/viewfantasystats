@@ -1,24 +1,21 @@
 import React, { useState, useEffect, FunctionComponent } from 'react';
 
-import Pagination from 'rc-pagination';
-import axios from 'axios';
-
 import { DefaultPageContainer } from '../../Layout/DefaultPageContainer/DefaultPageContainer';
+import { Table, TableHead, TableBody, TableRow, TableCell } from '../../Shared/Table/Table';
 import { TableSortHead } from './../../Shared/TableSortHead/TableSortHead';
 import { RankModel } from '../../../models/RankStatistics/RankStatistics';
-import { LanguageProps } from '../../../models/shared/LanguageProps';
+import { propComparatorRankModel } from '../../../utils/compareFunctions';
+import { PageProps, esf } from '../../../models/shared/PageProps';
+import { Pagination } from '../../Shared/Pagination/Pagination';
 import { Spinner } from '../../Shared/Spinner/Spinner';
 import { store } from '../../../store/index';
-import OpenInNew from '@material-ui/icons/OpenInNew';
+import { Link } from '../../Shared/Link/Link';
+import axios from 'axios';
 
-import '../../../components/Shared/Pagination/Pagination.scss';
 import './RankStatistics.scss';
 
-axios.defaults.xsrfCookieName = 'csrftoken';
-axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
-
-export const RankStatisticsPage : FunctionComponent<LanguageProps> = (props) => {
+export const RankStatisticsPage : FunctionComponent<PageProps> = (props) => {
     const player_ownership_api_path = "/statistics/rank-statistics-api/";
     
     const initial_last_x_years = 3;
@@ -34,12 +31,11 @@ export const RankStatisticsPage : FunctionComponent<LanguageProps> = (props) => 
     const  [ firstLoading, setFirstLoading ] = useState(true);
 
     useEffect(() => {
-        if (store.getState()?.league_type != "Eliteserien") {
-            store.dispatch({type: "league_type", payload: "Eliteserien"});
+        if (store.getState()?.league_type != esf) {
+            store.dispatch({type: "league_type", payload: esf});
         }
 
-        search(initial_last_x_years);
-        
+        search(initial_last_x_years);   
     }, []);
 
     function search(last_x_years: number) {
@@ -75,11 +71,7 @@ export const RankStatisticsPage : FunctionComponent<LanguageProps> = (props) => 
     }
 
     const [ pagingationNumber, setPaginationNumber ] = useState(1);
-    const [ numberOfHitsPerPagination, setNumberOfHitsPerPagination ] = useState(15);
-
-    function paginationUpdate(pageNumber: number) {
-        setPaginationNumber(pageNumber);
-    }
+    const numberOfHitsPerPagination = 15;
 
     function searchUsers(keyword: string) {
         let temp: RankModel[] = [];
@@ -99,32 +91,9 @@ export const RankStatisticsPage : FunctionComponent<LanguageProps> = (props) => 
         setPaginationNumber(1);
     }
 
-    const propComparator = (prop:number, increasing: boolean) =>
-    (a:RankModel, b:RankModel) => {
-        if (prop == 0) {
-            if ( a.avg_rank < b.avg_rank){
-                return increasing ? -1 : 1;
-            }
-            if (a.avg_rank > b.avg_rank){
-                return increasing ? 1 : -1;
-            }
-            return 0;
-        }
-        if (prop == 1) {
-            if ( a.avg_points > b.avg_points){
-                return increasing ? -1 : 1;
-            }
-            if (a.avg_points < b.avg_points){
-                return increasing ? 1 : -1;
-            }
-            return 0;
-        }
-        return 0;
-    } 
-
     function sortRankingData(sortType: number, increase: boolean) {
         let temp = [...ranksToShow];
-        let sorted = temp.sort(propComparator(sortType, increase));
+        let sorted = temp.sort(propComparatorRankModel(sortType, increase));
         setRanksToShow(sorted);
         if (sortType == 0) { setCurrentSorted('Rank')}
         if (sortType == 1) { setCurrentSorted('Points')}
@@ -135,7 +104,7 @@ export const RankStatisticsPage : FunctionComponent<LanguageProps> = (props) => 
     let title = props.content.Statistics.RankStatistics?.title;
 
     return <>
-    <DefaultPageContainer pageClassName='search-user-name-container' heading={title + " - " + store.getState().league_type} description={title}>
+    <DefaultPageContainer pageClassName='search-user-name-container' heading={title + " - " + (store.getState().league_type === "fpl" ? "Premier League" : "Eliteserien")} description={title}>
     <h1>{title}</h1>
         { !firstLoading && <>
 
@@ -160,51 +129,41 @@ export const RankStatisticsPage : FunctionComponent<LanguageProps> = (props) => 
         </form></>
         }
 
-        { isLoading && 
-            <Spinner />
-        }
+        { isLoading &&  <Spinner /> }
 
         { !isLoading && ranksToShow.length > 0 && ranksToShow[0].user_id != "" &&  
         <>
             <div className="container-player-stats">
-            <table className='stat-table'>
-                <thead>
-                    <tr>
-                        <th className="narrow">{props.content.General.rank}</th>
-                        <th className="name-col">{props.content.General.teamname}</th>
-                        <th><TableSortHead defaultSortType={'Increasing'} text={props.content.Statistics.RankStatistics.rank} reset={currentSorted != 'Rank'} onclick={(increase: boolean) => sortRankingData(0, increase)}/></th>
-                        <th><TableSortHead text={props.content.Statistics.RankStatistics.points} reset={currentSorted != 'Points'} onclick={(increase: boolean) => sortRankingData(1, increase)}/></th>
-                        {/* <th className="see-team">{props.content.General.see_team}</th> */}
-                    </tr>
-                </thead>
-
-                <tbody>
-                    { ranksToShow.slice( (pagingationNumber - 1) * numberOfHitsPerPagination, (pagingationNumber - 1) * numberOfHitsPerPagination + numberOfHitsPerPagination).map( (x, index) => 
-                    <tr>
-                        <td className="narrow">{ currentSorted == "Rank" ? (x.avg_rank_ranking) : (x.avg_points_ranking) }</td>
-                        <td className="name-col">
-                            <a target="_blank" href={fantasy_manager_url.replace("X", x.user_id)} className="format-name-col">
-                                { x.team_name }
-                            </a>
-                        </td>
-                        <td className="">{ x.avg_rank }</td>
-                        <td className="">{ x.avg_points } </td>
-                        {/* <td className="see-team">
-                            <a target="_blank" href={fantasy_manager_url.replace("X", x.user_id)}>
-                                {props.content.General.see_team}
-                                <OpenInNew fontSize='small' />
-                            </a>
-                        </td> */}
-                    </tr>
-                    )}             
-                </tbody>
-            </table>
+                <Table tableLayoutType='esf' className='stat-table'>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell cellType='head' className="narrow">{props.content.General.rank}</TableCell>
+                            <TableCell cellType='head' className="name-col">{props.content.General.teamname}</TableCell>
+                            <TableCell cellType='head' minWidth={145}><TableSortHead defaultSortType={'Increasing'} text={props.content.Statistics.RankStatistics.rank} reset={currentSorted != 'Rank'} onclick={(increase: boolean) => sortRankingData(0, increase)}/></TableCell>
+                            <TableCell cellType='head' minWidth={145}><TableSortHead text={props.content.Statistics.RankStatistics.points} reset={currentSorted != 'Points'} onclick={(increase: boolean) => sortRankingData(1, increase)}/></TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        { ranksToShow.slice( (pagingationNumber - 1) * numberOfHitsPerPagination, (pagingationNumber - 1) * numberOfHitsPerPagination + numberOfHitsPerPagination).map( (x, index) => 
+                        <TableRow>
+                            <TableCell cellType='data' className="narrow">{ currentSorted == "Rank" ? (x.avg_rank_ranking) : (x.avg_points_ranking) }</TableCell>
+                            <TableCell cellType='data' className="name-col">
+                                <Link href={fantasy_manager_url.replace("X", x.user_id)} target='_blank'>
+                                    { x.team_name }
+                                </Link>
+                            </TableCell>
+                            <TableCell cellType='data' minWidth={145}>{ x.avg_rank }</TableCell>
+                            <TableCell cellType='data' minWidth={145}>{ x.avg_points } </TableCell>
+                        </TableRow>
+                        )}             
+                    </TableBody>
+                </Table>
             </div>                
 
             { !isLoading && ranksToShow.length > 0 && 
                 <Pagination 
                     className="ant-pagination" 
-                    onChange={(number) => paginationUpdate(number)}
+                    onChange={(number) => setPaginationNumber(number)}
                     defaultCurrent={1}   
                     defaultPageSize={numberOfHitsPerPagination}
                     total={ranksToShow.length} /> 

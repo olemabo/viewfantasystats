@@ -1,15 +1,16 @@
-from constants import eliteserien_api_url, premier_league_api_url, premier_league_folder_name, eliteserien_folder_name
 from player_statistics.backend.read_api_data_to_txt.read_player_statistics import static_json, get_ids
 from player_statistics.db_models.eliteserien.player_statistics_model import EliteserienPlayerStatistic
 from player_statistics.db_models.premier_league.player_statistics_model import PremierLeaguePlayers
+from constants import eliteserien_api_url, premier_league_api_url, fpl, esf
 from utils.dataFetch.DataFetch import DataFetch
 import time
 
 
 def fill_database_all_players(league_name):
-    api_url = eliteserien_api_url if league_name == eliteserien_folder_name else premier_league_api_url
+    api_url = eliteserien_api_url if league_name == esf else premier_league_api_url
     static_data = static_json("api", api_url)
     ids = get_ids("api", api_url)
+    
     dataFetch = DataFetch(api_url)
     print("\nStart to fill db for all ", str(len(ids)), " players. \n")
 
@@ -66,6 +67,7 @@ def fill_database_for_one_player(player_data_json, static_data, id, league_name)
     team_id = static_data[element_id][35]
     web_name = static_data[element_id][36]
     temp_fixture_ids = [static_data[element_id][48]]
+    player_status = static_data[element_id][49]
 
     # FPL stats
     temp_expected_goals = [static_data[element_id][37]]
@@ -78,7 +80,7 @@ def fill_database_for_one_player(player_data_json, static_data, id, league_name)
     temp_expected_goals_conceded_per_90 = static_data[element_id][44]
     temp_goals_conceded_per_90 = static_data[element_id][45]
     temp_saves_per_90 = static_data[element_id][46]
-    
+
     # ESF stats
     temp_opta_index = [static_data[element_id][47]]
 
@@ -106,7 +108,7 @@ def fill_database_for_one_player(player_data_json, static_data, id, league_name)
         temp_saves.append(gw_i_data['saves'])
         temp_bonus.append(gw_i_data['bonus'])
 
-        if (league_name == premier_league_folder_name):
+        if (league_name == fpl):
             temp_bps.append(gw_i_data['bps'])
             temp_influence.append(gw_i_data['influence'])
             temp_creativity.append(gw_i_data['creativity'])
@@ -117,7 +119,7 @@ def fill_database_for_one_player(player_data_json, static_data, id, league_name)
             temp_expected_goal_involvements.append(gw_i_data['expected_goal_involvements'])
             temp_expected_goals_conceded.append(gw_i_data['expected_goals_conceded'])
         
-        if (league_name == eliteserien_folder_name):
+        if (league_name == esf):
             temp_opta_index.append(gw_i_data["opta_index"])
 
         temp_transfers_balance.append(gw_i_data['transfers_balance'])
@@ -127,8 +129,9 @@ def fill_database_for_one_player(player_data_json, static_data, id, league_name)
         temp_value.append(gw_i_data['value'])
         temp_red_cards.append(gw_i_data['red_cards'])
         temp_fixture_ids.append(gw_i_data['fixture'])
-
-    if league_name == premier_league_folder_name:
+    
+    if league_name == fpl:
+        print(player_status)
         fill_model = PremierLeaguePlayers(
             player_id=element_id,
             player_team_id=team_id,
@@ -175,11 +178,12 @@ def fill_database_for_one_player(player_data_json, static_data, id, league_name)
             goals_conceded_per_90=temp_goals_conceded_per_90,
             saves_per_90=temp_saves_per_90,
             fixture_id_list=temp_fixture_ids,
+            player_status=player_status
         )
 
         fill_model.save()
     
-    if league_name == eliteserien_folder_name:
+    if league_name == esf:
         fill_model = EliteserienPlayerStatistic(
             player_id=element_id,
             player_team_id=team_id,
@@ -211,6 +215,7 @@ def fill_database_for_one_player(player_data_json, static_data, id, league_name)
             was_home_list=temp_was_home,
             yellow_cards_list=temp_yellow_cards,
             opta_index_list=temp_opta_index,
-            fixture_id_list=temp_fixture_ids)
+            fixture_id_list=temp_fixture_ids,
+            player_status=player_status)
         
         fill_model.save()

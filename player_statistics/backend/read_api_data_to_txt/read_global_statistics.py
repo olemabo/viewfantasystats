@@ -1,4 +1,4 @@
-from constants import current_season_name_eliteserien, finished_file_name, all_top_x_players_eliteserien_nationality, all_top_x_players_eliteserien_total_chips, all_top_x_players_premier_league_total_chips, all_top_x_players_premier_league_nationality, top_x_players_ids_backup_file_name, backup_data_txt_file_name, current_season_name_premier_league, backup_data_folder_name, how_often_do_back_up_of_global_data, nationality_delimiter, name_of_nationality_file, global_stats_folder_name, eliteserien_wc_due_date, premier_league_wc_due_date, total_chip_usage_txt_file_name, country_population_txt_file_name, global_stats_folder_name, premier_league_api_url, eliteserien_api_url, web_global_league_eliteserien, eliteserien_folder_name, premier_league_folder_name, name_of_extra_info_file, path_to_store_local_data, web_global_league_premier_league, all_top_x_players_premier_league, all_top_x_players_eliteserien, time_to_sleep_for_each_iteration, name_of_ownership_file
+from constants import esf, fpl, current_season_name_eliteserien, global_chip_usage, finished_file_name, all_top_x_players_eliteserien_nationality, all_top_x_players_eliteserien_total_chips, all_top_x_players_premier_league_total_chips, all_top_x_players_premier_league_nationality, top_x_players_ids_backup_file_name, backup_data_txt_file_name, current_season_name_premier_league, backup_data_folder_name, how_often_do_back_up_of_global_data, nationality_delimiter, name_of_nationality_file, global_stats_folder_name, eliteserien_wc_due_date, premier_league_wc_due_date, total_chip_usage_txt_file_name, country_population_txt_file_name, global_stats_folder_name, premier_league_api_url, eliteserien_api_url, web_global_league_eliteserien, name_of_extra_info_file, path_to_store_local_data, web_global_league_premier_league, all_top_x_players_premier_league, all_top_x_players_eliteserien, time_to_sleep_for_each_iteration, name_of_ownership_file
 from utils.dataFetch.DataFetch import DataFetch
 from tqdm import tqdm
 import pandas as pd
@@ -9,7 +9,7 @@ import time
 import os
 
 
-def save_all_global_stats_for_current_gw(league_name=premier_league_folder_name):
+def save_all_global_stats_for_current_gw(league_name=fpl):
     """
     Save ownership stats from "top_x_players" fpl teams based on the fpl players they have in their teams
     :param top_x_players: top x fpl teams based on global ranking (10000)
@@ -22,16 +22,16 @@ def save_all_global_stats_for_current_gw(league_name=premier_league_folder_name)
 
     """
     
-    all_top_x_players = all_top_x_players_eliteserien if league_name == eliteserien_folder_name else all_top_x_players_premier_league
+    all_top_x_players = all_top_x_players_eliteserien if league_name == esf else all_top_x_players_premier_league
 
     start_time = time.time()
     
     # collect fpl api class for premier league or eliteserien
-    api_url = eliteserien_api_url if league_name == eliteserien_folder_name else premier_league_api_url
+    api_url = eliteserien_api_url if league_name == esf else premier_league_api_url
     DFObject = DataFetch(api_url)
     
     current_gameweek = get_current_gw(DFObject)
-    season_name = current_season_name_eliteserien if league_name == eliteserien_folder_name else current_season_name_premier_league
+    season_name = current_season_name_eliteserien if league_name == esf else current_season_name_premier_league
 
     print("\nCurrent GW: ", current_gameweek, "\nCurrent season: ", season_name, "\n")
 
@@ -69,14 +69,18 @@ def save_all_global_stats_for_current_gw(league_name=premier_league_folder_name)
     path_ids_txt_file = gw_path + "/" + finished_file_name
     if os.path.exists(path_ids_txt_file):
         return -1
-    
+
     # find max top_x players to check
     top_x_players = max(all_top_x_players)
-    all_top_x_player_nationality = all_top_x_players_eliteserien_nationality if league_name == eliteserien_folder_name else all_top_x_players_premier_league_nationality
-    all_top_x_player_total_chips = all_top_x_players_eliteserien_total_chips if league_name == eliteserien_folder_name else all_top_x_players_premier_league_total_chips
+    all_top_x_player_nationality = all_top_x_players_eliteserien_nationality if league_name == esf else all_top_x_players_premier_league_nationality
+    all_top_x_player_total_chips = all_top_x_players_eliteserien_total_chips if league_name == esf else all_top_x_players_premier_league_total_chips
     top_x_players_nationality = max(all_top_x_player_nationality)
     top_x_players_total_chips = max(all_top_x_player_total_chips)
-
+    
+    print(f"Extract ownership info for top {max(all_top_x_players)} managers")
+    print(f"Extract nationality info for top {top_x_players_nationality} managers")
+    print(f"Extract total chips usage info for top {top_x_players_total_chips} managers")
+    
     # get soccer player name and ids
     ids = get_player_name_ids(DFObject)
 
@@ -122,13 +126,13 @@ def save_all_global_stats_for_current_gw(league_name=premier_league_folder_name)
 
     dict_chip_to_index_premier_league = {"freehit": 0, "bboost": 1, "3xc": 2, "wildcard": 3, None: 4}
     dict_chip_to_index_eliteserien = {"rich": 0, "frush": 1, "2capt": 2, "wildcard": 3, None: 4}
-    dict_chip_to_index = dict_chip_to_index_eliteserien if league_name == eliteserien_folder_name else dict_chip_to_index_premier_league
+    dict_chip_to_index = dict_chip_to_index_eliteserien if league_name == esf else dict_chip_to_index_premier_league
 
     # data for total chip usage
     total_chip_usage_eliteserien_dict = {"wildcard": [0, 0], "rich": 0, "frush": 0, "2capt": 0}
     total_chip_usage_premier_league_dict = {"wildcard": [0, 0], "freehit": 0, "3xc": 0, "bboost": 0}
-    dict_total_chip_usage_to_index = total_chip_usage_eliteserien_dict if league_name == eliteserien_folder_name else total_chip_usage_premier_league_dict
-    wildcard_date = eliteserien_wc_due_date if league_name == eliteserien_folder_name else premier_league_wc_due_date
+    dict_total_chip_usage_to_index = total_chip_usage_eliteserien_dict if league_name == esf else total_chip_usage_premier_league_dict
+    wildcard_date = eliteserien_wc_due_date if league_name == esf else premier_league_wc_due_date
     wildcard_deadline = get_tz_notation_to_seconds(wildcard_date)
 
     # data for nationality data
@@ -258,7 +262,82 @@ def save_all_global_stats_for_current_gw(league_name=premier_league_folder_name)
         f_finished = open(path_ids_txt_file, "w", encoding="utf-8")
         f_finished.close()
 
+    fill_global_chip_usage(DFObject, global_stats_path, current_gameweek, league_name)
+
     return current_gameweek
+
+
+def fill_global_chip_usage(DFObject: DataFetch, global_stats_path, current_gameweek, league_name):
+    dict_total_chip_usage_to_index = {"wildcard": [0, 0], "rich": 0, "frush": 0, "2capt": 0} if league_name == esf else {"wildcard": [0, 0], "freehit": 0, "3xc": 0, "bboost": 0}
+    dict_total_chip_usage_global_to_index = {"wildcard": [0, 0], "rich": 0, "frush": 0, "2capt": 0} if league_name == esf else {"wildcard": [0, 0], "freehit": 0, "3xc": 0, "bboost": 0}
+    wildcard_date = eliteserien_wc_due_date if league_name == esf else premier_league_wc_due_date
+    wildcard_deadline = get_tz_notation_to_seconds(wildcard_date)
+    
+    static = DFObject.get_current_fpl_info()
+    event = static['events']
+    total_players = static["total_players"]
+    
+    for gw_i in range(0, current_gameweek + 1):
+        if os.path.exists(global_stats_path + "/" + str(gw_i + 1)):
+            chips_played_gw = event[gw_i]["chip_plays"]
+            for chip in chips_played_gw:
+                chip_name = chip['chip_name']
+                if chip_name != "wildcard":
+                    dict_total_chip_usage_global_to_index[chip_name] += chip['num_played']
+                    dict_total_chip_usage_to_index[chip_name] = chip['num_played']
+                else:
+                    wildcard_time_used = get_tz_notation_to_seconds(event[gw_i]["deadline_time"].split("Z")[0])
+                    if wildcard_time_used > wildcard_deadline:
+                        dict_total_chip_usage_global_to_index[chip_name][1] += chip['num_played']
+                        dict_total_chip_usage_to_index[chip_name][1] = chip['num_played']
+                    else:
+                        dict_total_chip_usage_global_to_index[chip_name][0] += chip['num_played']
+                        dict_total_chip_usage_to_index[chip_name][0] = chip['num_played']
+
+            current_path = global_stats_path + "/" + str(gw_i + 1) + "/" + global_chip_usage
+            if not os.path.exists(current_path):
+                f_finished = open(current_path, "w", encoding="utf-8")
+                f_finished.close()
+
+            first_line, data_line, data_line_2 = "", "", ""
+            for idx, chip_key in enumerate(dict_total_chip_usage_to_index.keys()):
+                if (chip_key == "wildcard"):
+                    first_line += "wildcard_1, wildcard_2"
+                    data_line += str(dict_total_chip_usage_to_index["wildcard"][0]) + "," + str(dict_total_chip_usage_to_index["wildcard"][1])
+                else:
+                    first_line += chip_key
+                    data_line += str(dict_total_chip_usage_to_index[chip_key])
+                if (idx != len(dict_total_chip_usage_to_index.keys()) - 1):
+                    first_line += "," 
+                    data_line += "," 
+            
+            for idx, chip_key in enumerate(dict_total_chip_usage_global_to_index.keys()):
+                if (chip_key == "wildcard"):
+                    data_line_2 += str(dict_total_chip_usage_global_to_index["wildcard"][0]) + "," + str(dict_total_chip_usage_global_to_index["wildcard"][1])
+                else:
+                    data_line_2 += str(dict_total_chip_usage_global_to_index[chip_key])
+                if (idx != len(dict_total_chip_usage_global_to_index.keys()) - 1):
+                    data_line_2 += ","
+
+            f4 = open(current_path, "w", encoding="utf-8")
+            f4.write(first_line + "\n")
+            f4.write(data_line + "\n")
+            f4.write(data_line_2 + "\n")
+            f4.write("average_entry_score:" + str(event[gw_i]["average_entry_score"]) + "\n")
+            f4.write("highest_scoring_entry:" + str(event[gw_i]["highest_scoring_entry"]) + "\n")
+            f4.write("highest_score:" + str(event[gw_i]["highest_score"]) + "\n")
+            f4.write("most_selected:" + str(event[gw_i]["most_selected"]) + "\n")
+            f4.write("most_transferred_in:" + str(event[gw_i]["most_transferred_in"]) + "\n")
+            f4.write("top_element:" + str(event[gw_i]["top_element"]) + "\n")
+            f4.write("transfers_made:" + str(event[gw_i]["transfers_made"]) + "\n")
+            f4.write("most_captained:" + str(event[gw_i]["most_captained"]) + "\n")
+            f4.write("most_vice_captained:" + str(event[gw_i]["most_vice_captained"]) + "\n")
+            f4.write("top_element_info:" + str(event[gw_i]["top_element_info"]["id"]) + "-" + str(event[gw_i]["top_element_info"]["points"]) + "\n")
+            if ((gw_i + 1) == current_gameweek):
+                f4.write(str(total_players))
+            else:
+                f4.write(str(-1))
+            f4.close()
 
 
 def get_season_name(DFObject):
@@ -276,9 +355,9 @@ def data_fetch(num, league_type):
     data_fetch will collect 50 teams from page "num" from global rank
     """
     time.sleep(0.5)
-    if league_type == premier_league_folder_name:
+    if league_type == fpl:
         r = requests.get(web_global_league_premier_league.replace('X', str(num)))
-    elif league_type == eliteserien_folder_name:
+    elif league_type == esf:
         r = requests.get(web_global_league_eliteserien.replace('X', str(num)))
     else:
         return None
@@ -326,7 +405,7 @@ def write_date_to_files(general_folder_path, ids, ids_dict,
     store_extra_info = general_folder_path + "/" + name_of_extra_info_file
 
     f2 = open(store_extra_info, "w", encoding="utf-8")
-    first_line = "Rich Uncle, Forward Rush, 2 Captains, Wildcard, None\n" if league_name == eliteserien_folder_name else "Freehit, Bench Boost, Triple Captain, Wildcard, None\n"
+    first_line = "Rich Uncle, Forward Rush, 2 Captains, Wildcard, None\n" if league_name == esf else "Freehit, Bench Boost, Triple Captain, Wildcard, None\n"
     f2.write(first_line)
     f2.write(str(fpl_player_chip_info[0]) + "," + 
         str(fpl_player_chip_info[1]) + "," + str(fpl_player_chip_info[2]) + "," + 
@@ -512,12 +591,21 @@ def read_complete_ownership(path, ids_dict):
 def get_id_s(path, id_s, top_x_players):
     current_data = np.loadtxt(path, encoding="utf-8", dtype="str", delimiter=",", skiprows=0)
     current_number_stored = int(current_data[1])
+    print("current_number_stored: ", current_number_stored)
     
     # if all data is stored
     if current_number_stored == top_x_players:
         return [], current_number_stored
+
+    next_id = current_number_stored
+    for idx, id in enumerate(id_s):
+        if (str(id) == str(id_s[current_number_stored])):
+            next_id = idx
     
-    next_id = np.where(id_s == id_s[current_number_stored])[0]
+    # next_id = np.where(id_s == id_s[current_number_stored])[0]
+
+    print("next_id: ", next_id, id_s[current_number_stored], id_s[next_id])
+
     new_id_s_list = id_s[int(next_id):]
     
     return new_id_s_list, current_number_stored

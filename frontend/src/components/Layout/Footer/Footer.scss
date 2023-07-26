@@ -1,10 +1,9 @@
 .footer {
     background-color: var(--footer-background-color);
     color: var(--white-color);
+    padding: 20px 0 35px 0;
     position: relative;
     width: 100%;
-    padding-top: 20px;
-    padding-bottom: 35px;
 
     .footer-container {
         display: flex;
@@ -12,7 +11,7 @@
         height: 100%;
         max-width: var(--max-width);
         margin: 0 auto;
-        padding: 0 40px 0 40px;
+        padding: 0 40px;
 
         .footer-section {
             margin-right: 50px;
@@ -21,12 +20,19 @@
         .footer-section-social-media {
             margin-left: auto;
             margin-right: 20px;
+            margin-top: 15px;
 
             a {
                 display: inline;
                 position: relative;
                 top: -7px;
                 margin-left: 10px;
+            }
+        }
+    
+        @media (max-width: 600px) {
+            .footer-section-social-media {
+                margin-left: 0;
             }
         }
 
@@ -48,6 +54,27 @@
         }
     }
 
+    @media (max-width: 600px) {
+        .footer-container {
+            flex-direction: column;
+            padding: 0 15px;
+    
+            div {
+                margin-bottom: 15px;
+            }
+    
+            h2 {
+                font-size: 18px;
+                margin-bottom: 15px;
+            }
+    
+            a {
+                margin-top: 10px;
+                font-size: 14px;
+            }
+        }
+    }
+
     h2 {
         margin-top: 10px;
         margin-bottom: 20px;
@@ -59,11 +86,7 @@
         color: var(--footer-h2-color-eliteserien);
     }
 
-    .footer-section-social-media {
-        margin-top: 15px;
-    }
-
-    &.FPL {
+    &.fpl {
         h2 {
             color: var(--footer-h2-color-premier-league);
         }
@@ -71,31 +94,5 @@
         svg {
             color: var(--footer-h2-color-premier-league);
         }
-    }
-}
-
-
-@media (max-width: 600px) {
-    .footer-container {
-        flex-direction: column !important;
-        padding: 0 15px !important;
-
-        div {
-            margin-bottom: 15px;
-        }
-
-        h2 {
-            font-size: 18px !important;
-            margin-bottom: 15px !important;
-        }
-
-        a {
-            margin-top: 10px !important;
-            font-size: 14px !important;
-        }
-    }
-
-    .footer-section-social-media {
-        margin-left: 0 !important;
     }
 }

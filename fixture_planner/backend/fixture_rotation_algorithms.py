@@ -1,6 +1,6 @@
-from utils.fixtures.models.RotationPlannerTeamInfoModel import RotationPlannerTeamInfoModel
+from models.fixtures.models.RotationPlannerTeamInfoModel import RotationPlannerTeamInfoModel
 from fixture_planner.backend.utility_functions import insertion_sort, create_two_dim_list
-from utils.fixtures.models.FixtureDifficultyModel import FixtureDifficultyModel
+from models.fixtures.models.FixtureDifficultyModel import FixtureDifficultyModel
 from fixture_planner.backend.create_data_objects import create_FDR_dict
 from constants import blank_gw_fdr_score, total_number_of_gameweeks
 from fixture_planner.models import PremierLeagueTeamInfo

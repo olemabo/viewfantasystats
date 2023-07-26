@@ -1,42 +1,23 @@
+import { PlayerStatisticsModel, CategoryTypes } from '../../../models/playerStatistics/PlayerStatisticsModel';
 import { DefaultPageContainer } from '../../Layout/DefaultPageContainer/DefaultPageContainer';
+import { Table, TableBody, TableCell, TableHead, TableRow } from '../../Shared/Table/Table';
 import { TeamNameAndIdModel } from '../../../models/playerOwnership/TeamNameAndIdModel';
 import React, { useState, useEffect, FunctionComponent } from 'react';
 import TableSortHead from '../../Shared/TableSortHead/TableSortHead';
+import { PageProps } from '../../../models/shared/PageProps';
 import { Spinner } from '../../Shared/Spinner/Spinner';
-import '../PlayerOwnership/PlayerOwnership.scss';
 import { store } from '../../../store/index';
 import Pagination from 'rc-pagination';
 import axios from 'axios';
 
-axios.defaults.xsrfCookieName = 'csrftoken';
-axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
-type LanguageProps = {
-    content: any;
-    league_type: string;
-}
-
-export interface PlayerStatisticsModel {
-    Name: string;
-    Points: number;
-    Bps: number;
-    ICT: number;
-    I: number;
-    C: number;
-    T: number;
-    player_team_id: number;
-    player_position_id: number;
-}
-
-type CategoryTypes = 'Name' | 'Points' | 'Bps' | 'ICT' | 'I' | 'C' | 'T';
-
-export const PlayerStatisticsPage : FunctionComponent<LanguageProps> = (props) => {
+export const PlayerStatisticsPage : FunctionComponent<PageProps> = (props) => {
     const player_statistics_api_path = "/statistics/player-statistics-api/";
     const emptyAvailableGws: any[] = []
 
     const emptyOwnershipData: PlayerStatisticsModel[] = [];
 
-    const  [ firstLoading, setFirstLoading ] = useState(true);
+    const [ firstLoading, setFirstLoading ] = useState(true);
     const [ sorting_keyword_teams, setSorting_keyword_teams ] = useState("All");
     const [ sorting_keyword_positions, setSorting_keyword_positions ] = useState("All");
     const [ query, setQuery ] = useState("");
@@ -48,7 +29,8 @@ export const PlayerStatisticsPage : FunctionComponent<LanguageProps> = (props) =
     const [ totalNumberOfGws, setTotalNumberOfGws ] = useState(0);
 
     const [ pagingationNumber, setPaginationNumber ] = useState(1);
-    const [ numberOfHitsPerPagination, setNumberOfHitsPerPagination ] = useState(15);
+    const numberOfHitsPerPagination = 15;
+
     const [ categories, setCategories ] = useState([]);
     const [ currentSorted, setCurrentSorted ] = useState("Points");
     
@@ -79,6 +61,8 @@ export const PlayerStatisticsPage : FunctionComponent<LanguageProps> = (props) =
 
 
     function updateOwnershipTopXData(last_x_gws: number) {
+        setIsLoading(true);
+
         var body = {
             league_name: props.league_type,
             last_x_gw: last_x_gws,
@@ -91,7 +75,9 @@ export const PlayerStatisticsPage : FunctionComponent<LanguageProps> = (props) =
             setPlayerStatsDataToShow(data?.player_info);
             setLastXGws(last_x_gws);
             filterOnPositionAndTeam(sorting_keyword_teams, sorting_keyword_positions, query, data?.player_info);
-        })
+            setIsLoading(false);
+        });
+
     }
 
 
@@ -157,10 +143,6 @@ export const PlayerStatisticsPage : FunctionComponent<LanguageProps> = (props) =
         })
         setTeamNameAndIds(te);
     }
-
-    function paginationUpdate(pageNumber: number) {
-        setPaginationNumber(pageNumber);
-    }
     
     function sortOwnershipData(sortType: CategoryTypes, increase: boolean) {
         let temp = [...playerStatsDataToShow];
@@ -187,10 +169,15 @@ export const PlayerStatisticsPage : FunctionComponent<LanguageProps> = (props) =
         totalNumberOfGwsList.push(i + 1);
     }
 
-    console.log(currentSorted, categories)
+    const getMinWidth = (category: string) => {
+        if (category === "Name") return 140;
+        if (lastXGws === 0) return 100;
+
+        return (1000 / categories.length);
+    }
 
     return <>
-        <DefaultPageContainer pageClassName='player-ownership-container' heading={props.content.Statistics.PlayerStatistics?.title + " - " + store.getState().league_type} description={props.content.Statistics.PlayerStatistics?.title}>
+        <DefaultPageContainer pageClassName='player-ownership-container' heading={props.content.Statistics.PlayerStatistics?.title + " - " + (store.getState().league_type === "fpl" ? "Premier League" : "Eliteserien")} description={props.content.Statistics.PlayerStatistics?.title}>
         <h1>{props.content.Statistics.PlayerStatistics?.title}</h1>
         { !firstLoading && <>
             <form className="form-stuff player-stats text-center">
@@ -198,7 +185,7 @@ export const PlayerStatisticsPage : FunctionComponent<LanguageProps> = (props) =
                 <label>{props.content.General.view}</label>
                 <select onChange={(e) => filterOnPositionAndTeam(sorting_keyword_teams, e.target.value, query)} className="input-box" id="sort_players_dropdown" name="sort_players">
                     <option selected={sorting_keyword_positions == "All"} value="All">{props.content.General.all_positions}</option>
-                    <option selected={sorting_keyword_positions == "Goalkeepers"} value="Goalkeepers">{props.content.General.goalkeeper}</option>
+                    <option selected={sorting_keyword_positions == "Goalkeepers"} value="Goalkeepers">{props.content.General.goalkeepers}</option>
                     <option selected={sorting_keyword_positions == "Defenders"} value="Defenders">{props.content.General.defenders}</option>
                     <option selected={sorting_keyword_positions == "Midfielders"} value="Midfielders">{props.content.General.midfielders}</option>
                     <option selected={sorting_keyword_positions == "Forwards"} value="Forwards">{props.content.General.forwards}</option>
@@ -254,45 +241,43 @@ export const PlayerStatisticsPage : FunctionComponent<LanguageProps> = (props) =
 
         { !isLoading && playerStatsDataToShow?.length > 0 && 
             <div className="container-player-stats">
-                <table>
-                <thead>
-                    <tr><>
-                        { categories.map( (category, idx) => 
-                            <th className={idx == 0 ? 'name-col' : (idx + 1) == categories.length ? 'last-element' : ''}>
-                                { idx != 0 ? <TableSortHead text={category} reset={currentSorted != category} defaultSortType={'Increasing'} onclick={(increase: boolean) => sortOwnershipData(category, increase)}/>
-                                : category }
-                            </th>
-                        )}</>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    { playerStatsDataToShow.slice( (pagingationNumber - 1) * numberOfHitsPerPagination, (pagingationNumber - 1) * numberOfHitsPerPagination + numberOfHitsPerPagination).map( (x, index) => 
-                    <tr>
-                        { categories.map( (category, idx ) => 
-                            <td className={ category == "Name" ? "name-col" : '' + (currentSorted == category) ? 'selected' : ''}>
-                                <div className={ category == "Name" ? "format-name-col" : ''}>
-                                    { category == "Name" ? x[category] : Number(x[category]).toFixed(1) }
-                                </div>
-                            </td>
-                        )}
-                    </tr>
-                    )}             
-                </tbody>
-            </table>
-        </div>}
-        
+                <Table tableLayoutType={props.league_type}>
+                    <TableHead>
+                        <TableRow><>
+                            { categories.map( (category, idx) => 
+                                <TableCell cellType='head' minWidth={getMinWidth(category)} className={idx == 0 ? 'name-col' : (idx + 1) == categories.length ? 'last-element' : ''}>
+                                    { idx != 0 ? <TableSortHead text={category} reset={currentSorted != category} defaultSortType={'Increasing'} onclick={(increase: boolean) => sortOwnershipData(category, increase)}/>
+                                    : category }
+                                </TableCell>
+                            )}</>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        { playerStatsDataToShow.slice( (pagingationNumber - 1) * numberOfHitsPerPagination, (pagingationNumber - 1) * numberOfHitsPerPagination + numberOfHitsPerPagination).map(player_stat => 
+                        <TableRow>
+                            { categories.map( (category) => 
+                                <TableCell cellType='data' minWidth={getMinWidth(category)} className={ category === "Name" ? "name-col" : '' + (currentSorted === category) ? 'selected' : ''}>
+                                    <div className={ category === "Name" ? "format-name-col" : ''}>
+                                        { category === "Name" ? player_stat[category] : Number(player_stat[category]).toFixed(category === "Mins" ? 0 : 1) }
+                                    </div>
+                                </TableCell>
+                                
+                            )}
+                        </TableRow>
+                        )}             
+                    </TableBody>
+                </Table>
+            </div> }
         { !isLoading && playerStatsDataToShow.length > 0 && 
             <Pagination 
                 className="ant-pagination" 
-                onChange={(number) => paginationUpdate(number)}
-                defaultCurrent={1}   
+                onChange={(number) => setPaginationNumber(number)}
+                defaultCurrent={1}
+                pageSize={numberOfHitsPerPagination}   
                 total={playerStatsDataToShow.length} />     
         }
 
-        { isLoading && 
-            <Spinner />
-        }
+        { isLoading && <Spinner /> }
 
         </DefaultPageContainer>
     </>

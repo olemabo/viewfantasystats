@@ -14,7 +14,6 @@ from django.contrib import admin
 class CupAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'round_lost', 'qualification_rank')
 
-
 class NationalityAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'number_of_managers_from_this_country') 
 
@@ -29,6 +28,7 @@ class GWCheckedAdmin(admin.ModelAdmin):
 
 class UserAdmin(admin.ModelAdmin):
     list_display = ('user_first_name', 'user_last_name', 'user_team_name', 'user_id')
+
 
 admin.site.register(PremierLeagueNationalityStatistics, NationalityAdmin)
 admin.site.register(PremierLeagueGlobalOwnershipStats10000, OwnershipAdmin)

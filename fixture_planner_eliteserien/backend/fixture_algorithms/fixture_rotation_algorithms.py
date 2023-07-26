@@ -1,10 +1,10 @@
 from fixture_planner.backend.utility_functions import fixture_score_one_team, insertion_sort, create_two_dim_list
 from fixture_planner.backend.fixture_planner_best_algorithms import compute_best_fixtures_one_team_db_data
 from constants import total_number_of_eliteserien_teams
-from utils.fixtures.models.FixtureDifficultyModel import FixtureDifficultyModel
+from models.fixtures.models.FixtureDifficultyModel import FixtureDifficultyModel
 from itertools import combinations
 import numpy as np
-from utils.fixtures.models.RotationPlannerTeamInfoModel import RotationPlannerTeamInfoModel
+from models.fixtures.models.RotationPlannerTeamInfoModel import RotationPlannerTeamInfoModel
 import json
 
 

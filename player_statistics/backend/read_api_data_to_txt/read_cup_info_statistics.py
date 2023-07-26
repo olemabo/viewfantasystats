@@ -1,4 +1,4 @@
-from constants import current_season_name_eliteserien, cup_processed_rounds, cup_all_ids_processed_file, cup_data_file, current_season_name_premier_league, cup_delimiter, user_stats_special_delimiter, cup_stats_folder_name, premier_league_api_url, eliteserien_api_url, eliteserien_folder_name, path_to_store_local_data
+from constants import current_season_name_eliteserien, cup_processed_rounds, cup_all_ids_processed_file, cup_data_file, current_season_name_premier_league, cup_delimiter, cup_stats_folder_name, premier_league_api_url, eliteserien_api_url, esf, path_to_store_local_data
 from utils.utility_functions import get_current_gw_
 from utils.dataFetch.DataFetch import DataFetch
 import numpy as np
@@ -7,10 +7,10 @@ import time
 import os 
 
 
-def read_cup_info_statistics_eliteserien(league_name=eliteserien_folder_name):
+def read_cup_info_statistics_eliteserien(league_name=esf):
     print("\n\nRead data from API | Cup statistics\n")
     
-    api_url = eliteserien_api_url if league_name == eliteserien_folder_name else premier_league_api_url
+    api_url = eliteserien_api_url if league_name == esf else premier_league_api_url
     DFObject = DataFetch(api_url)
     static_bootstrap = DFObject.get_current_fpl_info()
     
@@ -146,7 +146,7 @@ def check_if_txt_file_exist(league_name, total_number_of_participants, number_of
         print("Create folder: ", league_path)
         os.mkdir(league_path)
 
-    season_name = current_season_name_eliteserien if league_name == eliteserien_folder_name else current_season_name_premier_league
+    season_name = current_season_name_eliteserien if league_name == esf else current_season_name_premier_league
     season_path = league_path + "/" + season_name + "/"
     if not os.path.isdir(season_path):
         print("Create folder: ", league_path)

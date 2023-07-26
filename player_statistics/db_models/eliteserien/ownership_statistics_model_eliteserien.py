@@ -411,6 +411,14 @@ class EliteserienGlobalOwnershipStats1000(models.Model):
         blank=True,
     )
 
+    def extract_data_from_current_gw(self, current_gw):
+        field_name = f'gw_{current_gw}'
+        field_value = getattr(self, field_name, None)
+        if field_value:
+            return field_value
+        else:
+            return None
+
     # Metadata
     class Meta:
         ordering = ['player_id', 'player_name', 'player_team_id', 'player_position_id']
@@ -705,10 +713,24 @@ class EliteserienChipsAndUserInfo(models.Model):
     )
 
     total_chip_usage_5000 = ListTextField(
-        base_field=models.IntegerField(help_text='Total chip usage among top 10000'),
+        base_field=models.IntegerField(help_text='Total chip usage among top 5000'),
         size=number_of_total_chip_usage,  # Maximum of 100 ids in list
         blank=True,
     )
+ 
+    global_chip_usage_this_gw = ListTextField(
+        base_field=models.IntegerField(help_text='Global chip usage for all managers this round', blank=True, null=True),
+        size=number_of_total_chip_usage,  # Maximum of 100 ids in list
+        blank=True,
+    )
+
+    global_chip_usage_total = ListTextField(
+        base_field=models.IntegerField(help_text='Global chip usage for all managers in total', blank=True, null=True),
+        size=number_of_total_chip_usage,  # Maximum of 100 ids in list
+        blank=True,
+    )
+
+    number_of_managers = models.IntegerField(help_text='Number of managers (130328)', blank=True, null=True)
 
     # Metadata
     class Meta:

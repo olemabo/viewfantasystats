@@ -20,9 +20,10 @@ path_to_store_local_data = "/home/olebo/viewfantasystats/" + stored_data
 web_global_league_premier_league = 'https://fantasy.premierleague.com/api/leagues-classic/314/standings/?phase=1&page_new_entries=1&page_standings=X'
 web_global_league_eliteserien = 'https://fantasy.tv2.no/api/leagues-classic/325/standings/?phase=1&page_new_entries=1&page_standings=X'
 
-# folder names
-premier_league_folder_name = "premier_league"
-eliteserien_folder_name = "eliteserien"
+
+# league_type
+fpl = "fpl"
+esf = "esf"
 
 global_stats_folder_name = "global_stats"
 backup_data_folder_name= "backup_data"
@@ -47,6 +48,7 @@ cup_all_ids_processed_file = "cup_all_processed_ids.txt"
 cup_data_file = "cup_data.txt"
 cup_processed_rounds = "cup_processed_rounds.txt"
 finished_file_name = "finished.txt"
+global_chip_usage = "global_chip_usage.txt"
 
 # delimiters
 user_stats_special_delimiter = ":;:"
@@ -89,3 +91,6 @@ blank_gw_fdr_score = 10
 # pythonanywhere
 python_anywhere_path = "/home/olebo/viewfantasystats/"
 # python_anywhere_path = ""
+
+
+

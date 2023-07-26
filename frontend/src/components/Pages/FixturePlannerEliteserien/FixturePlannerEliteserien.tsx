@@ -5,26 +5,21 @@ import { KickOffTimesModel } from '../../../models/fixturePlanning/KickOffTimes'
 import React, { useState, useEffect, FunctionComponent } from 'react';
 import { FilterButton } from '../../Shared/FilterButton/FilterButton';
 import { ShowFDRData } from '../../Fixtures/ShowFDRData/ShowFDRData';
+import * as external_urls from '../../../static_urls/externalUrls';
+import ToggleButton from '../../Shared/ToggleButton/ToggleButton';
 import { convertFDRtoHex } from '../../../utils/convertFDRtoHex';
+import { PageProps, esf } from '../../../models/shared/PageProps';
 import "../../Pages/FixturePlanner/FixturePlanner.scss";
 import { Spinner } from '../../Shared/Spinner/Spinner';
 import { Button } from '../../Shared/Button/Button';
 import Popover from '../../Shared/Popover/Popover';
 import { store } from '../../../store/index';
 import axios from 'axios';
-import ToggleButton, { ToggleButton2 } from '../../Shared/ToggleButton/ToggleButton';
+import TextInput from '../../Shared/TextInput/TextInput';
+import FdrBox from '../../Shared/FDR-explaination/FdrBox';
+ 
 
-axios.defaults.xsrfCookieName = 'csrftoken';
-axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-
-type FixturePlannerPageProps = {
-    content: any;
-    league_type: string;
-    fixture_planning_type: string;
-}
-
-export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPageProps> = (props) => {
-    const fixture_planner_kickoff_time_api_path = "/fixture-planner-eliteserien/get-eliteserien-kickoff-times/";
+export const FixturePlannerEliteserienPage : FunctionComponent<PageProps & { fixture_planning_type: string }> = (props) => {
     const fixture_planner_api_path = "/fixture-planner-eliteserien/get-all-eliteserien-fdr-data/";
     
     const min_gw = 1;
@@ -118,7 +113,6 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
             if (data?.gws_and_dates?.length > 0) {
                 let temp_KickOffTimes: KickOffTimesModel[] = [];
                 data?.gws_and_dates.forEach((kickoff: string) => temp_KickOffTimes.push(JSON.parse(kickoff)));
-                // setKickOffTimesToShow(temp_KickOffTimes.slice(data.gw_start - 1, data.gw_end));
                 setKickOffTimesToShow(temp_KickOffTimes);
             }
             
@@ -178,7 +172,6 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
     }
 
     var title_fixture_planner = props.content.Fixture.FixturePlanner?.title
-    var title_rotation_planner = props.content.Fixture.RotationPlanner?.title
     var title_period_planner = props.content.Fixture.PeriodPlanner?.title
 
     var title = title_fixture_planner;
@@ -202,7 +195,7 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
     return <>
     <DefaultPageContainer 
         pageClassName='fixture-planner-container' 
-        heading={title + " - " + store.getState().league_type} 
+        heading={title + " - " + (store.getState().league_type === "fpl" ? "Premier League" : "Eliteserien")} 
         description={'Fixture Difficulty Rating Planner for Eliteserien Fantasy (ESF). '}>
         <h1>
             {title}
@@ -215,74 +208,55 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
                 iconpostition={[-10, 0, 0, 3]}
                 popover_text={ description }>
                 Kampprogram og vanskelighetsgrader er hentet fra 
-                <a href="https://docs.google.com/spreadsheets/d/168WcZ2mnGbSh-aI-NheJl5OtpTgx3lZL-YFV4bAJRU8/edit?usp=sharing">Excel arket</a>
-                til Dagfinn Thon.
+                <a href={external_urls.url_spreadsheets_dagfinn_thon}>Excel arket</a> til Dagfinn Thon.
                 { fdrToColor != null && 
-                    <><p className='diff-introduction-container'>
-                        FDR verdier: 
-                        <span style={{backgroundColor: "#1d3557bf" }} className="diff-introduction-box wide">0.25</span>
-                        <span style={{ backgroundColor: "#47abd89e" }} className="diff-introduction-box">1</span>
-                        <span style={{ backgroundColor: "#95d2ec8f" }} className="diff-introduction-box">2</span>
-                        <span style={{backgroundColor: "#e7f9ff7a" }} className="diff-introduction-box">3</span>
-                        <span style={{backgroundColor: "#ff4242a3" }} className="diff-introduction-box">4</span>
-                        <span style={{backgroundColor: "#d01b1bb5" }} className="diff-introduction-box">5</span>
-                        <span style={{backgroundColor: convertFDRtoHex("10", fdrToColor)}} className="diff-introduction-box black">10</span>
-                    </p>
-                    <p>Mørkeblå bokser markerer en dobbeltrunde, mens svarte bokser markerer at laget ikke har kamp den runden.</p></>
+                    <FdrBox leagueType={esf} />
                 }
             </Popover>
         </h1>
         { maxGw > 0 && 
-            <form onSubmit={(e) =>  {updateFDRData(fdrType); e.preventDefault()}}>
-                <label htmlFor='input-form-start-gw'>{props.content.Fixture.gw_start}</label>
-                <input 
-                    className="form-number-box" 
-                    type="number" 
-                    min={min_gw}
-                    max={gwEnd}
-                    onInput={(e) => setGwStart(parseInt(e.currentTarget.value))} 
-                    value={gwStart} 
-                    id="input-form-start-gw" 
-                    name="input-form-start-gw">
-                </input>
-                
-                <label htmlFor='input-form-end-gw'>{props.content.Fixture.gw_end}</label>
-                <input 
-                    className="form-number-box" 
-                    type="number" 
-                    min={gwStart}
-                    max={maxGw}
-                    onInput={(e) => setGwEnd(parseInt(e.currentTarget.value))} 
-                    value={gwEnd} 
-                    id="input-form-end-gw" 
-                    name="input-form-end-gw">
-                </input>
+            <div className='input-row-container'>
+                <form onSubmit={(e) =>  {updateFDRData(fdrType); e.preventDefault()}}>
+                    <TextInput 
+                        htmlFor='input-form-start-gw'
+                        min={min_gw}
+                        max={max_gw}
+                        onInput={(e: number) => setGwStart(e)} 
+                        defaultValue={gwStart}>
+                        {props.content.Fixture.gw_start}
+                    </TextInput>
+                    <TextInput 
+                        htmlFor='input-form-end-gw'
+                        min={gwStart}
+                        max={max_gw}
+                        onInput={(e: number) => setGwEnd(e)} 
+                        defaultValue={gwEnd}>
+                        {props.content.Fixture.gw_end}
+                    </TextInput>
 
-                { props.fixture_planning_type == FixturePlanningType.Periode && 
-                <><br />
-                    <label htmlFor='min_num_fixtures'>
-                        {props.content.Fixture.min_fixtures}
-                    </label>
-                    <input 
-                        className="box" 
-                        type="number" 
-                        min={1} 
-                        max={gwEnd}
-                        value={minNumFixtures} 
-                        onInput={(e) => setMinNumFixtures(parseInt(e.currentTarget.value))} 
-                        id="min_num_fixtures" 
-                        name="min_num_fixtures" /></>
-                }
+                    { props.fixture_planning_type == FixturePlanningType.Periode && 
+                        <TextInput 
+                            onInput={(e: number) => setMinNumFixtures(e)} 
+                            defaultValue={minNumFixtures}
+                            min={minNumFixtures}
+                            htmlFor='min-num-fixtures'
+                            max={gwEnd}>
+                            {/* {props.content.Fixture.min_fixtures} */}
+                            {props.content.Fixture.min_fixtures.split(/(\s+)/)[0]}<br/>
+                            {props.content.Fixture.min_fixtures.split(/(\s+)/)[2]}
+                        </TextInput>
+                    }
 
-                <input className="submit" type="submit" value={props.content.General.search_button_name} />
-            </form> 
+                    <input className="submit" type="submit" value={props.content.General.search_button_name} />
+                </form> 
+            </div>
         }
 
         { maxGw > 0 && <>
             <ToggleButton 
                 onclick={(checked: string) => changeXlsxSheet(checked)} 
                 toggleButtonName="FDR-toggle"
-                toggleList={[ 
+                defaultToggleList={[ 
                     { name: "Defensivt", value: "_defensivt", checked: fdrType==="_defensivt", classname: "defensiv" },
                     { name: "FDR", value: "", checked: fdrType==="", classname: "fdr" },
                     { name: "Offensivt", value: "_offensivt", checked: fdrType==="_offensivt", classname: "offensiv"}
@@ -290,7 +264,9 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
             />
             <Button buttonText={props.content.Fixture.filter_button_text} 
                 icon_class={"fa fa-chevron-" + (showTeamFilters ? "up" : "down")} 
-                onclick={() => setShowTeamFilters(showTeamFilters ? false : true)} />
+                onclick={() => setShowTeamFilters(showTeamFilters ? false : true)} 
+                color='white'
+            />
         </> }
         
         { fdrDataToShow != null && fdrDataToShow.length > 0 && fdrDataToShow[0].team_name != "empty" && showTeamFilters &&
@@ -314,7 +290,7 @@ export const FixturePlannerEliteserienPage : FunctionComponent<FixturePlannerPag
                 fdrData={fdrDataToShow}
                 kickOffTimes={kickOffTimesToShow}
                 allowToggleBorder={true}
-                // fdrToColor={fdrToColor}
+                warningMessage={props.content.Fixture.noTeamsChosen}
             />
         )}
     </DefaultPageContainer>

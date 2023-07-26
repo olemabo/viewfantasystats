@@ -7,13 +7,15 @@ urlpatterns = [
     path('premier-league/fixture-planner/', index),
     path('premier-league/player-ownership/', index),
     path('premier-league/player-statistics/', index),
-    
+    path('premier-league/live-fixtures/', index),
+
     path('premier-league/fdr-planner/', index),
     path('premier-league/rotation-planner/', index),
     path('premier-league/periode-planner/', index),
 
     path('eliteserien/', index),
     path('eliteserien/fdr-planner/', index),
+    path('eliteserien/fdr-planner-team-id/', index),
     path('eliteserien/rotation-planner/', index),
     path('eliteserien/periode-planner/', index),
     path('eliteserien/player-ownership/', index),

@@ -5,18 +5,22 @@ type ButtonProps = {
     buttonText: string,
     onclick: any,
     icon_class?: string,
+    small?: boolean,
+    color?: 'white' | 'default'
 }
 
-export const Button : FunctionComponent<ButtonProps> = (props) => {
+export const Button : FunctionComponent<ButtonProps> = ({ 
+    buttonText, 
+    onclick, 
+    icon_class = '',
+    small = false,
+    color = 'default',
+}) => {
     
-    return <button className='button-component' onClick={() => props.onclick()}>
-        <span>{props.buttonText}</span>
-        <i className={props.icon_class} aria-hidden="true"></i>
+    return <button className={`button-component ${(small ? ' small' : '')} ${color}`} onClick={() => onclick()}>
+        <span>{buttonText}</span>
+        <i className={icon_class} aria-hidden="true"></i>
     </button>
 };
 
 export default Button;
-
-Button.defaultProps = {
-    icon_class: "",
-}

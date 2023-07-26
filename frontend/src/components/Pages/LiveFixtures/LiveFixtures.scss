@@ -71,74 +71,6 @@
             background-color: var(--white-color);
             column-gap: 10px;
             
-            
-            table {
-                width: 100%;
-                
-                margin-bottom: 25px;
-                font-size: 14px;
-
-                thead {
-                    text-align: left;
-
-                    tr {
-                        background-color: var(--table-thead-tr-background-color-eliteserien) !important;
-                        // background-color: #dcdbdbf7 !important;
-                        // background-color: #e7e7e7f7 !important;
-                    }
-                }
-
-                .name {
-                    text-align: left;
-                    width: 170px;
-                }
-
-                tr:nth-child(even) {
-                    background-color: var(--table-even-rows);
-                }
-                tr:nth-child(odd) {
-                    background-color: var(--table-odd-rows);
-                }
-
-                tbody tr:first-child td {
-                    border-top: 1px solid transparent;
-                }
-
-                th, td {
-                    border-color: transparent !important;
-                    // min-width: 60px;
-                }
-
-                td {
-                    border: solid;
-                    border-width: 1px 1px;
-                    text-align: left;
-                    padding: 4px;
-                }
-              
-                th {
-                    border: solid;
-                    border-width: 1px 1px;
-                    text-align: left;
-                    padding-left: 5px;
-                    border-bottom: 1px solid var(--black-color);
-                    width: 55px;
-                    height: 20px;
-                }
-
-                tbody tr {
-                    height: 30px;
-                }
-
-                thead tr th {
-                    height: 30px;
-                }
-            }
-
-            table {
-                margin-top: 12px;
-            }
-
             .game-stats {
                 flex-basis: 36%;
 
@@ -152,12 +84,11 @@
 
                 th {
                     text-align: center;
-                    // min-width: 109px !important;
                 }
 
                 .team-col {
                     width: 95px;
-                    min-width: 120px;
+                    min-width: 100px;
                 }
 
                 @media (max-width: 900px) {
@@ -210,7 +141,9 @@
             @media (max-width: 970px) {
                 .game-stats {
                     order: 1;
-                    margin: 0 6px;
+                    margin-right: 6px;
+                    margin-left: 6px;
+                    width: 96%;
                 }
             }
 
@@ -224,6 +157,13 @@
             }
         }
 
+        @media (max-width: 600px) {
+
+            td.h, td.a {
+                min-width: 30px !important;
+            }
+        }
+
         @media (max-width: 900px) {
             .fixture-info {
                 flex-direction: column;
@@ -232,6 +172,25 @@
         }
     }
 }
+
+@media (max-width: 600px) {
+
+    td.h, td.a {
+        min-width: 30px !important;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 .opta-box {
     position: absolute;
@@ -255,12 +214,13 @@
     margin-top: 30px;
 
     h2 {
-        flex-basis: 20%;
-        margin: 0 !important;
+        flex-basis: 30%;
+        margin: 0;
+        font-size: 20px;
     }
     
     .toggle-button {
-        flex-basis: 40%;
+        flex-basis: 35%;
         position: relative;
         display: flex;
         top: 30px;
@@ -316,3 +276,11 @@
         }
     }
 }
+
+// .fpl .live-fixtures-container .fixture-boxes-container .fixture-info-container table thead tr {
+//     background-color: var(--table-thead-tr-background-color-fpl) !important;
+// }
+
+// .fpl .live-fixtures-container .fixture-boxes-container .fixture-info-container table thead th {
+//     background-color: var(--table-thead-tr-background-color-fpl) !important;
+// }

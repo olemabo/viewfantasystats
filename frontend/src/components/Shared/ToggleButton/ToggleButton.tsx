@@ -11,11 +11,17 @@ type toggleButtonProps = {
 type ToggleButtonProps = {
     onclick: any;
     toggleButtonName: string;
-    toggleList: toggleButtonProps[];
+    defaultToggleList: toggleButtonProps[];
+    small?: boolean;
 }
 
-export const ToggleButton : FunctionComponent<ToggleButtonProps> = (props) => {
-    const [ toggleList, SetToggleList ] = useState(props.toggleList);
+export const ToggleButton : FunctionComponent<ToggleButtonProps> = ({
+    onclick,
+    toggleButtonName,
+    defaultToggleList,
+    small = false
+}) => {
+    const [ toggleList, SetToggleList ] = useState(defaultToggleList);
     const [ checkedValue, SetCheckedValue ] = useState("");
 
     useEffect(() => {
@@ -25,26 +31,19 @@ export const ToggleButton : FunctionComponent<ToggleButtonProps> = (props) => {
             if (x.checked) { SetCheckedValue(x.value); }
         });
 
-    }, [props.toggleList]);
-
-    function updateCheckedState(value: string) {
-        // toggleList.map(x => {
-        //     x.checked = false;
-        //     if (value === x.value) { x.checked = true; }
-        // });
-    }
+    }, [defaultToggleList]);
     
     
-    return <div className='toggle-container'>
+    return <div className={`toggle-container${(small ? " small" : "")}`}>
         <ul className='toggle-section'>
-        {props.toggleList.map(btn => 
+        {defaultToggleList.map(btn => 
             <li className={btn.classname}>
-                <input tabIndex={-1} type="radio" id={btn.name} name={props.toggleButtonName} />
+                <input tabIndex={-1} type="radio" id={btn.name} name={toggleButtonName} />
                 <label className={"thin " + (btn.checked ? "checked" : "")} 
                     tabIndex={0} 
-                    onClick={ () => { 
-                        updateCheckedState(btn.value);
-                        props.onclick(btn.value);
+                    onClick={ (e: any) => { 
+                        onclick(btn.value);
+                        e.preventDefault();
                     }} 
                     role="radio" 
                     aria-label={btn.name}
