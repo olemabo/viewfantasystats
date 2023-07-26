@@ -41,7 +41,7 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
     const [ gwStart, setGwStart ] = useState(-1);
     const [ gwEnd, setGwEnd ] = useState(max_gw);
     const [ maxGw, setMaxGw ] = useState(-1);
-    const [ teamID, setTeamId ] = useState(80);
+    const [ teamID, setTeamId ] = useState(0);
     const [ loading, setLoading ] = useState(false);
     const [ openModal, setOpenModal ] = useState(false);
     const [ fdrType, SetFdrType ] = useState("");
@@ -58,7 +58,6 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
 
     function updateFixtureData(fdrType: string, isInitial: boolean) {
         axios.get(fixture_planner_api_path).then((x: any) => {
-            let apiFDRList: TeamIdFDRModel[] = [];
             let data = JSON.parse(x.data);
 
             if (data.current_gw !== gwStart) { setGwStart(data.current_gw); }
@@ -157,11 +156,16 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
             let data = JSON.parse(x.data);
             
             if (data?.goal_keepers?.length > 0 && data?.defenders?.length > 0 && data?.midtfielders?.length > 0 && data?.forwards?.length > 0){
-                console.log(data);
                 setGoalkeepers(convertToTeamNamePlayerName(data?.goal_keepers));
                 setDefenders(convertToTeamNamePlayerName(data?.defenders));
                 setMidtfielders(convertToTeamNamePlayerName(data?.midtfielders));
                 setForwards(convertToTeamNamePlayerName(data?.forwards));
+            }
+            else {
+                setGoalkeepers([]);
+                setDefenders([]);
+                setMidtfielders([]);
+                setForwards([]);
             }
 
             setLoading(false);
@@ -219,7 +223,6 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
         const newArr = playerData.filter(object => {
             return object.player_name !== playerName;
         });
-        console.log(newArr);
 
         return newArr;
     };
@@ -259,7 +262,7 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
                     <TextInput 
                         htmlFor='input-form-start-gw'
                         min={min_gw}
-                        max={max_gw}
+                        max={maxGw}
                         onInput={(e: number) => setGwStart(e)} 
                         defaultValue={gwStart}>
                         {props.content.Fixture.gw_start}
@@ -268,7 +271,7 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
                     <TextInput 
                         htmlFor='input-form-end-gw'
                         min={gwStart}
-                        max={max_gw}
+                        max={maxGw}
                         onInput={(e: number) => setGwEnd(e)} 
                         defaultValue={gwEnd}>
                         {props.content.Fixture.gw_end}
