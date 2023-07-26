@@ -1,23 +1,21 @@
-import { TeamFDRDataModel, FDR_GW_i, FDRData, TeamIdFDRModel } from '../../../models/fixturePlanning/TeamFDRData';
+import { FDR_GW_i, FDRData, TeamIdFDRModel } from '../../../models/fixturePlanning/TeamFDRData';
 import { DefaultPageContainer } from '../../Layout/DefaultPageContainer/DefaultPageContainer';
+import { TeamNamePlayerName } from '../../../models/fixturePlanning/TeamNamePlayerName';
 import { KickOffTimesModel } from '../../../models/fixturePlanning/KickOffTimes';
+import ShowTeamIDFDRData from '../../Fixtures/ShowFDRData/ShowTeamIdFDRData';
 import React, { useState, useEffect, FunctionComponent } from 'react';
-import { ShowFDRData } from '../../Fixtures/ShowFDRData/ShowFDRData';
 import * as external_urls from '../../../static_urls/externalUrls';
-import ToggleButton from '../../Shared/ToggleButton/ToggleButton';
 import { PageProps, esf } from '../../../models/shared/PageProps';
 import FdrBox from '../../Shared/FDR-explaination/FdrBox';
 import TextInput from '../../Shared/TextInput/TextInput';
 import "../../Pages/FixturePlanner/FixturePlanner.scss";
 import { Spinner } from '../../Shared/Spinner/Spinner';
 import Popover from '../../Shared/Popover/Popover';
-import { store } from '../../../store/index';
-import axios from 'axios';
-import { TeamNamePlayerName } from '../../../models/fixturePlanning/TeamNamePlayerName';
-import ShowTeamIDFDRData from '../../Fixtures/ShowFDRData/ShowTeamIdFDRData';
-import Modal from '../../Shared/Modal/Modal';
-import '../../Shared/TextInput/TextInput.scss';
 import Button from '../../Shared/Button/Button';
+import '../../Shared/TextInput/TextInput.scss';
+import { store } from '../../../store/index';
+import Modal from '../../Shared/Modal/Modal';
+import axios from 'axios';
 
 
 export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) => {
@@ -44,17 +42,18 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
     const [ teamID, setTeamId ] = useState(0);
     const [ loading, setLoading ] = useState(false);
     const [ openModal, setOpenModal ] = useState(false);
-    const [ fdrType, SetFdrType ] = useState("");
 
     useEffect(() => {
         store.dispatch({type: "league_type", payload: props.league_type});
-        
+
+        // Get fdr data from the API
+        updateFixtureData(true);
+    }, []);
+
+    useEffect(() => {       
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
         const teamId = urlParams.get('team_id')
-
-        // Get fdr data from the API
-        updateFixtureData(fdrType, true);
 
         if (teamId && parseInt(teamId) && gwStart > 0) {             
             var body = {
@@ -69,7 +68,8 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
 
     }, [gwStart]);
 
-    function updateFixtureData(fdrType: string, isInitial: boolean) {
+
+    function updateFixtureData(isInitial: boolean) {
         axios.get(fixture_planner_api_path).then((x: any) => {
             let data = JSON.parse(x.data);
 
@@ -92,32 +92,10 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
             setFixtureData([fdr_data, fdr_data_def, fdr_data_off]);
 
             if (fdr_data.length > 15 && isInitial) {
-                setGoalkeepers([
-                    // { team_name_short: fdr_data[0].team_name_short, player_name: fdr_data[0].team_name_short },
-                    // { team_name_short: fdr_data[1].team_name_short, player_name: fdr_data[1].team_name_short }
-                ]);
-
-                setDefenders([
-                    // { team_name_short: fdr_data[2].team_name_short, player_name: fdr_data[2].team_name_short },
-                    // { team_name_short: fdr_data[3].team_name_short, player_name: fdr_data[3].team_name_short },
-                    // { team_name_short: fdr_data[4].team_name_short, player_name: fdr_data[4].team_name_short },
-                    // { team_name_short: fdr_data[5].team_name_short, player_name: fdr_data[5].team_name_short },
-                    // { team_name_short: fdr_data[6].team_name_short, player_name: fdr_data[6].team_name_short }
-                ])
-
-                setMidtfielders([
-                    // { team_name_short: fdr_data[7].team_name_short, player_name: fdr_data[7].team_name_short },
-                    // { team_name_short: fdr_data[8].team_name_short, player_name: fdr_data[8].team_name_short },
-                    // { team_name_short: fdr_data[9].team_name_short, player_name: fdr_data[9].team_name_short },
-                    // { team_name_short: fdr_data[10].team_name_short, player_name: fdr_data[10].team_name_short },
-                    // { team_name_short: fdr_data[11].team_name_short, player_name: fdr_data[11].team_name_short }
-                ]);
-
-                setForwards([
-                    // { team_name_short: fdr_data[12].team_name_short, player_name: fdr_data[12].team_name_short },
-                    // { team_name_short: fdr_data[13].team_name_short, player_name: fdr_data[13].team_name_short },
-                    // { team_name_short: fdr_data[14].team_name_short, player_name: fdr_data[14].team_name_short }
-                ])
+                setGoalkeepers([ ]);
+                setDefenders([])
+                setMidtfielders([]);
+                setForwards([])
             }
         });
     }
@@ -202,11 +180,6 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
 
         return position;
     }
-
-    // function changeXlsxSheet(fdr_type: string) {
-    //     SetFdrType(fdr_type);
-    //     updateFixtureData(fdr_type, false);
-    // }
 
     function toggleModal(postionNumber: number) {
         setNewPlayerPostionNumber(postionNumber);
