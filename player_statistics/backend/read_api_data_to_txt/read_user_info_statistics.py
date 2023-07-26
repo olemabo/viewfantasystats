@@ -30,6 +30,10 @@ def read_user_info_statistics_eliteserien(league_name=esf, max_time=60 * 60 * 24
     for id in range(start_id, number_of_fantasy_players + 1):
         start_time = time.time()
         content = read_single_user_info(id, DFObject)
+
+        if content == -1:
+            continue
+        
         wrtie_to_file(content, path_to_file)
         end_time = time.time()
         total_time += (end_time - start_time) 
