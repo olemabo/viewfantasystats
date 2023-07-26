@@ -30,6 +30,10 @@ def read_user_info_statistics_eliteserien(league_name=esf, max_time=60 * 60 * 24
     for id in range(start_id, number_of_fantasy_players + 1):
         start_time = time.time()
         content = read_single_user_info(id, DFObject)
+
+        if content == -1:
+            continue
+
         wrtie_to_file(content, path_to_file)
         end_time = time.time()
         total_time += (end_time - start_time) 
@@ -93,6 +97,10 @@ def read_single_user_info(id, DFObject: DataFetch):
     
     current_fpl_user = DFObject.get_current_fpl_player(id)
     current_fpl_user_history = DFObject.get_current_member(id)['past']
+    
+    if "detail" in current_fpl_user:
+        print("Could not find data for user with id: ", id)
+        return -1
     
     history_data_str = "["
     for idx, history_data in enumerate(current_fpl_user_history):
