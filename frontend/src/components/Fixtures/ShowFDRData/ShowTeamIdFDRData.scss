@@ -72,7 +72,10 @@
             width: 110px;
             text-align: left;
             top: 21px;
-            position: relative;
+            position: sticky;
+
+            left: 0px;
+            margin-top: 22px;
         }
 
         .button-group {

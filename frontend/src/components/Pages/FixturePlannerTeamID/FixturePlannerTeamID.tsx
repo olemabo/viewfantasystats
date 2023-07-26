@@ -51,10 +51,23 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
         
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
-        
+        const teamId = urlParams.get('team_id')
+
         // Get fdr data from the API
         updateFixtureData(fdrType, true);
-    }, []);
+
+        if (teamId && parseInt(teamId) && gwStart > 0) {             
+            var body = {
+                current_gw: gwStart,
+                team_id: teamId,
+            };
+
+            setTeamId(parseInt(teamId));
+    
+            extractFDRData(body);
+        } 
+
+    }, [gwStart]);
 
     function updateFixtureData(fdrType: string, isInitial: boolean) {
         axios.get(fixture_planner_api_path).then((x: any) => {
@@ -131,14 +144,14 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
                 });
                 FDR_gw_i.push({fdr_gw_i: temp})
             });
-
+                
             temp.push({ team_name_short: team_name_short, FDR: FDR_gw_i });
         });
         
         return temp;
     }
 
-    function updateFDRData(currentFdrType: string) {
+    function updateFDRData() {
         var body = {
             current_gw: gwStart,
             team_id: teamID,
@@ -169,6 +182,10 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
             }
 
             setLoading(false);
+
+            if (teamID > 0) {
+                window.history.pushState('', '', window.location.origin + window.location.pathname + '?team_id=' + teamID);
+            }
         })
     }
 
@@ -201,6 +218,7 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
     const [ newPlayerPostionNumber, setNewPlayerPostionNumber ] = useState(0);
 
     function AddPlayer() {
+        console.log(newPlayerName, newPlayerTeam)
         const newPlayer = { team_name_short: newPlayerTeam, player_name: newPlayerName }
         if (newPlayerPostionNumber === 0) { goalKeepers.push(newPlayer); }
         if (newPlayerPostionNumber === 1) { defenders.push(newPlayer); }
@@ -251,14 +269,14 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
         </h1>
         { maxGw > 0 && 
             <div className='input-row-container'>
-                <form onSubmit={(e) =>  {updateFDRData(fdrType); e.preventDefault()}}>
+                <form onSubmit={(e) =>  {updateFDRData(); e.preventDefault()}}>
                     <TextInput 
                         htmlFor='input-form-team-id'
                         min={0}
                         max={100000}
                         minWidth={80}
                         onInput={(e: number) => setTeamId(e)}
-                        defaultValue={0} >
+                        defaultValue={teamID} >
                         {props.content.Fixture.teamId}
                     </TextInput>
 
@@ -297,6 +315,7 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
                     htmlFor='input-form-player-name'
                     type={'text'}
                     minWidth={200}
+                    defaultValue={newPlayerName}
                     onInput={(e: string) => setNewPlayerName(e)}>
                     { props.content.General.playerName }
                 </TextInput>
