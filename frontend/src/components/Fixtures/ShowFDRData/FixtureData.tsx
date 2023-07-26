@@ -86,7 +86,7 @@ export const FixtureData : FunctionComponent<FixtureDataProps> = ({
         { playerData.map(player => (<>
             <tr id={`fdr-row-${player.team_name_short}`}>
                 <td className='fixed-column'>
-                    <span>{player.player_name}</span>
+                    <span>{player.player_name.length > 12 ? player.player_name.substring(0, 11) + "..." : player.player_name}</span>
                     {/* <button title={content.General.removePlayer} className='fa fa-arrow-up remove-player-btn' onClick={ () => removePlayer(positionNumber ,player.player_name) }></button> */}
                     <button title={content.General.removePlayer} className='fa fa-minus remove-player-btn' onClick={ () => removePlayer(positionNumber ,player.player_name) }></button>
                     {/* <button title={content.General.removePlayer} className='fa fa-arrow-down remove-player-btn' onClick={ () => removePlayer(positionNumber ,player.player_name) }></button> */}
