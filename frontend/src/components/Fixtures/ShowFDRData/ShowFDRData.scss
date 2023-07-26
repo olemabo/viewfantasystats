@@ -303,4 +303,14 @@
         background-color: var(--fdr-premier-league-5);
         color: var(--white-color);
     }
+
+    .greyed-out {
+        background-color: #8786861f;
+        color: var(--black-color);
+    }
+
+    .hide-game {
+        background-color: transparent;
+        color: transparent;
+    }
 }
