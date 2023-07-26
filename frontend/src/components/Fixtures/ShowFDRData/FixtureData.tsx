@@ -57,31 +57,34 @@ export const FixtureData : FunctionComponent<FixtureDataProps> = ({
         return fixtureData[fdrType][0].FDR;
     }
 
+    const hasOnlyOneFdrType = fixtureData[1].length === 0 && fixtureData[2].length === 0;
+
 
     return <>
         <div className='fixed-column'>
             <div className='postition-container'>
                 <span className='text'>{postionName}</span>
                 <div className='button-group'>
-                    <ToggleButton 
-                        small={true}
-                        onclick={(fdrType: string) => SetFdrType(parseInt(fdrType))} 
-                        toggleButtonName="FDR-toggle"
-                        defaultToggleList={[ 
-                            { name: "Defensivt", value: "1", checked: fdrType===1, classname: "defensiv" },
-                            { name: "FDR", value: "0", checked: fdrType===0, classname: "fdr" },
-                            { name: "Offensivt", value: "2", checked: fdrType===2, classname: "offensiv"}
-                        ]}
-                    />
-                    <div>
+                    { !hasOnlyOneFdrType && 
+                        <ToggleButton 
+                            small={true}
+                            onclick={(fdrType: string) => SetFdrType(parseInt(fdrType))} 
+                            toggleButtonName="FDR-toggle"
+                            defaultToggleList={[ 
+                                { name: "Defensivt", value: "1", checked: fdrType===1, classname: "defensiv" },
+                                { name: "FDR", value: "0", checked: fdrType===0, classname: "fdr" },
+                                { name: "Offensivt", value: "2", checked: fdrType===2, classname: "offensiv"}
+                            ]} /> }
+                <div> 
                     <Button 
                         buttonText={content.General.add_player} 
                         icon_class='fa fa-plus'
                         color='white'
                         small={true}
-                        onclick={() => openModal(positionNumber)}/></div>
+                        onclick={() => openModal(positionNumber)}/>
                 </div>
             </div>
+        </div>
         </div>
         { playerData.map(player => (<>
             <tr id={`fdr-row-${player.team_name_short}`}>

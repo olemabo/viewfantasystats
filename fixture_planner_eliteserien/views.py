@@ -4,15 +4,17 @@ from fixture_planner_eliteserien.backend.fixture_algorithms.fixture_planner_alor
 from fixture_planner_eliteserien.backend.read_team_players_from_team_id import read_team_players_from_team_id
 from fixture_planner_eliteserien.backend.read_eliteserien_data import read_eliteserien_excel_to_db_format
 from fixture_planner_eliteserien.backend.utility_functions import create_eliteserien_fdr_dict
+from utils.util_functions.convertFDRdata_to_FDR_Model import convertFDRToModel
 from utils.util_functions.get_upcoming_gw import get_upcoming_gw_eliteserien
+from utils.util_functions.get_request_data import get_request_body
+from utils.util_functions.get_kickoff_data import getKickOffData
 
 from models.fixtures.apiResponse.FDRTeamIDApiResponse import FDRApiResponse, FDRTeamIDApiResponse
 from models.fixtures.models.TeamNameShortPlayerNameModel import TeamNameShortPlayerNameModel
 from fixture_planner_eliteserien.models import EliteserienKickOffTime
 from models.fixtures.models.FDRTeamIdModel import FDRTeamIDModel
-from models.fixtures.models.FDRModel import FDRModel
 from django.http import JsonResponse
-from datetime import datetime
+from constants import esf
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -159,7 +161,7 @@ class PostFDRFromTeamIDView(APIView):
         fdr_data_defensive_list = getFixtureData(fixture_list_db_def, number_of_gws)
         fdr_data_offensive_list = getFixtureData(fixture_list_db_off, number_of_gws)
             
-        temp_kick_off_time, first_upcoming_game = getKickOffData()
+        temp_kick_off_time, first_upcoming_game = getKickOffData(esf)
         
         gw_end = first_upcoming_game + 6 if len(current_gws) > 7 else current_gws[-1]
         gw_start = current_gws[0]
@@ -232,19 +234,6 @@ def getFixtureData(fixture_list_db, number_of_gws):
     return fdr_data_list
 
 
-def get_request_body(request, parameter_name, parameter_type):
-    return parse_input(request.data.get(parameter_name), parameter_type)
-
-
-def parse_input(input_str, data_type):
-    if input_str == None:
-        return None
-    try:
-        parsed_input = data_type(input_str)
-        return parsed_input
-    except ValueError:
-        print("Error: could not parse input as", data_type.__name__)
-        return None
 
 
 def get_data_from_body(request, dates):
@@ -263,36 +252,3 @@ def get_data_from_body(request, dates):
     start_gw = 1 if start_gw > end_gw else start_gw    
     
     return start_gw, end_gw, min_num_fixtures, combinations
-
-
-def convertFDRToModel(fdr_data):
-    temp = []
-    for fdr_data_i in fdr_data:
-        temp.append(FDRModel(
-            opponent_team_name=fdr_data_i[0],
-            H_A=fdr_data_i[1],
-            this_difficulty_score=fdr_data_i[2],
-        ).toJson())
-    
-    return temp
-
-
-def getKickOffData():
-    temp_kick_off_time = []
-    
-    current_datetime = datetime.utcnow()
-    first_upcoming_game = None
-    
-    kick_off_times_db = EliteserienKickOffTime.objects.all() 
-    for kick_of_time in kick_off_times_db:
-        kickoff_time = datetime.strptime(kick_of_time.kickoff_time, "%Y-%m-%dT%H:%M:%SZ")
-        if kickoff_time > current_datetime and first_upcoming_game is None:
-            first_upcoming_game = kick_of_time.gameweek
-        
-        temp_kick_off_time.append(KickOffTimesModel(
-            gameweek=kick_of_time.gameweek,
-            kickoff_time=kick_of_time.kickoff_time,
-            day_month=kick_of_time.day_month,
-        ).toJson())
-
-    return temp_kick_off_time, first_upcoming_game

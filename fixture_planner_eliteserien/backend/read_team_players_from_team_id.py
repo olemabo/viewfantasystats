@@ -2,7 +2,7 @@ from constants import premier_league_api_url, eliteserien_api_url, esf
 from utils.dataFetch.DataFetch import DataFetch
 
 from utils.dictinoaries.playerIdInfo import createPlayerIdToPlayerNameEliteserienDict, createPlayerIdToPlayerNamePremierLeagueDict, createTeamIdToTeamNameShortEliteserienDict, createTeamIdToTeamNameShortPremierLeagueDict
-from utils.util_functions.get_upcoming_gw import get_upcoming_gw_eliteserien
+from utils.util_functions.get_upcoming_gw import get_upcoming_gw_eliteserien, get_upcoming_gw_premier_league
 import json
 
 
@@ -24,8 +24,8 @@ def read_team_players_from_team_id(user_id, gw, league_name=esf):
 
     team_info = DFObject.get_current_ind_team(user_id, gw)
     if ('detail' in team_info):
-        start_gw = get_upcoming_gw_eliteserien()
-        if (start_gw > 0):
+        start_gw = get_upcoming_gw_eliteserien() if league_name == esf else get_upcoming_gw_premier_league()
+        if (start_gw > 1):
             team_info = DFObject.get_current_ind_team(user_id, start_gw - 1)
         else:
             return 0

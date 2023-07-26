@@ -4,6 +4,7 @@
 export const url_premier_league = 'premier-league/';
 export const url_premier_league_fdr_planner = url_premier_league + 'fdr-planner/';
 export const url_premier_league_rotation_planner =  url_premier_league + 'rotation-planner/';
+export const url_premier_league_fdr_planner_team_id =  url_premier_league + 'fdr-planner-team-id/';
 export const url_premier_league_periode_planner =  url_premier_league + 'periode-planner/';
 export const url_premier_league_player_ownership = url_premier_league + 'player-ownership/';
 export const url_premier_league_player_statistics = url_premier_league + 'player-statistics/';
