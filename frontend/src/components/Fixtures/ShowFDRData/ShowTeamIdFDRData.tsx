@@ -35,8 +35,11 @@ export const ShowTeamIDFDRData : FunctionComponent<ShowTeamIDFDRProps> = ({
         content.General.midfielders, 
         content.General.forwards, 
     ];
+    
+    const defaultDefensive = fixtureData[1].length === 0 ? 0 : 1;
+    const defaultOffensive = fixtureData[1].length === 0 ? 0 : 2;
+    const defaultFdrType = [defaultDefensive, defaultDefensive, defaultOffensive, defaultOffensive];
 
-    const defaultFdrType = [1, 1, 2, 2 ];
     const positionNumber = [0, 1, 2, 3 ];
 
     return <>

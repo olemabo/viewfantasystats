@@ -19,8 +19,8 @@ import axios from 'axios';
 
 
 export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) => {
-    const fixture_planner_api_path = "/fixture-planner-eliteserien/get-fdr-data-from-team-id/";
-    
+    const fixture_planner_api_path = props.league_type === esf ? "/fixture-planner-eliteserien/get-fdr-data-from-team-id/" 
+                : "/fixture-planner/get-fdr-data-from-team-id/";
     const min_gw = 1;
     const max_gw = 30;
     
@@ -99,6 +99,8 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
             }
         });
     }
+
+    console.log(fixtureData);
 
     function convertFixtureData(fdr_data: any): TeamIdFDRModel[] {
         var temp: TeamIdFDRModel[] = [];

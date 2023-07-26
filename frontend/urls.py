@@ -12,6 +12,7 @@ urlpatterns = [
     path('premier-league/fdr-planner/', index),
     path('premier-league/rotation-planner/', index),
     path('premier-league/periode-planner/', index),
+    path('premier-league/fdr-planner-team-id/', index),
 
     path('eliteserien/', index),
     path('eliteserien/fdr-planner/', index),
