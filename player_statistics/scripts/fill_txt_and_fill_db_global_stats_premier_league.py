@@ -11,9 +11,9 @@ django.setup()
 
 from player_statistics.backend.read_api_data_to_txt.read_global_statistics import save_all_global_stats_for_current_gw
 from player_statistics.backend.fill_db_from_txt.fill_db_global_statistics import write_global_stats_to_db
-from constants import premier_league_folder_name
+from constants import fpl
 
-current_gw = save_all_global_stats_for_current_gw(premier_league_folder_name)
+current_gw = save_all_global_stats_for_current_gw(fpl)
 if current_gw == -1:
     print("Data allready updated for current gw")
 else:

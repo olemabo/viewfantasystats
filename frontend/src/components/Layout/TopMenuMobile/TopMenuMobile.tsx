@@ -1,29 +1,15 @@
-import React, { useEffect, useState } from "react";
-import "./TopMenuMobile.scss";
-import MenuIcon from '@material-ui/icons/Menu';
-import CloseIcon from '@material-ui/icons/Close';
-import HomeIcon from '@material-ui/icons/Home';
-import BarChartIcon from '@material-ui/icons/BarChart';
-import SportsSoccerIcon from '@material-ui/icons/SportsSoccer';
-import { content_json } from "../../../language/languageContent";
-
-import { store } from '../../../store/index';
-import { Link } from "react-router-dom";
-import * as urls from '../../../internal_urls/internalUrls';
 import { LanguageSelector, LeagueSelector } from "../../Shared/LeagueAndLanguageSelector/LeagueAndLanguageSelector";
+import { PageProps, en, esf, fpl, no } from "../../../models/shared/PageProps";
+import { content_json } from "../../../language/languageContent";
+import * as urls from '../../../static_urls/internalUrls';
+import React, { useEffect, useState } from "react";
+import CloseIcon from '@mui/icons-material/Close';
+import MenuIcon from '@mui/icons-material/Menu';
+import { store } from '../../../store/index';
+import "./TopMenuMobile.scss";
 
 
-interface TopMenyProps {
-    title: string;
-    soccer_leauge: string;
-    content: any;
-}
-
-export const TopMenuMobile: React.FunctionComponent<TopMenyProps> = (props) => {
-    const fpl = "FPL";
-    const eliteserien = "Eliteserien";
-    const norwegain = "no";
-    const english = "en";
+export const TopMenuMobile: React.FunctionComponent<PageProps & { title: string}> = (props) => {
     
     function toggleMenu() {
         setMenuOpen(wasOpened => !wasOpened);
@@ -45,25 +31,13 @@ export const TopMenuMobile: React.FunctionComponent<TopMenyProps> = (props) => {
         setMenuOpen(false);
         store.dispatch({type: "isMenuOpen", payload: false })
     }, [])
-
-    console.log(MenuOpen)
     
     function updateLanguage(lang: string) {
-        if (lang == english) {
-            store.dispatch({type: "language", payload: content_json.English});
-            store.dispatch({type: "language_code", payload: english});
-            setLanguage(english);
-        }
-        else if (lang == norwegain) {
-            store.dispatch({type: "language", payload: content_json.Norwegian});
-            store.dispatch({type: "language_code", payload: norwegain});
-            setLanguage(norwegain);
-        }
-        else {
-            store.dispatch({type: "language", payload: content_json.Norwegian});
-            store.dispatch({type: "language_code", payload: norwegain});
-            setLanguage(norwegain);
-        }
+        const currentLanguage = lang === en ? en : no;
+        const currentContent = lang === en ? content_json.English : content_json.Norwegian;
+        store.dispatch({type: "language", payload: currentContent});
+        store.dispatch({type: "language_code", payload: currentLanguage});
+        setLanguage(currentLanguage);
     }
     
     let league_type = store.getState()?.league_type;
@@ -76,10 +50,6 @@ export const TopMenuMobile: React.FunctionComponent<TopMenyProps> = (props) => {
                     { props?.title}
                 </div>
                 <div className="header-menu-section">
-                    {/* <div className="top-menu-mobile-circle-container">
-                        { league_type == eliteserien && <Link className="circle-link fpl" onClick={() => updateSoccerLeague(fpl)} to="/fixture-planner/"></Link> }
-                        { league_type == fpl && <Link className="circle-link eliteserien" onClick={() => updateSoccerLeague(eliteserien)} to="/fixture-planner-eliteserien/"></Link> }
-                    </div> */}
                     <div onClick={ () => toggleMenu() } className="header-menu-text">
                         { !MenuOpen ? props.content.General.menu : props.content.General.close }
                     </div>
@@ -93,23 +63,19 @@ export const TopMenuMobile: React.FunctionComponent<TopMenyProps> = (props) => {
             <div className="mobile-sub-menu">
                 <div className="top-menu-mobile-circle-container">
                     <div className="top-navbar-mobile-langauge-container">
-                        {/* <button className={language == norwegain ? "" : "not-chosen"} onClick={() => updateLanguage(norwegain)}>No</button> |
-                        <button className={language == english ? "" : "not-chosen"} onClick={() => updateLanguage(english)}>En</button> */}
-                        { language == norwegain && 
+                        { language == no && 
                         <LanguageSelector 
                             text={'English'}
-                            onclick={() => updateLanguage(english)} />
+                            onclick={() => updateLanguage(en)} />
                         }
-                        { language == english && 
+                        { language == en && 
                         <LanguageSelector 
                             text={'Norsk'}
-                            onclick={() => updateLanguage(norwegain)}  />
+                            onclick={() => updateLanguage(no)}  />
                         }
                     </div>
                     <div>
-                        {/* { league_type == eliteserien && <Link className="circle-link" onClick={() => updateSoccerLeague(fpl)} to={"/" + urls.url_premier_league}>FPL</Link> }
-                        { league_type == fpl && <Link className="circle-link" onClick={() => updateSoccerLeague(eliteserien)} to={"/" + urls.url_elitserien}>ESF</Link> } */}
-                        { league_type === eliteserien && 
+                        { league_type === esf && 
                             <LeagueSelector 
                                 text={'FPL'}
                                 onclick={() => updateSoccerLeague(fpl)}
@@ -118,59 +84,51 @@ export const TopMenuMobile: React.FunctionComponent<TopMenyProps> = (props) => {
                         { league_type === fpl && 
                             <LeagueSelector 
                                 text={'ESF'}
-                                onclick={() => updateSoccerLeague(eliteserien)}
+                                onclick={() => updateSoccerLeague(esf)}
                                 url={"/" + urls.url_elitserien}  />
                         }
                     </div>
                 </div>
                 <nav className="mobile-sub-menu-container">
                     <ul>
-                        { league_type == eliteserien && <>
-                            {/* <h2>Fixture Planning</h2> */}
+                        { league_type == esf && <>
                             <li className="sub-menu-item">
-                                {/* <HomeIcon /> */}
-                                <a onClick={() => closeMenu()} href={"../../../" + urls.url_elitserien_fdr_planner}>{props.content.Fixture.FixturePlanner?.title}</a>
+                                <a onClick={() => closeMenu()} href={"/" + urls.url_elitserien_fdr_planner}>{props.content.Fixture.FixturePlanner?.title}</a>
                             </li>
                             <li className="sub-menu-item">
-                                {/* <SportsSoccerIcon /> */}
-                                <a onClick={() => closeMenu()} href={"../../../" + urls.url_eliteserien_rotation_planner}>{props.content.Fixture.RotationPlanner?.title}</a>
+                                <a onClick={() => closeMenu()} href={"/" + urls.url_eliteserien_rotation_planner}>{props.content.Fixture.RotationPlanner?.title}</a>
                             </li>
                             <li onClick={() => closeMenu()} className="sub-menu-item">
-                                {/* <BarChartIcon /> */}
-                                <a href={"../../../" + urls.url_eliteserien_periode_planner}>{props.content.Fixture.PeriodPlanner?.title}</a>
-                            </li>
-                            {/* <h2>Statistics</h2> */}
-                            <li onClick={() => closeMenu()} className="sub-menu-item">
-                                <a href={"../../../" + urls.url_eliteserien_player_ownership}>{props.content.Statistics.PlayerOwnership?.title}</a>
+                                <a href={"/" + urls.url_eliteserien_periode_planner}>{props.content.Fixture.PeriodPlanner?.title}</a>
                             </li>
                             <li onClick={() => closeMenu()} className="sub-menu-item">
-                                <a href={"../../../" + urls.url_eliteserien_live_fixtures}>{props.content.Statistics.LiveFixtures?.title}</a>
+                                <a href={"/" + urls.url_eliteserien_player_ownership}>{props.content.Statistics.PlayerOwnership?.title}</a>
                             </li>
                             <li onClick={() => closeMenu()} className="sub-menu-item">
-                                <a href={"../../../" + urls.url_eliteserien_rank_statistics}>{props.content.Statistics.RankStatistics?.title}</a>
+                                <a href={"/" + urls.url_eliteserien_live_fixtures}>{props.content.Statistics.LiveFixtures?.title}</a>
+                            </li>
+                            <li onClick={() => closeMenu()} className="sub-menu-item">
+                                <a href={"/" + urls.url_eliteserien_rank_statistics}>{props.content.Statistics.RankStatistics?.title}</a>
                             </li>
                             </>
                         }   
 
                         { league_type == fpl && <>
                             <li className="sub-menu-item">
-                                {/* <HomeIcon /> */}
-                                <a onClick={() => closeMenu()} href={"../../../" + urls.url_premier_league_fdr_planner}>{props.content.Fixture.FixturePlanner?.title}</a>
+                                <a onClick={() => closeMenu()} href={"/" + urls.url_premier_league_fdr_planner}>{props.content.Fixture.FixturePlanner?.title}</a>
                             </li>
                             <li className="sub-menu-item">
-                                {/* <SportsSoccerIcon /> */}
-                                <a onClick={() => closeMenu()} href={"../../../" + urls.url_premier_league_rotation_planner}>{props.content.Fixture.RotationPlanner?.title}</a>
+                                <a onClick={() => closeMenu()} href={"/" + urls.url_premier_league_rotation_planner}>{props.content.Fixture.RotationPlanner?.title}</a>
                             </li>
                             <li className="sub-menu-item">
-                                {/* <BarChartIcon /> */}
-                                <a onClick={() => closeMenu()} href={"../../../" + urls.url_premier_league_periode_planner}>{props.content.Fixture.PeriodPlanner?.title}</a>
+                                <a onClick={() => closeMenu()} href={"/" + urls.url_premier_league_periode_planner}>{props.content.Fixture.PeriodPlanner?.title}</a>
                             </li>
                             <li onClick={() => closeMenu()} className="sub-menu-item">
-                                <a href={"../../../" + urls.url_premier_league_player_ownership}>{props.content.Statistics.PlayerOwnership?.title}</a>
+                                <a href={"/" + urls.url_premier_league_player_ownership}>{props.content.Statistics.PlayerOwnership?.title}</a>
                             </li>
 
                             <li onClick={() => closeMenu()} className="sub-menu-item">
-                                <a href={"../../../" + urls.url_premier_league_player_statistics}>{props.content.Statistics.PlayerStatistics?.title}</a>
+                                <a href={"/" + urls.url_premier_league_player_statistics}>{props.content.Statistics.PlayerStatistics?.title}</a>
                             </li>
                             </>
                         }
@@ -180,7 +138,6 @@ export const TopMenuMobile: React.FunctionComponent<TopMenyProps> = (props) => {
         }
     </div>
     </>
-
 };
 
 export default TopMenuMobile;

@@ -1,0 +1,49 @@
+.text-input-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: fit-content;
+    align-items: flex-start;
+    gap: 2px;
+    font-size: 16px;
+
+    &.border input, &.border select {
+        border: 1px solid var(--border-color);
+    }
+    
+    label {
+        user-select: text;
+        color: var(--text-color);
+        line-height: 1.2em;
+        font-size: 10px;
+        font-weight: 900;
+        font-style: normal;
+        margin: 0px;
+        text-align: left;
+    }
+    
+    input[type=number] { 
+        -moz-appearance: textfield;
+        appearance: textfield;
+    }
+
+    input {
+        margin: 0 !important;
+        padding-left: 4px;
+        width: 50px;
+        border-width: inherit;
+        line-height: 28px;
+        border: transparent;
+        font-size: 15px;
+    }
+
+    select {
+        float: left;
+        width: 100%;
+        border: 1px solid var(--white-color);
+        height: 30px;
+        margin-right: var(--margin-right);
+        border-radius: 0;
+        background-color: var(--white-color);
+    }
+}

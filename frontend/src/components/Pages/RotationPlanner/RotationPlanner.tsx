@@ -3,24 +3,21 @@ import { DefaultPageContainer } from '../../Layout/DefaultPageContainer/DefaultP
 import { ShowRotationData } from '../../Fixtures/ShowRotationData/ShowRotationData';
 import { KickOffTimesModel } from '../../../models/fixturePlanning/KickOffTimes';
 import { TeamCheckedModel } from '../../../models/fixturePlanning/TeamChecked';
+import ThreeStateCheckbox from '../../Shared/FilterButton/ThreeStateCheckbox';
 import React, { useState, useEffect, FunctionComponent } from 'react';
-import { CheckBox } from '../../Shared/CheckBox/CheckBox';
+import * as external_urls from '../../../static_urls/externalUrls';
+import { PageProps } from '../../../models/shared/PageProps';
+import { combinations } from '../../../utils/productRange';
+import FdrBox from '../../Shared/FDR-explaination/FdrBox';
 import { Spinner } from '../../Shared/Spinner/Spinner';
 import { Button } from '../../Shared/Button/Button';
+import Popover from '../../Shared/Popover/Popover';
 import { store } from '../../../store/index';
 import axios from 'axios';
-import Popover from '../../Shared/Popover/Popover';
-import FilterButton from '../../Shared/FilterButton/FilterButton';
-import ThreeStateCheckbox from '../../Shared/FilterButton/ThreeStateCheckbox';
+import TextInput from '../../Shared/TextInput/TextInput';
 
-axios.defaults.xsrfCookieName = 'csrftoken';
-axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
-type LanguageProps = {
-    content: any;
-}
-
-export const RotationPlannerPage : FunctionComponent<LanguageProps> = (props) => {
+export const RotationPlannerPage : FunctionComponent<PageProps> = (props) => {
     const fixture_planner_kickoff_time_api_path = "/fixture-planner/get-kickoff-times/";
     const fixture_planner_api_path = "/fixture-planner/get-all-fdr-data/";
     
@@ -124,34 +121,6 @@ export const RotationPlannerPage : FunctionComponent<LanguageProps> = (props) =>
         })
     }
 
-    function toggleCheckboxMustBeInSolution(e: any) {
-        let temp: TeamCheckedModel[] = [];
-        teamData.forEach(x => {
-            let checked_must_be_in_solution = x.checked_must_be_in_solution;
-            let checked = x.checked;
-            if (x.team_name == e.currentTarget.value) {
-                checked_must_be_in_solution = !x.checked_must_be_in_solution;
-                if (checked_must_be_in_solution) { checked = true; }
-            }
-            temp.push({ team_name: x.team_name, checked: checked, checked_must_be_in_solution: checked_must_be_in_solution});
-        });
-        setTeamData(temp);
-    }
-
-    
-
-    function toggleCheckbox(e: any) {
-        let temp: TeamCheckedModel[] = [];
-        teamData.forEach(x => {
-            let checked = x.checked;
-            if (x.team_name == e.currentTarget.value) {
-                checked = !x.checked;
-            }
-            temp.push({ team_name: x.team_name, checked: checked, checked_must_be_in_solution: x.checked_must_be_in_solution });
-        });
-        setTeamData(temp);
-    }
-
     function toggleFilterButton(e: React.MouseEvent<HTMLSpanElement, MouseEvent>) {
         let temp: TeamCheckedModel[] = [];
         const classList = e.currentTarget.classList;
@@ -244,7 +213,6 @@ export const RotationPlannerPage : FunctionComponent<LanguageProps> = (props) =>
             fpl_teams: teamsANDteamsinsolution[0],
         };
 
-
         if (validateInput(body)) {
             setValidationErrorMessage("");
             const numberOfCombintaions = numberOfUniqueCombinations();
@@ -274,54 +242,14 @@ export const RotationPlannerPage : FunctionComponent<LanguageProps> = (props) =>
         return { number_of_not_in_solution: number_of_not_in_solution, number_of_must_be_in_solution:number_of_must_be_in_solution , number_can_be_in_solution: number_can_be_in_solution }
     }
 
-    function convertTeamsToString(teamList: string[]) {
-        if (!teamList || teamList.length == 0) {
-            return null;
-        }
-        if (teamList.length == 1) {
-            return teamList[0];
-        }
-        let response = '';
-        for (var i = 0; i < teamList.length - 1; i++) { 
-            response += teamList[i]; 
-            if (i < teamList.length - 2) {
-                response += ', ';
-            }
-        }
-        return response + ' ' + props.content.General.and + ' ' + teamList[teamList.length - 1]
-    }
-
     const { number_of_not_in_solution, number_of_must_be_in_solution, number_can_be_in_solution } = filterTeamData();
 
     function numberOfUniqueCombinations() {
         return combinations(number_can_be_in_solution, teamsToCheck - number_of_must_be_in_solution)
     }
 
-    function product_Range(a: number, b: number) {
-        var prd = a,i = a;
-       
-        while (i++< b) {
-          prd*=i;
-        }
-        return prd;
-      }
-      
-      
-    function combinations(n: number, r: number) 
-    {
-        if (n==r || r==0) 
-        {
-            return 1;
-        } 
-        else 
-        {
-            r=(r < n-r) ? n-r : r;
-            return product_Range(r+1, n)/product_Range(1, n-r);
-        }
-    }
-
     return <>
-    <DefaultPageContainer pageClassName='fixture-planner-container' heading={props.content.Fixture.RotationPlanner?.title + " - " + store.getState().league_type} description={props.content.Fixture.RotationPlanner?.title}>
+    <DefaultPageContainer pageClassName='fixture-planner-container' heading={props.content.Fixture.RotationPlanner?.title + " - " + (store.getState().league_type === "fpl" ? "Premier League" : "Eliteserien")} description={props.content.Fixture.RotationPlanner?.title}>
          <h1>{props.content.Fixture.RotationPlanner?.title}
          <Popover 
             id={"rotations-planner-id"}
@@ -337,85 +265,73 @@ export const RotationPlannerPage : FunctionComponent<LanguageProps> = (props) =>
             + "'" + props.content.Fixture.teams_to_play.toString() + "'" + " blir 1 fordi kun en av de to keeperene skal spille per runde. "
             }>
             Kampprogram og vanskelighetsgrader er hentet fra
-            <a href="https://fantasy.premierleague.com/">Fantasy Premier League.</a>
-            <><p className='diff-introduction-container'>
-                FDR verdier: 
-                <span className="diff-introduction-box diff-1">1</span>
-                <span className="diff-introduction-box diff-2">2</span>
-                <span className="diff-introduction-box diff-3">3</span>
-                <span className="diff-introduction-box diff-4">4</span>
-                <span className="diff-introduction-box diff-5">5</span>
-                <span className="diff-introduction-box black">10</span>
-            </p>
-            </>
+            <a href={external_urls.url_offical_fantasy_premier_league}>Fantasy Premier League.</a>
+            <FdrBox />
             </Popover>
          </h1>
          { !firstloading && <>
-            <form onSubmit={(e) =>  {updateFDRData(); e.preventDefault()}}>
-                <label htmlFor='input-form-start-gw'>{props.content.Fixture.gw_start}</label>
-                <input 
-                    className="form-number-box" 
-                    type="number" 
-                    min={min_gw}
-                    max={max_gw}
-                    onInput={(e) => setGwStart(parseInt(e.currentTarget.value))} 
-                    value={gwStart} 
-                    id="input-form-start-gw" 
-                    name="input-form-start-gw">
-                </input>
-                <label htmlFor='input-form-end-gw'>{props.content.Fixture.gw_end}</label>
-                <input 
-                    className="form-number-box" 
-                    type="number" 
-                    min={gwStart}
-                    max={max_gw}
-                    onInput={(e) => setGwEnd(parseInt(e.currentTarget.value))} 
-                    value={gwEnd} 
-                    id="input-form-end-gw" 
-                    name="input-form-end-gw">
-                </input>
-
-                <br />
-                <label htmlFor='teams_to_check'>{props.content.Fixture.teams_to_check}</label>
-                <input 
-                    className="box" 
-                    type="number" 
-                    min={1} 
-                    max={5} 
-                    onInput={(e) => setTeamsToCheck(parseInt(e.currentTarget.value))} 
-                    value={teamsToCheck} 
-                    id="teams_to_check" 
-                    name="teams_to_check" />
+            <div className='input-row-container'>
+                <Button buttonText={props.content.Fixture.filter_button_text} 
+                    icon_class={"fa fa-chevron-" + (showTeamFilters ? "up" : "down")} 
+                    onclick={() => setShowTeamFilters(showTeamFilters ? false : true)} 
+                    color='white'    
+                />
                 
-                <label htmlFor='teams_to_play'>{props.content.Fixture.teams_to_play}</label>
-                <input 
-                    className="box" 
-                    type="number" 
-                    min={1} 
-                    max={5} 
-                    onInput={(e) => setTeamsToPlay(parseInt(e.currentTarget.value))} 
-                    value={teamsToPlay}
-                    id="teams_to_play" 
-                    name="teams_to_play" />
+                <form onSubmit={(e) =>  {updateFDRData(); e.preventDefault()}}>
+                    <TextInput 
+                        htmlFor='input-form-start-gw'
+                        min={min_gw}
+                        max={max_gw}
+                        onInput={(e: number) => setGwStart(e)} 
+                        defaultValue={gwStart}>
+                        {props.content.Fixture.gw_start}
+                    </TextInput>
+                    <TextInput 
+                        htmlFor='input-form-end-gw'
+                        min={gwStart}
+                        max={max_gw}
+                        onInput={(e: number) => setGwEnd(e)} 
+                        defaultValue={gwEnd}>
+                        {props.content.Fixture.gw_end}
+                    </TextInput>
+                    <TextInput 
+                        htmlFor='teams_to_check'                    
+                        min={1} 
+                        max={5} 
+                        onInput={(e: number) => setTeamsToCheck(e)} 
+                        defaultValue={teamsToCheck}>
+                        {/* {props.content.Fixture.teams_to_check} */}
+                        {props.content.Fixture.teams_to_check_1}<br/>
+                        {props.content.Fixture.teams_to_check_2}
+                    </TextInput>
+                    <TextInput 
+                        htmlFor='teams_to_play'                    
+                        min={1} 
+                        max={5} 
+                        onInput={(e: number) => setTeamsToPlay(e)} 
+                        defaultValue={teamsToCheck}>
+                        {/* {props.content.Fixture.teams_to_play} */}
+                        {props.content.Fixture.teams_to_play_1}<br/>
+                        {props.content.Fixture.teams_to_play_2}
+                    </TextInput>
 
-                <input className="submit" type="submit" value={props.content.General.search_button_name}>
-                </input>
-            </form>
-            
-            <div style={{ display: "flex", justifyContent: 'center' }}>
-                <span style={{ color: "red", maxWidth: '375px' }}>{validationErrorMessage}</span>
+                    <input className="submit" type="submit" value={props.content.General.search_button_name}>
+                    </input>
+                </form>
             </div>
             
-            <Button buttonText={props.content.Fixture.filter_button_text} 
-                icon_class={"fa fa-chevron-" + (showTeamFilters ? "up" : "down")} 
-                onclick={() => setShowTeamFilters(showTeamFilters ? false : true)} />
+            { validationErrorMessage && 
+                <div style={{ display: "flex", justifyContent: 'center' }}>
+                    <span style={{ color: "red", maxWidth: '375px' }}>{validationErrorMessage}</span>
+                </div>
+            }
 
             { teamData != null && teamData.length > 0 && teamData[0].team_name != "empty" && showTeamFilters &&
                 <div className='filter-teams-container'>
                     <div className='filter-teams-description'>
-                        <div><span className="dot can-be-in-solution"></span>{`Lag kan være i løsning (${number_can_be_in_solution})`}</div>
-                        <div><span className="dot must-be-in-solution"></span>{`Lag må være i løsning (${number_of_must_be_in_solution})`}</div>
-                        <div><span className="dot not-in-solution"></span>{`Lag er ikke i løsning (${number_of_not_in_solution})`}</div>
+                        <div><span className="dot can-be-in-solution"></span>{`${props.content.Fixture.RotationPlanner.teams_can_be_in_solution} (${number_can_be_in_solution})`}</div>
+                        <div><span className="dot must-be-in-solution"></span>{`${props.content.Fixture.RotationPlanner.teams_must_be_in_solution} (${number_of_must_be_in_solution})`}</div>
+                        <div><span className="dot not-in-solution"></span>{`${props.content.Fixture.RotationPlanner.teams_cant_be_in_solution} (${number_of_not_in_solution})`}</div>
                     </div>
                     <div className='filter-teams-list'>
                         { teamData.map(team_name =>
@@ -426,18 +342,6 @@ export const RotationPlannerPage : FunctionComponent<LanguageProps> = (props) =>
                                 buttonText={team_name.team_name} />
                         )}
                         <div>
-                        {/* { must_be_in_solution_as_string &&
-                            <div className='filter-info'>
-                                <b>{props.content.Fixture.RotationPlanner.teams_in_solution}</b>
-                                {must_be_in_solution_as_string}
-                            </div>
-                        }
-                        { not_in_solution_as_string &&
-                            <div className='filter-info'>
-                                <b>{props.content.Fixture.RotationPlanner.not_in_solution}</b>
-                                {not_in_solution_as_string}
-                            </div>
-                        } */}
                         </div>
                     </div>
                 </div>
@@ -450,11 +354,8 @@ export const RotationPlannerPage : FunctionComponent<LanguageProps> = (props) =>
                         <p style={{ width: '300px', textAlign: 'center'}}>
                             { longLoadingTimeText }
                         </p>
-                    </div> 
-                }
+                    </div> }
                 </div> }
-
-            <br ></br>
 
             { !loading && fdrDataToShow.length > 0 && fdrDataToShow[0].avg_Score != -1 &&
                 <ShowRotationData 

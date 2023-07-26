@@ -23,27 +23,6 @@
 .player-ownership-container {
     max-width: 920px;
     margin: auto;
-
-    table thead tr {
-        background-color: var(--table-thead-tr-background-color-eliteserien) !important;
-        color: var(--table-thead-tr-color) !important;
-    }
-
-    .name-col {
-        padding-left: 10px;
-    }
-
-    .team-info {
-        min-width: 170px;
-    }
-
-    .name-col-chips {
-        min-width: 145px;
-    }
-
-    .name-col-chips-2 {
-        min-width: 145px;
-    }
     
     .container-player-stats {
         margin: 5px auto;
@@ -52,98 +31,8 @@
         justify-content: center;
     }
     
-    thead tr th {
-        height: var(--table-thead-height);
-    }
-    
-    th {
-        text-align: center;
-        width: 55px;
-        height: 20px;
-    }
-    
-    td {
-        text-align: center;
-        width: 55px;
-        height: 20px;
-    }
-    
-    th, td {
-        border-color: transparent !important;
-    }
-
-    // thead {
-    //     background-color: var(--table-thead-tr-background-color);
-    // }
-    
-    tbody tr {
-        height: 30px;
-    }
-    
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        background-color: var(--white-color);
-        font-size: 14px;
-        overflow: auto;
-        border-collapse: collapse;
-        margin: auto auto auto auto;
-        width: 100%;
-        background-color: none;
-        height: 100%;
-        display: flex;
-        flex-wrap: wrap;
-        align-content: flex-start;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-
-        tr:nth-child(even) {
-            background-color: var(--table-even-rows);
-        }
-        tr:nth-child(odd) {
-            background-color: var(--table-odd-rows);
-        }
-
-        // thead tr {
-        //     background-color: var(--table-thead-color);
-        // }
-
-        tbody tr:first-child td {
-            border-top: 1px solid transparent;
-        }
-    }
-
-    td {
-      border: solid;
-      border-width: 1px 1px;
-    //   border-color: var(--table-border-color);
-      text-align: left;
-      padding: 5px;
-    }
-
-    th {
-        border: solid;
-        border-width: 1px 1px;
-        // border-color: var(--table-border-color);
-        text-align: left;
-        padding-left: 7px;
-        border-bottom: 1px solid var(--black-color);
-    }
-    
-    tr:first-child {
-      border-top: none;
-    }
-    
-    .name-col {
-        text-align: left;
-        width: 170px;
-        // background-color: var(--white-color);
-    }
-    
     .input-box {
         height: 30px;
-        // margin-left: var(--margin-left);
         margin-right: var(--margin-right);
         border-radius: 0 !important;
         background-color: var(--white-color) !important;
@@ -180,6 +69,7 @@
             font-weight: 900;
             margin-left: 2px;
         }
+
         display: grid;
         grid-template-columns: 150px 90px 60px 1fr 170px;
         font-size: 14px;
@@ -190,7 +80,6 @@
         }
 
         select {
-            // border: 1px solid var(--black-color);
             border: 1px solid var(--white-color);
             background-color: var(--white-color);
         }
@@ -198,6 +87,7 @@
         .hidden {
             color: transparent;
         }
+
         .input-box {
             float: left;
             width: 100%;
@@ -216,22 +106,10 @@
                 }
             }
         }
-
-        .chips-section {
-            table {
-                width: 100% !important;
-                margin-bottom: 25px;
-
-                td, th {
-                    width: 400px !important;
-                }
-            }
-        }
     }
 
     @media (max-width: 600px) {
         .form-stuff {
-            // grid-template-columns: 1fr;
             grid-template-areas: 
                 "head head"
                 "aside main"
@@ -271,31 +149,34 @@
         text-align: left;
         margin: 0 1px;
     }
-    .one {
-        width: var(--col-1);
-    }
-    .two {
-        width: var(--col-2);
-    }
-    .three {
-        width: var(--col-3);
-    }
-    .four {
-        width: var(--col-4);
-    }
     
     .fixture-planner-container {
         max-width: 600px;
-    }
-
-    th, td {
-        min-width: 130px;
     }
 
     input {
         border: 1px solid var(--white-color);
         margin-left: auto !important;
         padding-left: 5px;
+    }
+}
+
+
+// Page specific table properties
+.player-ownership-container {
+    table {
+        margin: auto auto auto auto;
+        height: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        align-content: flex-start;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+
+        th, td {
+            min-width: 130px;
+        }
     }
 }
 
@@ -322,21 +203,19 @@
 }
 
 @media (max-width: 600px) {
+    .chips-section {
+        table {
+            width: 100% !important;
+            margin-bottom: 25px;
+
+            td, th {
+                width: 400px !important;
+            }
+        }
+    }
+
     .team-info-table {
         margin-left: 0px !important;
         margin-bottom: 25px;
     }
-
-    .team-info {
-        min-width: 145px !important; 
-    }
-}
-
-.ant-pagination {
-    margin-top: 10px;
-    margin-bottom: 25px;
-}
-
-.FPL .player-ownership-container table thead tr {
-    background-color: var(--table-thead-tr-background-color-fpl) !important;
 }

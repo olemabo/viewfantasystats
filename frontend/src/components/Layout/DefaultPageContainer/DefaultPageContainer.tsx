@@ -6,22 +6,24 @@ type DefaultPageContainerProps = {
     heading: string;
     description: string;
     pageClassName?: string;
+    children?: React.ReactNode;
 }
 
-export const DefaultPageContainer : React.FunctionComponent<DefaultPageContainerProps> = (props) => {  
+export const DefaultPageContainer : React.FunctionComponent<DefaultPageContainerProps> = ({
+    heading,
+    description,
+    pageClassName = '',
+    children,
+  }) => {  
     const langaugeCodeFromRedux = useSelector((state: any) => state?.language_code);
     document.documentElement.lang = langaugeCodeFromRedux;
     
-    return <>
-        <div className={props.pageClassName} key={props.heading + "-container"} lang={langaugeCodeFromRedux.toString()}>
-            <HelmetAndMetaData description={props.description} heading={props.heading} />
-                {props.children}
+    return (
+        <div className={pageClassName} key={`${heading}-container`} lang={langaugeCodeFromRedux.toString()}>
+            <HelmetAndMetaData description={description} heading={heading} />
+                {children}
         </div>
-    </>
-}
+    );
+};
 
 export default DefaultPageContainer;
-
-DefaultPageContainer.defaultProps = {
-    pageClassName: "",
-}

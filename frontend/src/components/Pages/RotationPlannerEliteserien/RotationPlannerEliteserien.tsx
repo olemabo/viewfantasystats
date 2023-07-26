@@ -4,25 +4,22 @@ import { TeamCheckedModel } from '../../../models/fixturePlanning/TeamChecked';
 
 import { DefaultPageContainer } from '../../Layout/DefaultPageContainer/DefaultPageContainer';
 import { ShowRotationData } from '../../Fixtures/ShowRotationData/ShowRotationData';
+import ThreeStateCheckbox from '../../Shared/FilterButton/ThreeStateCheckbox';
 import React, { useState, useEffect, FunctionComponent } from 'react';
+import * as external_urls from '../../../static_urls/externalUrls';
+import ToggleButton from '../../Shared/ToggleButton/ToggleButton';
+import { PageProps, esf } from '../../../models/shared/PageProps';
 import { convertFDRtoHex } from '../../../utils/convertFDRtoHex';
-import { CheckBox } from '../../Shared/CheckBox/CheckBox';
 import { Spinner } from '../../Shared/Spinner/Spinner';
 import { Popover } from '../../Shared/Popover/Popover';
 import { Button } from '../../Shared/Button/Button';
 import { store } from '../../../store/index';
 import axios from 'axios';
-import ThreeStateCheckbox from '../../Shared/FilterButton/ThreeStateCheckbox';
-import ToggleButton from '../../Shared/ToggleButton/ToggleButton';
+import FdrBox from '../../Shared/FDR-explaination/FdrBox';
+import TextInput from '../../Shared/TextInput/TextInput';
 
-axios.defaults.xsrfCookieName = 'csrftoken';
-axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
-type LanguageProps = {
-    content: any;
-}
-
-export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> = (props) => {
+export const RotationPlannerEliteserienPage : FunctionComponent<PageProps> = (props) => {
     const fixture_planner_api_path = "/fixture-planner-eliteserien/get-all-eliteserien-fdr-data/";
     const min_gw = 1;
     const max_gw = 30;
@@ -44,14 +41,12 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
     const [ validationErrorMessage, setValidationErrorMessage ] = useState("");
     const [ loading, setLoading ] = useState(false);
     const [ longLoadingTimeText, setLongLoadingTimeText ] = useState('');
-
-
     const [ excludeGws, setExcludeGws ] = useState([-1]);
 
     useEffect(() => {
         // get all fpl teams   
-        if (store.getState()?.league_type != "Eliteserien") {
-            store.dispatch({type: "league_type", payload: "Eliteserien"});
+        if (store.getState()?.league_type !== esf) {
+            store.dispatch({type: "league_type", payload: esf});
         }
 
         const queryString = window.location.search;
@@ -123,7 +118,6 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
             if (data?.gws_and_dates?.length > 0) {
                 let temp_KickOffTimes: KickOffTimesModel[] = [];
                 data?.gws_and_dates.forEach((kickoff: string) => temp_KickOffTimes.push(JSON.parse(kickoff)));
-                // setKickOffTimesToShow(temp_KickOffTimes.slice(data.gw_start - 1, data.gw_end));
                 setKickOffTimesToShow(temp_KickOffTimes);
                 setGwEnd(data.gw_end); 
             }
@@ -150,34 +144,6 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
             setLoading(false);
             setLongLoadingTimeText("");
         })
-    }
-
-    function toggleCheckbox(e: any) {
-        let temp: TeamCheckedModel[] = [];
-        teamData.forEach(x => {
-            let checked = x.checked;
-            let checked_must_be_in_solution = x.checked_must_be_in_solution;
-            if (x.team_name == e.currentTarget.value) {
-                checked = !x.checked;
-                if (!checked && checked_must_be_in_solution) { checked_must_be_in_solution = false; }
-            }
-            temp.push({ team_name: x.team_name, checked: checked, checked_must_be_in_solution: checked_must_be_in_solution});
-        });
-        setTeamData(temp);
-    }
-
-    function toggleCheckboxMustBeInSolution(e: any) {
-        let temp: TeamCheckedModel[] = [];
-        teamData.forEach(x => {
-            let checked_must_be_in_solution = x.checked_must_be_in_solution;
-            let checked = x.checked;
-            if (x.team_name == e.currentTarget.value) {
-                checked_must_be_in_solution = !x.checked_must_be_in_solution;
-                if (checked_must_be_in_solution) { checked = true; }
-            }
-            temp.push({ team_name: x.team_name, checked: checked, checked_must_be_in_solution: checked_must_be_in_solution});
-        });
-        setTeamData(temp);
     }
 
     function validateInput(body: any) {
@@ -295,7 +261,7 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
     return <>
     <DefaultPageContainer 
         pageClassName='fixture-planner-container' 
-        heading={props.content.Fixture.RotationPlanner?.title + " - " + store.getState().league_type} 
+        heading={props.content.Fixture.RotationPlanner?.title + " - " + (store.getState().league_type === "fpl" ? "Premier League" : "Eliteserien")} 
         description={'Rotation Planner for Eliteserien Fantasy (ESF). '}>
         <h1>{props.content.Fixture.RotationPlanner?.title}<Popover 
             id={"rotations-planner-id"}
@@ -311,74 +277,60 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
             + "'" + props.content.Fixture.teams_to_play.toString() + "'" + " blir 1 fordi kun en av de to keeperene skal spille per runde. "
             }>
             Kampprogram og vanskelighetsgrader er hentet fra 
-            <a href="https://docs.google.com/spreadsheets/d/168WcZ2mnGbSh-aI-NheJl5OtpTgx3lZL-YFV4bAJRU8/edit?usp=sharing">Excel arket</a>
+            <a href={external_urls.url_spreadsheets_dagfinn_thon}>Excel arket</a>
             til Dagfinn Thon.
             { fdrToColor != null && 
-                <><p className='diff-introduction-container'>
-                    FDR verdier: 
-                    <span style={{backgroundColor: "#1d3557bf" }} className="diff-introduction-box wide">0.25</span>
-                    <span style={{ backgroundColor: "#47abd89e" }}className="diff-introduction-box">1</span>
-                    <span style={{ backgroundColor: "#95d2ec8f" }}className="diff-introduction-box">2</span>
-                    <span style={{backgroundColor: "#e7f9ff7a" }}className="diff-introduction-box">3</span>
-                    <span style={{backgroundColor: "#ff4242a3" }}className="diff-introduction-box">4</span>
-                    <span style={{backgroundColor: "#d01b1bb5" }}className="diff-introduction-box">5</span>
-                    <span style={{backgroundColor: convertFDRtoHex("10", fdrToColor)}} className="diff-introduction-box black">10</span>
-                </p>
-                <p>Mørkeblå bokser markerer en dobbeltrunde, mens svarte bokser markerer at laget ikke har kamp den runden.</p></>
+                <FdrBox leagueType={esf} />
             }
             </Popover>
         </h1>
         { maxGw > 0 && <>
-            <form onSubmit={(e) =>  {updateFDRData(fdrType); e.preventDefault()}}>
-                <label htmlFor='input-form-start-gw'>{props.content.Fixture.gw_start}</label>
-                <input 
-                    className="form-number-box" 
-                    type="number" 
-                    min={min_gw}
-                    max={gwEnd}
-                    onInput={(e) => setGwStart(parseInt(e.currentTarget.value))} 
-                    value={gwStart} 
-                    id="input-form-start-gw" 
-                    name="input-form-start-gw">
-                </input>
-                <label htmlFor='input-form-end-gw'>{props.content.Fixture.gw_end}</label>
-                <input 
-                    className="form-number-box" 
-                    type="number" 
-                    min={gwStart}
-                    max={maxGw}
-                    onInput={(e) => setGwEnd(parseInt(e.currentTarget.value))} 
-                    value={gwEnd} 
-                    id="input-form-end-gw" 
-                    name="input-form-end-gw">
-                </input>
-                
-                <br />
-                <label htmlFor='teams_to_check'>{props.content.Fixture.teams_to_check}</label>
-                <input 
-                    className="box" 
-                    type="number" 
-                    min={1} 
-                    max={5} 
-                    onInput={(e) => setTeamsToCheck(parseInt(e.currentTarget.value))} 
-                    value={teamsToCheck} 
-                    id="teams_to_check" 
-                    name="teams_to_check" />
-                
-                <label htmlFor='teams_to_play'>{props.content.Fixture.teams_to_play}</label>
-                <input 
-                    className="box" 
-                    type="number" 
-                    min={1} 
-                    max={5} 
-                    onInput={(e) => setTeamsToPlay(parseInt(e.currentTarget.value))} 
-                    value={teamsToPlay}
-                    id="teams_to_play" 
-                    name="teams_to_play" />
+            <div className='input-row-container'>
+                <form onSubmit={(e) =>  {updateFDRData(fdrType); e.preventDefault()}}>
+                    <TextInput 
+                        htmlFor='input-form-start-gw'
+                        min={min_gw}
+                        max={max_gw}
+                        onInput={(e: number) => setGwStart(e)} 
+                        defaultValue={gwStart}>
+                        {props.content.Fixture.gw_start}
+                    </TextInput>
 
-                <input className="submit" type="submit" value={props.content.General.search_button_name}>
-                </input>
-            </form>
+                    <TextInput 
+                        htmlFor='input-form-end-gw'
+                        min={gwStart}
+                        max={max_gw}
+                        onInput={(e: number) => setGwEnd(e)} 
+                        defaultValue={gwEnd}>
+                        {props.content.Fixture.gw_end}
+                    </TextInput>
+                    
+                    <TextInput 
+                        htmlFor='teams_to_check'                    
+                        min={1} 
+                        max={5} 
+                        onInput={(e: number) => setTeamsToCheck(e)} 
+                        defaultValue={teamsToCheck}>
+                        {/* {props.content.Fixture.teams_to_check} */}
+                        {props.content.Fixture.teams_to_check_1}<br/>
+                        {props.content.Fixture.teams_to_check_2}
+                    </TextInput>
+
+                    <TextInput 
+                        htmlFor='teams_to_play'                    
+                        min={1} 
+                        max={5} 
+                        onInput={(e: number) => setTeamsToPlay(e)} 
+                        defaultValue={teamsToCheck}>
+                        {/* {props.content.Fixture.teams_to_play} */}
+                        {props.content.Fixture.teams_to_play_1}<br/>
+                        {props.content.Fixture.teams_to_play_2}
+                    </TextInput>
+
+                    <input className="submit" type="submit" value={props.content.General.search_button_name}>
+                    </input>
+                </form>
+            </div>
 
             <div style={{ display: "flex", justifyContent: 'center' }}>
                 <span style={{ color: "red", maxWidth: '375px' }}>{validationErrorMessage}</span>
@@ -387,16 +339,19 @@ export const RotationPlannerEliteserienPage : FunctionComponent<LanguageProps> =
             <ToggleButton 
                 onclick={(checked: string) => changeXlsxSheet(checked)} 
                 toggleButtonName="FDR-toggle"
-                toggleList={[ 
+                defaultToggleList={[ 
                     { name: "Defensivt", value: "_defensivt", checked: fdrType==="_defensivt", classname: "defensiv" },
                     { name: "FDR", value: "", checked:  fdrType==="", classname: "fdr" },
                     { name: "Offensivt", value: "_offensivt", checked:  fdrType==="_offensivt", classname: "offensiv"}
                 ]}
             />
 
-            <Button buttonText={props.content.Fixture.filter_button_text} 
+            <Button 
+                buttonText={props.content.Fixture.filter_button_text} 
                 icon_class={"fa fa-chevron-" + (showTeamFilters ? "up" : "down")} 
-                onclick={() => setShowTeamFilters(showTeamFilters ? false : true)} />
+                onclick={() => setShowTeamFilters(showTeamFilters ? false : true)} 
+                color='white'
+            />
         </> }
 
         { teamData != null && teamData.length > 0 && teamData[0].team_name != "empty" && showTeamFilters &&

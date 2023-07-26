@@ -1,5 +1,5 @@
-import SportsSoccerIcon from '@material-ui/icons/SportsSoccer';
-import PublicIcon from '@material-ui/icons/Public';
+import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
+import PublicIcon from '@mui/icons-material/Public';
 import React, { FunctionComponent } from 'react';
 import './LeagueAndLanguageSelector.scss';
 import { Link } from 'react-router-dom';
@@ -25,7 +25,7 @@ export const LanguageSelector : FunctionComponent<LeagueAndLanguageSelectorProps
 
     return <button onClick={() => props.onclick()} className="button-with-icon">
     <PublicIcon fontSize="small" className="adjust-height-lang"/>
-    <span className="adjust-height-lang">
+    <span className="adjust-height-lang lang">
         {props.text}
     </span>
 </button>

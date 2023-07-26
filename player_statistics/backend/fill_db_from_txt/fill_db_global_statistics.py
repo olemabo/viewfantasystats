@@ -1,4 +1,4 @@
-from constants import premier_league_folder_name, global_stats_folder_name, nationality_delimiter, total_chip_usage_txt_file_name, name_of_extra_info_file, current_season_name_premier_league, name_of_nationality_file, path_to_store_local_data, all_top_x_players_premier_league, name_of_ownership_file, total_number_of_gameweeks
+from constants import fpl, global_stats_folder_name, nationality_delimiter, total_chip_usage_txt_file_name, name_of_extra_info_file, current_season_name_premier_league, name_of_nationality_file, path_to_store_local_data, all_top_x_players_premier_league, name_of_ownership_file, total_number_of_gameweeks
 from player_statistics.db_models.premier_league.ownership_statistics_model import PremierLeagueChipsAndUserInfo, PremierLeagueGlobalOwnershipStats10000, \
     PremierLeagueGlobalOwnershipStats1000, PremierLeagueGlobalOwnershipStats100, PremierLeagueGwsChecked
 from player_statistics.db_models.premier_league.nationality_statistics_model import PremierLeagueNationalityStatistics
@@ -12,7 +12,7 @@ def write_global_stats_to_db(current_gw=0):
     gws = [current_gw] if current_gw > 0 else gws 
     
     for gw in gws:
-        file_path = path_to_store_local_data + "/" + premier_league_folder_name + "/" + current_season_name_premier_league + "/" + global_stats_folder_name + "/" + str(gw)
+        file_path = path_to_store_local_data + "/" + fpl + "/" + current_season_name_premier_league + "/" + global_stats_folder_name + "/" + str(gw)
         
         fill_db_ownership_statistics(gw, file_path)
         fill_db_extra_info_statistics(gw, file_path)

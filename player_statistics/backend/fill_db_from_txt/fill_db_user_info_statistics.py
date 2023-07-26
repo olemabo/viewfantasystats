@@ -1,13 +1,13 @@
 from player_statistics.db_models.eliteserien.user_statistics_model_eliteserien import EliteserienUserInfoStatistics
 from constants import ranking_delimiter, user_stats_special_delimiter, user_stats_special_delimiter
-from constants import user_stats_folder_name, eliteserien_folder_name, user_stats_txt_file_name
+from constants import user_stats_folder_name, esf, user_stats_txt_file_name
 from constants import current_season_name_eliteserien, path_to_store_local_data
 import numpy as np
 import json
 
 
 def write_user_info_to_db_eliteserien():
-    path = path_to_store_local_data + "/" + eliteserien_folder_name + "/" + current_season_name_eliteserien + "/" + user_stats_folder_name + "/" + user_stats_txt_file_name
+    path = path_to_store_local_data + "/" + esf + "/" + current_season_name_eliteserien + "/" + user_stats_folder_name + "/" + user_stats_txt_file_name
     user_info_data = np.genfromtxt(path, dtype="str", comments="&&&&&&&&&&&", delimiter=user_stats_special_delimiter, skip_header=1, encoding="utf-8")
     new, update = 0, 0
     print("\n")

@@ -4,31 +4,31 @@ import './FilterButton.scss';
 type FilterButtonProps = {
     buttonText: string,
     checked: boolean,
-    onclick?: any,
+    onclick: (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => void,
     labelClassName?: string;
     inputName?: string;
 }
 
-export const FilterButton : FunctionComponent<FilterButtonProps> = (props) => {
+export const FilterButton : FunctionComponent<FilterButtonProps> = ({
+    buttonText,
+    checked,
+    onclick,
+    labelClassName = 'filter-button',
+    inputName = ''
+}) => {
     
-    return <label className={'filter-team ' + props.labelClassName}>
+    return <label className={'filter-team ' + labelClassName}>
         <input 
-            onClick={(e) => props.onclick(e)} 
-            value={props.buttonText} 
-            checked={props.checked} 
-            name={props.inputName} 
-            id={props.buttonText} 
+            onClick={(e) => onclick(e)} 
+            value={buttonText} 
+            checked={checked} 
+            name={inputName} 
+            id={buttonText} 
             type='checkbox' 
             />
-        <span className={props.checked ? 'checked' : ''}>
-            {props.buttonText}  </span>
+        <span className={checked ? 'checked' : ''}>
+            {buttonText}  </span>
     </label>
 };
 
 export default FilterButton;
-
-
-FilterButton.defaultProps = {
-    labelClassName: 'filter-button',
-    inputName: '',
-}

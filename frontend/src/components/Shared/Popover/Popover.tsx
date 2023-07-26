@@ -9,9 +9,19 @@ type PopoverProps = {
     iconSize?: number;
     algin_left?: boolean;
     iconpostition?: number[];
+    children?: React.ReactNode;
 }
 
-export const Popover : FunctionComponent<PopoverProps> = (props) => {
+export const Popover : FunctionComponent<PopoverProps> = ({
+    id,
+    title,
+    popover_title,
+    popover_text,
+    iconSize = 0,
+    algin_left = false,
+    iconpostition = [0, 0, 0, 0],
+    children,
+}) => {
 
     
     if (document.querySelector('[data-popover-target]')) {
@@ -44,9 +54,9 @@ export const Popover : FunctionComponent<PopoverProps> = (props) => {
 
     const [ show, setShow ] = useState(false);
 
-    // let id = props.title;
+    // let id = title;
     useEffect(() => {
-        var ignoreClickOnMeElement = document.getElementById(props.id);
+        var ignoreClickOnMeElement = document.getElementById(id);
         document.addEventListener('click', function(event: any) {
             if (ignoreClickOnMeElement != null) {
                 var isClickInsideElement = ignoreClickOnMeElement.contains(event.target);
@@ -58,38 +68,31 @@ export const Popover : FunctionComponent<PopoverProps> = (props) => {
     });   
 
     return <>
-    <label htmlFor={'popover-content-' + props.id} id={props.id} className={ "thin-ui-popover " + (props.iconSize != null && props.iconSize > 0 ? "" : "dotted")}>
-        {props.title}
-        <button id={'popover-content-' + props.id} title="popover-button" name="popover" onClick={() => setShow(true)}>
-            { props.iconSize != null && props.iconSize > 0 && props.iconpostition != null &&
+    <label htmlFor={'popover-content-' + id} id={id} className={ "thin-ui-popover " + (iconSize != null && iconSize > 0 ? "" : "dotted")}>
+        {title}
+        <button id={'popover-content-' + id} title="popover-button" name="popover" onClick={() => setShow(true)}>
+            { iconSize != null && iconSize > 0 && iconpostition != null &&
                 <svg style={{
-                    width: props.iconSize.toString() + "px", 
+                    width: iconSize.toString() + "px", 
                     position: "relative", 
                     borderBottomStyle: "none",
-                    top: props.iconpostition[0].toString() + "px",
-                    right: props.iconpostition[1].toString() + "px",
-                    bottom: props.iconpostition[2].toString() + "px",
-                    left: props.iconpostition[3].toString() + "px",
+                    top: iconpostition[0].toString() + "px",
+                    right: iconpostition[1].toString() + "px",
+                    bottom: iconpostition[2].toString() + "px",
+                    left: iconpostition[3].toString() + "px",
                     }} xmlns="http://www.w3.org/2000/svg" aria-hidden="true" className="svg-inline--fa fa-question-circle fa-w-16 fa-fw" data-icon="question-circle" data-prefix="fal" viewBox="0 0 512 512">
                     <defs />
                     <path fill="currentColor" d="M256 340a28 28 0 100 56 28 28 0 000-56zm7.7-24h-16a12 12 0 01-12-12v-.4c0-70.3 77.4-63.6 77.4-107.4 0-20-17.8-40.2-57.4-40.2-29.2 0-44.3 9.6-59.2 28.7-4 5-11 6-16.3 2.4l-13.1-9.2a12 12 0 01-2.7-17.2c21.3-27.2 46.4-44.7 91.3-44.7 52.3 0 97.4 29.8 97.4 80.2 0 67.4-77.4 63.9-77.4 107.4v.4a12 12 0 01-12 12zM256 40a216 216 0 110 432 216 216 0 010-432m0-32a248 248 0 100 496 248 248 0 000-496z" />
                 </svg> }
         </button>
         { show &&
-        <div id={'popover-content-' + props.id} className={"thin-ui-popover-body " + (props.algin_left ? "adjust-left" : " ")}>
-            <h3>{props.popover_title}</h3>
-            <p>{props.popover_text}</p>
-            <p>{props.children}</p>
+        <div id={'popover-content-' + id} className={"thin-ui-popover-body " + (algin_left ? "adjust-left" : " ")}>
+            <h3>{popover_title}</h3>
+            <p>{popover_text}</p>
+            <p>{children}</p>
         </div>}
     </label>
     </>
 };
 
 export default Popover;
-
-
-Popover.defaultProps = {
-    iconSize: 0,
-    iconpostition: [0, 0, 0, 0],
-    algin_left: false,
-}

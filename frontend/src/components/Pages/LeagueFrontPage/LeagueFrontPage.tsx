@@ -4,14 +4,10 @@ import { ShowRotationData } from '../../Fixtures/ShowRotationData/ShowRotationDa
 import { KickOffTimesModel } from '../../../models/fixturePlanning/KickOffTimes';
 import { TeamCheckedModel } from '../../../models/fixturePlanning/TeamChecked';
 import React, { useState, useEffect, FunctionComponent } from 'react';
-import { CheckBox } from '../../Shared/CheckBox/CheckBox';
-import { Spinner } from '../../Shared/Spinner/Spinner';
-import { Button } from '../../Shared/Button/Button';
 import { store } from '../../../store/index';
 import axios from 'axios';
 import './LeagueFrontPage.scss';
-import PermIdentityIcon from '@material-ui/icons/PermIdentity';
-import PersonIcon from '@material-ui/icons/Person';
+import { esf } from '../../../models/shared/PageProps';
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
@@ -65,7 +61,6 @@ export const FrontPage : FunctionComponent<FrontPageProps> = (props) => {
         axios.get(most_owned_api_path + "?league_name=" + props.league_type).then(x => {
             if (x.data) {
                 let data = JSON.parse(x.data);
-                console.log(data)
                 setCurrentGw(data?.gw);
                 setMostOwnedPlayersData({
                     goalkeeper_list: data?.goalkeeper_list,
@@ -79,7 +74,7 @@ export const FrontPage : FunctionComponent<FrontPageProps> = (props) => {
     }, [props?.league_type]);
 
     function getTeamShirtImgSrcUrl(num: number) {
-        if (props.league_type == "Eliteserien") {
+        if (props.league_type == esf) {
             if (num == 1) return team_id_to_img_shirt_url_eliteserien[1];
             if (num == 3) return team_id_to_img_shirt_url_eliteserien[3];
             if (num == 4) return team_id_to_img_shirt_url_eliteserien[4];
@@ -168,7 +163,7 @@ export const FrontPage : FunctionComponent<FrontPageProps> = (props) => {
       };
 
     return <>
-    <DefaultPageContainer pageClassName='front-page-container' heading={props.content.Fixture?.RotationPlanner?.title + " - " + store.getState().league_type} description={props.content?.Fixture?.RotationPlanner?.title}>
+    <DefaultPageContainer pageClassName='front-page-container' heading={props.content.Fixture?.RotationPlanner?.title + " - " + (store.getState().league_type === "fpl" ? "Premier League" : "Eliteserien")} description={props.content?.Fixture?.RotationPlanner?.title}>
         { currentGw > 0 && <h1>{props.content.General?.gw} {currentGw}</h1>}
         <h2> {props.content?.Statistics?.PlayerOwnership?.title} (EO) {props.content?.General?.top} {props.league_type == "FPL" ? "10000" : "1000"} </h2>
         <div className='most-owned-players'>

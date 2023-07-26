@@ -1,0 +1,13 @@
+.start-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    text-align: center;
+    
+    .content-container {
+        width: 100%;
+        padding: 0 10px;
+    }
+}

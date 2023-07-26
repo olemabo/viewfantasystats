@@ -1,136 +1,44 @@
 
-:root {
-    --margin-left: 1.25px;
-    --margin-right: 1.25px;
-}
-
 .search-user-name-container {
+    margin-bottom: 25px;
     max-width: 697px;
     margin: auto;
-    margin-bottom: 25px;
-
-    .name-col {
-        padding-left: 10px;
-    }
-
-    .narrow {
-        max-width: 100px !important;
-        min-width: 80px !important;
-    }
-
-    .name-col {
-        min-width: 210px !important;
-    }
-
-    .team-info {
-        min-width: 170px;
-    }
-
-    .name-col-chips {
-        min-width: 145px;
-    }
-
-    .name-col-chips-2 {
-        min-width: 145px;
-    }
-
-    .see-team {
-        min-width: 116px;
-        text-align: center;
-    }
-    
+         
     .container-player-stats {
-        margin: 10px auto;
+        margin: 0 auto;
         display: flex;
         background-color: #EEE;
         justify-content: center;
-
-        tbody tr:first-child td {
-            border-width: 0px 1px;
-        }
-
-        svg {
-            font-size: 0.8rem;
-            margin-left: 3px;
-            position: relative;
-            top: 1px;
-        }
-    }
-
-    table {
-        // display: flex;
-        // flex-wrap: wrap;
         
-        a {
-            border-bottom: 1px solid var(--black-color);
-            font-size: 13px;
+        table {
+            // SKAL VÆRE MED
+            .narrow {
+                max-width: 100px !important;
+                min-width: 80px !important;
+            }
+            
+            // SKAL VÆRE MED
+            .name-col {
+                padding-left: 10px;
+                min-width: 210px !important;
+                text-align: left;
+                width: 200px;
+            }
         }
-
-        td, tr {
-            padding-left: 10px;
-        }
-
-        tr:nth-child(even) {
-            background-color: var(--table-even-rows);
-        }
-
-        tr:nth-child(odd) {
-            background-color: var(--table-odd-rows);
-        }
-    }
-    
-    thead tr th {
-        height: var(--table-thead-height);
-    }
-    
-    tbody tr {
-        height: 30px;
-    }
-    
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 14px;
-        overflow: auto;
     }
 
-    td {
-        border: solid;
-        border-width: 1px 1px;
-        // border-color: var(--table-border-color);
-        text-align: left;
-        width: 55px;
-        height: 20px;
-    }
-
-    th {
-        width: 55px;
-        height: 20px;
-        border: solid;
-        border-width: 1px 1px;
-        // border-color: var(--table-border-color);
-        text-align: left;
-        padding-left: 7px;
-        border-bottom: 1px solid var(--black-color);
-    }
-    
-    tr:first-child {
-      border-top: none;
-    }
-    
-    .name-col {
-        text-align: left;
-        width: 200px;
-    }
-    
-    .input-box {
-        height: 30px;
-        // margin-left: var(--margin-left);
-        margin-right: var(--margin-right);
-        border-color: white;
-    }
-    
     .form-stuff {
+        display: grid;
+        grid-template-columns: 130px 1fr 170px;
+        font-size: 14px;
+        grid-gap: 5px;
+        
+        .input-box {
+            height: 30px;
+            margin-right: 1.25px;
+            border-color: white;
+        }
+        
         label {
             color: black;
             display: block;
@@ -141,18 +49,11 @@
             margin-left: 2px;
         }
 
-        // .last-x-seasons-select {
-        //     width: 130px;
-        // }
-
-        display: grid;
-        grid-template-columns: 130px 1fr 170px;
-        font-size: 14px;
-        grid-gap: 5px;
         
         .hidden {
             color: transparent;
         }
+
         .input-box {
             float: left;
             width: 100%;
@@ -178,17 +79,6 @@
             
             label {
                 margin-top: 5px !important;
-            }
-        }
-
-        .chips-section {
-            table {
-                width: 100% !important;
-                margin-bottom: 25px;
-
-                td, th {
-                    width: 400px !important;
-                }
             }
         }
     }
@@ -234,9 +124,6 @@
         max-width: 600px;
     }
 
-    th, td {
-        min-width: 145px;
-    }
 
     input {
         border: 1px solid white;
@@ -245,31 +132,8 @@
     }
 
     select {
-        // border: 1px solid var(--black-color);
         border: 1px solid var(--white-color);
         background-color: var(--white-color);
-    }
-}
-
-.chips-section {
-    margin-top: 30px;
-    
-    table {
-        display: inline-flex !important;
-        width: min-content !important;
-        margin-bottom: 25px;
-    }
-    
-    .chips-table {
-        float: left;
-        overflow: auto;
-        margin-bottom: 25px;
-        margin-right: 33px;
-    }
-
-    .team-info-table {
-        float: left;
-        overflow: auto;
     }
 }
 
@@ -290,8 +154,4 @@
     .search-user-name-container .hidden {
         display: none !important;
     }
-}
- 
-.ant-pagination {
-    margin-top: 10px;
 }

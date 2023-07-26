@@ -1,4 +1,4 @@
-from constants import ranking_delimiter, nationality_delimiter, all_top_x_players_eliteserien, total_chip_usage_txt_file_name, current_season_name_eliteserien, total_number_of_gameweeks_in_eliteserien, global_stats_folder_name, eliteserien_folder_name, name_of_extra_info_file, name_of_nationality_file, path_to_store_local_data, all_top_x_players_eliteserien, name_of_ownership_file, total_number_of_gameweeks
+from constants import ranking_delimiter, global_chip_usage, nationality_delimiter, all_top_x_players_eliteserien, total_chip_usage_txt_file_name, current_season_name_eliteserien, total_number_of_gameweeks_in_eliteserien, global_stats_folder_name, esf, name_of_extra_info_file, name_of_nationality_file, path_to_store_local_data, all_top_x_players_eliteserien, name_of_ownership_file, total_number_of_gameweeks
 from player_statistics.db_models.eliteserien.ownership_statistics_model_eliteserien import EliteserienChipsAndUserInfo, EliteserienGlobalOwnershipStats5000, \
     EliteserienGlobalOwnershipStats1000, EliteserienGlobalOwnershipStats100, EliteserienGwsChecked
 from player_statistics.db_models.eliteserien.nationality_statistics_model_eliteserien import EliteserienNationalityStatistics
@@ -13,7 +13,7 @@ def write_global_stats_to_db_eliteserien(current_gw=0):
     gws = [current_gw] if current_gw > 0 else gws 
 
     for gw in gws:
-        file_path = path_to_store_local_data + "/" + eliteserien_folder_name + "/" + current_season_name_eliteserien + "/" + global_stats_folder_name + "/" + str(gw)
+        file_path = path_to_store_local_data + "/" + esf + "/" + current_season_name_eliteserien + "/" + global_stats_folder_name + "/" + str(gw)
         fill_db_ownership_statistics_eliteserien(gw, file_path)
         fill_db_extra_info_statistics_eliteserien(gw, file_path)
         fill_db_nationality_statistics_eliteserien(gw, file_path)
@@ -120,6 +120,16 @@ def fill_db_extra_info_statistics_eliteserien(gw, file_path):
     total_chip_usage_1000 = []
     total_chip_usage_5000 = []
 
+    global_chip_usage_this_gw = []
+    global_chip_usage_total = []
+    number_of_managers = -1
+
+    if os.path.exists(file_path + "/" + global_chip_usage):
+        chips_data = np.loadtxt(file_path + "/" + global_chip_usage, dtype="str", delimiter=",", skiprows=1, max_rows=2)
+        global_chip_usage_this_gw = [ int(data) for data in chips_data[0]]
+        global_chip_usage_total = [ int(data) for data in chips_data[1]]
+        number_of_managers = np.loadtxt(file_path + "/" + global_chip_usage, dtype="str", delimiter=",", skiprows=3, max_rows=1)
+
     for top_x in top_x_players:
         try:
             current_path = file_path + "/top_" + str(top_x) + "/" + name_of_extra_info_file
@@ -181,10 +191,18 @@ def fill_db_extra_info_statistics_eliteserien(gw, file_path):
                                             total_chip_usage_100=total_chip_usage_100,
                                             total_chip_usage_1000=total_chip_usage_1000,
                                             total_chip_usage_5000=total_chip_usage_5000,
+                                            global_chip_usage_this_gw=global_chip_usage_this_gw,
+                                            global_chip_usage_total=global_chip_usage_total,
+                                            number_of_managers=number_of_managers
                                             )
         fill_model.save()
         print("Filled up Extra Info DB for GW: ", gw)
-
+    else:
+        fill_model = EliteserienChipsAndUserInfo.objects.filter(gw=gw)
+        fill_model.update(
+            global_chip_usage_this_gw=global_chip_usage_this_gw,
+            global_chip_usage_total=global_chip_usage_total, 
+            number_of_managers=number_of_managers)
 
 def fill_global_ownership_statistics_top_x(ownership_data, gw, top_x):
     for data_i in ownership_data:

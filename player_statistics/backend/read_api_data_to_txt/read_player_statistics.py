@@ -76,6 +76,7 @@ def static_json(use_api_or_local="local", api_url=premier_league_api_url):
             player['saves_per_90'] if api_url == premier_league_api_url else 0, # 46
             player['opta_index'] if api_url == eliteserien_api_url else 0, # 47
             0, # 48
+            player['status'] # 49
         ]
 
     return player_dict

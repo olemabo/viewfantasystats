@@ -1,5 +1,5 @@
-from constants import python_anywhere_path, total_number_of_eliteserien_teams, total_number_of_eliteserien_teams, total_number_of_gameweeks_in_eliteserien, fixture_folder_name, stored_data, eliteserien_folder_name, current_season_name_eliteserien
-from utils.fixtures.models.TeamFixtureInfoEliteserienModel import TeamFixtureInfoEliteserienModel
+from constants import python_anywhere_path, total_number_of_eliteserien_teams, total_number_of_eliteserien_teams, total_number_of_gameweeks_in_eliteserien, fixture_folder_name, stored_data, esf, current_season_name_eliteserien
+from models.fixtures.models.TeamFixtureInfoEliteserienModel import TeamFixtureInfoEliteserienModel
 from openpyxl.utils.cell import get_column_letter
 from openpyxl import load_workbook
 
@@ -7,7 +7,7 @@ from openpyxl import load_workbook
 def read_eliteserien_excel_to_db_format(defensivt=""):
     xlsx_file = "Eliteserien_fixtures" + defensivt + ".xlsx"
     
-    path = python_anywhere_path + stored_data + "/" + eliteserien_folder_name + "/" + current_season_name_eliteserien + \
+    path = python_anywhere_path + stored_data + "/" + esf + "/" + current_season_name_eliteserien + \
         "/" + fixture_folder_name + "/" + xlsx_file
 
     max_teams = total_number_of_eliteserien_teams
@@ -35,12 +35,12 @@ def read_eliteserien_excel_to_db_format(defensivt=""):
         team_font_color_hex = ws_fdr[team_name_cell_name].font.color.index
         
         team_name_hexcolor.append([team_name, team_color_hex, team_font_color_hex, team_id_idx])
-                
+
         for column in column_letters_list:
             cell_name = "{}{}".format(column, row)
             gw_number = "{}{}".format(column, 2)
             value = ws_fdr[cell_name].value
-            
+           
             if value is not None:
                 all_games_in_gw = value.split("+")
                 for game in all_games_in_gw:

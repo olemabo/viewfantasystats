@@ -15,6 +15,7 @@ class EliteserienPlayerStatistic(models.Model):
     player_name = models.CharField(max_length=40, help_text='Enter player name (Bruno Miguel & Borges Fernandes) ')
     player_web_name = models.CharField(max_length=40, help_text='Enter player web name (Fernandes) ')
     chance_of_playing = models.CharField(max_length=5, help_text='Enter chance of playing next round (75%) ')
+    player_status = models.CharField(max_length=1, help_text='Player status (a=available, u=unavailble,i,d)', blank=True, null=True)
 
     assists_list = ListTextField(
         base_field=models.IntegerField(help_text='Enter number of assist (2)'),

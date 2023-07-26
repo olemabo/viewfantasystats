@@ -1,18 +1,14 @@
-import React, { useState, useEffect, FunctionComponent } from 'react';
-
-import Pagination from 'rc-pagination';
-import axios from 'axios';
-
 import { UserSearchHitModel } from '../../../models/SearchUserName/UserSearchHitModel';
-import { LanguageProps } from '../../../models/shared/LanguageProps';
+import React, { useState, useEffect, FunctionComponent } from 'react';
+import { PageProps, esf } from '../../../models/shared/PageProps';
 import { Spinner } from '../../Shared/Spinner/Spinner';
 import { store } from '../../../store/index';
+import Pagination from 'rc-pagination';
 import './SearchUserName.scss';
+import axios from 'axios';
 
-axios.defaults.xsrfCookieName = 'csrftoken';
-axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
-export const SearchUserNamePage : FunctionComponent<LanguageProps> = (props) => {
+export const SearchUserNamePage : FunctionComponent<PageProps> = (props) => {
     const player_ownership_api_path = "/statistics/search-user-names-api/";
     
     const emptyHits: UserSearchHitModel[] = [{ hit_text: "", user_id: "", user_team_name: "", user_first_name: "", user_last_name: ""}];
@@ -23,8 +19,8 @@ export const SearchUserNamePage : FunctionComponent<LanguageProps> = (props) => 
     const [ fantasy_manager_url, setFantasy_manager_url ] = useState("");
 
     useEffect(() => {
-        if (store.getState()?.league_type != "Eliteserien") {
-            store.dispatch({type: "league_type", payload: "Eliteserien"});
+        if (store.getState()?.league_type !== esf) {
+            store.dispatch({type: "league_type", payload: esf});
         }
 
     }, []);

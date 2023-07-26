@@ -3,6 +3,7 @@ import { KickOffTimesModel } from '../../../models/fixturePlanning/KickOffTimes'
 import { contrastingColor } from '../../../utils/findContrastColor';
 import { convertFDRtoHex } from '../../../utils/convertFDRtoHex';
 import { lowerCaseText } from '../../../utils/lowerCaseText';
+import Message from '../../Shared/Messages/Messages';
 import React, { FunctionComponent } from 'react';
 import './ShowFDRData.scss';
 
@@ -12,6 +13,7 @@ type ShowFDRProps = {
     kickOffTimes: KickOffTimesModel[];
     allowToggleBorder?: boolean;
     fdrToColor?: any;
+    warningMessage: string;
 }
 
 export const ShowFDRData : FunctionComponent<ShowFDRProps> = (props) => {
@@ -27,7 +29,19 @@ export const ShowFDRData : FunctionComponent<ShowFDRProps> = (props) => {
         }
     }
 
+    function checkIfAllTeamsAreToggledOff() {
+        var toggledOff = 0;
+        props.fdrData.map(team => {
+            toggledOff += team.checked ? 1 : 0;
+        })
+        
+        return toggledOff === 0;
+    }
+
     return <>
+        { checkIfAllTeamsAreToggledOff() ? 
+        <Message messageType='warning' messageText={props.warningMessage} />
+         :
         <div className="container-fdr fdr">
             <div className="fdr-table">
                 <div className="fdr-team-names">
@@ -113,6 +127,7 @@ export const ShowFDRData : FunctionComponent<ShowFDRProps> = (props) => {
                 </div> */}
             </div>
         </div>
+    }
     </>
 };
 

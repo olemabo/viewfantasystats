@@ -1,12 +1,9 @@
-import { TableSortLabelTypeMap } from '@material-ui/core';
 import React, { FunctionComponent, useEffect, useState } from 'react';
-import './TableSortHead.scss';
 import { Popover } from '../../Shared/Popover/Popover';
-import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUpOutlined';
-import ArrowDropDownIcon from  '@material-ui/icons/ArrowDropDownOutlined';
-import UnfoldMore from  '@material-ui/icons/UnfoldMore';
-import ExpandLess from  '@material-ui/icons/ExpandLess';
-import ExpandMore from  '@material-ui/icons/ExpandMore';
+import UnfoldMore from '@mui/icons-material/UnfoldMore';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import './TableSortHead.scss';
 
 type TableSortHeadProps = {
     text: string,
@@ -58,14 +55,14 @@ export const TableSortHead : FunctionComponent<TableSortHeadProps> = (props) => 
     }
     return <>
         <div className='sort-text'><>
-        { (props.popover_text != '' && props.popover_title != '') ?
-            <Popover
-                id={props.text}
-                title={props.text}
-                popover_title={props.popover_title ?? ''}
-                popover_text={props.popover_text ?? ''} />
-            : <>{props.text}</>
-        }</>
+            { (props.popover_text != '' && props.popover_title != '') ?
+                <Popover
+                    id={props.text}
+                    title={props.text}
+                    popover_title={props.popover_title ?? ''}
+                    popover_text={props.popover_text ?? ''} />
+                : <>{props.text}</>
+            }</>
         </div>
         <button title="sort-arrow-button" onClick={() => sortCell()} className="sort-arrows-container">
             { (sortType == SortType.Increasing) &&

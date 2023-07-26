@@ -125,7 +125,7 @@
     }
 }
 
-.Eliteserien {
+.esf {
     .fpl-linear-gradient-color-darker {
         background: var(--eliteserien-linear-gradient-first-color);  /* fallback for old browsers */
         background: -webkit-linear-gradient(to left, var(--eliteserien-linear-gradient-first-color-darker), var(--eliteserien-linear-gradient-second-color));  /* Chrome 10-25, Safari 5.1-6 */
@@ -164,7 +164,7 @@
 //             position: relative;
 //         }
 
-//         &.eliteserien {
+//         &.esf {
 //             background: var(--eliteserien-linear-gradient-first-color);  /* fallback for old browsers */
 //             background: -webkit-linear-gradient(to left, var(--eliteserien-linear-gradient-first-color), var(--eliteserien-linear-gradient-second-color));  /* Chrome 10-25, Safari 5.1-6 */
 //             background: linear-gradient(to left, var(--eliteserien-linear-gradient-first-color), var(--eliteserien-linear-gradient-second-color)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
@@ -200,7 +200,7 @@
             position: relative;
         }
 
-        &.eliteserien {
+        &.esf {
             background: var(--eliteserien-linear-gradient-first-color);  /* fallback for old browsers */
             background: -webkit-linear-gradient(to left, var(--eliteserien-linear-gradient-first-color), var(--eliteserien-linear-gradient-second-color));  /* Chrome 10-25, Safari 5.1-6 */
             background: linear-gradient(to left, var(--eliteserien-linear-gradient-first-color), var(--eliteserien-linear-gradient-second-color)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */

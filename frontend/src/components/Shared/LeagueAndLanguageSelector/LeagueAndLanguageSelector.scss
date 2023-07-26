@@ -3,43 +3,56 @@
 }
 
 .button-with-icon {
+    color: inherit;
     display: flex;
     cursor: pointer !important;
     box-shadow: 0 0 0 1px #00000082;
     box-shadow: 0 0 0 1px transparent;
     border-radius: 25px;
     padding: 4px;
+    
     svg {
+        // color: #372e2e;
+        color: var(--top-menu-items-color);
         font-size: 18px;
         margin-right: 6px;
         width: 16px;
         height: 16px;
     }
+
     button {
         cursor: pointer !important;
         height: 12px;
         margin: 1px 4px 0 3px;
     }
+    
     .league {
         margin-right: 6px;
         margin-left: 2px;
         position: relative;
         bottom: 3px;
     }
+    
     .adjust-height {
-        height: 18px;
-        line-height: 16px;
+        // height: 18px;
+        // line-height: 16px;
         text-align: center;
     }
+    
     .adjust-height-lang {
         height: 18px;
         line-height: 16px;
         text-align: center;
     }
+    
+    .lang {
+        position: relative;
+        top: 1px;
+    }
+
     span {
-        display: inline !important;
-        font-weight: 700;
-        font-family: 'Lato';
+        display: inline;
+        font-family: var(--font-family);
         font-size: 15px;
     }
 }
