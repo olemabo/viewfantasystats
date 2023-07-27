@@ -248,6 +248,12 @@ export const RotationPlannerPage : FunctionComponent<PageProps> = (props) => {
         return combinations(number_can_be_in_solution, teamsToCheck - number_of_must_be_in_solution)
     }
 
+    const popoverText = `${props.content.Fixture.RotationPlanner?.title} ${props.content.LongTexts.rotationPlannerDescription} 
+    '${props.content.Fixture.gw_start} ' ${props.content.General.and} ' ${props.content.Fixture.gw_end} ' ${props.content.LongTexts.becomesRes}
+    '${props.content.Fixture.teams_to_check}' ${props.content.LongTexts.rotationPlannerDescription_1} 
+    '${props.content.Fixture.teams_to_play}' ${props.content.LongTexts.rotationPlannerDescription_2}`;
+    
+
     return <>
     <DefaultPageContainer pageClassName='fixture-planner-container' heading={props.content.Fixture.RotationPlanner?.title + " - " + (store.getState().league_type === "fpl" ? "Premier League" : "Eliteserien")} description={props.content.Fixture.RotationPlanner?.title}>
          <h1>{props.content.Fixture.RotationPlanner?.title}
@@ -258,15 +264,10 @@ export const RotationPlannerPage : FunctionComponent<PageProps> = (props) => {
             popover_title={props.content.Fixture.RotationPlanner?.title} 
             iconSize={14}
             iconpostition={[-10, 0, 0, 3]}
-            popover_text={ props.content.Fixture.RotationPlanner?.title + " viser kombinasjoner av lag som kan roteres for å gi best mulig kampprogram. "
-            + "Eksempelvis ønsker man å finne to keepere som roterer bra mellom runde 10 og 20. "
-            + "'" + props.content.Fixture.gw_start.toString() + "'" + " og " + "'" + props.content.Fixture.gw_end.toString() + "'" + " blir da henholdsvis 10 og 20. "
-            + "'" + props.content.Fixture.teams_to_check.toString() + "'" + " blir 2 fordi man skal ha 2 keepere som skal rotere. "
-            + "'" + props.content.Fixture.teams_to_play.toString() + "'" + " blir 1 fordi kun en av de to keeperene skal spille per runde. "
-            }>
-            Kampprogram og vanskelighetsgrader er hentet fra
+            popover_text={ popoverText }>
+           { props.content.LongTexts.fixtureAreFrom }
             <a href={external_urls.url_offical_fantasy_premier_league}>Fantasy Premier League.</a>
-            <FdrBox />
+            <FdrBox content={props.content} />
             </Popover>
          </h1>
          { !firstloading && <>

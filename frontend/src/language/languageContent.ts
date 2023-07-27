@@ -3,6 +3,7 @@ export const content_json = {
         General: {
             fdr: "FDR",
             defence: "Defence",
+            offence: 'Offence',
             search_button_name: "Search",
             all_players: "All Players",
             all_teams: "All Teams",
@@ -57,11 +58,20 @@ export const content_json = {
             new: 'new',
             playerName: 'Player name',
             removePlayer: 'Remove player',
+            managers: 'managers',
+            player: 'Player',
+            here: 'here',
         },
         Fixture: {
             FixturePlanner: {
                 title: "FDR Planner",
             }, 
+            TeamPlanner: {
+                title: "Team Planner",
+                description_1: "The team planner can be used to plan substitutions for a given team. By entering the team ID in the 'Team ID' box you can pick up an exciting team, otherwise you can manually add one player at a time to the various positions using the 'Add Player' buttons. You can remove a player by clicking on the red line in the box with the player's name.",
+                description_2: "If the buttons are available, you can choose between Defensive, Offensive and FDR on the matches for the various positions.",
+                description_3: "If you click on a match field once, the color will change to gray (intended: bench player). On the second click the match field will be removed (intended: player has been replaced by the team or is not part of the team for this round).",
+            },
             RotationPlanner: {
                 title: "Rotation Planner",
                 avg_fdr_score: "Avg FDR score:",
@@ -74,9 +84,6 @@ export const content_json = {
             PeriodPlanner: {
                 title: "Period Planner",
             }, 
-            TeamID: {
-                title: "Team Planner",
-            },
             teamId: "Team ID",
             noTeamsChosen: "All teams remove from 'Hide teams'",
             removeAllText: "Show all teams",
@@ -101,9 +108,9 @@ export const content_json = {
                 title: "Player Ownership",
                 owned_by: "Owned by",
                 captain: "Captaincy",
-                vice_captain: "Vice Captain",
+                vice_captain: "Vice captain",
                 benched: "Benched",
-                tot_ownership: "Total Ownership",
+                tot_ownership: "Total ownership",
                 player: "Player",
                 chip_title: "Chip usage in",
                 chip_total_usage_title: "Chips used all gws",
@@ -146,12 +153,40 @@ export const content_json = {
             },
             statistic: "Statistics",
             search: "Search",
-        }
+        },
+        LongTexts: {
+            fdrValues: 'FDR values: ',
+            fdrDescription: 'Dark blue boxes mark a double round, while black boxes mark that the team does not have a match that round.',
+            fixtureAreFrom: 'Match program and difficulty levels are taken from',
+            ExcelSheet: 'this Excel sheet',
+            to: 'made by',
+            bestFixture: 'The best match program is at the top and the worst at the bottom',
+            rankTeams: 'ranks teams according to best match schedule between two rounds',
+            markPeriode: 'marks the period a team has the best match schedule between two rounds. Best series of matches are marked with black border colors. For example, you want to find out which period between rounds 1 and 20 each team has the best matches.',
+            becomesRes: 'will then be 1 and 20 respectively.',
+            leastNumber: 'is the minimum number of consecutive games a team must have.',
+            ownershiptDescription: 'Data is obtained from the 100, 1000 and 5000 best ESF managers each round immediately after the exchange deadline. Normally, this is posted approx. 50 minutes after the first start of the match. Statistics on chip usage and team info also only apply to top 100, 1000 and 5000 (not all in the entire game).',
+            ownershiptDescriptionFPL: 'Data is obtained from the 100, 1000 and 10000 best FPL managers each round immediately after the exchange deadline. Normally, this is posted approx. 90 minutes after the first start of the match. Statistics on chip usage and team info also only apply to top 100, 1000 and 10000 (not all in the entire game).',
+            liveFixturesDescription: 'Statistics around, among other things, Bonus Point System (BPS), minutes played and points for players in the various matches.',
+            rotationPlannerDescription: 'shows combinations of teams that can be rotated to provide the best possible match schedule. For example, you want to find two goalkeepers who rotate well between rounds 10 and 20.',
+            rotationPlannerDescription_1: 'will be 2 because you must have 2 keepers who will rotate.',
+            rotationPlannerDescription_2: 'becomes 1 because only one of the two goalkeepers will play per round.', 
+        },
+        Popover: {
+            effectiveOwnership: 'Effective ownership is a calculation that takes into account managers who start a player (not just those who own them), along with those who captain the player. It is therefore the ownership share that starts the player plus the ownership share that has captained the player.',
+            chosenBy: 'Percentage who have this player in their squad (does not have to be in the starting eleven).',
+            topOwnership: 'Percentage among all managers who own this player (figures taken at the start of the round). So not just among the top ',
+            minutesPlayed: 'Number of minutes played. The number of minutes is updated live while the matches are being played.',
+            points: 'The number of points the player has received this round. The scores are updated live as the matches are played.',
+            EO: 'EO (%) for top 1000 managers from round ',
+            moreInfoEO: 'For more info and complete statistics, see ',
+        },
     },
     Norwegian: {
         General: {
             fdr: "FDR",
             defence: "Defensivt",
+            offence: 'Offensivt',
             search_button_name: "Søk",
             all_players: "Alle spiller",
             all_teams: "Alle lag",
@@ -206,10 +241,19 @@ export const content_json = {
             new: 'ny',
             playerName: 'Spillernavn',
             removePlayer: 'Fjern spiller',
+            managers: 'managere',
+            player: 'Spiller',
+            here: 'her',
         },
         Fixture: {
             FixturePlanner: {
                 title: "FDR Planner",
+            },
+            TeamPlanner: {
+                title: "Lagplanlegger",
+                description_1: "Bruk lagplanleggeren til å planlegge bytter frem i tid. Man kan hente ut eksisterende lag ved legge inn lag-ID i 'Lag-ID' boksen og gjøre et søk. Ellers kan man manuelt legg til en og en spiller til de ulike posisjonene ved hjelp av 'Legg til spiller'-knappene. Spillere kan fjernes ved å klikke på den rød streken i boksen med spillernavn.",
+                description_2: "For ESF kan man også velge mellom defensivt, offenstivt og FDR på kampene til de ulike posisjonene. ",
+                description_3: "Man kan klikke på kamp-feltene for å de ulike visualiseringer. Et klikk vil gi grå farge (tiltenkt: benk-spiller). To klikk vil gjøre at kamp-feltet fjernes (tiltenkt: spiller er byttet ut av laget eller er ikke en del av laget for denne runden). ",
             }, 
             RotationPlanner: {
                 title: "Rotasjonsplanlegger",
@@ -222,9 +266,6 @@ export const content_json = {
             },
             PeriodPlanner: {
                 title: "Periodeplanlegger",
-            },
-            TeamID: {
-                title: "Lagplanlegger",
             },
             teamId: "Lag-ID",
             noTeamsChosen: "Alle lag er filtrert vekk",
@@ -294,6 +335,34 @@ export const content_json = {
             },
             statistic: "Statistikk",
             search: "Søk",
-        }
+        },
+        LongTexts: {
+            fdrValues: 'FDR verdier: ',
+            fdrDescription: 'Mørkeblå bokser markerer en dobbeltrunde, mens svarte bokser markerer at laget ikke har kamp den runden.',
+            fixtureAreFrom: 'Kampprogram og vanskelighetsgrader er hentet fra',
+            ExcelSheet: 'Excel arket',
+            to: 'til',
+            bestFixture: 'Best kampprogram ligger øverst og dårligst nederst',
+            rankTeams: 'rangerer lag etter best kampprogram mellom to runder',
+            markPeriode: 'markerer perioden et lag har best kampprogram mellom to runder. Beste rekke med kamper er markert med svart kantfarger. Eksempelvis ønsker man å finne ut hvilken periode mellom runde 1 og 20 hvert lag har best kamper.',
+            becomesRes: 'blir da henholdsvis 1 og 20.',
+            leastNumber: 'er minste antall etterfølgende kamper et lag må ha.',
+            ownershiptDescription: 'Data hentes ut fra de 100, 1000 og 5000 beste ESF-managerne hver runde rett etter byttefrist. Normalt blir dette lagt ut ca. 50 minutter etter først kampstart. Statistikk om chipsbruk og laginfo gjelder også kun for topp 100, 1000 og 5000 (ikke alle i hele spillet).',
+            ownershiptDescriptionFPL: 'Data hentes ut fra de 100, 1000 og 10000 beste FPL-managerne hver runde rett etter byttefrist. Normalt blir dette lagt ut ca. 90 minutter etter først kampstart. Statistikk om chipsbruk og laginfo gjelder også kun for topp 100, 1000 og 10000 (ikke alle i hele spillet).',
+            liveFixturesDescription: 'Statistikk rundt blant annet opta index, minutter spilt og poeng for spillere i de ulike kampene.',
+            rotationPlannerDescription: 'viser kombinasjoner av lag som kan roteres for å gi best mulig kampprogram. Eksempelvis ønsker man å finne to keepere som roterer bra mellom runde 10 og 20.',
+            rotationPlannerDescription_1: 'blir 2 fordi man skal ha 2 keepere som skal rotere.',
+            rotationPlannerDescription_2: 'blir 1 fordi kun en av de to keeperene skal spille per runde.',
+
+        },
+        Popover: {
+            effectiveOwnership: 'Effektivt eierskap er en beregning som tar hensyn til managere som starter en spiller (ikke bare de som eier dem), sammen med de som kapteiner spilleren. Det er altså eierandel som starter spilleren pluss eierandelen som har kapteinet spilleren. ',
+            chosenBy: 'Prosentandel som har denne spilleren i troppen sin (trenger ikke være i startelleveren).',
+            topOwnership: 'Prosentandel blant alle managere som eier denne spilleren (tall hentet ved rundestart). Altså ikke bare blant topp ',
+            minutesPlayed: 'Antall minutter spilt. Antall minutter oppdateres live mens kampene spilles.',
+            points: 'Antall poeng spilleren har fått denne runden. Poengene oppdateres live mens kampene spilles.',
+            EO: 'EO (%) for topp 1000 managere fra runde ',
+            moreInfoEO: 'For mer info og fullstendig statistikk, se ',
+        },
      }
 };

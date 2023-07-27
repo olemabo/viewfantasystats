@@ -1,4 +1,4 @@
-import { fpl, LeagueType } from '../../../models/shared/PageProps';
+import { en, no, fpl, LeagueType } from '../../../models/shared/PageProps';
 import { convertFDRtoHex } from '../../../utils/convertFDRtoHex';
 import React, { FunctionComponent } from 'react';
 import './FdrBox.scss';
@@ -7,16 +7,18 @@ import './FdrBox.scss';
 type FdrBoxProps = {
     leagueType?: LeagueType,
     fdrToColor?: any,
+    content: any,
 }
 
 export const FdrBox : FunctionComponent<FdrBoxProps> = ({
     leagueType = fpl,
-    fdrToColor
+    fdrToColor,
+    content,
 }) => {
-    
+
     return <>
     { leagueType === fpl ? <p className='diff-introduction-container'>
-        FDR verdier: 
+        { content.LongTexts.fdrValues } 
         <span className="diff-introduction-box diff-1">1</span>
         <span className="diff-introduction-box diff-2">2</span>
         <span className="diff-introduction-box diff-3">3</span>
@@ -25,7 +27,7 @@ export const FdrBox : FunctionComponent<FdrBoxProps> = ({
         <span className="diff-introduction-box black">10</span>
     </p> : <>
         <p className='diff-introduction-container'>
-            FDR verdier: 
+            { content.LongTexts.fdrValues } 
             <span style={{ backgroundColor: "#1d3557bf" }} className="diff-introduction-box wide">0.25</span>
             <span style={{ backgroundColor: "#47abd89e" }} className="diff-introduction-box">1</span>
             <span style={{ backgroundColor: "#95d2ec8f" }} className="diff-introduction-box">2</span>
@@ -34,7 +36,7 @@ export const FdrBox : FunctionComponent<FdrBoxProps> = ({
             <span style={{ backgroundColor: "#d01b1bb5" }} className="diff-introduction-box">5</span>
             <span style={{ backgroundColor: convertFDRtoHex("10", fdrToColor)}} className="diff-introduction-box black">10</span>
         </p>
-        <p>Mørkeblå bokser markerer en dobbeltrunde, mens svarte bokser markerer at laget ikke har kamp den runden.</p>
+        <p>{ content.LongTexts.fdrDescription } </p>
     </>
     }
     </>

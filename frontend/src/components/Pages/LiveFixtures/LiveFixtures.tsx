@@ -236,7 +236,6 @@ export const LiveFixturesPage : FunctionComponent<PageProps> = (props) => {
         return identifier;
     }
 
-    console.log(fixtureData)
     const playerNameMinWidth = 120;
 
     return <>
@@ -253,7 +252,7 @@ export const LiveFixturesPage : FunctionComponent<PageProps> = (props) => {
             iconSize={14}
             iconpostition={[-10, 0, 0, 3]}
             popover_text=''>
-            Statistikk rundt blant annet opta index, minutter spilt og poeng for spillere i de ulike kampene.
+            { props.content.LongTexts.liveFixturesDescription }
         </Popover>
         </h1>
         { isLoading && 
@@ -305,13 +304,13 @@ export const LiveFixturesPage : FunctionComponent<PageProps> = (props) => {
                                         <Table tableLayoutType={props.league_type}>
                                             <TableHead tableHeight='compact'>
                                                 <TableRow>
-                                                    <TableCell cellType='head' minWidth={playerNameMinWidth}>Player</TableCell>
+                                                    <TableCell cellType='head' minWidth={playerNameMinWidth}>{props.content.General.player}</TableCell>
                                                     <TableCell cellType='head'>
                                                         <Popover
                                                             id={'Mp-home'}
                                                             title={'MP'}
                                                             popover_title={'Minutes Played'}
-                                                            popover_text={`Antall minutter spilt. Antall minutter oppdateres live mens kampene spilles. `} 
+                                                            popover_text={props.content.Popover.minutesPlayed} 
                                                         /> 
                                                     </TableCell>
                                                     <TableCell cellType='head'>
@@ -327,7 +326,7 @@ export const LiveFixturesPage : FunctionComponent<PageProps> = (props) => {
                                                             id={'Pts-home'}
                                                             title={'Pts'}
                                                             popover_title={'Points'}
-                                                            popover_text={`Antall poeng spilleren har fått denne runden. Poengene oppdateres live mens kampene spilles. `} 
+                                                            popover_text={props.content.Popover.points}  
                                                         /> 
                                                     </TableCell>
                                                     { hasOwnershipData && 
@@ -335,9 +334,9 @@ export const LiveFixturesPage : FunctionComponent<PageProps> = (props) => {
                                                                 id={'EO-home'}
                                                                 title={'EO'}
                                                                 popover_title={'Effective Ownership'}
-                                                                popover_text={`EO (%) for topp 1000 managere fra runde ${currentGW}.`}> 
-                                                                For mer info og fullstendig statistikk, se
-                                                                <a href={urls.url_eliteserien_player_ownership}>her</a>.     
+                                                                popover_text={`${props.content.Popover.EO} ${currentGW}.`}> 
+                                                                { props.content.Popover.moreInfoEO}
+                                                                <a href={urls.url_eliteserien_player_ownership}>{ props.content.General.here }</a>.     
                                                             </Popover>
                                                         </TableCell>
                                                     }
@@ -408,7 +407,7 @@ export const LiveFixturesPage : FunctionComponent<PageProps> = (props) => {
                                                             id={'Mp-away'}
                                                             title={'MP'}
                                                             popover_title={'Minutes Played'}
-                                                            popover_text={`Antall minutter spilt. Antall minutter oppdateres live mens kampene spilles. `} 
+                                                            popover_text={props.content.Popover.minutesPlayed} 
                                                         /> 
                                                     </TableCell>
                                                     <TableCell cellType='head'>
@@ -424,7 +423,7 @@ export const LiveFixturesPage : FunctionComponent<PageProps> = (props) => {
                                                             id={'Pts-away'}
                                                             title={'Pts'}
                                                             popover_title={'Points'}
-                                                            popover_text={`Antall poeng spilleren har fått denne runden. Poengene oppdateres live mens kampene spilles. `} 
+                                                            popover_text={props.content.Popover.points} 
                                                         />     
                                                     </TableCell>
                                                     { hasOwnershipData && 
@@ -432,9 +431,8 @@ export const LiveFixturesPage : FunctionComponent<PageProps> = (props) => {
                                                                 id={'EO-away'}
                                                                 title={'EO'}
                                                                 popover_title={'Effective Ownership'}
-                                                                popover_text={`EO (%) for topp 1000 managere fra runde ${currentGW}.`}> 
-                                                                For mer info og fullstendig statistikk, se
-                                                                <a href={urls.url_eliteserien_player_ownership}>her</a>.     
+                                                                popover_text={`${props.content.Popover.EO} ${currentGW}.`}> 
+                                                                { props.content.Popover.moreInfoEO}<a href={urls.url_eliteserien_player_ownership}>{props.content.General.here}</a>.     
                                                             </Popover>
                                                         </TableCell> 
                                                     }

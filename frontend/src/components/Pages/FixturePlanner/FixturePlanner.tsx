@@ -162,17 +162,17 @@ export const FixturePlannerPage : FunctionComponent<PageProps & { fixture_planni
     
     if (props.fixture_planning_type == FixturePlanningType.FDR) { 
         title = title_fixture_planner;
-        description = title + " (Fixture Difficulty Rating) rangerer lag etter best kampprogram mellom to runder " +
-        "('" + props.content.Fixture.gw_start.toString() + "'" + " og " + "'" + props.content.Fixture.gw_end.toString() + "')" + 
-        ". Lag med best kampprogram havner øverst og dårligst nederst. ";
+
+        description = `${title} (Fixture Difficulty Rating) ${props.content.LongTexts.rankTeams}
+        ('${props.content.Fixture.gw_start}' ${props.content.General.and} ' ${props.content.Fixture.gw_end}').
+        ${props.content.LongTexts.bestFixture}`;
     }
 
     if (props.fixture_planning_type == FixturePlanningType.Periode) { 
         title = title_period_planner;
-        description = title + " markerer perioden et lag har best kampprogram mellom to runder. Beste rekke med kamper er markert med svart kantfarger. "
-        + "Eksempelvis ønsker man å finne ut hvilken periode mellom runde 1 og 20 hvert lag har best kamper. "
-        + "'" + props.content.Fixture.gw_start.toString() + "'" + " og " + "'" + props.content.Fixture.gw_end.toString() + "'" + " blir da henholdsvis 1 og 20. "
-        + "'" + props.content.Fixture.min_fixtures.toString() + "'" + " er minste antall etterfølgende kamper et lag må ha. ";
+        description = `${title} ${props.content.LongTexts.markPeriode} 
+        ' ${props.content.Fixture.gw_start} ' ${props.content.General.and} ' ${props.content.Fixture.gw_end} ' ${props.content.LongTexts.becomesRes}
+        '${props.content.Fixture.min_fixtures} ' ${props.content.LongTexts.leastNumber}`;
     }
 
     return <>
@@ -190,9 +190,9 @@ export const FixturePlannerPage : FunctionComponent<PageProps & { fixture_planni
                 iconSize={14}
                 iconpostition={[-10, 0, 0, 3]}
                 popover_text={ description }>
-                Kampprogram og vanskelighetsgrader er hentet fra
+                { props.content.LongTexts.fixtureAreFrom }
                 <a href={external_urls.url_offical_fantasy_premier_league}>Fantasy Premier League.</a>
-                <FdrBox />
+                <FdrBox content={props.content} />
             </Popover>
         </h1>
         

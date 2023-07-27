@@ -16,13 +16,17 @@ import '../../Shared/TextInput/TextInput.scss';
 import { store } from '../../../store/index';
 import Modal from '../../Shared/Modal/Modal';
 import axios from 'axios';
+import { max_gw_esf, max_gw_fpl, min_gw_esf, min_gw_fpl } from '../../../constants/gws';
+import { url_get_fdr_data_from_team_id_eliteserien, url_get_fdr_data_from_team_id_premier_league } from '../../../static_urls/APIUrls';
 
 
 export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) => {
-    const fixture_planner_api_path = props.league_type === esf ? "/fixture-planner-eliteserien/get-fdr-data-from-team-id/" 
-                : "/fixture-planner/get-fdr-data-from-team-id/";
-    const min_gw = 1;
-    const max_gw = 30;
+    const fixture_planner_api_path = props.league_type === esf 
+        ? url_get_fdr_data_from_team_id_eliteserien 
+                : url_get_fdr_data_from_team_id_premier_league;
+    
+    const min_gw = props.league_type === esf ? min_gw_esf : min_gw_fpl;
+    const max_gw = props.league_type === esf ? max_gw_esf : max_gw_fpl;
     
     const empty: TeamIdFDRModel[] = [ { team_name_short: "-", FDR: [] } ];
     const emptyGwDate: KickOffTimesModel[] = [{gameweek: 0, day_month: "",kickoff_time: "" }];
@@ -92,15 +96,13 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
             setFixtureData([fdr_data, fdr_data_def, fdr_data_off]);
 
             if (fdr_data.length > 15 && isInitial) {
-                setGoalkeepers([ ]);
+                setGoalkeepers([]);
                 setDefenders([])
                 setMidtfielders([]);
                 setForwards([])
             }
         });
     }
-
-    console.log(fixtureData);
 
     function convertFixtureData(fdr_data: any): TeamIdFDRModel[] {
         var temp: TeamIdFDRModel[] = [];
@@ -225,35 +227,29 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
     return <>
     <DefaultPageContainer 
         pageClassName='fixture-planner-container' 
-        heading={`${props.content.Fixture.TeamID?.title} - ${(store.getState().league_type === "fpl" ? "Premier League" : "Eliteserien")}`} 
-        description={'Fixture Difficulty Rating Planner for Eliteserien Fantasy (ESF). '}>
+        heading={`${props.content.Fixture.TeamPlanner?.title} - ${(store.getState().league_type === "fpl" ? "Premier League" : "Eliteserien")}`} 
+        description={`Fixture Difficulty Rating Planner for a team with a given team-ID for ${(store.getState().league_type === "fpl" ? "Premier League" : "Eliteserien")}. `}>
         <h1>
-            {props.content.Fixture.TeamID?.title}
+            {props.content.Fixture.TeamPlanner?.title}
             <Popover 
                 id={"rotations-planner-id"}
                 title=""
                 algin_left={true}
-                popover_title={props.content.Fixture.TeamID?.title} 
+                popover_title={props.content.Fixture.TeamPlanner?.title} 
                 iconSize={14}
                 iconpostition={[-10, 0, 0, 3]}
                 popover_text={ "" }>
-                Kampprogram og vanskelighetsgrader er hentet fra 
-                <a href={external_urls.url_spreadsheets_dagfinn_thon}>Excel arket</a> til Dagfinn Thon.
-                <FdrBox leagueType={esf}/>
+                <p>{ props.content.Fixture.TeamPlanner.description_1}</p>
+                <p>{ props.content.Fixture.TeamPlanner.description_2}</p>
+                <p>{ props.content.Fixture.TeamPlanner.description_3}</p>
+                { props.content.LongTexts.fixtureAreFrom }
+                <a href={external_urls.url_spreadsheets_dagfinn_thon}>{ props.content.LongTexts.ExcelSheet }</a> { props.content.LongTexts.to } Dagfinn Thon.
+                <FdrBox content={props.content} leagueType={esf}/>
             </Popover>
         </h1>
         { maxGw > 0 && 
             <div className='input-row-container'>
                 <form onSubmit={(e) =>  {updateFDRData(); e.preventDefault()}}>
-                    <TextInput 
-                        htmlFor='input-form-team-id'
-                        min={0}
-                        max={100000}
-                        minWidth={80}
-                        onInput={(e: number) => setTeamId(e)}
-                        defaultValue={teamID} >
-                        {props.content.Fixture.teamId}
-                    </TextInput>
 
                     <TextInput 
                         htmlFor='input-form-start-gw'
@@ -271,6 +267,16 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
                         onInput={(e: number) => setGwEnd(e)} 
                         defaultValue={gwEnd}>
                         {props.content.Fixture.gw_end}
+                    </TextInput>
+                    
+                    <TextInput 
+                        htmlFor='input-form-team-id'
+                        min={0}
+                        max={100000}
+                        minWidth={80}
+                        onInput={(e: number) => setTeamId(e)}
+                        defaultValue={teamID} >
+                        {props.content.Fixture.teamId}
                     </TextInput>
 
                     <input className="submit" type="submit" value={props.content.General.search_button_name} />

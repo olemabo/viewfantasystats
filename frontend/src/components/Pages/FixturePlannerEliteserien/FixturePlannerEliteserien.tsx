@@ -104,9 +104,7 @@ export const FixturePlannerEliteserienPage : FunctionComponent<PageProps & { fix
                 setGwEnd(data.gw_end);
             }
 
-            if (maxGw < 0) { 
-                setMaxGw(data.max_gw); 
-            }
+            if (maxGw < 0) { setMaxGw(data.max_gw); }
             
             setFdrToColor(data.fdr_to_colors_dict);
             
@@ -179,17 +177,17 @@ export const FixturePlannerEliteserienPage : FunctionComponent<PageProps & { fix
     
     if (props.fixture_planning_type == FixturePlanningType.FDR) { 
         title = title_fixture_planner;
-        description = title + " (Fixture Difficulty Rating) rangerer lag etter best kampprogram mellom to runder " +
-        "('" + props.content.Fixture.gw_start.toString() + "'" + " og " + "'" + props.content.Fixture.gw_end.toString() + "')" + 
-        ". Best kampprogram ligger øverst og dårligst nederst. ";
+
+        description = `${title} (Fixture Difficulty Rating) ${props.content.LongTexts.rankTeams}
+        ('${props.content.Fixture.gw_start}' ${props.content.General.and} ' ${props.content.Fixture.gw_end}').
+        ${props.content.LongTexts.bestFixture}`;
     }
 
     if (props.fixture_planning_type == FixturePlanningType.Periode) { 
         title = title_period_planner;
-        description = title + " markerer perioden et lag har best kampprogram mellom to runder. Beste rekke med kamper er markert med svart kantfarger. "
-        + "Eksempelvis ønsker man å finne ut hvilken periode mellom runde 1 og 20 hvert lag har best kamper. "
-        + "'" + props.content.Fixture.gw_start.toString() + "'" + " og " + "'" + props.content.Fixture.gw_end.toString() + "'" + " blir da henholdsvis 1 og 20. "
-        + "'" + props.content.Fixture.min_fixtures.toString() + "'" + " er minste antall etterfølgende kamper et lag må ha. ";
+        description = `${title} ${props.content.LongTexts.markPeriode} 
+        ' ${props.content.Fixture.gw_start} ' ${props.content.General.and} ' ${props.content.Fixture.gw_end} ' ${props.content.LongTexts.becomesRes}
+        '${props.content.Fixture.min_fixtures} ' ${props.content.LongTexts.leastNumber}`;
     }
 
     return <>
@@ -207,10 +205,10 @@ export const FixturePlannerEliteserienPage : FunctionComponent<PageProps & { fix
                 iconSize={14}
                 iconpostition={[-10, 0, 0, 3]}
                 popover_text={ description }>
-                Kampprogram og vanskelighetsgrader er hentet fra 
-                <a href={external_urls.url_spreadsheets_dagfinn_thon}>Excel arket</a> til Dagfinn Thon.
+                { props.content.LongTexts.fixtureAreFrom }
+                <a href={external_urls.url_spreadsheets_dagfinn_thon}>{ props.content.LongTexts.ExcelSheet }</a> { props.content.LongTexts.to } Dagfinn Thon.
                 { fdrToColor != null && 
-                    <FdrBox leagueType={esf} />
+                    <FdrBox leagueType={esf} content={props.content} />
                 }
             </Popover>
         </h1>
@@ -220,7 +218,7 @@ export const FixturePlannerEliteserienPage : FunctionComponent<PageProps & { fix
                     <TextInput 
                         htmlFor='input-form-start-gw'
                         min={min_gw}
-                        max={max_gw}
+                        max={maxGw}
                         onInput={(e: number) => setGwStart(e)} 
                         defaultValue={gwStart}>
                         {props.content.Fixture.gw_start}
@@ -228,7 +226,7 @@ export const FixturePlannerEliteserienPage : FunctionComponent<PageProps & { fix
                     <TextInput 
                         htmlFor='input-form-end-gw'
                         min={gwStart}
-                        max={max_gw}
+                        max={maxGw}
                         onInput={(e: number) => setGwEnd(e)} 
                         defaultValue={gwEnd}>
                         {props.content.Fixture.gw_end}
@@ -257,9 +255,9 @@ export const FixturePlannerEliteserienPage : FunctionComponent<PageProps & { fix
                 onclick={(checked: string) => changeXlsxSheet(checked)} 
                 toggleButtonName="FDR-toggle"
                 defaultToggleList={[ 
-                    { name: "Defensivt", value: "_defensivt", checked: fdrType==="_defensivt", classname: "defensiv" },
+                    { name: props.content.General.defence, value: "_defensivt", checked: fdrType==="_defensivt", classname: "defensiv" },
                     { name: "FDR", value: "", checked: fdrType==="", classname: "fdr" },
-                    { name: "Offensivt", value: "_offensivt", checked: fdrType==="_offensivt", classname: "offensiv"}
+                    { name: props.content.General.offence, value: "_offensivt", checked: fdrType==="_offensivt", classname: "offensiv"}
                 ]}
             />
             <Button buttonText={props.content.Fixture.filter_button_text} 

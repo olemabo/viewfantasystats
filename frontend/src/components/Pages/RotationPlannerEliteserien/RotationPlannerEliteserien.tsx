@@ -9,14 +9,13 @@ import React, { useState, useEffect, FunctionComponent } from 'react';
 import * as external_urls from '../../../static_urls/externalUrls';
 import ToggleButton from '../../Shared/ToggleButton/ToggleButton';
 import { PageProps, esf } from '../../../models/shared/PageProps';
-import { convertFDRtoHex } from '../../../utils/convertFDRtoHex';
+import FdrBox from '../../Shared/FDR-explaination/FdrBox';
+import TextInput from '../../Shared/TextInput/TextInput';
 import { Spinner } from '../../Shared/Spinner/Spinner';
 import { Popover } from '../../Shared/Popover/Popover';
 import { Button } from '../../Shared/Button/Button';
 import { store } from '../../../store/index';
 import axios from 'axios';
-import FdrBox from '../../Shared/FDR-explaination/FdrBox';
-import TextInput from '../../Shared/TextInput/TextInput';
 
 
 export const RotationPlannerEliteserienPage : FunctionComponent<PageProps> = (props) => {
@@ -257,7 +256,12 @@ export const RotationPlannerEliteserienPage : FunctionComponent<PageProps> = (pr
     }
 
     const { number_of_not_in_solution, number_of_must_be_in_solution, number_can_be_in_solution } = filterTeamData();
-
+    
+    const popoverText = `${props.content.Fixture.RotationPlanner?.title} ${props.content.LongTexts.rotationPlannerDescription} 
+    '${props.content.Fixture.gw_start} ' ${props.content.General.and} ' ${props.content.Fixture.gw_end} ' ${props.content.LongTexts.becomesRes}
+    '${props.content.Fixture.teams_to_check} ' ${props.content.LongTexts.rotationPlannerDescription_1} 
+    '${props.content.Fixture.teams_to_play}' ${props.content.LongTexts.rotationPlannerDescription_2}`;
+    
     return <>
     <DefaultPageContainer 
         pageClassName='fixture-planner-container' 
@@ -270,17 +274,12 @@ export const RotationPlannerEliteserienPage : FunctionComponent<PageProps> = (pr
             popover_title={props.content.Fixture.RotationPlanner?.title} 
             iconSize={14}
             iconpostition={[-10, 0, 0, 3]}
-            popover_text={ props.content.Fixture.RotationPlanner?.title + " viser kombinasjoner av lag som kan roteres for å gi best mulig kampprogram. "
-            + "Eksempelvis ønsker man å finne to keepere som roterer bra mellom runde 10 og 20. "
-            + "'" + props.content.Fixture.gw_start.toString() + "'" + " og " + "'" + props.content.Fixture.gw_end.toString() + "'" + " blir da henholdsvis 10 og 20. "
-            + "'" + props.content.Fixture.teams_to_check.toString() + "'" + " blir 2 fordi man skal ha 2 keepere som skal rotere. "
-            + "'" + props.content.Fixture.teams_to_play.toString() + "'" + " blir 1 fordi kun en av de to keeperene skal spille per runde. "
-            }>
-            Kampprogram og vanskelighetsgrader er hentet fra 
-            <a href={external_urls.url_spreadsheets_dagfinn_thon}>Excel arket</a>
-            til Dagfinn Thon.
+            popover_text={ popoverText }>
+            { props.content.LongTexts.fixtureAreFrom }
+            <a href={external_urls.url_spreadsheets_dagfinn_thon}>{ props.content.LongTexts.ExcelSheet }</a>
+            { props.content.LongTexts.to } Dagfinn Thon.
             { fdrToColor != null && 
-                <FdrBox leagueType={esf} />
+                <FdrBox content={props.content} leagueType={esf} />
             }
             </Popover>
         </h1>
@@ -290,7 +289,7 @@ export const RotationPlannerEliteserienPage : FunctionComponent<PageProps> = (pr
                     <TextInput 
                         htmlFor='input-form-start-gw'
                         min={min_gw}
-                        max={max_gw}
+                        max={maxGw}
                         onInput={(e: number) => setGwStart(e)} 
                         defaultValue={gwStart}>
                         {props.content.Fixture.gw_start}
@@ -299,7 +298,7 @@ export const RotationPlannerEliteserienPage : FunctionComponent<PageProps> = (pr
                     <TextInput 
                         htmlFor='input-form-end-gw'
                         min={gwStart}
-                        max={max_gw}
+                        max={maxGw}
                         onInput={(e: number) => setGwEnd(e)} 
                         defaultValue={gwEnd}>
                         {props.content.Fixture.gw_end}
@@ -340,9 +339,9 @@ export const RotationPlannerEliteserienPage : FunctionComponent<PageProps> = (pr
                 onclick={(checked: string) => changeXlsxSheet(checked)} 
                 toggleButtonName="FDR-toggle"
                 defaultToggleList={[ 
-                    { name: "Defensivt", value: "_defensivt", checked: fdrType==="_defensivt", classname: "defensiv" },
+                    { name: props.content.General.defence, value: "_defensivt", checked: fdrType==="_defensivt", classname: "defensiv" },
                     { name: "FDR", value: "", checked:  fdrType==="", classname: "fdr" },
-                    { name: "Offensivt", value: "_offensivt", checked:  fdrType==="_offensivt", classname: "offensiv"}
+                    { name: props.content.General.offence, value: "_offensivt", checked:  fdrType==="_offensivt", classname: "offensiv"}
                 ]}
             />
 

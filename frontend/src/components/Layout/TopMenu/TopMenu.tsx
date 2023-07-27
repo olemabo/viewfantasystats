@@ -67,13 +67,13 @@ export const TopMenu : FunctionComponent<LanguageProps> = (props) => {
                             <LeagueSelector 
                                 text={'ESF'}
                                 onclick={() => updateSoccerLeague(esf)}
-                                url={"/" + urls.url_elitserien}  /> }
+                                url={"/" + urls.url_eliteserien}  /> }
                     </div>
                 </div>
                 <div className="navbar">
                     <div className="nav-container">
                         <h1 className="logo">
-                            <Link to={"/" + (leagueType === fpl ? urls.url_premier_league : urls.url_elitserien)}>
+                            <Link to={"/" + (leagueType === fpl ? urls.url_premier_league : urls.url_eliteserien)}>
                                 <div>{"Fantasy Stats "}</div>
                                 { "" +  (leagueType === fpl ? "Premier League" : "Eliteserien")}
                             </Link>
@@ -95,6 +95,7 @@ export const TopMenu : FunctionComponent<LanguageProps> = (props) => {
                                             <a className="dropbtn" href={"/" + urls.url_premier_league_fdr_planner}>{props.content.Fixture.FixturePlanner?.title}</a>
                                             <a className="dropbtn" href={"/" + urls.url_premier_league_rotation_planner}>{props.content.Fixture.RotationPlanner?.title}</a>
                                             <a className="dropbtn" href={"/" + urls.url_premier_league_periode_planner}>{props.content.Fixture.PeriodPlanner?.title}</a>
+                                            <a className="dropbtn" href={"/" + urls.url_premier_league_fdr_planner_team_id}>{props.content.Fixture.TeamPlanner?.title}</a>
                                         </div>
                                     </li>
                                 </ul>
@@ -115,9 +116,10 @@ export const TopMenu : FunctionComponent<LanguageProps> = (props) => {
                                     <li className="dropdown">
                                         <button className="dropbtn">{props.content.Fixture.fixture}</button>
                                         <div style={{float: 'left'}} className="dropdown-content">
-                                            <a className="dropbtn" href={"/" + urls.url_elitserien_fdr_planner}>{props.content.Fixture.FixturePlanner?.title}</a>
+                                            <a className="dropbtn" href={"/" + urls.url_eliteserien_fdr_planner}>{props.content.Fixture.FixturePlanner?.title}</a>
                                             <a className="dropbtn" href={"/" + urls.url_eliteserien_rotation_planner}>{props.content.Fixture.RotationPlanner?.title}</a>
                                             <a className="dropbtn" href={"/" + urls.url_eliteserien_periode_planner}>{props.content.Fixture.PeriodPlanner?.title}</a>
+                                            <a className="dropbtn" href={"/" + urls.url_eliteserien_fdr_planner_team_id}>{props.content.Fixture.TeamPlanner?.title}</a>
                                         </div>
                                     </li>
                                 </ul>

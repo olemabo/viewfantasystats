@@ -14,6 +14,8 @@
     --size-of-top-bar-mobile: 60px;
     --link-color: var(--black-color);
     --border-color: #b9b9b9;
+
+    --primary-dark-blue-color: #0f3443;
     
     /* Layout */
     --fpl-linear-gradient-first-color: #0F3443;
@@ -36,7 +38,7 @@
     --font-size-header-title: 26px;
 
     /* Footer */
-    --footer-background-color: #0f3443;
+    --footer-background-color: var(--primary-dark-blue-color);
     --footer-h2-color-eliteserien: #7fd9ff;
     --footer-h2-color-premier-league: var(--fpl-linear-gradient-second-color);
 
@@ -52,17 +54,11 @@
     --fdr-premier-league-5: #7004268c;
     /* --fdr-premier-league-5: #F2BFCF; */
 
-    --fdr-eliteserien-1: #47abd89e;
     --fdr-eliteserien-1: #87C5E1;
-    --fdr-eliteserien-2: #95d2ec8f;
     --fdr-eliteserien-2: #BDDFED;
-    --fdr-eliteserien-3: #e7f9ff87;
     --fdr-eliteserien-3: #EAF4F7;
-    --fdr-eliteserien-4: #ff4242a3;
     --fdr-eliteserien-4: #F98080;
-    --fdr-eliteserien-5: #d01b1bb5;
     --fdr-eliteserien-5: #D95858;
-    --fdr-eliteserien-double: #1d3557bf;
     --fdr-eliteserien-double: #52647D;
 
     --fdr-color-blank: #000000ab;
@@ -91,16 +87,16 @@
     --table-thead-height-compact: 30px;
     
     /* Components */
-    --submit-button-color: #1b2f44;
+    --submit-button-color: var(--primary-dark-blue-color);
     --submit-button-text-color: var(--white-color);
-    --search-box-color: #0f3443;
+    --search-box-color: var(--primary-dark-blue-color);
 
     --filter-all-background-color: transparent;
     --filter-all-color: var(--black-color);
     
     /* Pagination */
-    --pagination-item-color: #0F3443;
+    --pagination-item-color: var(--primary-dark-blue-color);
     --pagination-item-border-color: #9ea5a8;
-    --pagination-item-hover-color: #0F3443;
+    --pagination-item-hover-color: var(--primary-dark-blue-color);
 }
 
