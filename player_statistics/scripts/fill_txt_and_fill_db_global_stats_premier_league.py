@@ -2,10 +2,9 @@ import django
 import sys
 import os
 
-prod = "/home/olebo/viewfantasystats/"
-local = os.path.abspath('../..')
+path = os.path.abspath('../..') if "ole.borge" in os.getcwd() else "/home/olebo/viewfantasystats/"
 
-sys.path.append(prod)
+sys.path.append(path)
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'fplwebpage.settings')
 django.setup()
 

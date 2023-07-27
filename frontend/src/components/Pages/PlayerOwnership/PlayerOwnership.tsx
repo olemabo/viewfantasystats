@@ -254,7 +254,7 @@ export const PlayerOwnership : FunctionComponent<PageProps> = (props) => {
             iconSize={14}
             iconpostition={[-10, 0, 0, 3]}
             popover_text=''>
-            Data hentes ut fra de 100, 1000 og 5000 beste ESF-managerne hver runde rett etter byttefrist. Normalt blir dette lagt ut ca. 50 minutter etter først kampstart. Statistikk om chipsbruk og laginfo gjelder også kun for topp 100, 1000 og 5000 (ikke alle i hele spillet).
+            { props.league_type === fpl ? props.content.LongTexts.ownershiptDescriptionFPL : props.content.LongTexts.ownershiptDescription }
         </Popover>
         </h1>
         { emptyDataMessage && <>
@@ -327,15 +327,21 @@ export const PlayerOwnership : FunctionComponent<PageProps> = (props) => {
                 <TableHead>
                     <TableRow>
                         <TableCell cellType='head' minWidth={139}>{props.content.Statistics.PlayerOwnership.player}</TableCell>
-                        <TableCell cellType='head'><TableSortHead popover_title='Effective Ownership' popover_text='Effektivt eierskap er en beregning som tar hensyn til managere som starter en spiller (ikke bare de som eier dem), sammen med de som kapteiner spilleren. Det er altså eierandel som starter spilleren pluss eierandelen som har kapteinet spilleren. ' text={props.content.General.eo} reset={currentSorted != 'EO'} defaultSortType={'Increasing'} onclick={(increase: boolean) => sortOwnershipData(0, increase)}/></TableCell>
-                        <TableCell cellType='head'><TableSortHead popover_title='Valgt av' popover_text='Prosentandel som har denne spilleren i troppen sin (trenger ikke være i startelleveren).' text={props.content.Statistics.PlayerOwnership.owned_by} reset={currentSorted != 'Owned by'} defaultSortType={'Increasing'} onclick={(increase: boolean) => sortOwnershipData(4, increase)}/></TableCell>
+                        <TableCell cellType='head'><TableSortHead popover_title='Effective Ownership' popover_text={props.content.Popover.effectiveOwnership} text={props.content.General.eo} reset={currentSorted != 'EO'} defaultSortType={'Increasing'} onclick={(increase: boolean) => sortOwnershipData(0, increase)}/></TableCell>
+                        <TableCell cellType='head'><TableSortHead popover_title='Valgt av' popover_text={props.content.Popover.chosenBy} text={props.content.Statistics.PlayerOwnership.owned_by} reset={currentSorted != 'Owned by'} defaultSortType={'Increasing'} onclick={(increase: boolean) => sortOwnershipData(4, increase)}/></TableCell>
                         <TableCell cellType='head'><TableSortHead text={props.content.Statistics.PlayerOwnership.captain} reset={currentSorted != 'Captaincy'} onclick={(increase: boolean) => sortOwnershipData(1, increase)}/></TableCell>
                         { props.league_type === fpl && 
                             <TableCell cellType='head'><TableSortHead text={props.content.Statistics.PlayerOwnership.three_captain} reset={currentSorted != '3xC'} onclick={(increase: boolean) => sortOwnershipData(2, increase)}/></TableCell>
                         }
                         <TableCell cellType='head'><TableSortHead text={props.content.Statistics.PlayerOwnership.vice_captain} reset={currentSorted != 'VC'} onclick={(increase: boolean) => sortOwnershipData(3, increase)}/></TableCell>
                         <TableCell cellType='head'><TableSortHead text={props.content.Statistics.PlayerOwnership.benched} reset={currentSorted != 'Benched'} onclick={(increase: boolean) => sortOwnershipData(5, increase)}/></TableCell>
-                        <TableCell cellType='head' className='last-element'><TableSortHead popover_title={props.content.Statistics.PlayerOwnership.tot_ownership} popover_text={'Prosentandel blant alle managere som eier denne spilleren (tall hentet ved rundestart). Altså ikke bare blant topp ' + topXPlayers.toString() + ' managere.' } text={props.content.Statistics.PlayerOwnership.tot_ownership} reset={currentSorted != 'Total Ownership'} onclick={(increase: boolean) => sortOwnershipData(6, increase)}/></TableCell>
+                        <TableCell cellType='head' className='last-element'>
+                            <TableSortHead 
+                                popover_title={props.content.Statistics.PlayerOwnership.tot_ownership} 
+                                popover_text={props.content.Popover.topOwnership + topXPlayers.toString() + ' ' + props.content.General.managers + '.' } 
+                                text={props.content.Statistics.PlayerOwnership.tot_ownership} 
+                                reset={currentSorted != 'Total Ownership'} 
+                                onclick={(increase: boolean) => sortOwnershipData(6, increase)}/></TableCell>
                     </TableRow>
                 </TableHead>
 

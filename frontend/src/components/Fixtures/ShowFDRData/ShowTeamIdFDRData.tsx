@@ -1,4 +1,5 @@
 import { TeamNamePlayerName } from '../../../models/fixturePlanning/TeamNamePlayerName';
+import { defence_number, fdr_number, ofence_number } from '../../../constants/fdr';
 import { KickOffTimesModel } from '../../../models/fixturePlanning/KickOffTimes';
 import { TeamIdFDRModel } from '../../../models/fixturePlanning/TeamFDRData';
 import React, { FunctionComponent } from 'react';
@@ -35,9 +36,9 @@ export const ShowTeamIDFDRData : FunctionComponent<ShowTeamIDFDRProps> = ({
         content.General.midfielders, 
         content.General.forwards, 
     ];
-    
-    const defaultDefensive = fixtureData[1].length === 0 ? 0 : 1;
-    const defaultOffensive = fixtureData[1].length === 0 ? 0 : 2;
+
+    const defaultDefensive = fixtureData[defence_number].length === 0 ? fdr_number : defence_number;
+    const defaultOffensive = fixtureData[ofence_number].length === 0 ? fdr_number : ofence_number;
     const defaultFdrType = [defaultDefensive, defaultDefensive, defaultOffensive, defaultOffensive];
 
     const positionNumber = [0, 1, 2, 3 ];

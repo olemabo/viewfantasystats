@@ -22,6 +22,7 @@ export const Footer : FunctionComponent<LanguageProps> = (props) => {
                 <a href={`/${urls.url_premier_league_fdr_planner}`}>{props.content.Fixture.FixturePlanner?.title}</a>
                 <a href={`/${urls.url_premier_league_rotation_planner}`}>{props.content.Fixture.RotationPlanner?.title}</a>
                 <a href={`/${urls.url_premier_league_periode_planner}`}>{props.content.Fixture.PeriodPlanner?.title}</a>
+                <a href={`/${urls.url_premier_league_fdr_planner_team_id}`}>{props.content.Fixture.TeamPlanner?.title}</a>
               </div>
           </div>
           <div className="footer-section">
@@ -37,9 +38,10 @@ export const Footer : FunctionComponent<LanguageProps> = (props) => {
           <div className="footer-section">
             <h2>{props.content.Fixture.fixture}</h2>
               <div>
-                <a href={`/${urls.url_elitserien_fdr_planner}`}>{props.content.Fixture.FixturePlanner?.title}</a>
+                <a href={`/${urls.url_eliteserien_fdr_planner}`}>{props.content.Fixture.FixturePlanner?.title}</a>
                 <a href={`/${urls.url_eliteserien_rotation_planner}`}>{props.content.Fixture.RotationPlanner?.title}</a>
                 <a href={`/${urls.url_eliteserien_periode_planner}`}>{props.content.Fixture.PeriodPlanner?.title}</a>
+                <a href={`/${urls.url_eliteserien_fdr_planner_team_id}`}>{props.content.Fixture.TeamPlanner?.title}</a>
               </div>
           </div>
           <div className="footer-section">

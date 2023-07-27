@@ -78,11 +78,11 @@ export const DefaultLayout = () => {
                             <Route path={urls.url_premier_league_live_fixtures} element={<LiveFixturesPage league_type={fpl} content={langagueContent} />} />
 
                             {/* <Route path="/eliteserien/" element={<LeagueFrontPage league_type={eliteserien} content={langagueContent} />} /> */}
-                            <Route path={urls.url_elitserien} element={<PlayerOwnership top_x_managers_default={1000} league_type={esf} content={langagueContent} />} />
+                            <Route path={urls.url_eliteserien} element={<PlayerOwnership top_x_managers_default={1000} league_type={esf} content={langagueContent} />} />
                             <Route path={urls.url_eliteserien_rotation_planner} element={<RotationPlannerEliteserienPage content={langagueContent} league_type={esf} />} />
                             <Route path={urls.url_eliteserien_periode_planner} element={<FixturePlannerEliteserienPage fixture_planning_type={FixturePlanningType.Periode} league_type={esf} content={langagueContent} />} />                            
-                            <Route path={urls.url_elitserien_fdr_planner} element={<FixturePlannerEliteserienPage fixture_planning_type={FixturePlanningType.FDR} league_type={esf} content={langagueContent} />} />
-                            <Route path={urls.url_elitserien_fdr_planner_team_id} element={<FixturePlannerTeamIdPage league_type={esf} content={langagueContent} />} />
+                            <Route path={urls.url_eliteserien_fdr_planner} element={<FixturePlannerEliteserienPage fixture_planning_type={FixturePlanningType.FDR} league_type={esf} content={langagueContent} />} />
+                            <Route path={urls.url_eliteserien_fdr_planner_team_id} element={<FixturePlannerTeamIdPage league_type={esf} content={langagueContent} />} />
                             <Route path={urls.url_eliteserien_player_ownership} element={<PlayerOwnership top_x_managers_default={1000} league_type={esf} content={langagueContent} />} />
                             <Route path={urls.url_eliteserien_search_user_name} element={<SearchUserNamePage content={langagueContent} league_type={esf} />} />
                             <Route path={urls.url_eliteserien_rank_statistics} element={<RankStatisticsPage content={langagueContent} league_type={esf} />} />

@@ -22,9 +22,20 @@
         border: var(--fdr-box-gap) solid var(--page-background-color);
         min-width: 110px;
         
-        
         height: 50px;
-        // min-width: 90px;
+    }
+
+    @media screen and (max-width: 800px) {
+        td, th {
+            min-width: 90px;
+            height: 45px;
+        }
+        td {
+            font-size: 13px;
+        }
+        th {
+            font-size: 12px !important;
+        }
     }
 
     thead, tbody {

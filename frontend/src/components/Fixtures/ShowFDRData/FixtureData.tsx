@@ -1,9 +1,10 @@
 import { TeamNamePlayerName } from '../../../models/fixturePlanning/TeamNamePlayerName';
 import { FDR_GW_i, TeamIdFDRModel } from '../../../models/fixturePlanning/TeamFDRData';
-import React, { FunctionComponent, useState } from 'react';
-import './ShowFDRData.scss';
+import { defence_number, fdr_number, ofence_number } from '../../../constants/fdr';
 import ToggleButton from '../../Shared/ToggleButton/ToggleButton';
+import React, { FunctionComponent, useState } from 'react';
 import Button from '../../Shared/Button/Button';
+import './ShowFDRData.scss';
 
 type FixtureDataProps = {
     content: any;
@@ -27,7 +28,7 @@ export const FixtureData : FunctionComponent<FixtureDataProps> = ({
     gwEnd,
     postionName,
     allowToggleBorder = true,
-    defaultFdrType = 0,
+    defaultFdrType = fdr_number,
     positionNumber,
     openModal,
     removePlayer,
@@ -54,10 +55,10 @@ export const FixtureData : FunctionComponent<FixtureDataProps> = ({
             if (fixtureData[fdrType][i].team_name_short === team_short_name) return fixtureData[fdrType][i].FDR;
         }
 
-        return fixtureData[fdrType][0].FDR;
+        return fixtureData[fdrType][fdr_number].FDR;
     }
 
-    const hasOnlyOneFdrType = fixtureData[1].length === 0 && fixtureData[2].length === 0;
+    const hasOnlyOneFdrType = fixtureData[defence_number].length === 0 && fixtureData[ofence_number].length === 0;
 
 
     return <>
@@ -71,9 +72,9 @@ export const FixtureData : FunctionComponent<FixtureDataProps> = ({
                             onclick={(fdrType: string) => SetFdrType(parseInt(fdrType))} 
                             toggleButtonName="FDR-toggle"
                             defaultToggleList={[ 
-                                { name: "Defensivt", value: "1", checked: fdrType===1, classname: "defensiv" },
-                                { name: "FDR", value: "0", checked: fdrType===0, classname: "fdr" },
-                                { name: "Offensivt", value: "2", checked: fdrType===2, classname: "offensiv"}
+                                { name: content.General.defence, value: defence_number.toString(), checked: fdrType===defence_number, classname: "defensiv" },
+                                { name: "FDR", value: fdr_number.toString(), checked: fdrType===fdr_number, classname: "fdr" },
+                                { name: content.General.offence, value: ofence_number.toString(), checked: fdrType===ofence_number, classname: "offensiv"}
                             ]} /> }
                 <div> 
                     <Button 
