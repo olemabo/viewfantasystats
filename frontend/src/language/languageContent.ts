@@ -251,9 +251,9 @@ export const content_json = {
             },
             TeamPlanner: {
                 title: "Lagplanlegger",
-                description_1: "Bruk lagplanleggeren til å planlegge bytter frem i tid. Man kan hente ut eksisterende lag ved legge inn lag-ID i 'Lag-ID' boksen og gjøre et søk. Ellers kan man manuelt legg til en og en spiller til de ulike posisjonene ved hjelp av 'Legg til spiller'-knappene. Spillere kan fjernes ved å klikke på den rød streken i boksen med spillernavn.",
+                description_1: "Bruk lagplanleggeren til å planlegge bytter frem i tid. Man kan hente ut eksisterende lag ved legge inn lag-ID i 'Lag-ID' boksen og gjøre et søk. Ellers kan man manuelt legge til en og en spiller til de ulike posisjonene ved hjelp av 'Legg til spiller'-knappene. Spillere kan fjernes ved å klikke på den rød streken i boksen med spillernavn.",
                 description_2: "For ESF kan man også velge mellom defensivt, offenstivt og FDR på kampene til de ulike posisjonene. ",
-                description_3: "Man kan klikke på kamp-feltene for å de ulike visualiseringer. Et klikk vil gi grå farge (tiltenkt: benk-spiller). To klikk vil gjøre at kamp-feltet fjernes (tiltenkt: spiller er byttet ut av laget eller er ikke en del av laget for denne runden). ",
+                description_3: "Man kan klikke på kamp-feltene for å få ulike visualiseringer. Et klikk gir grå farge (tiltenkt: benk-spiller). To klikk vil gjøre at kamp-feltet fjernes (tiltenkt: spiller er byttet ut av laget eller er ikke en del av laget for denne runden). ",
             }, 
             RotationPlanner: {
                 title: "Rotasjonsplanlegger",

@@ -25,7 +25,7 @@ export const RotationPlannerEliteserienPage : FunctionComponent<PageProps> = (pr
     const empty: RotationPlannerTeamModel[] = [ { avg_Score: -1, id_list: [], team_name_list: [], extra_fixtures: -1, home_games: -1, fixture_list: [] }];
     const emptyGwDate: KickOffTimesModel[] = [{gameweek: 0, day_month: "",kickoff_time: "" }];
 
-    const [ gwStart, setGwStart ] = useState(21);
+    const [ gwStart, setGwStart ] = useState(-1);
     const [ gwEnd, setGwEnd ] = useState(max_gw);
     const [ fdrDataToShow, setFdrDataToShow ] = useState(empty);
     const [ kickOffTimesToShow, setKickOffTimesToShow ] = useState(emptyGwDate);
@@ -320,7 +320,7 @@ export const RotationPlannerEliteserienPage : FunctionComponent<PageProps> = (pr
                         min={1} 
                         max={5} 
                         onInput={(e: number) => setTeamsToPlay(e)} 
-                        defaultValue={teamsToCheck}>
+                        defaultValue={teamsToPlay}>
                         {/* {props.content.Fixture.teams_to_play} */}
                         {props.content.Fixture.teams_to_play_1}<br/>
                         {props.content.Fixture.teams_to_play_2}
