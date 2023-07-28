@@ -310,7 +310,7 @@ export const RotationPlannerPage : FunctionComponent<PageProps> = (props) => {
                         min={1} 
                         max={5} 
                         onInput={(e: number) => setTeamsToPlay(e)} 
-                        defaultValue={teamsToCheck}>
+                        defaultValue={teamsToPlay}>
                         {/* {props.content.Fixture.teams_to_play} */}
                         {props.content.Fixture.teams_to_play_1}<br/>
                         {props.content.Fixture.teams_to_play_2}

@@ -215,7 +215,6 @@ class PostFDRFromTeamIDView(APIView):
         temp_kick_off_time, first_upcoming_game = getKickOffData(fpl)
 
         number_of_gws = len(temp_kick_off_time)
-        print(number_of_gws)
 
         fdr_data_list = []
         for fdr_data in fixture_list_db:

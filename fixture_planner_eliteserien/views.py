@@ -179,7 +179,6 @@ class PostFDRFromTeamIDView(APIView):
             fdr_and_gws = FDRTeamIDApiResponse(goal_keepers, defenders, midtfielders, forwards) 
 
             current_gw = get_request_body(request, "current_gw", int)
-            print(current_gw)
 
             team_id = get_request_body(request, "team_id", int)
 
