@@ -4,6 +4,8 @@
     max-width: 100%;
     margin: 10px 0 40px 0;
     min-height: 400px;
+    // display: flex;
+    // justify-content: center;
  
     table {
         width: fit-content;
@@ -75,7 +77,7 @@
         display: flex;
         justify-content: space-between;
         height: 46px;
-        max-width: 980px;
+        max-width: 1000px;
 
         .text {
             font-weight: 900;

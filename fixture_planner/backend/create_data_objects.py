@@ -76,10 +76,12 @@ def return_fixture_names_shortnames(api_local="local"):
     return df, names, short_names, ids
 
 
-def create_FDR_dict(fdr_data, blank_score=10):
+def create_FDR_dict(fdr_data, blank_score=10, home_away_adjustment=0):
     num_gws = len(fdr_data.gw)
     new_dict = {new_list: [] for new_list in range(num_gws + 1)}
     for gw, H_A, opponent, FDR in zip(fdr_data.gw, fdr_data.oppTeamHomeAwayList, fdr_data.oppTeamNameList, fdr_data.oppTeamDifficultyScore):
+        FDR = FDR + (-1 if H_A == "H" else 1) * home_away_adjustment
+        
         new_dict[gw].append([opponent, H_A, FDR])
     for i in range(1, num_gws + 1):
         if not new_dict[i]:

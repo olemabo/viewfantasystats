@@ -13,8 +13,13 @@ total_number_of_eliteserien_teams = 16
 
 # where to store local data
 stored_data = "stored_data"
+
 # path_to_store_local_data = "C:\\Users\\ole.borge\\source\\repos\\django\\viewfantasystats\\" + stored_data
 path_to_store_local_data = "/home/olebo/viewfantasystats/" + stored_data
+
+# pythonanywhere
+python_anywhere_path = "/home/olebo/viewfantasystats/"
+#python_anywhere_path = ""
 
 # link to global ranks
 web_global_league_premier_league = 'https://fantasy.premierleague.com/api/leagues-classic/314/standings/?phase=1&page_new_entries=1&page_standings=X'
@@ -45,6 +50,8 @@ name_of_ownership_file = "complete_ownership.txt"
 name_of_nationality_file = "country_population.txt"
 name_of_extra_info_file = "extra_info.txt"
 cup_all_ids_processed_file = "cup_all_processed_ids.txt"
+cup_all_ids_currently_updated = "cup_all_ids_currently_updated.txt"
+finished_first_iteration_file_name = "finished_first_iteration_file_name.txt"
 cup_data_file = "cup_data.txt"
 cup_processed_rounds = "cup_processed_rounds.txt"
 finished_file_name = "finished.txt"
@@ -87,10 +94,6 @@ initial_extra_gameweeks = 5
 
 # fdr score for a blank gameweek fixture
 blank_gw_fdr_score = 10
-
-# pythonanywhere
-python_anywhere_path = "/home/olebo/viewfantasystats/"
-# python_anywhere_path = ""
 
 
 

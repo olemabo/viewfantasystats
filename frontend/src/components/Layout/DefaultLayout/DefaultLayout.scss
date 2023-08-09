@@ -2,12 +2,25 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    max-width: var(--max-width);
+    // max-width: var(--max-width);
     margin: 0 auto;
     text-align: center;
     
     .content-container {
         width: 100%;
         padding: 0 10px;
+    }
+}
+
+.team-id-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    text-align: center;
+
+    .team-id-container {
+        width: 100%;
     }
 }

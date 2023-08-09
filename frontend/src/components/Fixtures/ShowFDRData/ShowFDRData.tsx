@@ -89,7 +89,7 @@ export const ShowFDRData : FunctionComponent<ShowFDRProps> = (props) => {
                                                     <div style={{
                                                         backgroundColor: convertFDRtoHex(f.fdr_gw_i[0].difficulty_score, props.fdrToColor),
                                                         color: contrastingColor(convertFDRtoHex(f.fdr_gw_i[0].difficulty_score, props.fdrToColor))}} 
-                                                        className={'color-' + g.difficulty_score + ' height-' + f.fdr_gw_i.length + 
+                                                        className={'color-' + Number(g.difficulty_score).toFixed(0) + ' height-' + f.fdr_gw_i.length + 
                                                         (f.fdr_gw_i.length > 1 ? ' multiple-fixtures' : '') + ' ' + 
                                                         (f.fdr_gw_i[0].double_blank?.includes("-") ? "possible-blank" : "")}>
                                                         { g.opponent_team_name == '-' ? "Blank" : (g.opponent_team_name + " (" + g.H_A + ")") }

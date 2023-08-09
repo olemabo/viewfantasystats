@@ -97,7 +97,7 @@ export const FixtureData : FunctionComponent<FixtureDataProps> = ({
                 </td>
             { getFixtureData(player.team_name_short).slice(gwStart - 1, gwEnd).map(team => (
                     <td onClick={(e) => toggleBorderLine(e)} scope='col' className={''
-                    + (team.fdr_gw_i.length == 1 ? " color-" + team.fdr_gw_i[0].difficulty_score + " " : " multiple no-padding ") + ' show-color' }>
+                    + (team.fdr_gw_i.length == 1 ? " color-" + Number(team.fdr_gw_i[0].difficulty_score).toFixed(0) + " " : " multiple no-padding ") + ' show-color' }>
                         { team.fdr_gw_i.map(g => (
                             <div 
                                 className={`height-${team.fdr_gw_i.length} 

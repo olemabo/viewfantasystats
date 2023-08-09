@@ -1,7 +1,6 @@
 .container-fdr {
-    margin: 10px 10px 40px 10px !important;
+    margin: 10px 10px 40px 10px;
     justify-content: center;
-    max-width: 1200px;
     display: flex;
 
     .fdr-table {
@@ -30,9 +29,11 @@
         margin-left: 0 !important;
         margin-right: 0 !important;
     }
+    
     .fdr-table {
-        font-size: 14px !important;
+        font-size: var(--fdr-font-size-small-screen) !important;
     }
+
     #fdr-names .name-column {
         min-width: 70px !important;
     }
@@ -46,7 +47,6 @@
         border-collapse: collapse;
         margin: auto auto auto auto;
         width: 100%;
-        background-color: none;
         height: 100%;
         overflow-x: auto;
         display: flex;
@@ -58,7 +58,7 @@
         
         tr td {
             min-width: 110px;
-            height: var(--fdr-box-height);
+            // height: var(--fdr-box-height);
             border: var(--fdr-box-gap) solid var(--page-background-color);
             
             div {
@@ -84,7 +84,7 @@
                 min-width: var(--fdr-box-min-width-small-screen);
 
                 div {
-                    padding: var(--fdr-box-padding-height) var(--fdr-box-padding-width-small-screen);
+                    padding: var(--fdr-box-padding-height-small-screen) var(--fdr-box-padding-width-small-screen);
                 }
             }
 
@@ -113,7 +113,6 @@
         }
 
         .name-column-top-corner {
-            // background-color: var(--name-column-top-corner);
             padding-left: 10px;
             padding-right: 7px;
             text-align: left;
@@ -124,6 +123,16 @@
             border: var(--fdr-box-gap) solid var(--page-background-color);
             color: var(--white-color);
             letter-spacing: .5px;
+        }
+        
+        @media (max-width: 600px) {
+            .name-column-top-corner, th {
+                height: var(--fdr-box-th-heigh-small-screen);
+            }
+
+            .day-month {
+                font-size: 8px;
+            }
         }
     
         .height-2 {
@@ -213,7 +222,7 @@
 
 
 .esf { 
-    .multiple {
+    .multiple, .no-padding {
         background-color: var(--fdr-eliteserien-double);
         color: var(--white-color);
     }

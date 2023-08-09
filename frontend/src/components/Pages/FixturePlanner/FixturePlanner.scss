@@ -9,9 +9,10 @@
             display: flex;
             padding: 0 10px;
             justify-content: center;
-            max-width: var(--max-width);
-            gap: 12px;
             align-items: end;
+            column-gap: 12px;
+
+            flex-wrap: wrap-reverse;
             
             form {
                 display: flex;
@@ -31,18 +32,18 @@
             } 
         } 
 
-        @media screen and (max-width: 500px) {
-            .input-row-container {
-                align-content: center;
-                flex-wrap: wrap;
-                flex-direction: column-reverse;
-                align-items: center;
+        // @media screen and (max-width: 450px) {
+        //     .input-row-container {
+        //         align-content: center;
+        //         flex-wrap: wrap;
+        //         flex-direction: column-reverse;
+        //         align-items: center;
 
-                button {
-                    margin-top: 0;
-                }
-            }   
-        }
+        //         button {
+        //             margin-top: 0;
+        //         }
+        //     }   
+        // }
     }
 }
 

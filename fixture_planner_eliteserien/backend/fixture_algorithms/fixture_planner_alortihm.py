@@ -72,6 +72,7 @@ def fdr_planner_eliteserien_fixture_list(fixture_list, gw_list):
                                             opponent_team_name=team_i.oppTeamNameList[j],
                                             this_difficulty_score=team_i.oppTeamDifficultyScore[j],
                                             total_fdr_score=FDR_score,
+                                            double_blank="",
                                             H_A=team_i.oppTeamHomeAwayList[j],
                                             Use_Not_Use=0).toJson()])
 
