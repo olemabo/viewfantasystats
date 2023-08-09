@@ -72,7 +72,7 @@ export const DefaultLayout = () => {
                             <Route path={urls.url_premier_league_fdr_planner} element={<FixturePlannerPage fixture_planning_type={FixturePlanningType.FDR} league_type={fpl} content={langagueContent} />} />
                             <Route path={urls.url_premier_league_fdr_planner_team_id} element={<FixturePlannerTeamIdPage league_type={fpl} content={langagueContent} />} />
                             <Route path={urls.url_premier_league_periode_planner} element={<FixturePlannerPage fixture_planning_type={FixturePlanningType.Periode} league_type={fpl} content={langagueContent} />} />
-                            <Route path={urls.url_premier_league_rotation_planner} element={<RotationPlannerPage content={langagueContent} league_type={esf} />} />
+                            <Route path={urls.url_premier_league_rotation_planner} element={<RotationPlannerPage content={langagueContent} league_type={fpl} />} />
                             <Route path={urls.url_premier_league_player_ownership} element={<PlayerOwnership top_x_managers_default={10000} league_type={fpl} content={langagueContent} />} />
                             <Route path={urls.url_premier_league_player_statistics} element={<PlayerStatisticsPage league_type={fpl} content={langagueContent} />} />
                             <Route path={urls.url_premier_league_live_fixtures} element={<LiveFixturesPage league_type={fpl} content={langagueContent} />} />
