@@ -238,11 +238,13 @@ export const LiveFixturesPage : FunctionComponent<PageProps> = (props) => {
 
     const playerNameMinWidth = 120;
 
+    const description = props.league_type === fpl ? props.content.LongTexts.liveFixturesDescriptionFPL : props.content.LongTexts.liveFixturesDescription;
+
     return <>
     <DefaultPageContainer 
         pageClassName='live-fixtures-container' 
         heading={props.content.Statistics.LiveFixtures.title + " - " + (store.getState().league_type === "fpl" ? "Premier League" : "Eliteserien")} 
-        description={'Live statistikk for blant annet opta index, minutter spilt og poeng for spillere i de ulike kampene.'}>
+        description={ description }>
         <h1>{props.content.Statistics.LiveFixtures.title}
         <Popover 
             id={"live-fixture-id"}
@@ -252,7 +254,7 @@ export const LiveFixturesPage : FunctionComponent<PageProps> = (props) => {
             iconSize={14}
             iconpostition={[-10, 0, 0, 3]}
             popover_text=''>
-            { props.content.LongTexts.liveFixturesDescription }
+            { description }
         </Popover>
         </h1>
         { isLoading && 

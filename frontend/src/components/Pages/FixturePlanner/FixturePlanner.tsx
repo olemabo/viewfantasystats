@@ -179,7 +179,7 @@ export const FixturePlannerPage : FunctionComponent<PageProps & { fixture_planni
     <DefaultPageContainer 
         pageClassName='fixture-planner-container' 
         heading={title + " - " + (store.getState().league_type === "fpl" ? "Premier League" : "Eliteserien")} 
-        description={title}>
+        description={ description }>
         <h1>
             {title}
             <Popover 
@@ -228,7 +228,6 @@ export const FixturePlannerPage : FunctionComponent<PageProps & { fixture_planni
                             min={min_number_of_fixture}
                             htmlFor='min-num-fixtures'
                             max={gwEnd}>
-                                {/* {props.content.Fixture.min_fixtures} */}
                             {props.content.Fixture.min_fixtures.split(/(\s+)/)[0]}<br/>
                             {props.content.Fixture.min_fixtures.split(/(\s+)/)[2]}
                         </TextInput>

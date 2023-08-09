@@ -70,12 +70,16 @@
 
     --fdr-box-padding-height: 12px;
     --fdr-box-padding-width: 15px;
-    --fdr-box-padding-width-small-screen: 5px;
-    --fdr-box-height: 54px;
     --fdr-box-th-height: 55px;
+    
+    --fdr-box-padding-width-small-screen: 4px;
+    --fdr-box-padding-height-small-screen: 10px;
+    --fdr-font-size-small-screen: 13px;
+    --fdr-box-th-heigh-small-screen: 48px;
+    --fdr-box-min-width-small-screen: 90px;
+
     --fdr-border-width: 3px;
     --fdr-box-gap: 1px;
-    --fdr-box-min-width-small-screen: 95px;
 
     /* Statistiscs */
     --table-even-rows: #F8F9F9;
@@ -91,7 +95,7 @@
     --submit-button-text-color: var(--white-color);
     --search-box-color: var(--primary-dark-blue-color);
 
-    --filter-all-background-color: transparent;
+    --filter-all-background-color: #e3e3e3;
     --filter-all-color: var(--black-color);
     
     /* Pagination */

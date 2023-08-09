@@ -5,11 +5,13 @@ import json
 
 
 def write_cup_statistics_to_db_eliteserien():
+    EliteserienCupStatistics.objects.all().delete()
+    
     path = path_to_store_local_data + "/" + esf + "/" + current_season_name_eliteserien + "/" + cup_stats_folder_name + "/" + cup_data_file
     cup_statistics_data = np.loadtxt(path, dtype="str", comments="&&&&&&&&&&&", delimiter=cup_delimiter, skiprows=0, encoding="utf-8")
     new = 0
     update = 0
-    print("\n")
+    print("\nWrite to DB \n")
     for idx, data in enumerate(cup_statistics_data):
         id = int(data[0])
         team_name = str(data[1][1:-1])

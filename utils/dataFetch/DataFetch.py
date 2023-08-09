@@ -19,6 +19,8 @@ class DataFetch:
         self.web_page_cup = league_url + '/api/entry/X/cup/'
         self.web_page_fpl_player = league_url + '/api/entry/X/'
         self.web_page_latest_transfers = league_url + '/api/entry/X/transfers/'
+        self.web_page_cup_status = league_url + '/api/league/X/cup-status/'
+        self.web_page_h2h = league_url + '/api/leagues-h2h-matches/league/X/?page=Y&entry=Z'
         self.local_path = 'fpl.json'
         self.global_path = ''
         self.investigate_path()
@@ -77,11 +79,21 @@ class DataFetch:
         jsonResponse = r.json()
         return jsonResponse
 
+    def get_current_h2h(self, league_id, page_number, player_id) -> dict:
+        r = requests.get(self.web_page_h2h.replace('X', str(league_id)).replace('Y', str(page_number)).replace('Z', str(player_id)))
+        jsonResponse = r.json()
+        return jsonResponse
+
     def get_current_cup(self, player_id) -> dict:
         r = requests.get(self.web_page_cup.replace('X', str(player_id)))
         jsonResponse = r.json()
         return jsonResponse
-
+    
+    def get_current_cup_status(self, league_id) -> dict:
+        r = requests.get(self.web_page_cup_status.replace('X', str(league_id)))
+        jsonResponse = r.json()
+        return jsonResponse
+    
     def get_current_fpl_player(self, player_id) -> dict:
         r = requests.get(self.web_page_fpl_player.replace('X', str(player_id)))
         jsonResponse = r.json()

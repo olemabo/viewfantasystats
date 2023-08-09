@@ -224,7 +224,7 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
 
     const playerNames = [props.content.General.goalkeeper, props.content.General.defender, props.content.General.midfielder, props.content.General.forward]
 
-    return <>
+    return <div className='team-id-wrapper'><div className='team-id-container'>
     <DefaultPageContainer 
         pageClassName='fixture-planner-container' 
         heading={`${props.content.Fixture.TeamPlanner?.title} - ${(store.getState().league_type === "fpl" ? "Premier League" : "Eliteserien")}`} 
@@ -334,7 +334,7 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
             />
         )}
     </DefaultPageContainer>
-    </>
+    </div></div>
 };
 
 export default FixturePlannerTeamIdPage;

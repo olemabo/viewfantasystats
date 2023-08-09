@@ -5,27 +5,34 @@ import React, { FunctionComponent, useState } from 'react';
 import '../ShowFDRData/ShowFDRData.scss';
 import Pagination from 'rc-pagination';
 import './ShowRotationData.scss';
+import { FDRData } from '../../../models/fixturePlanning/TeamFDRData';
 
 type ShowRotationProps = {
     content: any;
     fdrData: RotationPlannerTeamInfoModel[];
     kickOffTimes: KickOffTimesModel[];
-    fdrToColor?: any;
 }
 
 export const ShowRotationData : FunctionComponent<ShowRotationProps> = ({
     content,
     fdrData,
     kickOffTimes,
-    fdrToColor = null
 }) => {
 
     const [ pagingationNumber, setPaginationNumber ] = useState(1);
-    const [ numberOfHitsPerPagination, setNumberOfHitsPerPagination ] = useState(10);
-    const [ numberOfHits, setNumberOfHits ] = useState(fdrData?.length);
+    const numberOfHitsPerPagination = 10;
+    const numberOfHits = fdrData?.length;
     
     function paginationUpdate(pageNumber: number) {
         setPaginationNumber(pageNumber);
+    }
+
+    function getFDRDiv(fdrData: FDRData, num_teams: number) {
+        return <div className={ "color-" + Number(fdrData.difficulty_score).toFixed(0) + " height-" + num_teams.toString() + (num_teams > 1 ? ' multiple-fixtures' : '') }>
+            { fdrData.opponent_team_name == '-' ? "Blank" : 
+                fdrData.opponent_team_name + " (" + fdrData.H_A + ")"
+            }
+        </div>
     }
     
     return <>
@@ -38,7 +45,7 @@ export const ShowRotationData : FunctionComponent<ShowRotationProps> = ({
                             <tbody>
                                 <tr className="fdr-row-gws">
                                     <td className="name-column-top-corner">
-                                        {content.Fixture.team}
+                                        {/* {content.Fixture.team} */}
                                     </td>
                                     { kickOffTimes.map(gw =>
                                         <th>{content.General.round_short}{gw.gameweek}
@@ -64,13 +71,7 @@ export const ShowRotationData : FunctionComponent<ShowRotationProps> = ({
                                                     { team_i_j.map( (team: any) => {
                                                         var num_teams = team_i_j.length;
                                                         var json_team_data = JSON.parse(team); 
-                                                        return <div 
-                                                            className={"color-" + json_team_data.difficulty_score + " height-" + num_teams.toString() + (num_teams > 1 ? ' multiple-fixtures' : '') }>
-                                                            { json_team_data.opponent_team_name == '-' ? "Blank" : 
-                                                                json_team_data.opponent_team_name + " (" + json_team_data.H_A + ")"
-                                                            }
-                                                        </div>
-
+                                                        return getFDRDiv(json_team_data, num_teams);
                                                     })}
                                                 </td> :
                                                 <td 
@@ -79,11 +80,7 @@ export const ShowRotationData : FunctionComponent<ShowRotationProps> = ({
                                                     { team_i_j.map( (team: any) => {
                                                         var num_teams = team_i_j.length;
                                                         var json_team_data = JSON.parse(team); 
-                                                        return <div className={"color-" + json_team_data.difficulty_score + " height-" + num_teams.toString() + (num_teams > 1 ? ' multiple-fixtures' : '') }>
-                                                            { json_team_data.opponent_team_name == '-' ? "Blank" : 
-                                                                json_team_data.opponent_team_name + " (" + json_team_data.H_A + ")"
-                                                            }
-                                                        </div>
+                                                        return getFDRDiv(json_team_data, num_teams);
                                                     })}
                                                 </td>}
                                             </>
@@ -92,8 +89,8 @@ export const ShowRotationData : FunctionComponent<ShowRotationProps> = ({
                                 ))}
                             </tbody>
                         </table>
-                        <caption style={{display: 'block'}}>
-                            <p> {content.Fixture.RotationPlanner.avg_fdr_score} <b> {row.avg_Score} </b></p>
+                        <caption>
+                            {content.Fixture.RotationPlanner.avg_fdr_score} <b> {row.avg_Score.toFixed(2)} </b>
                         </caption>
                     </>)}
                     <Pagination 

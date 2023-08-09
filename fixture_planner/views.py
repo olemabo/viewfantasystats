@@ -109,14 +109,18 @@ class PostFDRView(APIView):
 
             teams = len(fixture_list)
 
+            home_away_adjustment = 0.1
+            blank_score = 10
+
             if combinations == 'FDR':
-                fdr_fixture_data = []
-                FDR_scores = []
-                for idx, i in enumerate(fixture_list):
-                    fdr_dict = create_data_objects.create_FDR_dict(i)
+                fdr_fixture_data, FDR_scores = [], []
+                for i in fixture_list:
+                    fdr_dict = create_data_objects.create_FDR_dict(i, blank_score=blank_score, home_away_adjustment=home_away_adjustment)
                     sum = calc_score(fdr_dict, start_gw, end_gw)
                     FDR_scores.append([i, sum])
+                
                 FDR_scores = sorted(FDR_scores, key=lambda x: x[1], reverse=False)
+                
                 for i in range(teams):
                     temp_list2 = [[] for i in range(gws)]
                     team_i = FDR_scores[i][0]
@@ -156,26 +160,23 @@ class PostFDRView(APIView):
 
             if combinations == 'FDR-best':
                 fdr_fixture_data = find_best_fixture_with_min_length_each_team(fixture_list,
-                                                                               GW_start=start_gw,
-                                                                               GW_end=end_gw,
-                                                                               min_length=min_num_fixtures)
+                        GW_start=start_gw, GW_end=end_gw, min_length=min_num_fixtures, 
+                        home_away_adjustment=home_away_adjustment, blank_score=blank_score)
            
             if combinations == 'Rotation':
                 teams_to_check = int(request.data.get("teams_to_check"))
                 teams_to_play = int(request.data.get("teams_to_play"))
                 teams_in_solution = request.data.get("teams_in_solution")
                 fpl_teams = request.data.get("fpl_teams")
-
-                fdr_fixture_data = []
-
-                rotation_data = []
                 
                 remove_these_teams = []
                 for team_sol in teams_in_solution:
                     if team_sol not in fpl_teams:
                         remove_these_teams.append(team_sol)
+                
                 for remove_team in remove_these_teams:
                     teams_in_solution.remove(remove_team)
+                
                 for i in team_name_list:
                     if i.team_name in teams_in_solution:
                         i.checked_must_be_in_solution = 'checked'
@@ -188,14 +189,9 @@ class PostFDRView(APIView):
                                                             teams_not_in_solution=[],
                                                             top_teams_adjustment=False, 
                                                             one_double_up=False,
-                                                            home_away_adjustment=True, 
-                                                            include_extra_good_games=False,
-                                                            )
+                                                            include_extra_good_games=False)
 
-                if rotation_data == -1:
-                    rotation_data = [['Wrong input', [], [], 0, 0, [[]]]]
-                else:
-                    rotation_data = rotation_data[:(min(len(rotation_data), 50))]
+                rotation_data = [['Wrong input', [], [], 0, 0, [[]]]] if rotation_data == -1 else rotation_data[:(min(len(rotation_data), 50))]
                 
                 fdr_fixture_data = rotation_data 
 

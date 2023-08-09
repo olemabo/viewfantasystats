@@ -40,7 +40,7 @@ export const FilterTeamBox : FunctionComponent<FilterTeamBoxProps> = ({
         { displayUncheckAll && 
             <FilterButton 
                 onclick={() => toggleAll()} 
-                buttonText={hasToggledOffAll ? removeAllText : addAllText} 
+                buttonText={ hasToggledOffAll ? addAllText : removeAllText } 
                 labelClassName={"toggle-all"}
                 checked={true}
             /> }

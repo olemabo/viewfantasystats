@@ -177,7 +177,7 @@ export const PlayerStatisticsPage : FunctionComponent<PageProps> = (props) => {
     }
 
     return <>
-        <DefaultPageContainer pageClassName='player-ownership-container' heading={props.content.Statistics.PlayerStatistics?.title + " - " + (store.getState().league_type === "fpl" ? "Premier League" : "Eliteserien")} description={props.content.Statistics.PlayerStatistics?.title}>
+        <DefaultPageContainer pageClassName='player-ownership-container' heading={props.content.Statistics.PlayerStatistics?.title + " - " + (store.getState().league_type === "fpl" ? "Premier League" : "Eliteserien")} description={ props.content.Statistics.PlayerStatistics?.title }>
         <h1>{props.content.Statistics.PlayerStatistics?.title}</h1>
         { !firstLoading && <>
             <form className="form-stuff player-stats text-center">

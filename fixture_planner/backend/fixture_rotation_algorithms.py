@@ -75,11 +75,7 @@ def create_list_with_team_ids_from_list_with_team_names(fixture_list_db, team_na
     return team_id_list
 
 
-def return_fixture_names_shortnames(fixture_list_db):
-    team_names = [team_model.team_name for team_model in fixture_list_db]
-    team_short_names = [team_model.team_short_name for team_model in fixture_list_db]
-    team_ids = [team_model.team_id for team_model in fixture_list_db]
-
+def return_fixture_data_df(fixture_list_db, home_away_adjustment=0.1):
     columns = [str(i) for i in range(0, total_number_of_gameweeks + 1)]
     columns[0] = 'Team'
 
@@ -87,17 +83,21 @@ def return_fixture_names_shortnames(fixture_list_db):
     for team_i_info in fixture_list_db:
         temp_data = [team_i_info.team_name]
         for gw_i, team_i_name_short, team_i_h_a, team_i_difficulty in zip(team_i_info.gw, team_i_info.oppTeamNameList, team_i_info.oppTeamHomeAwayList, team_i_info.oppTeamDifficultyScore):
+            if team_i_h_a == "A":
+                team_i_difficulty = team_i_difficulty - home_away_adjustment
+            
+            if team_i_h_a == "H":
+                team_i_difficulty = team_i_difficulty + home_away_adjustment
 
             temp_data.append([team_i_name_short, team_i_h_a, team_i_difficulty, int(gw_i)])
         data.append(temp_data)
 
-    return pd.DataFrame(data=data, columns=columns), pd.DataFrame(team_names), pd.DataFrame(team_short_names), pd.DataFrame(team_ids)
+    return pd.DataFrame(data=data, columns=columns)
 
 
 def find_best_rotation_combos(data, gw_start, gw_end, teams_to_check=5, teams_to_play=3, team_names=[-1],
-                              teams_in_solution=[], teams_not_in_solution=[],
-                              top_teams_adjustment=False, one_double_up=False, home_away_adjustment=True,
-                              include_extra_good_games=False):
+            teams_in_solution=[], teams_not_in_solution=[], top_teams_adjustment=False, 
+            one_double_up=False, include_extra_good_games=False):
     """
     Find the best rotation combo for "teams_to_check" number of team where "team_to_play" number of them must play each gw.
     :param gw_start: start count from this gw
@@ -107,7 +107,6 @@ def find_best_rotation_combos(data, gw_start, gw_end, teams_to_check=5, teams_to
     teams_to_check = 5 and teams_to_play = 3 will give the best 5 teams to use in your team if you must use at least 3 each round
     :param team_names: which teams to check from. ([-1]: all teams, ["Arsenal", "Spurs"]: check only some teams)
     :param teams_in_solution: ["Liverpool"]: liverpool must be in the optimal solution. []: no extra dependencies.
-    :param home_away_adjustment: wheter to give home/away match score -/+ 0.1 points. Default=true
     :param num_to_print: how many of the best results to print to screen
     :return: combos_with_score [[score, [team_ids], [team_names]], ... ]   ([22.2, [1, 4, 11], ['Arsenal', 'Burnley', 'Liverpool']])
     """
@@ -123,7 +122,7 @@ def find_best_rotation_combos(data, gw_start, gw_end, teams_to_check=5, teams_to
     fixture_list_db = PremierLeagueTeamInfo.objects.all()
 
     # create fixture dataframe. Each element: ['ARS', 'H', 3]
-    df, names, short_names, ids = return_fixture_names_shortnames(fixture_list_db)
+    df = return_fixture_data_df(fixture_list_db)
 
     dict_with_team_ids_to_team_name, dict_with_team_name_to_team_ids = \
         create_dict_with_team_ids_to_team_name_and_team_name_to_ids_from_db(fixture_list_db)
@@ -141,7 +140,7 @@ def find_best_rotation_combos(data, gw_start, gw_end, teams_to_check=5, teams_to
     dict_team_id_to_home_away = {}
     dict_team_id_to_opponent = {}
 
-    for idx, team_id in enumerate(team_ids):
+    for team_id in team_ids:
         info = fixture_score_one_team(df, team_id, gw_start, gw_end)[3]
         info[info == 0] = blank_gw_fdr_score
         dict_team_id_to_fixtures[team_id] = info
@@ -186,7 +185,7 @@ def find_best_rotation_combos(data, gw_start, gw_end, teams_to_check=5, teams_to
             for team_idx, team_id in enumerate(team_combos):
                 # team_id = 6
                 team_name = dict_with_team_ids_to_team_name[team_id]
-                temp_team_data_dict = create_FDR_dict(data[int(team_id - 1)], 10)
+                temp_team_data_dict = create_FDR_dict(data[int(team_id - 1)], 10, 0.1)
                 data_gw = temp_team_data_dict[GW + gw_start]
                 gws_this_round = len(data_gw)
                 temp_score = 0
@@ -194,7 +193,6 @@ def find_best_rotation_combos(data, gw_start, gw_end, teams_to_check=5, teams_to
                 if gws_this_round > 1:
                     for i in range(gws_this_round):
                         temp_score += data_gw[i][2]
-
                         team_object_new.append(FixtureDifficultyModel(team_name=team_name,
                                                                      opponent_team_name=data_gw[i][0].upper(),
                                                                      this_difficulty_score=data_gw[i][2],
@@ -221,7 +219,7 @@ def find_best_rotation_combos(data, gw_start, gw_end, teams_to_check=5, teams_to
 
             sorted_scores_new = np.array(sorted(GW_home_scores_new, key=lambda l: l[0], reverse=False))
             team_total_score += np.sum(sorted_scores_new[:teams_to_play, 0])
-
+            
             # if there are more good games than
             if include_extra_good_games:
                 if teams_to_play < len(team_combos):
