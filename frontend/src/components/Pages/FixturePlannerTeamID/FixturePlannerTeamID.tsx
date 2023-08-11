@@ -272,7 +272,7 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
                     <TextInput 
                         htmlFor='input-form-team-id'
                         min={0}
-                        max={100000}
+                        max={10000000}
                         minWidth={80}
                         onInput={(e: number) => setTeamId(e)}
                         defaultValue={teamID} >
