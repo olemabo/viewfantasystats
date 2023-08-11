@@ -37,7 +37,7 @@ fixture_folder_name = "fixture_data"
 cup_stats_folder_name = "cup_data"
 
 # must change before each season
-current_season_name_premier_league = "2022-2023"
+current_season_name_premier_league = "2023-2024"
 current_season_name_eliteserien = "2023"
 
 # txt file names 
@@ -65,7 +65,7 @@ cup_delimiter = ":;:"
 cup_db_delimiter = "|-|"
 # wildcard due date NB: MUST BE SET MANUALLY
 eliteserien_wc_due_date = "2023-07-22T15:55:00"
-premier_league_wc_due_date = "2022-11-12T11:00:00"
+premier_league_wc_due_date = "2023-12-30T13:30:00"
 
 # urls
 eliteserien_api_url = "https://fantasy.tv2.no"

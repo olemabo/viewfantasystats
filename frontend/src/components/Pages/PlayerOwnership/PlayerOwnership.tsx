@@ -41,7 +41,7 @@ export const PlayerOwnership : FunctionComponent<PageProps> = (props) => {
 
     const [ query, setQuery ] = useState("");
     const [ isLoading, setIsLoading ] = useState(false);
-    const [ emptyDataMessage, setEmptyDataMessage ] = useState("");
+    const [ emptyDataMessage, setEmptyDataMessage ] = useState(false);
 
     const  [ firstLoading, setFirstLoading ] = useState(true);
 
@@ -54,7 +54,7 @@ export const PlayerOwnership : FunctionComponent<PageProps> = (props) => {
 
         axios.get(player_ownership_api_path + "?league_name=" + props.league_type).then(x => {  
             if (x?.data?.length === 0) {
-                setEmptyDataMessage("Fant ingen data for årets sesong")
+                setEmptyDataMessage(true)
                 setIsLoading(false);
             }
             let data = JSON.parse(x?.data);
@@ -259,7 +259,7 @@ export const PlayerOwnership : FunctionComponent<PageProps> = (props) => {
         </h1>
         { emptyDataMessage && <>
             <div className='info-box'>
-            <p>{emptyDataMessage}</p></div>
+            <p>{props.content.Statistics?.PlayerOwnership?.no_data_found}</p></div>
         </>}
         { !firstLoading && <>
             <form className="form-stuff text-center">
