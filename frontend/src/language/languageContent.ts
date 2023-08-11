@@ -129,6 +129,7 @@ export const content_json = {
                 avg_transfers: "Avg. Transfers",
                 avg_transfer_cost: "Avg. Transfer Cost",
                 search_text: "Search..",
+                no_data_found: "No data for the current season available"
             },
             SearchUserName: {
                 title: "User search",
@@ -312,6 +313,7 @@ export const content_json = {
                 avg_transfers: "Gj. snittlig antall bytter",
                 avg_transfer_cost: "Gj. snittlig byttekostnad",
                 search_text: "Søk..",
+                no_data_found: "Fant ingen data for årets sesong",
             },
             SearchUserName: {
                 title: "Søk blant managere",
