@@ -26,7 +26,7 @@ def read_eliteserien_excel_to_db_format(defensivt=""):
     max_gws, team_id_idx = 0, 1
 
     for row in row_numbers_list:
-        temp_oppTeamNameList, temp_oppTeamHomeAwayList, temp_oppTeamDifficultyScore, temp_gw = [], [], [], []
+        temp_oppTeamNameList, temp_oppTeamHomeAwayList, temp_oppTeamDifficultyScore, temp_gw, temp_messages = [], [], [], [], []
         
         team_name_cell_name = "{}{}".format('A', row)
         team_name = ws_fdr[team_name_cell_name].value.split("(")[0]
@@ -42,7 +42,11 @@ def read_eliteserien_excel_to_db_format(defensivt=""):
             value = ws_fdr[cell_name].value
            
             if value is not None:
-                all_games_in_gw = value.split("+")
+                message = ""
+                if (len(value.split(":")) == 2):
+                    message = value.split(":")[1]
+
+                all_games_in_gw = value.split(":")[0].split("+")
                 for game in all_games_in_gw:
                     fdr = color_to_fdr_dict[ws_fdr[cell_name].fill.start_color.index]
                     opponent = game
@@ -50,6 +54,7 @@ def read_eliteserien_excel_to_db_format(defensivt=""):
                     temp_oppTeamNameList.append(opponent)
                     temp_oppTeamHomeAwayList.append(home_away)
                     temp_oppTeamDifficultyScore.append(fdr)
+                    temp_messages.append(message)
                     temp_gw.append(ws_fdr[gw_number].value)
         
         max_gws = max(temp_gw)
@@ -59,7 +64,8 @@ def read_eliteserien_excel_to_db_format(defensivt=""):
             opp_team_name_list=temp_oppTeamNameList,
             opp_team_home_away_list=temp_oppTeamHomeAwayList,
             opp_team_difficulty_score=temp_oppTeamDifficultyScore,
-            gw=temp_gw)
+            gw=temp_gw,
+            messages_list=temp_messages)
         )
         
         team_id_idx += 1

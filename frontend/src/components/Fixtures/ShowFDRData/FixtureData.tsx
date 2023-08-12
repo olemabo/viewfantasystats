@@ -5,6 +5,7 @@ import ToggleButton from '../../Shared/ToggleButton/ToggleButton';
 import React, { FunctionComponent, useState } from 'react';
 import Button from '../../Shared/Button/Button';
 import './ShowFDRData.scss';
+import Popover from '../../Shared/Popover/Popover';
 
 type FixtureDataProps = {
     content: any;
@@ -38,6 +39,9 @@ export const FixtureData : FunctionComponent<FixtureDataProps> = ({
     function toggleBorderLine(e: React.MouseEvent<HTMLTableCellElement, MouseEvent>) {
         if (!allowToggleBorder) { return; }
         let classList = e.currentTarget.classList;
+
+        const temp: any = e.target;
+        if (temp?.tagName == "svg" || temp?.tagName == "path" ) return;
         
         if (classList.contains("show-color")) {
             e.currentTarget.classList.replace("show-color", "greyed-out")
@@ -98,14 +102,30 @@ export const FixtureData : FunctionComponent<FixtureDataProps> = ({
             { getFixtureData(player.team_name_short).slice(gwStart - 1, gwEnd).map(team => (
                     <td onClick={(e) => toggleBorderLine(e)} scope='col' className={''
                     + (team.fdr_gw_i.length == 1 ? " color-" + Number(team.fdr_gw_i[0].difficulty_score).toFixed(0) + " " : " multiple no-padding ") + ' show-color' }>
-                        { team.fdr_gw_i.map(g => (
+                        { team.fdr_gw_i.map(g => (<>
                             <div 
+                                style={{ position: g.message ? "relative" : "inherit" }}
                                 className={`height-${team.fdr_gw_i.length} 
                                 ${(team.fdr_gw_i.length > 1 ? ' multiple-fixtures' : '')} 
                                 ${(team.fdr_gw_i[0].double_blank?.includes("-") ? "possible-blank" : "")}`}>
+                                
+                                { g.message && 
+                                    <Popover 
+                                        id={`rotations-planner-id-${g.opponent_team_name}-${g.H_A}`}
+                                        title=""
+                                        html_title={content.Fixture.uncertain_match}
+                                        algin_left={false}
+                                        popover_title={""} // fdr.team_name + ' - ' + g.opponent_team_name  
+                                        iconSize={14}
+                                        topRigthCornerInDiv={true}
+                                        className={ positionNumber === 3 ? 'bottom-position' : ''}
+                                        iconpostition={[0, 0, 0, 0]}
+                                        popover_text={ g.message }>
+                                    </Popover> }
+                                
                                 { g.opponent_team_name == '-' ? "Blank" : `${g.opponent_team_name} (${g.H_A})`}
                             </div>
-                        ))}
+                        </>))}
                     </td>
                 ))}
             </tr>

@@ -219,11 +219,11 @@ def find_best_fixture_with_min_length_each_teamElitserien(data, gw_start, gw_end
 def create_FDR_dict(fdr_data, blank_score=10):
     num_gws = len(fdr_data.gw)
     new_dict = {new_list: [] for new_list in range(max(fdr_data.gw) + 1)}
-    for gw, H_A, opponent, FDR in zip(fdr_data.gw, fdr_data.oppTeamHomeAwayList, fdr_data.oppTeamNameList, fdr_data.oppTeamDifficultyScore):
-        new_dict[gw].append([opponent, H_A, FDR])
+    for gw, H_A, opponent, FDR, message in zip(fdr_data.gw, fdr_data.oppTeamHomeAwayList, fdr_data.oppTeamNameList, fdr_data.oppTeamDifficultyScore, fdr_data.messagesList):
+        new_dict[gw].append([opponent, H_A, FDR, message])
     for i in range(1, max(fdr_data.gw) + 1):
         if not new_dict[i]:
-            new_dict[i] = [['-', ' ', blank_score]]
+            new_dict[i] = [['-', ' ', blank_score, ""]]
     return new_dict
 
 
@@ -339,14 +339,16 @@ def find_best_rotation_combosEliteserien_gw_list(data, gw_list, teams_to_check=5
                                                                      opponent_team_name=data_gw[i][0].upper(),
                                                                      this_difficulty_score=data_gw[i][2],
                                                                      H_A=data_gw[i][1],
-                                                                     Use_Not_Use=0).toJson())
+                                                                     Use_Not_Use=0,
+                                                                     message=data_gw[i][3]).toJson())
                 else:
                     temp_score += data_gw[0][2]
                     team_object_new.append(FixtureDifficultyModel(team_name=team_name,
                                                                  opponent_team_name=data_gw[0][0].upper(),
                                                                  this_difficulty_score=data_gw[0][2],
                                                                  H_A=data_gw[0][1],
-                                                                 Use_Not_Use=0).toJson())
+                                                                 Use_Not_Use=0,
+                                                                 message=data_gw[0][3]).toJson())
                 temp_score = temp_score / gws_this_round ** 2
                 GW_scores_new.append(temp_score)
                 two_D_list_new[team_idx][GW_idx] = team_object_new

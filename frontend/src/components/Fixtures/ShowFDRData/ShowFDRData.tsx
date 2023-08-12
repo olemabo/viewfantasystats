@@ -6,6 +6,7 @@ import { lowerCaseText } from '../../../utils/lowerCaseText';
 import Message from '../../Shared/Messages/Messages';
 import React, { FunctionComponent } from 'react';
 import './ShowFDRData.scss';
+import Popover from '../../Shared/Popover/Popover';
 
 type ShowFDRProps = {
     content: any;
@@ -19,8 +20,13 @@ type ShowFDRProps = {
 export const ShowFDRData : FunctionComponent<ShowFDRProps> = (props) => {
     
     function toggleBorderLine(e: React.MouseEvent<HTMLTableCellElement, MouseEvent>) {
+        const temp: any = e.target;
+
+        if (temp?.tagName == "svg" || temp?.tagName == "path" ) return;
+
         if (!props.allowToggleBorder) { return; }
         let classList = e.currentTarget.classList;
+
         if (classList.contains("double-border-0")) {
             e.currentTarget.classList.replace("double-border-0", "double-border-1")
         }
@@ -88,11 +94,24 @@ export const ShowFDRData : FunctionComponent<ShowFDRProps> = (props) => {
                                                 { f.fdr_gw_i.map(g => (
                                                     <div style={{
                                                         backgroundColor: convertFDRtoHex(f.fdr_gw_i[0].difficulty_score, props.fdrToColor),
+                                                        position: g.message ? "relative" : "inherit",
                                                         color: contrastingColor(convertFDRtoHex(f.fdr_gw_i[0].difficulty_score, props.fdrToColor))}} 
                                                         className={'color-' + Number(g.difficulty_score).toFixed(0) + ' height-' + f.fdr_gw_i.length + 
                                                         (f.fdr_gw_i.length > 1 ? ' multiple-fixtures' : '') + ' ' + 
                                                         (f.fdr_gw_i[0].double_blank?.includes("-") ? "possible-blank" : "")}>
-                                                        { g.opponent_team_name == '-' ? "Blank" : (g.opponent_team_name + " (" + g.H_A + ")") }
+                                                        { g.message && 
+                                                        <Popover 
+                                                            id={`rotations-planner-id-${g.opponent_team_name}-${g.H_A}`}
+                                                            title=""
+                                                            html_title={props.content.Fixture.uncertain_match}
+                                                            algin_left={false}
+                                                            popover_title={""} // fdr.team_name + ' - ' + g.opponent_team_name  
+                                                            iconSize={14}
+                                                            topRigthCornerInDiv={true}
+                                                            iconpostition={[0, 0, 0, 0]}
+                                                            popover_text={ g.message }>
+                                                        </Popover> }
+                                                        { g.opponent_team_name == '-' ? "Blank" : (g.opponent_team_name + " (" + g.H_A +  ")") }
                                                     </div>
                                                 ))}
                                             </td>

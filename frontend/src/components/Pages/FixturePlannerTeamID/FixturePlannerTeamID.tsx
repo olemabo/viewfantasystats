@@ -121,7 +121,8 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
                         opponent_team_name: fdr_in_gw_i_json.opponent_team_name,
                         difficulty_score: fdr_in_gw_i_json.difficulty_score,
                         H_A: fdr_in_gw_i_json.H_A,
-                        Use_Not_Use: fdr_in_gw_i_json.Use_Not_Use ?? 0
+                        Use_Not_Use: fdr_in_gw_i_json.Use_Not_Use ?? 0,
+                        message: fdr_in_gw_i_json.message,
                     })
                 });
                 FDR_gw_i.push({fdr_gw_i: temp})
@@ -195,7 +196,6 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
     const [ newPlayerPostionNumber, setNewPlayerPostionNumber ] = useState(0);
 
     function AddPlayer() {
-        console.log(newPlayerName, newPlayerTeam)
         const newPlayer = { team_name_short: newPlayerTeam, player_name: newPlayerName }
         if (newPlayerPostionNumber === 0) { goalKeepers.push(newPlayer); }
         if (newPlayerPostionNumber === 1) { defenders.push(newPlayer); }
