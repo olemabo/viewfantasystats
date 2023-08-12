@@ -8,6 +8,7 @@ def convertFDRToModel(fdr_data):
             opponent_team_name=fdr_data_i[0],
             H_A=fdr_data_i[1],
             this_difficulty_score=fdr_data_i[2],
+            message=fdr_data_i[3]
         ).toJson())
     
     return temp

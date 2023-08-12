@@ -128,7 +128,9 @@ export const FixturePlannerEliteserienPage : FunctionComponent<PageProps & { fix
                             opponent_team_name: fdr_in_gw_i_json.opponent_team_name,
                             difficulty_score: fdr_in_gw_i_json.difficulty_score,
                             H_A: fdr_in_gw_i_json.H_A,
-                            Use_Not_Use: fdr_in_gw_i_json.Use_Not_Use})
+                            Use_Not_Use: fdr_in_gw_i_json.Use_Not_Use,
+                            message: fdr_in_gw_i_json.message,
+                        })
                     });
                     FDR_gw_i.push({fdr_gw_i: temp})
                 });

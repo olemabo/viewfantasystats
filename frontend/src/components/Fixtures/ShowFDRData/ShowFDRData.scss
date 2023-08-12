@@ -101,6 +101,7 @@
             color: var(--white-color);
             letter-spacing: 0.5px;
             padding: 5px;
+            font-size: 14px;
         }
     
         .fdr-row-gws {
@@ -200,7 +201,7 @@
             border-color: red !important;
         }
         
-        .double-border-1 div {
+        .double-border-1 > div {
             border: var(--fdr-border-width) solid var(--fdr-border-color) !important;
             // background-color: #f5f5f5;
             // color: black;
@@ -268,6 +269,18 @@
     .height-2.multiple-fixtures {
         background-color: var(--fdr-eliteserien-double);
         color: var(--white-color);
+    }
+
+    .color-1, .color-2, .color-3 {
+        .svg-inline--fa {
+            color: var(--fdr-eliteserien-5);
+        }
+    }
+
+    .color-4, .color-5 {
+        .svg-inline--fa {
+            color: var(--white-color);
+        }
     }
 
     

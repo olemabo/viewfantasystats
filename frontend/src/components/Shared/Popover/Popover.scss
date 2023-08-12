@@ -31,6 +31,17 @@ label.thin-ui-popover {
     svg {
         cursor: pointer;
     }
+
+    .top-corner {
+        position: absolute !important;
+        // top: 0 !important;
+        bottom: 73% !important;
+        right: 0 !important;
+    }
+
+    .thin-ui-popover-body.bottom-position {
+        top: -100px;
+    }
 }
 
 .last-element {
@@ -57,7 +68,38 @@ label.thin-ui-popover {
         left: 0 !important;
         top: 5px !important;
     }
+
+    // .adjust-top-right-mobile {
+    //     position: fixed !important;
+    //     left: 10% !important; /* Adjust as needed */
+    //     right: 10% !important; /* Adjust as needed */
+    //     max-width: calc(100vw - 20px); /* Make sure it fits within the viewport */
+    //     max-height: calc(100vh - 20px); /* Make sure it fits within the viewport */
+    //     overflow: auto;
+    //     top: initial !important;
+    // }
+    
+    .adjust-top-right-mobile {
+        padding: 16px !important;
+        max-width: 250px !important;
+    
+        position: fixed !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+    
+        // position: absolute !important;
+        // top: 100% !important; /* Position it right under the parent div */
+        // left: 50% !important;
+        // transform: translateX(-50%) !important;
+        // z-index: 100;
+    }
+
+    .bottom-position {
+        top: 50% !important;
+    }
 }
+
 
 
 label.thin-ui-popover button[name="popover"] {
@@ -79,6 +121,7 @@ label.thin-ui-popover .thin-ui-popover-body {
     border-radius: 2px;
     padding: 16px 36px 16px 16px;
     background-color: #ffffff;
+    color: black;
 
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 
@@ -94,5 +137,6 @@ label.thin-ui-popover .thin-ui-popover-body {
 label.thin-ui-popover button:focus + .thin-ui-popover-body {
     display: block;
 }
+
 
 // la

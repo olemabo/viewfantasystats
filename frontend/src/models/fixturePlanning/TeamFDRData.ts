@@ -29,4 +29,5 @@ export interface FDRData {
     H_A: string;
     Use_Not_Use: boolean;
     double_blank?: string;
+    message?: string;
 }

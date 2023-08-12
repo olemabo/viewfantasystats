@@ -1,6 +1,7 @@
 from fixture_planner_eliteserien.backend.utility_functions import create_eliteserien_fdr_dict
 from models.fixtures.models.FixtureDifficultyModel import FixtureDifficultyModel
 from fixture_planner.backend.utility_functions import calc_score, calc_score_from_list
+from models.fixtures.models.TeamFixtureInfoEliteserienModel import TeamFixtureInfoEliteserienModel
 
 
 def fdr_planner_eliteserien(fixture_list, start_gw, end_gw):
@@ -61,6 +62,7 @@ def fdr_planner_eliteserien_fixture_list(fixture_list, gw_list):
     
     for i in range(number_of_teams):
         temp_fixture_data = [[] for _ in range(len(gw_list))]
+        team_i: TeamFixtureInfoEliteserienModel
         team_i = FDR_scores[i][0]
         FDR_score = FDR_scores[i][1]
         temp_gws = team_i.gw
@@ -74,7 +76,7 @@ def fdr_planner_eliteserien_fixture_list(fixture_list, gw_list):
                                             total_fdr_score=FDR_score,
                                             double_blank="",
                                             H_A=team_i.oppTeamHomeAwayList[j],
-                                            Use_Not_Use=0).toJson()])
+                                            Use_Not_Use=0, message=team_i.messagesList[j]).toJson()])
 
         for k in range(len(temp_fixture_data)):
             if not temp_fixture_data[k]:
@@ -83,7 +85,8 @@ def fdr_planner_eliteserien_fixture_list(fixture_list, gw_list):
                                                         H_A=" ",
                                                         team_name=team_i.team_name,
                                                         total_fdr_score=0,
-                                                        Use_Not_Use=0).toJson()]]
+                                                        Use_Not_Use=0,
+                                                        message=team_i.messagesList[j]).toJson()]]
 
         fdr_fixture_data.append(temp_fixture_data)
 
@@ -100,6 +103,7 @@ def fdr_planner_eliteserien_gw_list(fixture_data, gw_list):
     gw_numbers = gw_list
     
     temp_fixture_data = [[] for _ in range(len(gw_list))]
+    team_i: TeamFixtureInfoEliteserienModel
     team_i = FDR_scores[0][0]
     FDR_score = FDR_scores[0][1]
     temp_gws = team_i.gw
@@ -112,7 +116,8 @@ def fdr_planner_eliteserien_gw_list(fixture_data, gw_list):
                                         this_difficulty_score=team_i.oppTeamDifficultyScore[j],
                                         total_fdr_score=FDR_score,
                                         H_A=team_i.oppTeamHomeAwayList[j],
-                                        Use_Not_Use=0).toJson()])
+                                        Use_Not_Use=0,
+                                        message=team_i.messagesList[j]).toJson()])
 
     for k in range(len(temp_fixture_data)):
         if not temp_fixture_data[k]:
@@ -121,6 +126,7 @@ def fdr_planner_eliteserien_gw_list(fixture_data, gw_list):
                                                     H_A=" ",
                                                     team_name=team_i.team_name,
                                                     total_fdr_score=0,
-                                                    Use_Not_Use=0).toJson()]]
+                                                    Use_Not_Use=0,
+                                                    message="").toJson()]]
 
     return temp_fixture_data

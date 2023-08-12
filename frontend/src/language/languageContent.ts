@@ -102,6 +102,7 @@ export const content_json = {
             filter_button_text: "Hide teams",
             team: "Team",
             search: "Search",
+            uncertain_match: "Match may be postponed",
         },
         Statistics: {
             PlayerOwnership: {
@@ -286,6 +287,7 @@ export const content_json = {
             min_fixtures: "Minimum kamper:",
             filter_button_text: "Filtrer lag",
             team: "Lag",
+            uncertain_match: "Kamp kan bli utsatt",
         },
         Statistics: {
             PlayerOwnership: {
