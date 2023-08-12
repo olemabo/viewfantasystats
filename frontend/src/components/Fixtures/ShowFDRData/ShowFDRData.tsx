@@ -84,7 +84,7 @@ export const ShowFDRData : FunctionComponent<ShowFDRProps> = (props) => {
                                     </th>
                                 )}
                             </tr>
-                            { props.fdrData.map(fdr => 
+                            { props.fdrData.map( (fdr, idx) => 
                                 <>
                                     { fdr.checked && (
                                     <tr id={"fdr-row-" + fdr.team_name}>
@@ -107,6 +107,7 @@ export const ShowFDRData : FunctionComponent<ShowFDRProps> = (props) => {
                                                             algin_left={false}
                                                             popover_title={""} // fdr.team_name + ' - ' + g.opponent_team_name  
                                                             iconSize={14}
+                                                            className={ idx > (props.fdrData?.length - 4) ? 'bottom-position' : ''}
                                                             topRigthCornerInDiv={true}
                                                             iconpostition={[0, 0, 0, 0]}
                                                             popover_text={ g.message }>

@@ -111,7 +111,7 @@ export const FixtureData : FunctionComponent<FixtureDataProps> = ({
                                 
                                 { g.message && 
                                     <Popover 
-                                        id={`rotations-planner-id-${g.opponent_team_name}-${g.H_A}`}
+                                        id={`rotations-planner-id-${g.opponent_team_name}-${g.H_A}-${player.player_name}`}
                                         title=""
                                         html_title={content.Fixture.uncertain_match}
                                         algin_left={false}
