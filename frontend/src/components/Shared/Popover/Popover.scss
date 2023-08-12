@@ -132,6 +132,9 @@ label.thin-ui-popover .thin-ui-popover-body {
     // min-width: 320px;
     min-width: $min-width;
     max-width: $max-width;
+
+    white-space: pre-line;
+
 }
 
 label.thin-ui-popover button:focus + .thin-ui-popover-body {
