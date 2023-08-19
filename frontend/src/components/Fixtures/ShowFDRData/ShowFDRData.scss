@@ -259,14 +259,24 @@
     .greyed-out {
         background-color: #c7c7c7;
         color: var(--black-color);
+
+        .height-2,  .height-3,  .height-4 {
+            background-color: #c7c7c7 !important;
+            color: var(--black-color) !important;
+        }
     }
 
     .hide-game {
         background-color: transparent;
         color: transparent;
+
+        .height-2,  .height-3,  .height-4 {
+            background-color: transparent !important;
+            color: transparent !important;
+        }
     }
 
-    .height-2.multiple-fixtures {
+    .height-2.multiple-fixtures, .height-3.multiple-fixtures {
         background-color: var(--fdr-eliteserien-double);
         color: var(--white-color);
     }
