@@ -48,7 +48,7 @@ def live_fixtures(league_name=esf, gw=0):
         total_minutes = stats["minutes"]
         
         if total_minutes > 0 and str(id) in player_dict:
-            EO = dict_ownership[id] if has_ownership_data else None
+            EO = dict_ownership[id] if (has_ownership_data and id in dict_ownership) else None
             player_info = player_dict[str(id)] 
             name, postition, team_id = player_info[0], player_info[1], player_info[2]
             
