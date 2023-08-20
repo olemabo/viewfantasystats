@@ -31,7 +31,6 @@ def live_fixtures(league_name=esf, gw=0):
     for fixture_i in fixture_data:
         gw = fixture_i["event"]
         fixture_id = fixture_i["id"]
-        
         if gw == current_gameweek:
             fixtures_this_round.append(convertApiJson(fixture_i, team_dict, player_dict))
             fixture_id_to_player_list_dict[fixture_id] = []
@@ -39,18 +38,16 @@ def live_fixtures(league_name=esf, gw=0):
         if fixture_i["started"]:
             min_gw = min(min_gw, gw)
             max_gw = max(max_gw, gw)
-
-    dict_ownership, has_ownership_data = getOwnershipData(league_name, current_gameweek)
     
+    dict_ownership, has_ownership_data = getOwnershipData(league_name, current_gameweek)
     live_player_data = DFObject.get_gameweek_info(current_gameweek)["elements"]
     
     for player_i in live_player_data:
         stats = player_i["stats"]
-
+        id = player_i["id"]
         total_minutes = stats["minutes"]
-
-        if total_minutes > 0:
-            id = player_i["id"]
+        
+        if total_minutes > 0 and str(id) in player_dict:
             EO = dict_ownership[id] if has_ownership_data else None
             player_info = player_dict[str(id)] 
             name, postition, team_id = player_info[0], player_info[1], player_info[2]
@@ -59,7 +56,6 @@ def live_fixtures(league_name=esf, gw=0):
             total_points = stats["total_points"]
             
             explain = player_i["explain"]
-            
             if len(explain) == 1:
                 # one match, use stats her
                 stats = explain[0]["stats"]
@@ -99,10 +95,8 @@ def live_fixtures(league_name=esf, gw=0):
                         if minutes_list[gw_idx] > 0:
                             fixture_id_to_player_list_dict[fixture_id].append([name, gw_i_minutes, gw_i_opta_or_bps, gw_i_total_points, postition, team_id, stats, EO])
     
-
     previous_gw = current_gameweek - 1 if min_gw < current_gameweek else -1
     next_gw = current_gameweek + 1 if max_gw > current_gameweek else -1
-    
     fixture_json = []
     fixture: LiveFixtureModel
     for fixture in fixtures_this_round:
@@ -127,13 +121,15 @@ def live_fixtures(league_name=esf, gw=0):
     return response
 
 
-def convertApiJson(data_i, team_dict, player_dict):        
+def convertApiJson(data_i, team_dict, player_dict):   
     stats = data_i["stats"]
     for stat in stats:
         for away in stat["a"]:
-            away["element"] = player_dict[str(away["element"])][0]
+            player_id = str(away["element"])
+            away["element"] = player_dict[player_id][0] if player_id in player_dict else player_id
         for away in stat["h"]:
-            away["element"] = player_dict[str(away["element"])][0]
+            player_id = str(away["element"])
+            away["element"] = player_dict[player_id][0] if player_id in player_dict else player_id
 
     return LiveFixtureModel(
         data_i["finished"],

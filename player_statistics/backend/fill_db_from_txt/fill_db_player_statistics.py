@@ -131,7 +131,6 @@ def fill_database_for_one_player(player_data_json, static_data, id, league_name)
         temp_fixture_ids.append(gw_i_data['fixture'])
     
     if league_name == fpl:
-        print(player_status)
         fill_model = PremierLeaguePlayers(
             player_id=element_id,
             player_team_id=team_id,

@@ -19,7 +19,6 @@ export const Modal : FunctionComponent<ModalProps> = ({
         const modal = document.getElementById("modal");
         
         if (openModal && modal) {
-            console.log("toggle");
             modal.style.display = "block";
         }
         else if (modal) {
