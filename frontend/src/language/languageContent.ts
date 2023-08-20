@@ -368,7 +368,7 @@ export const content_json = {
             minutesPlayed: 'Antall minutter spilt. Antall minutter oppdateres live mens kampene spilles.',
             points: 'Antall poeng spilleren har fått denne runden. Poengene oppdateres live mens kampene spilles.',
             EO: 'EO (%) for topp 1000 managere fra runde ',
-            moreInfoEO: 'For mer info og fullstendig statistikk, se ',
+            moreInfoEO: 'For mer info og fullstendig statistikk, se',
         },
      }
 };

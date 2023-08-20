@@ -337,8 +337,7 @@ export const LiveFixturesPage : FunctionComponent<PageProps> = (props) => {
                                                                 title={'EO'}
                                                                 popover_title={'Effective Ownership'}
                                                                 popover_text={`${props.content.Popover.EO} ${currentGW}.`}> 
-                                                                { props.content.Popover.moreInfoEO}
-                                                                <a href={urls.url_eliteserien_player_ownership}>{ props.content.General.here }</a>.     
+                                                                {props.content.Popover.moreInfoEO}<a href={`/${urls.url_eliteserien_player_ownership}`}>{props.content.General.here}</a>.     
                                                             </Popover>
                                                         </TableCell>
                                                     }
@@ -434,7 +433,7 @@ export const LiveFixturesPage : FunctionComponent<PageProps> = (props) => {
                                                                 title={'EO'}
                                                                 popover_title={'Effective Ownership'}
                                                                 popover_text={`${props.content.Popover.EO} ${currentGW}.`}> 
-                                                                { props.content.Popover.moreInfoEO}<a href={urls.url_eliteserien_player_ownership}>{props.content.General.here}</a>.     
+                                                                {props.content.Popover.moreInfoEO}<a href={`/${urls.url_eliteserien_player_ownership}`}>{props.content.General.here}</a>.     
                                                             </Popover>
                                                         </TableCell> 
                                                     }

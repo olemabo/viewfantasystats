@@ -78,20 +78,26 @@
       font-size: 13px;
    
       li {
-        height: 21px;
+        margin: 2px 4px 0 0;
+
+        &:last-child {
+          margin: 2px 1px 0 0;
+        }
+
+        height: 23px;
   
         &.defensiv {
           width: 70px;
-      }
+        }
   
-      &.fdr {
-          width: 45px;
-      }
+        &.fdr {
+            width: 45px;
+        }
   
-      &.offensiv {
-          width: 70px;
+        &.offensiv {
+            width: 70px;
+        }
       }
-    }
     }
   }
 
