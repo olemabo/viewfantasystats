@@ -45,7 +45,7 @@ export const ShowTeamIDFDRData : FunctionComponent<ShowTeamIDFDRProps> = ({
 
     return <>
         <div className="fdr-container">
-            <table>
+            <table style={{ margin: "0 auto"}}>
                 <thead>
                     <tr>
                         <th className='fixed-column' />

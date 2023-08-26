@@ -299,6 +299,10 @@
     }
 
     .rotation {
+        .double-border-0 {
+            background-color: var(--fdr-greyed-box);
+            color: var(--black-color);
+        }
         
         .double-border-0 div {
             background-color: var(--fdr-greyed-box);

@@ -8,18 +8,6 @@
     --margin-right: 1.25px;
 }
 
-.info-box {
-    background-color: #d0e8f9bf;
-    padding: 6px 0px;
-    border-radius: 15px;
-    width: fit-content;
-    margin: 24px auto;
-
-    p {
-        margin: 2px 15px !important;
-    }
-}
-
 .player-ownership-container {
     max-width: 920px;
     margin: auto;
@@ -95,44 +83,42 @@
 
     @media (max-width: 600px) {
         .form-stuff {
-            grid-template-columns: 0.5fr 0.5fr !important;
-            
-            label {
-                margin-top: 5px;
+            grid-gap: 7px 5px;
+            grid-template-columns: 47% 30% 20% !important;
+            grid-template-rows: auto 1fr;
 
-                &.hidden {
-                    margin-top: -5px !important;
-                }
-            }
-        }
-    }
-
-    @media (max-width: 600px) {
-        .form-stuff {
             grid-template-areas: 
-                "head head"
-                "aside main"
-                "foot foot";
+                "box-1 box-2 box-3"
+                "box-4 box-4 box-4";
+
             .box-1 {
-                grid-area: head;
+                grid-area: box-1;
             }
 
             .box-2 {
-                grid-area: aside;
+                grid-area: box-2;
 
             }
 
             .box-3 {
-                grid-area: main;
+                grid-area: box-3;
 
             }
 
             .box-5 {
-                grid-area: foot;
+                grid-area: box-4;
             }
             
             .input-box {
                 height: 35px !important;
+            }
+
+            label {
+                margin-top: 5px;
+            }
+
+            .hidden {
+                margin-top: -10px;
             }
         }
     }
@@ -181,23 +167,17 @@
 
 .chips-section {
     margin-top: 30px;
+    column-gap: 10px;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
     
     table {
         display: inline-flex !important;
         width: min-content !important;
         margin-bottom: 25px;
-    }
-    
-    .chips-table {
-        float: left;
-        overflow: auto;
-        margin-bottom: 25px;
-        margin-right: 33px;
-    }
-
-    .team-info-table {
-        float: left;
-        overflow: auto;
     }
 }
 
@@ -211,10 +191,5 @@
                 width: 400px !important;
             }
         }
-    }
-
-    .team-info-table {
-        margin-left: 0px !important;
-        margin-bottom: 25px;
     }
 }

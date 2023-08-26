@@ -1,5 +1,3 @@
-import React, { useState, useEffect, FunctionComponent } from 'react';
-
 import { DefaultPageContainer } from '../../Layout/DefaultPageContainer/DefaultPageContainer';
 import { PlayerOwnershipModel } from '../../../models/playerOwnership/PlayerOwnershipModel';
 import Table, { TableBody, TableCell, TableHead, TableRow } from '../../Shared/Table/Table';
@@ -9,8 +7,10 @@ import { getObjectDataFromKeys } from '../../../utils/getObjectDataFromKeys';
 import { compare, propComparator } from '../../../utils/compareFunctions';
 import { TableSortHead } from '../../Shared/TableSortHead/TableSortHead';
 import { PageProps, esf, fpl } from '../../../models/shared/PageProps';
+import React, { useState, useEffect, FunctionComponent } from 'react';
 import { Pagination } from '../../Shared/Pagination/Pagination';
 import { Spinner } from '../../Shared/Spinner/Spinner';
+import Message from '../../Shared/Messages/Messages';
 import Popover from '../../Shared/Popover/Popover';
 import { store } from '../../../store/index';
 import './PlayerOwnership.scss';
@@ -35,6 +35,8 @@ export const PlayerOwnership : FunctionComponent<PageProps> = (props) => {
     
     const [ chipData, setChipData ] = useState([-1, -1, -1, -1, -1, -1, -1]);
     const [ chipDataAll, setChipDataAll ] = useState(emptyChipModelAll);
+    const [ updatingPrecentage, setUpdatingPrecentage ] = useState(0.0);
+    const [ updatingGw, setUpdatingGw ] = useState(0);
 
     const [ totalChipUsage, setTotalChipUsage ] = useState([-1, -1, -1, -1, -1, -1, -1]);
     const [ totalChipUsageAll, setTotalChipUsageAll ] = useState(emptyChipModelAll);
@@ -64,6 +66,9 @@ export const PlayerOwnership : FunctionComponent<PageProps> = (props) => {
                     setTotalChipUsage(x.total_chip_usage);
                 }
             })
+
+            setUpdatingPrecentage(data?.is_updating_precentage);
+            setUpdatingGw(data?.is_updating_gw);
             setTopXPlayersList(data?.top_x_managers_list);
             setChipDataAll(data?.chip_data);
             UpdateTeamNameAndIds(data.team_names_and_ids);
@@ -127,14 +132,16 @@ export const PlayerOwnership : FunctionComponent<PageProps> = (props) => {
                     setChipData(x.chip_data);
                     setTotalChipUsage(x.total_chip_usage);
                 }
-            })
+            });
+
             setTopXPlayersList(data?.top_x_managers_list);
             setChipDataAll(data?.chip_data);
             setTotalChipUsageAll(data?.total_chip_usage);
             setAllOwnershipData(data.ownershipdata);
             initOwnershipData(data, data.newest_updated_gw);
             setIsLoading(false);
-        })
+        });
+
         setPaginationNumber(1);
         setCurrentSorted("EO");
         setTopXPlayers(top_x_players);
@@ -153,13 +160,15 @@ export const PlayerOwnership : FunctionComponent<PageProps> = (props) => {
                 ownership: ownershipdata,
                 filter_out: false,
             });
-        })
+        });
+
         chipDataAll.map(x => {
             if (x.gw == gw) {
                 setChipData(x.chip_data);
                 setTotalChipUsage(x.total_chip_usage);
             }
-        })
+        });
+
         setCurrentGw(gw);
         setCurrentSorted('EO');
         setOwnershipDataToShow(tempOwnershipModel.sort(compare))
@@ -218,7 +227,7 @@ export const PlayerOwnership : FunctionComponent<PageProps> = (props) => {
     }
     
     const [ pagingationNumber, setPaginationNumber ] = useState(1);
-    const [ numberOfHitsPerPagination, setNumberOfHitsPerPagination ] = useState(10);
+    const numberOfHitsPerPagination = 10;
     const [ numberOfHits, setNumberOfHits ] = useState(0);
 
     function paginationUpdate(pageNumber: number) {
@@ -240,6 +249,11 @@ export const PlayerOwnership : FunctionComponent<PageProps> = (props) => {
 
     const [ currentSorted, setCurrentSorted ] = useState("EO");
 
+    const chipsRoundTableWidth = 145;
+    const chipsAllRoundsTableWidth = 175;
+    const chipsTeamInfoTableWidthCol1 = 180;
+    const chipsTeamInfoTableWidthCol2 = 80;
+
     return <>
     <DefaultPageContainer 
         pageClassName='player-ownership-container' 
@@ -257,10 +271,17 @@ export const PlayerOwnership : FunctionComponent<PageProps> = (props) => {
             { props.league_type === fpl ? props.content.LongTexts.ownershiptDescriptionFPL : props.content.LongTexts.ownershiptDescription }
         </Popover>
         </h1>
-        { emptyDataMessage && <>
-            <div className='info-box'>
-            <p>{props.content.Statistics?.PlayerOwnership?.no_data_found}</p></div>
-        </>}
+        
+        { emptyDataMessage && 
+            <Message messageType='info' messageText={props.content.Statistics?.PlayerOwnership?.no_data_found}/>
+        }
+
+        { updatingPrecentage > 0 && updatingGw > 0 && 
+            <Message showCross={true} messageType='info' messageText={props.content.Statistics.PlayerOwnership.is_updating_message
+                ?.replace("__PERCENTAGE__", updatingPrecentage?.toFixed(0)?.toString())
+                ?.replace("__GW__", updatingGw?.toString()) } />
+        }
+        
         { !firstLoading && <>
             <form className="form-stuff text-center">
             <div className='box-1'>
@@ -287,17 +308,15 @@ export const PlayerOwnership : FunctionComponent<PageProps> = (props) => {
             </div>
             
             <div className='box-2'>
-                { topXPlayersList.length > 0 && 
-                <>
+                { topXPlayersList.length > 0 && <>
                     <label>{props.content.General.top_x_managers}</label>
                     <select onChange={(e) => updateOwnershipTopXData(parseInt(e.target.value))} className="input-box" id="sort_on_dropdown" name="sort_on">
-                    { topXPlayersList?.length > 0 &&
-                        topXPlayersList.map(x => (
-                            <option selected={x == topXPlayers} value={x}>{x}</option>
-                        ))
-                    }
-                    </select>
-                    </>
+                        { topXPlayersList?.length > 0 &&
+                            topXPlayersList.map(x => (
+                                <option selected={x == topXPlayers} value={x}>{x}</option>
+                            ))
+                        }
+                    </select></>
                 }
             </div>
             
@@ -391,100 +410,102 @@ export const PlayerOwnership : FunctionComponent<PageProps> = (props) => {
 
         { !isLoading && chipData?.length > 5 && chipData[0] != -1 && 
             <div className='chips-section'>
-                <Table tableLayoutType={props.league_type} className='chips-table'>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell cellType='head' minWidth={145}>{props.content.Statistics.PlayerOwnership.chip_title} {" "}{props.content.General.round_short}{currentGw}</TableCell>
-                            <TableCell cellType='head'>{props.content.Statistics.PlayerOwnership.percent}</TableCell>
-                            {/* <TableCell cellType='head'>{props.content.Statistics.PlayerOwnership.percent}</TableCell> */}
-                        </TableRow>
-                    </TableHead>
-
-                    <TableBody>
-                        <TableRow>
-                            <TableCell cellType='data' minWidth={145}><div>{props.content.Statistics.PlayerOwnership.no_chip}</div> </TableCell>
-                            <TableCell cellType='data'>{(chipData[4] / topXPlayers * 100).toFixed(1)} {'%'}</TableCell>
-                            {/* <TableCell cellType='data'>{(chipData[4] / topXPlayers * 100).toFixed(1)} {'%'}</TableCell> */}
-                        </TableRow>
-                        <TableRow>
-                            <TableCell cellType='data' minWidth={145}><div>{props.content.Statistics.PlayerOwnership.wildcard}</div> </TableCell>
-                            <TableCell cellType='data'>{(chipData[3] / topXPlayers * 100).toFixed(1)} {'%'}</TableCell>
-                            {/* <TableCell cellType='data'>{(chipData[3] / topXPlayers * 100).toFixed(1)} {'%'}</TableCell> */}
-                        </TableRow>
-                        <TableRow>
-                            <TableCell cellType='data' minWidth={145}><div>{props.league_type === esf ? props.content.Statistics.PlayerOwnership.rich_uncle : props.content.Statistics.PlayerOwnership.free_hit}</div> </TableCell>
-                            <TableCell cellType='data'>{(chipData[0] / topXPlayers * 100).toFixed(1)} {'%'}</TableCell>
-                            {/* <TableCell cellType='data'>{(chipData[0] / topXPlayers * 100).toFixed(1)} {'%'}</TableCell> */}
-                        </TableRow>
-                        <TableRow>
-                            <TableCell cellType='data' minWidth={145}><div>{props.league_type === esf ? props.content.Statistics.PlayerOwnership.forward_rush: props.content.Statistics.PlayerOwnership.bench_boost}</div> </TableCell>
-                            <TableCell cellType='data'>{(chipData[1] / topXPlayers * 100).toFixed(1)} {'%'}</TableCell>
-                            {/* <TableCell cellType='data'>{(chipData[1] / topXPlayers * 100).toFixed(1)} {'%'}</TableCell> */}
-                        </TableRow>
-                        <TableRow>
-                            <TableCell cellType='data' minWidth={145}><div>{props.league_type === esf ? props.content.Statistics.PlayerOwnership.two_captain : props.content.Statistics.PlayerOwnership.three_captain}</div> </TableCell>
-                            <TableCell cellType='data'>{(chipData[2] / topXPlayers * 100).toFixed(1)} {'%'}</TableCell>
-                            {/* <TableCell cellType='data'>{(chipData[2] / topXPlayers * 100).toFixed(1)} {'%'}</TableCell> */}
-                        </TableRow>
-                    </TableBody>
-                </Table>
-
-                { totalChipUsage != null && totalChipUsage.length > 3 &&
+                <div>
                     <Table tableLayoutType={props.league_type} className='chips-table'>
                         <TableHead>
                             <TableRow>
-                                <TableCell cellType='head' minWidth={145}>{props.content.Statistics.PlayerOwnership.chip_total_usage_title}</TableCell>
+                                <TableCell cellType='head' minWidth={chipsRoundTableWidth}>{props.content.Statistics.PlayerOwnership.chip_title} {" "}{props.content.General.round_short}{currentGw}</TableCell>
+                                <TableCell cellType='head'>{props.content.Statistics.PlayerOwnership.percent}</TableCell>
+                                {/* <TableCell cellType='head'>{props.content.Statistics.PlayerOwnership.percent}</TableCell> */}
+                            </TableRow>
+                        </TableHead>
+
+                        <TableBody>
+                            <TableRow>
+                                <TableCell cellType='data' minWidth={chipsRoundTableWidth}><div>{props.content.Statistics.PlayerOwnership.no_chip}</div> </TableCell>
+                                <TableCell cellType='data'>{(chipData[4] / topXPlayers * 100).toFixed(1)} {'%'}</TableCell>
+                                {/* <TableCell cellType='data'>{(chipData[4] / topXPlayers * 100).toFixed(1)} {'%'}</TableCell> */}
+                            </TableRow>
+                            <TableRow>
+                                <TableCell cellType='data' minWidth={chipsRoundTableWidth}><div>{props.content.Statistics.PlayerOwnership.wildcard}</div> </TableCell>
+                                <TableCell cellType='data'>{(chipData[3] / topXPlayers * 100).toFixed(1)} {'%'}</TableCell>
+                                {/* <TableCell cellType='data'>{(chipData[3] / topXPlayers * 100).toFixed(1)} {'%'}</TableCell> */}
+                            </TableRow>
+                            <TableRow>
+                                <TableCell cellType='data' minWidth={chipsRoundTableWidth}><div>{props.league_type === esf ? props.content.Statistics.PlayerOwnership.rich_uncle : props.content.Statistics.PlayerOwnership.free_hit}</div> </TableCell>
+                                <TableCell cellType='data'>{(chipData[0] / topXPlayers * 100).toFixed(1)} {'%'}</TableCell>
+                                {/* <TableCell cellType='data'>{(chipData[0] / topXPlayers * 100).toFixed(1)} {'%'}</TableCell> */}
+                            </TableRow>
+                            <TableRow>
+                                <TableCell cellType='data' minWidth={chipsRoundTableWidth}><div>{props.league_type === esf ? props.content.Statistics.PlayerOwnership.forward_rush: props.content.Statistics.PlayerOwnership.bench_boost}</div> </TableCell>
+                                <TableCell cellType='data'>{(chipData[1] / topXPlayers * 100).toFixed(1)} {'%'}</TableCell>
+                                {/* <TableCell cellType='data'>{(chipData[1] / topXPlayers * 100).toFixed(1)} {'%'}</TableCell> */}
+                            </TableRow>
+                            <TableRow>
+                                <TableCell cellType='data' minWidth={chipsRoundTableWidth}><div>{props.league_type === esf ? props.content.Statistics.PlayerOwnership.two_captain : props.content.Statistics.PlayerOwnership.three_captain}</div> </TableCell>
+                                <TableCell cellType='data'>{(chipData[2] / topXPlayers * 100).toFixed(1)} {'%'}</TableCell>
+                                {/* <TableCell cellType='data'>{(chipData[2] / topXPlayers * 100).toFixed(1)} {'%'}</TableCell> */}
+                            </TableRow>
+                        </TableBody>
+                    </Table>
+                </div>
+
+                { totalChipUsage != null && totalChipUsage.length > 3 &&
+                    <div><Table tableLayoutType={props.league_type} className='chips-table'>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell cellType='head' minWidth={chipsAllRoundsTableWidth}>{props.content.Statistics.PlayerOwnership.chip_total_usage_title}</TableCell>
                                 <TableCell cellType='head'>{props.content.Statistics.PlayerOwnership.percent}</TableCell>
                             </TableRow>
                         </TableHead>
 
                         <TableBody>
                             <TableRow>
-                                <TableCell cellType='data' minWidth={145}><div>{props.content.Statistics.PlayerOwnership.wildcard}{" nr. 1"}</div> </TableCell>
+                                <TableCell cellType='data' minWidth={chipsAllRoundsTableWidth}><div>{props.content.Statistics.PlayerOwnership.wildcard}{" nr. 1"}</div> </TableCell>
                                 <TableCell cellType='data'>{(totalChipUsage[0] / topXPlayers * 100).toFixed(1)} {'%'}</TableCell>
                             </TableRow>
                             <TableRow>
-                                <TableCell cellType='data' minWidth={145}><div>{props.content.Statistics.PlayerOwnership.wildcard}{" nr. 2"}</div> </TableCell>
+                                <TableCell cellType='data' minWidth={chipsAllRoundsTableWidth}><div>{props.content.Statistics.PlayerOwnership.wildcard}{" nr. 2"}</div> </TableCell>
                                 <TableCell cellType='data'>{(totalChipUsage[1] / topXPlayers * 100).toFixed(1)} {'%'}</TableCell>
                             </TableRow>
                             <TableRow>
-                                <TableCell cellType='data' minWidth={145}><div>{props.league_type === esf ? props.content.Statistics.PlayerOwnership.rich_uncle : props.content.Statistics.PlayerOwnership.free_hit}</div> </TableCell>
+                                <TableCell cellType='data' minWidth={chipsAllRoundsTableWidth}><div>{props.league_type === esf ? props.content.Statistics.PlayerOwnership.rich_uncle : props.content.Statistics.PlayerOwnership.free_hit}</div> </TableCell>
                                 <TableCell cellType='data'>{(totalChipUsage[2] / topXPlayers * 100).toFixed(1)} {'%'}</TableCell>
                             </TableRow>
                             <TableRow>
-                                <TableCell cellType='data' minWidth={145}><div>{props.league_type === esf ? props.content.Statistics.PlayerOwnership.forward_rush : props.content.Statistics.PlayerOwnership.bench_boost}</div> </TableCell>
+                                <TableCell cellType='data' minWidth={chipsAllRoundsTableWidth}><div>{props.league_type === esf ? props.content.Statistics.PlayerOwnership.forward_rush : props.content.Statistics.PlayerOwnership.bench_boost}</div> </TableCell>
                                 <TableCell cellType='data'>{(totalChipUsage[props.league_type === esf ? 3 : 4] / topXPlayers * 100).toFixed(1)} {'%'}</TableCell>
                             </TableRow>
                             <TableRow>
-                                <TableCell cellType='data' minWidth={145}><div>{props.league_type === esf ? props.content.Statistics.PlayerOwnership.two_captain : props.content.Statistics.PlayerOwnership.three_captain}</div> </TableCell>
+                                <TableCell cellType='data' minWidth={chipsAllRoundsTableWidth}><div>{props.league_type === esf ? props.content.Statistics.PlayerOwnership.two_captain : props.content.Statistics.PlayerOwnership.three_captain}</div> </TableCell>
                                 <TableCell cellType='data'>{(totalChipUsage[props.league_type === esf ? 4 : 3] / topXPlayers * 100).toFixed(1)} {'%'}</TableCell>
                             </TableRow>
                         </TableBody>
-                    </Table>
+                    </Table></div>
                 }
-
-                <Table tableLayoutType={props.league_type} className='team-info-table'>
+                <div>
+                <Table tableLayoutType={props.league_type}>
                     <TableHead>
                         <TableRow>
-                            <TableCell cellType='head' minWidth={170}>{props.content.Statistics.PlayerOwnership.team_info}</TableCell>
-                            <TableCell cellType='head'>{props.content.Statistics.PlayerOwnership.value}</TableCell>
+                            <TableCell cellType='head' minWidth={chipsTeamInfoTableWidthCol1}>{props.content.Statistics.PlayerOwnership.team_info}</TableCell>
+                            <TableCell cellType='head' minWidth={chipsTeamInfoTableWidthCol2}>{props.content.Statistics.PlayerOwnership.value}</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         <TableRow>
-                            <TableCell cellType='data' minWidth={170}><div>{props.content.Statistics.PlayerOwnership.avg_team_value}</div> </TableCell>
-                            <TableCell cellType='data'>{(chipData[5]  / 10).toFixed(1)}</TableCell>
+                            <TableCell cellType='data' minWidth={chipsTeamInfoTableWidthCol1}><div>{props.content.Statistics.PlayerOwnership.avg_team_value}</div> </TableCell>
+                            <TableCell cellType='data' minWidth={chipsTeamInfoTableWidthCol2}>{(chipData[5]  / 10).toFixed(1)}</TableCell>
                         </TableRow>
                         <TableRow>
-                            <TableCell cellType='data' minWidth={170}><div>{props.content.Statistics.PlayerOwnership.avg_transfers}</div> </TableCell>
-                            <TableCell cellType='data'>{(chipData[6] / 10).toFixed(1)}</TableCell>
+                            <TableCell cellType='data' minWidth={chipsTeamInfoTableWidthCol1}><div>{props.content.Statistics.PlayerOwnership.avg_transfers}</div> </TableCell>
+                            <TableCell cellType='data' minWidth={chipsTeamInfoTableWidthCol2}>{(chipData[6] / 10).toFixed(1)}</TableCell>
                         </TableRow>
                         <TableRow>
-                            <TableCell cellType='data' minWidth={170}><div>{props.content.Statistics.PlayerOwnership.avg_transfer_cost}</div> </TableCell>
-                            <TableCell cellType='data'>{"-"}{(chipData[7] / 10).toFixed(1)}</TableCell>
+                            <TableCell cellType='data' minWidth={chipsTeamInfoTableWidthCol1}><div>{props.content.Statistics.PlayerOwnership.avg_transfer_cost}</div> </TableCell>
+                            <TableCell cellType='data' minWidth={chipsTeamInfoTableWidthCol2}>{"-"}{(chipData[7] / 10).toFixed(1)}</TableCell>
                         </TableRow>
                     </TableBody>
-                </Table>
+                </Table></div>
             </div>
         }
     </DefaultPageContainer>

@@ -257,10 +257,9 @@ export const RotationPlannerEliteserienPage : FunctionComponent<PageProps> = (pr
 
     const { number_of_not_in_solution, number_of_must_be_in_solution, number_can_be_in_solution } = filterTeamData();
     
-    const popoverText = `${props.content.Fixture.RotationPlanner?.title} ${props.content.LongTexts.rotationPlannerDescription} 
-    '${props.content.Fixture.gw_start} ' ${props.content.General.and} ' ${props.content.Fixture.gw_end} ' ${props.content.LongTexts.becomesRes}
-    '${props.content.Fixture.teams_to_check} ' ${props.content.LongTexts.rotationPlannerDescription_1} 
-    '${props.content.Fixture.teams_to_play}' ${props.content.LongTexts.rotationPlannerDescription_2}`;
+    const popoverText = `${props.content.Fixture.RotationPlanner?.title} ${props.content.LongTexts.rotationPlannerDescription_first} 
+
+    ${props.content.LongTexts.rotationPlannerDescription_second} '${props.content.Fixture.gw_start}' ${props.content.General.and} '${props.content.Fixture.gw_end}' ${props.content.LongTexts.becomesRes} '${props.content.Fixture.teams_to_check}' ${props.content.LongTexts.rotationPlannerDescription_1} '${props.content.Fixture.teams_to_play}' ${props.content.LongTexts.rotationPlannerDescription_2}`;
     
     return <>
     <DefaultPageContainer 

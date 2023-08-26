@@ -2,7 +2,7 @@ import { StatsModel, BonusModel, PlayerModel, FixtureModel } from '../../../mode
 import { DefaultPageContainer } from '../../Layout/DefaultPageContainer/DefaultPageContainer';
 import Table, { TableBody, TableRow, TableCell, TableHead } from '../../Shared/Table/Table';
 import React, { useState, useEffect, FunctionComponent } from 'react';
-import { PageProps, fpl } from '../../../models/shared/PageProps';
+import { PageProps, esf, fpl } from '../../../models/shared/PageProps';
 import ArrowForward from '@mui/icons-material/ArrowForward';
 import * as urls from '../../../static_urls/internalUrls';
 import { Spinner } from '../../Shared/Spinner/Spinner';
@@ -337,7 +337,7 @@ export const LiveFixturesPage : FunctionComponent<PageProps> = (props) => {
                                                                 title={'EO'}
                                                                 popover_title={'Effective Ownership'}
                                                                 popover_text={`${props.content.Popover.EO} ${currentGW}.`}> 
-                                                                {props.content.Popover.moreInfoEO}<a href={`/${urls.url_eliteserien_player_ownership}`}>{props.content.General.here}</a>.     
+                                                                {props.content.Popover.moreInfoEO}<a href={`/${props.league_type === esf ? urls.url_eliteserien_player_ownership : urls.url_premier_league_player_ownership}`}>{props.content.General.here}</a>.     
                                                             </Popover>
                                                         </TableCell>
                                                     }
@@ -433,7 +433,7 @@ export const LiveFixturesPage : FunctionComponent<PageProps> = (props) => {
                                                                 title={'EO'}
                                                                 popover_title={'Effective Ownership'}
                                                                 popover_text={`${props.content.Popover.EO} ${currentGW}.`}> 
-                                                                {props.content.Popover.moreInfoEO}<a href={`/${urls.url_eliteserien_player_ownership}`}>{props.content.General.here}</a>.     
+                                                                {props.content.Popover.moreInfoEO}<a href={`/${props.league_type === esf ? urls.url_eliteserien_player_ownership : urls.url_premier_league_player_ownership}`}>{props.content.General.here}</a>.     
                                                             </Popover>
                                                         </TableCell> 
                                                     }

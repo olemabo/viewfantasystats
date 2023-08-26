@@ -180,16 +180,16 @@ export const FixturePlannerEliteserienPage : FunctionComponent<PageProps & { fix
     if (props.fixture_planning_type == FixturePlanningType.FDR) { 
         title = title_fixture_planner;
 
-        description = `${title} (Fixture Difficulty Rating) ${props.content.LongTexts.rankTeams}
-        ('${props.content.Fixture.gw_start}' ${props.content.General.and} ' ${props.content.Fixture.gw_end}').
+        description = `${title} (Fixture Difficulty Rating) ${props.content.LongTexts.rankTeams} ('${props.content.Fixture.gw_start}' ${props.content.General.and} ' ${props.content.Fixture.gw_end}'). 
+        
         ${props.content.LongTexts.bestFixture}`;
     }
 
     if (props.fixture_planning_type == FixturePlanningType.Periode) { 
         title = title_period_planner;
-        description = `${title} ${props.content.LongTexts.markPeriode} 
-        ' ${props.content.Fixture.gw_start} ' ${props.content.General.and} ' ${props.content.Fixture.gw_end} ' ${props.content.LongTexts.becomesRes}
-        '${props.content.Fixture.min_fixtures} ' ${props.content.LongTexts.leastNumber}`;
+        description = `${title} ${props.content.LongTexts.markPeriode_1}
+        
+        ${props.content.LongTexts.markPeriode_2} '${props.content.Fixture.gw_start}' ${props.content.General.and} '${props.content.Fixture.gw_end}' ${props.content.LongTexts.becomesRes} '${props.content.Fixture.min_fixtures}' ${props.content.LongTexts.leastNumber}`;
     }
 
     return <>
@@ -216,6 +216,20 @@ export const FixturePlannerEliteserienPage : FunctionComponent<PageProps & { fix
         </h1>
         { maxGw > 0 && 
             <div className='input-row-container'>
+                <ToggleButton 
+                    onclick={(checked: string) => changeXlsxSheet(checked)} 
+                    toggleButtonName="FDR-toggle"
+                    defaultToggleList={[ 
+                        { name: props.content.General.defence, value: "_defensivt", checked: fdrType === "_defensivt", classname: "defensiv" },
+                        { name: "FDR", value: "", checked: fdrType === "", classname: "fdr" },
+                        { name: props.content.General.offence, value: "_offensivt", checked: fdrType === "_offensivt", classname: "offensiv"}
+                    ]}
+                />
+                <Button buttonText={props.content.Fixture.filter_button_text} 
+                    icon_class={"fa fa-chevron-" + (showTeamFilters ? "up" : "down")} 
+                    onclick={() => setShowTeamFilters(showTeamFilters ? false : true)} 
+                    color='white'
+                />
                 <form onSubmit={(e) =>  {updateFDRData(fdrType); e.preventDefault()}}>
                     <TextInput 
                         htmlFor='input-form-start-gw'
@@ -241,7 +255,6 @@ export const FixturePlannerEliteserienPage : FunctionComponent<PageProps & { fix
                             min={minNumFixtures}
                             htmlFor='min-num-fixtures'
                             max={gwEnd}>
-                            {/* {props.content.Fixture.min_fixtures} */}
                             {props.content.Fixture.min_fixtures.split(/(\s+)/)[0]}<br/>
                             {props.content.Fixture.min_fixtures.split(/(\s+)/)[2]}
                         </TextInput>
@@ -251,23 +264,6 @@ export const FixturePlannerEliteserienPage : FunctionComponent<PageProps & { fix
                 </form> 
             </div>
         }
-
-        { maxGw > 0 && <>
-            <ToggleButton 
-                onclick={(checked: string) => changeXlsxSheet(checked)} 
-                toggleButtonName="FDR-toggle"
-                defaultToggleList={[ 
-                    { name: props.content.General.defence, value: "_defensivt", checked: fdrType==="_defensivt", classname: "defensiv" },
-                    { name: "FDR", value: "", checked: fdrType==="", classname: "fdr" },
-                    { name: props.content.General.offence, value: "_offensivt", checked: fdrType==="_offensivt", classname: "offensiv"}
-                ]}
-            />
-            <Button buttonText={props.content.Fixture.filter_button_text} 
-                icon_class={"fa fa-chevron-" + (showTeamFilters ? "up" : "down")} 
-                onclick={() => setShowTeamFilters(showTeamFilters ? false : true)} 
-                color='white'
-            />
-        </> }
         
         { fdrDataToShow != null && fdrDataToShow.length > 0 && fdrDataToShow[0].team_name != "empty" && showTeamFilters &&
             <div className='filter-teams-container'>

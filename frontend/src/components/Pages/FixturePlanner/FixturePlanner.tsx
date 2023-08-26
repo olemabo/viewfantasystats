@@ -163,15 +163,17 @@ export const FixturePlannerPage : FunctionComponent<PageProps & { fixture_planni
     if (props.fixture_planning_type == FixturePlanningType.FDR) { 
         title = title_fixture_planner;
 
-        description = `${title} (Fixture Difficulty Rating) ${props.content.LongTexts.rankTeams}
-        ('${props.content.Fixture.gw_start}' ${props.content.General.and} ' ${props.content.Fixture.gw_end}').
+        description = `${title} (Fixture Difficulty Rating) ${props.content.LongTexts.rankTeams} ('${props.content.Fixture.gw_start}' ${props.content.General.and} ' ${props.content.Fixture.gw_end}').
+        
         ${props.content.LongTexts.bestFixture}`;
     }
 
     if (props.fixture_planning_type == FixturePlanningType.Periode) { 
         title = title_period_planner;
-        description = `${title} ${props.content.LongTexts.markPeriode} 
-        ' ${props.content.Fixture.gw_start} ' ${props.content.General.and} ' ${props.content.Fixture.gw_end} ' ${props.content.LongTexts.becomesRes}
+        description = `${title} ${props.content.LongTexts.markPeriode_1} 
+        
+        ${props.content.LongTexts.markPeriode_2}'${props.content.Fixture.gw_start}' ${props.content.General.and} '${props.content.Fixture.gw_end}' ${props.content.LongTexts.becomesRes}
+        
         '${props.content.Fixture.min_fixtures} ' ${props.content.LongTexts.leastNumber}`;
     }
 
