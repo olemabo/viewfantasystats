@@ -48,6 +48,7 @@ def fill_db_rank_and_points_eliteserien(gw, file_path):
             else:
                 fill_model = EliteserienRankAndPoints(gw=gw, ranking_history=db_data_updated)
                 fill_model.save()
+            
             print("Filled 'EliteserienRankAndPoints' for gw: ", gw)
             break
 
@@ -60,6 +61,7 @@ def fill_db_ownership_statistics_eliteserien(gw, file_path):
         try:
             current_path = file_path + "/top_" + str(top_x) + "/" + name_of_ownership_file
             current_data = np.loadtxt(current_path, encoding="utf-8", dtype="str", delimiter=",", skiprows=1)
+            
             if top_x == 100:
                 fill_global_ownership_statistics_top_x(current_data, gw, top_x)
                 temp_list = list(current_filled_gws.gws_updated_100)
@@ -128,7 +130,7 @@ def fill_db_extra_info_statistics_eliteserien(gw, file_path):
         chips_data = np.loadtxt(file_path + "/" + global_chip_usage, dtype="str", delimiter=",", skiprows=1, max_rows=2)
         global_chip_usage_this_gw = [ int(data) for data in chips_data[0]]
         global_chip_usage_total = [ int(data) for data in chips_data[1]]
-        number_of_managers = np.loadtxt(file_path + "/" + global_chip_usage, dtype="str", delimiter=",", skiprows=3, max_rows=1)
+        number_of_managers = np.loadtxt(file_path + "/" + global_chip_usage, dtype="str", delimiter=",", skiprows=13, max_rows=1)
 
     for top_x in top_x_players:
         try:
@@ -193,21 +195,20 @@ def fill_db_extra_info_statistics_eliteserien(gw, file_path):
                                             total_chip_usage_5000=total_chip_usage_5000,
                                             global_chip_usage_this_gw=global_chip_usage_this_gw,
                                             global_chip_usage_total=global_chip_usage_total,
-                                            number_of_managers=number_of_managers
-                                            )
+                                            number_of_managers=number_of_managers)
         fill_model.save()
         print("Filled up Extra Info DB for GW: ", gw)
     else:
+        print("Update Extra Info DB for GW: ", gw)
         fill_model = EliteserienChipsAndUserInfo.objects.filter(gw=gw)
         fill_model.update(
             global_chip_usage_this_gw=global_chip_usage_this_gw,
             global_chip_usage_total=global_chip_usage_total, 
             number_of_managers=number_of_managers)
-
+    
 def fill_global_ownership_statistics_top_x(ownership_data, gw, top_x):
     for data_i in ownership_data:
         if top_x == 100:
-            # print(data_i, EliteserienGlobalOwnershipStats100.objects.filter(player_id = data_i[0]), len(EliteserienGlobalOwnershipStats100.objects.filter(player_id = data_i[0])), len(EliteserienGlobalOwnershipStats100.objects.filter(player_id = data_i[0])) > 0)
             if len(EliteserienGlobalOwnershipStats100.objects.filter(player_id = data_i[0])) > 0:
                 fill_model = EliteserienGlobalOwnershipStats100.objects.filter(player_id = data_i[0])
                 fill_model.update(player_name=data_i[3], player_team_id=data_i[1], player_position_id=data_i[2])

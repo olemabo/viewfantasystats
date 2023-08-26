@@ -1,11 +1,33 @@
 .message {
-    
-    .warning {
-        width: fit-content;
-        padding: 15px 30px;
-        margin: 25px auto;
-        border-radius: 10px;
+    width: fit-content;
+    margin: 0 auto;
+    position: relative;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    p {
+        margin: 10px 30px;
+        font-size: 14px;
+        max-width: 400px;
+    }
+
+    &.warning {
         border: 1px solid #dc4e4e;
         background-color: rgba(220, 78, 78, 0.1490196078);
+    }
+    
+    &.info {
+        border: 1px solid var(--fdr-eliteserien-1);
+        background-color: var(--table-thead-tr-background-color-eliteserien);
+    }
+
+
+    .close-icon {
+        position: absolute;
+        top: -4px;
+        right: 8px;
+        cursor: pointer;
+        font-size: 20px;
     }
 }

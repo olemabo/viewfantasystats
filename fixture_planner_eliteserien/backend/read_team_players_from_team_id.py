@@ -1,19 +1,9 @@
 from constants import premier_league_api_url, eliteserien_api_url, esf
+from models.fixtures.models.PlayerIdAndPosition import PlayerIdAndPosition
 from utils.dataFetch.DataFetch import DataFetch
 
 from utils.dictinoaries.playerIdInfo import createPlayerIdToPlayerNameEliteserienDict, createPlayerIdToPlayerNamePremierLeagueDict, createTeamIdToTeamNameShortEliteserienDict, createTeamIdToTeamNameShortPremierLeagueDict
 from utils.util_functions.get_upcoming_gw import get_upcoming_gw_eliteserien, get_upcoming_gw_premier_league
-import json
-
-
-class PlayerIdAndPosition:
-    def __init__(self, player_id, position_id, player_name, team_name_short):
-        ...
-        self.player_id = player_id
-        self.position_id = position_id
-        self.player_name = player_name
-        self.team_name_short = team_name_short
-
 
 
 def read_team_players_from_team_id(user_id, gw, league_name=esf):
@@ -35,11 +25,11 @@ def read_team_players_from_team_id(user_id, gw, league_name=esf):
 
     for player_row in players_with_all_info:
         player_id = player_row["element"]
-        player = playerIdToPlayerName[str(player_id)]
+        player = playerIdToPlayerName[str(player_id)] if str(player_id) in playerIdToPlayerName else ["", "", ""] 
         player_name = player[0]
         position_id = player[1]
         team_id = player[2]
-        team_name_short = teamIdToTeamNameShort[str(team_id)]
+        team_name_short = teamIdToTeamNameShort[str(team_id)] if str(team_id) in teamIdToTeamNameShort else ''
         player_i = PlayerIdAndPosition(player_id, position_id, player_name, team_name_short)
         player_list.append(player_i)
         
