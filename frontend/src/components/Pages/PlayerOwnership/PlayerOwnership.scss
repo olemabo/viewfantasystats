@@ -83,6 +83,7 @@
 
     @media (max-width: 600px) {
         .form-stuff {
+            margin-top: 10px;
             grid-gap: 7px 5px;
             grid-template-columns: 47% 30% 20% !important;
             grid-template-rows: auto 1fr;

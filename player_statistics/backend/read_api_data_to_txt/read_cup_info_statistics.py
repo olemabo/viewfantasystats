@@ -1,4 +1,5 @@
 from constants import finished_first_iteration_file_name, cup_all_ids_currently_updated, current_season_name_eliteserien, cup_processed_rounds, cup_all_ids_processed_file, cup_data_file, current_season_name_premier_league, cup_delimiter, cup_stats_folder_name, premier_league_api_url, eliteserien_api_url, esf, path_to_store_local_data
+from player_statistics.db_models.eliteserien.cup_statistics_model_eliteserien import EliteserienCupStatistics
 from utils.utility_functions import get_current_gw_
 from utils.dataFetch.DataFetch import DataFetch
 import numpy as np
@@ -30,8 +31,8 @@ def read_cup_info_statistics_from_league_number_eliteserien(max_time = 60 * 30, 
     cup_start = qualification_event + 1
 
     print("Cup start: ", cup_start)
-    print("Current gw: ", current_gameweek, "\n")
-    print("Cup end: ", cup_end)
+    print("Current gw: ", current_gameweek)
+    print("Cup end: ", cup_end, "\n")
 
     if current_gameweek < cup_start:
         print("Cup not started. Current gw: ", current_gameweek, " and cup start: ", cup_start)
@@ -113,7 +114,7 @@ def read_cup_info_statistics_from_league_number_eliteserien(max_time = 60 * 30, 
                 return -1
 
     if (update):
-        print("\nUpdate ", len(ids_currently_updated), " ids. \n")
+        print("\nUpdate ", len(ids_currently_updated), " ids in txt file. \n")
         file = open(store_cup_data_path, 'r', encoding='utf-8')
         replaced_content = ""
         for idx, line in enumerate(file):
@@ -151,9 +152,10 @@ def read_cup_info_statistics_from_league_number_eliteserien(max_time = 60 * 30, 
     # update cup_processed rounds  
     if (update == True and completed_the_loop == True):
         gws_allready_checked = np.loadtxt(base_path + "/" + cup_processed_rounds, dtype="int", delimiter=",", skiprows=0, encoding="utf-8", ndmin=2)
-        last_number = gws_allready_checked[-1][0]
+        last_number = gws_allready_checked[0][-1]
         first_num = gws_allready_checked[0][0]
         new_last_number = last_number + 1
+        print("new_last_number: ", new_last_number, gws_allready_checked)
         write_to_file(','.join(str(x) for x in range(first_num, new_last_number + 1)), rounds_path, "w")
         print("\nFinished new update and updated the gw file with new gw: ", str(new_last_number))
         os.remove(base_path + "/" + cup_all_ids_currently_updated)
@@ -162,8 +164,10 @@ def read_cup_info_statistics_from_league_number_eliteserien(max_time = 60 * 30, 
     return -1
 
 
-
-
+def deleteAllCurrentData():
+    print("Start deleting all data in EliteserienCupStatistics")
+    EliteserienCupStatistics.objects.all().delete()
+    print("Finished deleting all data in EliteserienCupStatistics")
 
 
 def check_if_txt_file_exist(league_name, total_number_of_participants, cup_start):
@@ -181,6 +185,7 @@ def check_if_txt_file_exist(league_name, total_number_of_participants, cup_start
 
     cup_stats_path = season_path + "/" + cup_stats_folder_name
     if not os.path.isdir(cup_stats_path):
+        deleteAllCurrentData()
         print("Create folder: ", league_path)
         os.mkdir(cup_stats_path)
 
