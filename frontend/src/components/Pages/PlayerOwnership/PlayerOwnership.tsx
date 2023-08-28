@@ -281,7 +281,7 @@ export const PlayerOwnership : FunctionComponent<PageProps> = (props) => {
                 ?.replace("__PERCENTAGE__", updatingPrecentage?.toFixed(0)?.toString())
                 ?.replace("__GW__", updatingGw?.toString()) } />
         }
-        
+
         { !firstLoading && <>
             <form className="form-stuff text-center">
             <div className='box-1'>

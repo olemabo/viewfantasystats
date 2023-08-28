@@ -14,10 +14,11 @@ def write_global_stats_to_db_eliteserien(current_gw=0):
 
     for gw in gws:
         file_path = path_to_store_local_data + "/" + esf + "/" + current_season_name_eliteserien + "/" + global_stats_folder_name + "/" + str(gw)
-        fill_db_ownership_statistics_eliteserien(gw, file_path)
-        fill_db_extra_info_statistics_eliteserien(gw, file_path)
-        fill_db_nationality_statistics_eliteserien(gw, file_path)
-        fill_db_rank_and_points_eliteserien(gw, file_path)
+        if (os.path.exists(file_path)):
+            fill_db_ownership_statistics_eliteserien(gw, file_path)
+            fill_db_extra_info_statistics_eliteserien(gw, file_path)
+            fill_db_nationality_statistics_eliteserien(gw, file_path)
+            fill_db_rank_and_points_eliteserien(gw, file_path)
 
 
 def fill_db_rank_and_points_eliteserien(gw, file_path):

@@ -1,4 +1,4 @@
-from constants import backup_data_folder_name, backup_data_txt_file_name, top_x_players_ids_backup_file_name, finished_file_name, current_season_name_eliteserien, global_stats_folder_name, path_to_store_local_data
+from constants import backup_data_folder_name, esf, backup_data_txt_file_name, current_season_name_premier_league, top_x_players_ids_backup_file_name, finished_file_name, current_season_name_eliteserien, global_stats_folder_name, path_to_store_local_data
 from player_statistics.db_models.premier_league.ownership_statistics_model import PremierLeagueGlobalOwnershipStats100, \
     PremierLeagueGlobalOwnershipStats1000, PremierLeagueGlobalOwnershipStats10000
 from utils.parse.parseStringToInt import parseStringToInt
@@ -28,7 +28,8 @@ def get_ownership_db_data(top_x, field_name, player_position_ids, player_team_id
 
 def checkIfLatestGwIsUpdating(league_name):
     try:
-        file_path = path_to_store_local_data + "/" + league_name + "/" + current_season_name_eliteserien + "/" + global_stats_folder_name
+        season_name = current_season_name_eliteserien if league_name == esf else current_season_name_premier_league
+        file_path = path_to_store_local_data + "/" + league_name + "/" + season_name + "/" + global_stats_folder_name
         latest_gw = 0
         for file in os.listdir(file_path):
             latest_gw = max(latest_gw, parseStringToInt(file))
@@ -52,7 +53,7 @@ def checkIfLatestGwIsUpdating(league_name):
                     with open(path_ids_txt_file, encoding="utf-8") as f:
                         ids_allready_stored = f.read().splitlines()
                         number_of_ids = len(ids_allready_stored)
-                
+
                 return current_number_stored / number_of_ids * 100, latest_gw
         
         return 0, 0

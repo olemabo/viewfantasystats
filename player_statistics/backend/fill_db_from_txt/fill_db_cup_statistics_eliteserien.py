@@ -4,9 +4,7 @@ import numpy as np
 import json
 
 
-def write_cup_statistics_to_db_eliteserien():
-    EliteserienCupStatistics.objects.all().delete()
-    
+def write_cup_statistics_to_db_eliteserien():    
     path = path_to_store_local_data + "/" + esf + "/" + current_season_name_eliteserien + "/" + cup_stats_folder_name + "/" + cup_data_file
     cup_statistics_data = np.loadtxt(path, dtype="str", comments="&&&&&&&&&&&", delimiter=cup_delimiter, skiprows=0, encoding="utf-8")
     new = 0
