@@ -32,7 +32,7 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
     const empty: TeamIdFDRModel[] = [ { team_name_short: "-", team_id: -1, FDR: [] } ];
     const emptyPlayerList: PlayerModel[] = [ {  player_team_id: -1, player_position_id: -1, player_web_name: "-" } ];
     const emptyGwDate: KickOffTimesModel[] = [{gameweek: 0, day_month: "",kickoff_time: "" }];
-    const emptyTeamNamePlayerName: TeamNamePlayerName[] = [ { team_name_short: "-", player_name: "-"} ];
+    const emptyTeamNamePlayerName: TeamNamePlayerName[] = [ { team_id: "-", player_name: "-"} ];
     
     const [ fixtureData, setFixtureData ] = useState([empty]);
     const [ kickOffTimesToShow, setKickOffTimesToShow ] = useState(emptyGwDate);
@@ -199,7 +199,7 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
         data.map( (x: any) => {
             const data = JSON.parse(x);
             position.push({
-                team_name_short: data.team_name_short,
+                team_id: data.team_name_short,
                 player_name: data.player_name,
             })
         })
@@ -213,10 +213,12 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
     }
 
     function AddPlayer() {
-        var selector_player: any = document.getElementById('player_dropdown');
-        var player = selector_player[selector_player.selectedIndex].value;
+        const selector_player: any = document.getElementById('player_dropdown');
+        const player_info = selector_player[selector_player.selectedIndex].value;
+        const player = player_info.split(",")[0];
+        const team_id = player_info.split(",")[1];
 
-        const newPlayer = { team_name_short: newPlayerTeam, player_name: player }
+        const newPlayer = { team_id: team_id, player_name: player }
         if (newPlayerPostionNumber === 0) { goalKeepers.push(newPlayer); }
         if (newPlayerPostionNumber === 1) { defenders.push(newPlayer); }
         if (newPlayerPostionNumber === 2) { midtfielders.push(newPlayer); }
@@ -244,7 +246,7 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
     };
 
     const playerNames = [props.content.General.goalkeeper, props.content.General.defender, props.content.General.midfielder, props.content.General.forward]
-
+    
     return <div className='team-id-wrapper'><div className='team-id-container'>
     <DefaultPageContainer 
         pageClassName='fixture-planner-container' 
@@ -334,7 +336,7 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
                     { playerList.length > 0 && playerList[0].player_web_name !== '-' &&
                         playerList.filter((player => (player.player_position_id - 1) === newPlayerPostionNumber))
                         .filter(player => (player.player_team_id.toString() === newPlayerTeam || newPlayerTeam==="")).map(player => (
-                            <option value={player.player_web_name}>
+                            <option value={[player.player_web_name, player.player_team_id.toString()]}>
                                 {player.player_web_name}
                             </option>
                         ))

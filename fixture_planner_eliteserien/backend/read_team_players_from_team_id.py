@@ -29,8 +29,8 @@ def read_team_players_from_team_id(user_id, gw, league_name=esf):
         player_name = player[0]
         position_id = player[1]
         team_id = player[2]
-        team_name_short = teamIdToTeamNameShort[str(team_id)] if str(team_id) in teamIdToTeamNameShort else ''
-        player_i = PlayerIdAndPosition(player_id, position_id, player_name, team_name_short)
+        # team_name_short = teamIdToTeamNameShort[str(team_id)] if str(team_id) in teamIdToTeamNameShort else ''
+        player_i = PlayerIdAndPosition(player_id, position_id, player_name, team_id)
         player_list.append(player_i)
         
     return player_list

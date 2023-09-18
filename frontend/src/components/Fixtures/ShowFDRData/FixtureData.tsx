@@ -54,16 +54,15 @@ export const FixtureData : FunctionComponent<FixtureDataProps> = ({
         }
     }
 
-    function getFixtureData(team_short_name: string): FDR_GW_i[] {
+    function getFixtureData(team_id: string): FDR_GW_i[] {
         for (let i = 0; i < fixtureData[fdrType].length; i++) {
-            if (fixtureData[fdrType][i].team_name_short === team_short_name) return fixtureData[fdrType][i].FDR;
+            if (fixtureData[fdrType][i].team_id.toString() === team_id.toString()) return fixtureData[fdrType][i].FDR;
         }
 
         return fixtureData[fdrType][fdr_number].FDR;
     }
 
     const hasOnlyOneFdrType = fixtureData[defence_number].length === 0 && fixtureData[ofence_number].length === 0;
-
 
     return <>
         <div className='fixed-column'>
@@ -92,14 +91,14 @@ export const FixtureData : FunctionComponent<FixtureDataProps> = ({
         </div>
         </div>
         { playerData.map(player => (<>
-            <tr id={`fdr-row-${player.team_name_short}`}>
+            <tr id={`fdr-row-${player.team_id}`}>
                 <td className='fixed-column'>
                     <span>{player.player_name.length > 12 ? player.player_name.substring(0, 11) + "..." : player.player_name}</span>
                     {/* <button title={content.General.removePlayer} className='fa fa-arrow-up remove-player-btn' onClick={ () => removePlayer(positionNumber ,player.player_name) }></button> */}
                     <button title={content.General.removePlayer} className='fa fa-minus remove-player-btn' onClick={ () => removePlayer(positionNumber ,player.player_name) }></button>
                     {/* <button title={content.General.removePlayer} className='fa fa-arrow-down remove-player-btn' onClick={ () => removePlayer(positionNumber ,player.player_name) }></button> */}
                 </td>
-            { getFixtureData(player.team_name_short).slice(gwStart - 1, gwEnd).map(team => (
+            { getFixtureData(player.team_id).slice(gwStart - 1, gwEnd).map(team => (
                     <td onClick={(e) => toggleBorderLine(e)} scope='col' className={''
                     + (team.fdr_gw_i.length == 1 ? " color-" + Number(team.fdr_gw_i[0].difficulty_score).toFixed(0) + " " : " multiple no-padding ") + ' show-color' }>
                         { team.fdr_gw_i.map(g => (<>
