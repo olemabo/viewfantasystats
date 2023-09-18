@@ -1,5 +1,6 @@
 from constants import python_anywhere_path, total_number_of_eliteserien_teams, total_number_of_eliteserien_teams, total_number_of_gameweeks_in_eliteserien, fixture_folder_name, stored_data, esf, current_season_name_eliteserien
 from models.fixtures.models.TeamFixtureInfoEliteserienModel import TeamFixtureInfoEliteserienModel
+from fixture_planner_eliteserien.models import EliteserienTeamInfo
 from openpyxl.utils.cell import get_column_letter
 from openpyxl import load_workbook
 
@@ -24,6 +25,8 @@ def read_eliteserien_excel_to_db_format(defensivt=""):
     fixture_info_list, team_name_hexcolor = [], []
 
     max_gws, team_id_idx = 0, 1
+    
+    eliteserienTeamDataDB = EliteserienTeamInfo.objects.all()
 
     for row in row_numbers_list:
         temp_oppTeamNameList, temp_oppTeamHomeAwayList, temp_oppTeamDifficultyScore, temp_gw, temp_messages = [], [], [], [], []
@@ -58,9 +61,17 @@ def read_eliteserien_excel_to_db_format(defensivt=""):
                     temp_gw.append(ws_fdr[gw_number].value)
         
         max_gws = max(temp_gw)
+
+        team_id = team_id_idx
+        
+        for team_i in eliteserienTeamDataDB:
+            if (team_i.team_short_name == team_name_short):
+                team_id = team_i.team_id
         
         fixture_info_list.append(TeamFixtureInfoEliteserienModel(team_name=team_name,
-            team_id=team_id_idx, team_short_name=team_name_short, date="",
+            team_id=team_id, 
+            team_short_name=team_name_short, 
+            date="",
             opp_team_name_list=temp_oppTeamNameList,
             opp_team_home_away_list=temp_oppTeamHomeAwayList,
             opp_team_difficulty_score=temp_oppTeamDifficultyScore,

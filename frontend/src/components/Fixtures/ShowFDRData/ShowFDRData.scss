@@ -58,7 +58,7 @@
         
         tr td {
             min-width: 110px;
-            // height: var(--fdr-box-height);
+            height: 40px;
             border: var(--fdr-box-gap) solid var(--page-background-color);
             
             div {
@@ -138,7 +138,7 @@
     
         .height-2 {
             height: 50%;
-            font-size: 11px;
+            font-size: 10px;
         }
         
         .height-3 {
@@ -257,6 +257,11 @@
     }
 
     .greyed-out {
+        div {
+            background-color: #c7c7c7;
+            color: var(--black-color);
+        }
+        
         background-color: #c7c7c7;
         color: var(--black-color);
 
@@ -266,7 +271,7 @@
         }
     }
 
-    .hide-game {
+    .hide-game, .hide-game div {
         background-color: transparent;
         color: transparent;
 
@@ -345,12 +350,12 @@
         color: var(--white-color);
     }
 
-    .greyed-out {
-        background-color: #8786861f;
+    .greyed-out, .greyed-out div {
+        background-color: #E7E7E7;
         color: var(--black-color);
     }
 
-    .hide-game {
+    .hide-game, .hide-game div {
         background-color: transparent;
         color: transparent;
     }

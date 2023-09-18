@@ -5,6 +5,7 @@ from fixture_planner_eliteserien.backend.read_team_players_from_team_id import r
 from fixture_planner_eliteserien.backend.read_eliteserien_data import read_eliteserien_excel_to_db_format
 from fixture_planner_eliteserien.backend.utility_functions import create_eliteserien_fdr_dict
 from utils.util_functions.convertFDRdata_to_FDR_Model import convertFDRToModel
+from utils.util_functions.get_player_data import getPlayerData
 from utils.util_functions.get_upcoming_gw import get_upcoming_gw_eliteserien
 from utils.util_functions.get_request_data import get_request_body
 from utils.util_functions.get_kickoff_data import getKickOffData
@@ -162,12 +163,13 @@ class PostFDRFromTeamIDView(APIView):
         fdr_data_offensive_list = getFixtureData(fixture_list_db_off, number_of_gws)
             
         temp_kick_off_time, first_upcoming_game = getKickOffData(esf)
-        
+        player_list = getPlayerData(esf)
+
         gw_end = first_upcoming_game + 6 if len(current_gws) > 7 else current_gws[-1]
         gw_start = current_gws[0]
         max_gw = current_gws[-1]
         
-        fdr_and_gws = FDRApiResponse(fdr_data_list, fdr_data_defensive_list, fdr_data_offensive_list, temp_kick_off_time, gw_start, gw_end, first_upcoming_game, max_gw) 
+        fdr_and_gws = FDRApiResponse(fdr_data_list, fdr_data_defensive_list, fdr_data_offensive_list, temp_kick_off_time, gw_start, gw_end, first_upcoming_game, max_gw, player_list) 
 
         return JsonResponse(fdr_and_gws.toJson(), safe=False)
 
@@ -221,13 +223,14 @@ def getFixtureData(fixture_list_db, number_of_gws):
     fdr_data_list = []
     for fdr_data in fixture_list_db:
         team_name_short = fdr_data.team_short_name
-        
+        team_id = fdr_data.team_id
         fdr_dict = create_eliteserien_fdr_dict(fdr_data)
         gw_i_list = [ convertFDRToModel(fdr_dict[gw_i]) for gw_i in range(1, number_of_gws + 1) ]
         
         fdr_data_list.append(FDRTeamIDModel(
             team_name_short,
-            gw_i_list
+            gw_i_list,
+            team_id
         ).toJson())
 
     return fdr_data_list
