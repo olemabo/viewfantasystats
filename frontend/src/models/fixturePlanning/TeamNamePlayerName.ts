@@ -1,4 +1,4 @@
 export interface TeamNamePlayerName {
-    team_name_short: string;
+    team_id: string;
     player_name: string;
 }
