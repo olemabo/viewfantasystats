@@ -1,5 +1,6 @@
 from fixture_planner_eliteserien.backend.read_team_players_from_team_id import read_team_players_from_team_id
 from utils.util_functions.convertFDRdata_to_FDR_Model import convertFDRToModel
+from utils.util_functions.get_player_data import getPlayerData
 from utils.util_functions.get_request_data import get_request_body
 from utils.util_functions.get_kickoff_data import getKickOffData
 
@@ -28,14 +29,18 @@ class PostFDRFromTeamIDView(APIView):
         fdr_data_list = []
         for fdr_data in fixture_list_db:
             team_name_short = fdr_data.team_short_name
+            team_id = fdr_data.team_id
 
             fdr_dict = create_data_objects.create_FDR_dict(fdr_data)
             gw_i_list = [ convertFDRToModel(fdr_dict[gw_i]) for gw_i in range(1, number_of_gws + 1) ]
             
             fdr_data_list.append(FDRTeamIDModel(
                 team_name_short,
-                gw_i_list
+                gw_i_list,
+                team_id
             ).toJson())
+    	
+        player_list = getPlayerData(fpl)
 
         current_gws = [gw for gw in range(0, number_of_gws + 1)]
                                             
@@ -43,7 +48,7 @@ class PostFDRFromTeamIDView(APIView):
         gw_start = current_gws[0]
         max_gw = current_gws[-1]
         
-        fdr_and_gws = FDRApiResponse(fdr_data_list, [], [], temp_kick_off_time, gw_start, gw_end, first_upcoming_game, max_gw) 
+        fdr_and_gws = FDRApiResponse(fdr_data_list, [], [], temp_kick_off_time, gw_start, gw_end, first_upcoming_game, max_gw, player_list) 
 
         return JsonResponse(fdr_and_gws.toJson(), safe=False)
 

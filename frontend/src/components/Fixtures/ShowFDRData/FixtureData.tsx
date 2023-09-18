@@ -105,7 +105,7 @@ export const FixtureData : FunctionComponent<FixtureDataProps> = ({
                         { team.fdr_gw_i.map(g => (<>
                             <div 
                                 style={{ position: g.message ? "relative" : "inherit" }}
-                                className={`height-${team.fdr_gw_i.length} 
+                                className={`height-${team.fdr_gw_i.length} color-${Number(g.difficulty_score).toFixed(0)}
                                 ${(team.fdr_gw_i.length > 1 ? ' multiple-fixtures' : '')} 
                                 ${(team.fdr_gw_i[0].double_blank?.includes("-") ? "possible-blank" : "")}`}>
                                 

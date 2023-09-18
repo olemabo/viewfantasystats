@@ -18,6 +18,7 @@ import Modal from '../../Shared/Modal/Modal';
 import axios from 'axios';
 import { max_gw_esf, max_gw_fpl, min_gw_esf, min_gw_fpl } from '../../../constants/gws';
 import { url_get_fdr_data_from_team_id_eliteserien, url_get_fdr_data_from_team_id_premier_league } from '../../../static_urls/APIUrls';
+import { PlayerModel } from '../../../models/fixturePlanning/PlayerModel';
 
 
 export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) => {
@@ -28,12 +29,14 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
     const min_gw = props.league_type === esf ? min_gw_esf : min_gw_fpl;
     const max_gw = props.league_type === esf ? max_gw_esf : max_gw_fpl;
     
-    const empty: TeamIdFDRModel[] = [ { team_name_short: "-", FDR: [] } ];
+    const empty: TeamIdFDRModel[] = [ { team_name_short: "-", team_id: -1, FDR: [] } ];
+    const emptyPlayerList: PlayerModel[] = [ {  player_team_id: -1, player_position_id: -1, player_web_name: "-" } ];
     const emptyGwDate: KickOffTimesModel[] = [{gameweek: 0, day_month: "",kickoff_time: "" }];
     const emptyTeamNamePlayerName: TeamNamePlayerName[] = [ { team_name_short: "-", player_name: "-"} ];
     
     const [ fixtureData, setFixtureData ] = useState([empty]);
     const [ kickOffTimesToShow, setKickOffTimesToShow ] = useState(emptyGwDate);
+    const [ playerList, setPlayerList ] = useState(emptyPlayerList);
     
     const [ goalKeepers, setGoalkeepers ] = useState(emptyTeamNamePlayerName);
     const [ defenders, setDefenders ] = useState(emptyTeamNamePlayerName);
@@ -46,6 +49,10 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
     const [ teamID, setTeamId ] = useState(0);
     const [ loading, setLoading ] = useState(false);
     const [ openModal, setOpenModal ] = useState(false);
+
+    const [ newPlayerName, setNewPlayerName ] = useState("");
+    const [ newPlayerTeam, setNewPlayerTeam ] = useState("");
+    const [ newPlayerPostionNumber, setNewPlayerPostionNumber ] = useState(0);
 
     useEffect(() => {
         store.dispatch({type: "league_type", payload: props.league_type});
@@ -88,6 +95,19 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
                 data?.gws_and_dates.forEach((kickoff: string) => temp_KickOffTimes.push(JSON.parse(kickoff)));
                 setKickOffTimesToShow(temp_KickOffTimes);
             }
+
+            if (data?.player_list?.length > 0) {
+                let playerList: PlayerModel[] = [];
+                data?.player_list.forEach((player: any) => {
+                    const data = JSON.parse(player);
+                    playerList.push({
+                        player_position_id: data.player_position_id,
+                        player_web_name: data.player_web_name,
+                        player_team_id: data.player_team_id,
+                    })
+                });
+                setPlayerList(playerList);
+            }
             
             const fdr_data = convertFixtureData(data.fdr_data);
             const fdr_data_off = convertFixtureData(data.fdr_data_offensive);
@@ -110,7 +130,8 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
         fdr_data.forEach((team: any) => {
             const team_i = JSON.parse(team);
             const team_name_short = team_i["team_name_short"];
-            
+            const team_id = team_i["team_id"];
+
             const FDR_gw_i: FDR_GW_i[] = [];
             
             team_i.fdr.forEach((fdr_for_each_gw: any[]) => {
@@ -128,7 +149,7 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
                 FDR_gw_i.push({fdr_gw_i: temp})
             });
                 
-            temp.push({ team_name_short: team_name_short, FDR: FDR_gw_i });
+            temp.push({ team_name_short: team_name_short, team_id: team_id, FDR: FDR_gw_i });
         });
         
         return temp;
@@ -191,16 +212,16 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
         setOpenModal(true);
     }
 
-    const [ newPlayerName, setNewPlayerName ] = useState("");
-    const [ newPlayerTeam, setNewPlayerTeam ] = useState("");
-    const [ newPlayerPostionNumber, setNewPlayerPostionNumber ] = useState(0);
-
     function AddPlayer() {
-        const newPlayer = { team_name_short: newPlayerTeam, player_name: newPlayerName }
+        var selector_player: any = document.getElementById('player_dropdown');
+        var player = selector_player[selector_player.selectedIndex].value;
+
+        const newPlayer = { team_name_short: newPlayerTeam, player_name: player }
         if (newPlayerPostionNumber === 0) { goalKeepers.push(newPlayer); }
         if (newPlayerPostionNumber === 1) { defenders.push(newPlayer); }
         if (newPlayerPostionNumber === 2) { midtfielders.push(newPlayer); }
         if (newPlayerPostionNumber === 3) { forwards.push(newPlayer); }
+
         setNewPlayerName("");
         setNewPlayerTeam("");
         setNewPlayerPostionNumber(0);
@@ -284,30 +305,37 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
             </div>
         }
 
-
         { loading && <Spinner /> }
 
         { <Modal 
             toggleModal={(showModal: boolean) => setOpenModal(showModal)} 
             openModal={openModal} 
             title={`${props.content.General.add} ${props.content.General.new} ${playerNames[newPlayerPostionNumber]}`}>
-                <TextInput 
-                    border={true}
-                    htmlFor='input-form-player-name'
-                    type={'text'}
-                    minWidth={200}
-                    defaultValue={newPlayerName}
-                    onInput={(e: string) => setNewPlayerName(e)}>
-                    { props.content.General.playerName }
-                </TextInput>
                 <div className='text-input-container border'>
                     <label htmlFor='team_short_name_dropdown'>{props.content.Fixture.team}</label>
-                    <select onChange={(e) => setNewPlayerTeam(e.target.value)} 
+                    <select onChange={(e) => { setNewPlayerTeam(e.target.value) }} 
                     id="team_short_name_dropdown" name="team_short_name_dropdown">
+                    <option value="" selected={newPlayerTeam===""}>{props.content.General.all_teams}</option>
                     { fixtureData[0]?.length > 0 &&
                         fixtureData[0].map(x => (
-                            <option selected={x.team_name_short == newPlayerTeam} value={x.team_name_short}>
+                            <option 
+                                selected={x.team_name_short == newPlayerTeam} 
+                                value={x.team_id}>                                
                                 {x.team_name_short}
+                            </option>
+                        ))
+                    }
+                    </select>
+                </div>
+                <div className='text-input-container border'>
+                    <label htmlFor='player_dropdown'>{props.content.Fixture.team}</label>
+                    <select onChange={(e) => { setNewPlayerName(e.target.value)} } 
+                    id="player_dropdown" name="player_dropdown">
+                    { playerList.length > 0 && playerList[0].player_web_name !== '-' &&
+                        playerList.filter((player => (player.player_position_id - 1) === newPlayerPostionNumber))
+                        .filter(player => (player.player_team_id.toString() === newPlayerTeam || newPlayerTeam==="")).map(player => (
+                            <option value={player.player_web_name}>
+                                {player.player_web_name}
                             </option>
                         ))
                     }

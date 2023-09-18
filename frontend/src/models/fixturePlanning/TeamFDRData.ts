@@ -9,6 +9,7 @@ export interface TeamFDRDataModel {
 
 export interface TeamIdFDRModel {
     team_name_short: string;
+    team_id: number;
     FDR: FDR_GW_i [];
 }
 
