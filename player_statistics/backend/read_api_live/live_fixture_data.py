@@ -46,6 +46,7 @@ def live_fixtures(league_name=esf, gw=0):
         stats = player_i["stats"]
         id = player_i["id"]
         total_minutes = stats["minutes"]
+
         
         if total_minutes > 0 and str(id) in player_dict:
             EO = dict_ownership[id] if (has_ownership_data and id in dict_ownership) else None
@@ -56,6 +57,7 @@ def live_fixtures(league_name=esf, gw=0):
             total_points = stats["total_points"]
             
             explain = player_i["explain"]
+
             if len(explain) == 1:
                 # one match, use stats her
                 stats = explain[0]["stats"]
@@ -68,33 +70,28 @@ def live_fixtures(league_name=esf, gw=0):
                 total_points_list = player_info[5]
                 fixture_id_list = player_info[6]
                 
-                for idx, explain_i in enumerate(explain):
-                    is_last = True if (idx + 1) == len(explain) else False
-                    
+                for explain_i in explain:                   
                     fixture_id = explain_i["fixture"]
                     stats = explain_i["stats"]
-                    
-                    if is_last:
-                        if total_minutes > 0:
-                            fixture_id_to_player_list_dict[fixture_id].append([name, total_minutes, total_opta_or_bps, total_points, postition, team_id, stats, EO])
-                    else:
-                        gw_idx = 0
-                        for idx_2, fixture_id_i in enumerate(fixture_id_list):
-                            if fixture_id_i == fixture_id:
-                                gw_idx = idx_2
 
-                        has_played = int(minutes_list[gw_idx]) > 0
-                        gw_i_minutes = minutes_list[gw_idx] if (gw_idx > 0 and has_played) else 0
-                        gw_i_opta_or_bps = float(opta_or_bps_list[gw_idx]) if (gw_idx > 0 and has_played) else 0
-                        gw_i_total_points = total_points_list[gw_idx] if (gw_idx > 0 and has_played) else 0
-                        
-                        total_minutes -= gw_i_minutes
-                        total_opta_or_bps -= gw_i_opta_or_bps
-                        total_points -= gw_i_total_points
-                        
-                        if minutes_list[gw_idx] > 0:
-                            fixture_id_to_player_list_dict[fixture_id].append([name, gw_i_minutes, gw_i_opta_or_bps, gw_i_total_points, postition, team_id, stats, EO])
-    
+                    gw_idx = 0
+                    for idx_2, fixture_id_i in enumerate(fixture_id_list):
+                        if fixture_id_i == fixture_id:
+                            gw_idx = idx_2
+
+                    has_played = int(minutes_list[gw_idx]) > 0
+                    
+                    gw_i_minutes = minutes_list[gw_idx] if (gw_idx > 0 and has_played) else total_minutes
+                    gw_i_opta_or_bps = float(opta_or_bps_list[gw_idx]) if (gw_idx > 0 and has_played) else total_opta_or_bps
+                    gw_i_total_points = total_points_list[gw_idx] if (gw_idx > 0 and has_played) else total_points
+                    
+                    total_minutes -= gw_i_minutes
+                    total_opta_or_bps -= gw_i_opta_or_bps
+                    total_points -= gw_i_total_points
+                    
+                    if minutes_list[gw_idx] > 0:
+                        fixture_id_to_player_list_dict[fixture_id].append([name, gw_i_minutes, gw_i_opta_or_bps, gw_i_total_points, postition, team_id, stats, EO])
+
     previous_gw = current_gameweek - 1 if min_gw < current_gameweek else -1
     next_gw = current_gameweek + 1 if max_gw > current_gameweek else -1
     fixture_json = []
@@ -113,7 +110,6 @@ def live_fixtures(league_name=esf, gw=0):
         
         num3 = [x for n in (players_h, players_a) for x in n]
         num3.sort(key = lambda x: x[2], reverse=True)
-
         fixture_json.append(fixture.toJson())
 
     response = LiveFixturesApiResponse(previous_gw, next_gw, current_gameweek, fixture_json, has_ownership_data) 
