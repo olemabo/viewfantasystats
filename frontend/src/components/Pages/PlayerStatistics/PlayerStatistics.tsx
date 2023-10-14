@@ -32,7 +32,7 @@ export const PlayerStatisticsPage : FunctionComponent<PageProps> = (props) => {
     const numberOfHitsPerPagination = 15;
 
     const [ categories, setCategories ] = useState([]);
-    const [ currentSorted, setCurrentSorted ] = useState("Points");
+    const [ currentSorted, setCurrentSorted ] = useState(0);
     
     useEffect(() => {
         store.dispatch({type: "league_type", payload: props.league_type});
@@ -40,7 +40,6 @@ export const PlayerStatisticsPage : FunctionComponent<PageProps> = (props) => {
         axios.get(player_statistics_api_path + "?league_name=" + props.league_type).then(x => {  
             let data = JSON.parse(x?.data);
             setTotalNumberOfGws(data.total_number_of_gws);
-            setCategories(data?.categories);
         })
 
         var body = {
@@ -51,14 +50,14 @@ export const PlayerStatisticsPage : FunctionComponent<PageProps> = (props) => {
         axios.post(player_statistics_api_path, body).then(x => {  
             let data = JSON.parse(x?.data);
             setFirstLoading(false);
+            setCategories(data?.categories);
             UpdateTeamNameAndIds(data.team_names_and_ids);
             setPlayerStatsData(data?.player_info);
             setPlayerStatsDataToShow(data?.player_info);
-            setCurrentSorted("Points");
+            setCurrentSorted(0);
         })
 
     }, []);
-
 
     function updateOwnershipTopXData(last_x_gws: number) {
         setIsLoading(true);
@@ -129,7 +128,7 @@ export const PlayerStatisticsPage : FunctionComponent<PageProps> = (props) => {
         setQuery(query);
         setSorting_keyword_positions(postion_id);
         setSorting_keyword_teams(team_id);
-        setCurrentSorted("Points");
+        setCurrentSorted(0);
     }
 
     function UpdateTeamNameAndIds(data: any) {
@@ -144,17 +143,17 @@ export const PlayerStatisticsPage : FunctionComponent<PageProps> = (props) => {
         setTeamNameAndIds(te);
     }
     
-    function sortOwnershipData(sortType: CategoryTypes, increase: boolean) {
+    function sortOwnershipData(index: number, increase: boolean) {
         let temp = [...playerStatsDataToShow];
-        let sorted = temp.sort(propComparator(sortType, increase));
+        let sorted = temp.sort(propComparator(index, increase));
         setPlayerStatsDataToShow(sorted);
-        setCurrentSorted(sortType);
+        setCurrentSorted(index);
     }
 
-    const propComparator = (category:CategoryTypes, increasing: boolean) =>
+    const propComparator = (index:number, increasing: boolean) =>
     (a:PlayerStatisticsModel, b:PlayerStatisticsModel) => {
-        let first_value = a[category];
-        let second_value = b[category];
+        let first_value = a.player_statistics_list[index];
+        let second_value = b.player_statistics_list[index];
         if (first_value > second_value){
             return increasing ? -1 : 1;
         }
@@ -171,9 +170,20 @@ export const PlayerStatisticsPage : FunctionComponent<PageProps> = (props) => {
 
     const getMinWidth = (category: string) => {
         if (category === "Name") return 140;
+        if (category === "Yellow Cards") return 120;
+        if (category === "Opta") return 88;
+        if (category === "Bps") return 70;
         if (lastXGws === 0) return 100;
 
         return (1000 / categories.length);
+    }
+
+    const convertCategoryToName = (category: string) => {
+        if (category == "Points") return props.content.General.points;
+        if (category == "Goals") return props.content.General.goal;
+        if (category == "Yellow Cards") return props.content.General.yellow_cards;
+        if (category == "Red Cards") return props.content.General.red_cards;
+        return category;
     }
 
     return <>
@@ -244,10 +254,12 @@ export const PlayerStatisticsPage : FunctionComponent<PageProps> = (props) => {
                 <Table tableLayoutType={props.league_type}>
                     <TableHead>
                         <TableRow><>
+                            <TableCell cellType='head' minWidth={getMinWidth('Name')} className={'name-col'}>
+                                { props.content.General.name }
+                            </TableCell>
                             { categories.map( (category, idx) => 
-                                <TableCell cellType='head' minWidth={getMinWidth(category)} className={idx == 0 ? 'name-col' : (idx + 1) == categories.length ? 'last-element' : ''}>
-                                    { idx != 0 ? <TableSortHead text={category} reset={currentSorted != category} defaultSortType={'Increasing'} onclick={(increase: boolean) => sortOwnershipData(category, increase)}/>
-                                    : category }
+                                <TableCell cellType='head' minWidth={getMinWidth(categories[idx])} className={(idx + 1) == categories.length ? 'last-element' : ''}>
+                                    <TableSortHead text={convertCategoryToName(category)} reset={currentSorted != idx} defaultSortType={'Increasing'} onclick={(increase: boolean) => sortOwnershipData(idx, increase)}/>
                                 </TableCell>
                             )}</>
                         </TableRow>
@@ -255,10 +267,15 @@ export const PlayerStatisticsPage : FunctionComponent<PageProps> = (props) => {
                     <TableBody>
                         { playerStatsDataToShow.slice( (pagingationNumber - 1) * numberOfHitsPerPagination, (pagingationNumber - 1) * numberOfHitsPerPagination + numberOfHitsPerPagination).map(player_stat => 
                         <TableRow>
-                            { categories.map( (category) => 
-                                <TableCell cellType='data' minWidth={getMinWidth(category)} className={ category === "Name" ? "name-col" : '' + (currentSorted === category) ? 'selected' : ''}>
-                                    <div className={ category === "Name" ? "format-name-col" : ''}>
-                                        { category === "Name" ? player_stat[category] : Number(player_stat[category]).toFixed(category === "Mins" ? 0 : 1) }
+                            <TableCell cellType='data' minWidth={getMinWidth('Name')} className={"name-col" + (currentSorted === 0) ? 'selected' : ''}>
+                                <div className='format-name-col'>
+                                    {player_stat.Name}
+                                </div>
+                            </TableCell>
+                            { player_stat?.player_statistics_list.map( (stat, index) => 
+                                <TableCell cellType='data' minWidth={getMinWidth(categories[index])} className={(currentSorted === categories[index]) ? 'selected' : ''}>
+                                    <div>
+                                        { Number(stat).toFixed(categories[index] === "Mins" ? 0 : 1) }
                                     </div>
                                 </TableCell>
                                 
@@ -268,7 +285,7 @@ export const PlayerStatisticsPage : FunctionComponent<PageProps> = (props) => {
                     </TableBody>
                 </Table>
             </div> }
-        { !isLoading && playerStatsDataToShow.length > 0 && 
+        { !isLoading && playerStatsDataToShow?.length > 0 && 
             <Pagination 
                 className="ant-pagination" 
                 onChange={(number) => setPaginationNumber(number)}

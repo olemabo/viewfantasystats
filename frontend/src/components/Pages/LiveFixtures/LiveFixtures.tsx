@@ -344,7 +344,7 @@ export const LiveFixturesPage : FunctionComponent<PageProps> = (props) => {
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
-                                                { fixture.players_h.map(h => (
+                                                { fixture.players_h.filter(h => h.minutes > 0).map(h => (
                                                     <TableRow>
                                                         <TableCell cellType='data' minWidth={playerNameMinWidth}>{h.name}</TableCell>
                                                         <TableCell cellType='data'>{h.minutes}</TableCell>
@@ -440,7 +440,7 @@ export const LiveFixturesPage : FunctionComponent<PageProps> = (props) => {
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
-                                                { fixture.players_a.map(a => (
+                                                { fixture.players_a.filter(a => a.minutes > 0).map(a => (
                                                     <TableRow>
                                                         <TableCell cellType='data' minWidth={playerNameMinWidth}>{a.name}</TableCell>
                                                         <TableCell cellType='data'>{a.minutes}</TableCell>

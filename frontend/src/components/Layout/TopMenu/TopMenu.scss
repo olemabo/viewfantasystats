@@ -94,7 +94,7 @@
 
 
 .navbar {
-    height: 42px;
+    height: var(--height-menu-items);
 
     .nav-container {
         display: flex;
@@ -115,7 +115,6 @@
         }
 
         nav {
-            margin-top: var(--height-the-gray-box-should-go-away-from-header);
             color: var(--top-menu-items-color);
 
             .dropdown {
@@ -128,6 +127,7 @@
                     letter-spacing: 0em;
                     font-weight: 400;
                     font-style: normal;
+                    height: var(--height-menu-items);
                 }
                 
                 .dropbtn {

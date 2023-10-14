@@ -7,7 +7,7 @@ import React, { useState, useEffect, FunctionComponent } from 'react';
 import { store } from '../../../store/index';
 import axios from 'axios';
 import './LeagueFrontPage.scss';
-import { esf } from '../../../models/shared/PageProps';
+import { esf, fpl } from '../../../models/shared/PageProps';
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
@@ -93,7 +93,7 @@ export const FrontPage : FunctionComponent<FrontPageProps> = (props) => {
             if (num == 25) return team_id_to_img_shirt_url_eliteserien[25];
             return "https://fantasy.tv2.no/dist/img/shirts/standard/shirt_0_1-66.webp";
         }
-        if (props.league_type == "FPL") {
+        if (props.league_type == fpl) {
             if (num == 1) return team_id_to_img_shirt_url_premier_league[1];
             if (num == 2) return team_id_to_img_shirt_url_premier_league[2];
             if (num == 3) return team_id_to_img_shirt_url_premier_league[3];

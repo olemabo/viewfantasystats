@@ -28,7 +28,7 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
     
     const min_gw = props.league_type === esf ? min_gw_esf : min_gw_fpl;
     const max_gw = props.league_type === esf ? max_gw_esf : max_gw_fpl;
-    
+
     const empty: TeamIdFDRModel[] = [ { team_name_short: "-", team_id: -1, FDR: [] } ];
     const emptyPlayerList: PlayerModel[] = [ {  player_team_id: -1, player_position_id: -1, player_web_name: "-" } ];
     const emptyGwDate: KickOffTimesModel[] = [{gameweek: 0, day_month: "",kickoff_time: "" }];
@@ -85,7 +85,6 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
             let data = JSON.parse(x.data);
 
             if (data.current_gw !== gwStart) { setGwStart(data.current_gw); }
-
             if (data.gw_end !== gwEnd) { setGwEnd(data.gw_end); }
             
             if (maxGw < 0) { setMaxGw(data.max_gw); }
