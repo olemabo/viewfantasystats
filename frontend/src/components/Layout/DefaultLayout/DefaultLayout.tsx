@@ -65,27 +65,27 @@ export const DefaultLayout = () => {
                     <div className="content-container">
                         <Routes>
                             <Route path="/" element={<FixturePlannerPage fixture_planning_type={FixturePlanningType.FDR} league_type={fpl} content={langagueContent} />} />
-                            {/* <Route path="/" element={<PlayerOwnership top_x_managers_default={1000} league_type={eliteserien} content={langagueContent} />} /> */}
 
                             {/* <Route path="/premier-league/" element={<LeagueFrontPage league_type={fpl} content={langagueContent} />} /> */}
-                            <Route path={urls.url_premier_league} element={<FixturePlannerPage fixture_planning_type={FixturePlanningType.FDR} league_type={fpl} content={langagueContent} />} />
-                            <Route path={urls.url_premier_league_fdr_planner} element={<FixturePlannerPage fixture_planning_type={FixturePlanningType.FDR} league_type={fpl} content={langagueContent} />} />
+                            <Route path={urls.url_premier_league} element={<FixturePlannerPage league_type={fpl} fixture_planning_type={FixturePlanningType.FDR} content={langagueContent} />} />
+                            <Route path={urls.url_premier_league_fdr_planner} element={<FixturePlannerPage league_type={fpl} fixture_planning_type={FixturePlanningType.FDR} content={langagueContent} />} />
                             <Route path={urls.url_premier_league_fdr_planner_team_id} element={<FixturePlannerTeamIdPage league_type={fpl} content={langagueContent} />} />
-                            <Route path={urls.url_premier_league_periode_planner} element={<FixturePlannerPage fixture_planning_type={FixturePlanningType.Periode} league_type={fpl} content={langagueContent} />} />
-                            <Route path={urls.url_premier_league_rotation_planner} element={<RotationPlannerPage content={langagueContent} league_type={fpl} />} />
-                            <Route path={urls.url_premier_league_player_ownership} element={<PlayerOwnership top_x_managers_default={10000} league_type={fpl} content={langagueContent} />} />
+                            <Route path={urls.url_premier_league_periode_planner} element={<FixturePlannerPage league_type={fpl} fixture_planning_type={FixturePlanningType.Periode} content={langagueContent} />} />
+                            <Route path={urls.url_premier_league_rotation_planner} element={<RotationPlannerPage league_type={fpl} content={langagueContent} />} />
+                            <Route path={urls.url_premier_league_player_ownership} element={<PlayerOwnership league_type={fpl} top_x_managers_default={10000}  content={langagueContent} />} />
                             <Route path={urls.url_premier_league_player_statistics} element={<PlayerStatisticsPage league_type={fpl} content={langagueContent} />} />
                             <Route path={urls.url_premier_league_live_fixtures} element={<LiveFixturesPage league_type={fpl} content={langagueContent} />} />
 
                             {/* <Route path="/eliteserien/" element={<LeagueFrontPage league_type={eliteserien} content={langagueContent} />} /> */}
                             <Route path={urls.url_eliteserien} element={<PlayerOwnership top_x_managers_default={1000} league_type={esf} content={langagueContent} />} />
-                            <Route path={urls.url_eliteserien_rotation_planner} element={<RotationPlannerEliteserienPage content={langagueContent} league_type={esf} />} />
-                            <Route path={urls.url_eliteserien_periode_planner} element={<FixturePlannerEliteserienPage fixture_planning_type={FixturePlanningType.Periode} league_type={esf} content={langagueContent} />} />                            
-                            <Route path={urls.url_eliteserien_fdr_planner} element={<FixturePlannerEliteserienPage fixture_planning_type={FixturePlanningType.FDR} league_type={esf} content={langagueContent} />} />
+                            <Route path={urls.url_eliteserien_rotation_planner} element={<RotationPlannerEliteserienPage league_type={esf} content={langagueContent} />} />
+                            <Route path={urls.url_eliteserien_periode_planner} element={<FixturePlannerEliteserienPage league_type={esf} fixture_planning_type={FixturePlanningType.Periode} content={langagueContent} />} />                            
+                            <Route path={urls.url_eliteserien_fdr_planner} element={<FixturePlannerEliteserienPage league_type={esf} fixture_planning_type={FixturePlanningType.FDR} content={langagueContent} />} />
                             <Route path={urls.url_eliteserien_fdr_planner_team_id} element={<FixturePlannerTeamIdPage league_type={esf} content={langagueContent} />} />
-                            <Route path={urls.url_eliteserien_player_ownership} element={<PlayerOwnership top_x_managers_default={1000} league_type={esf} content={langagueContent} />} />
-                            <Route path={urls.url_eliteserien_search_user_name} element={<SearchUserNamePage content={langagueContent} league_type={esf} />} />
-                            <Route path={urls.url_eliteserien_rank_statistics} element={<RankStatisticsPage content={langagueContent} league_type={esf} />} />
+                            <Route path={urls.url_eliteserien_player_ownership} element={<PlayerOwnership league_type={esf} top_x_managers_default={1000} content={langagueContent} />} />
+                            <Route path={urls.url_eliteserien_search_user_name} element={<SearchUserNamePage league_type={esf} content={langagueContent} />} />
+                            <Route path={urls.url_eliteserien_player_statistics} element={<PlayerStatisticsPage league_type={esf} content={langagueContent} />} />
+                            <Route path={urls.url_eliteserien_rank_statistics} element={<RankStatisticsPage league_type={esf} content={langagueContent} />} />
                             <Route path={urls.url_eliteserien_live_fixtures} element={<LiveFixturesPage league_type={esf} content={langagueContent} />} />
                                                     
                             <Route path="/statistics/player-ownership/" element={<PlayerOwnership top_x_managers_default={1000} league_type={esf} content={langagueContent} />} />

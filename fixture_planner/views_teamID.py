@@ -47,7 +47,10 @@ class PostFDRFromTeamIDView(APIView):
         gw_end = first_upcoming_game + 6 if len(current_gws) > 7 else current_gws[-1]
         gw_start = current_gws[0]
         max_gw = current_gws[-1]
-        
+
+        if (gw_end > max_gw):
+            gw_end = max_gw
+
         fdr_and_gws = FDRApiResponse(fdr_data_list, [], [], temp_kick_off_time, gw_start, gw_end, first_upcoming_game, max_gw, player_list) 
 
         return JsonResponse(fdr_and_gws.toJson(), safe=False)

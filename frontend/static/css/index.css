@@ -36,6 +36,7 @@
     --font-size-menu-items: 18px;
     --font-size-menu-sub-items: 16px;
     --font-size-header-title: 26px;
+    --height-menu-items: 42px;
 
     /* Footer */
     --footer-background-color: var(--primary-dark-blue-color);

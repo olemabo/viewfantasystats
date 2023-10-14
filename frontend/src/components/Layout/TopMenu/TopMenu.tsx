@@ -85,8 +85,8 @@ export const TopMenu : FunctionComponent<LanguageProps> = (props) => {
                                         <button className="dropbtn">{props.content.Statistics.statistic}</button>
                                         <div style={{left: '0'}} className="dropdown-content">
                                             <a className="dropbtn" href={"/" + urls.url_premier_league_player_ownership}>{props.content.Statistics.PlayerOwnership?.title}</a>
-                                            <a className="dropbtn" href={"/" + urls.url_premier_league_player_statistics}>{props.content.Statistics.PlayerStatistics?.title}</a>
                                             <a className="dropbtn" href={"/" + urls.url_premier_league_live_fixtures}>{props.content.Statistics.LiveFixtures?.title}</a>
+                                            <a className="dropbtn" href={"/" + urls.url_premier_league_player_statistics}>{props.content.Statistics.PlayerStatistics?.title}</a>
                                         </div>
                                     </li>
                                     <li className="dropdown">
@@ -110,6 +110,7 @@ export const TopMenu : FunctionComponent<LanguageProps> = (props) => {
                                             <a className="dropbtn" href={"/" + urls.url_eliteserien_player_ownership}>{props.content.Statistics.PlayerOwnership?.title}</a>
                                             {/* <a className="dropbtn" href={"/" + urls.url_eliteserien_search_user_name}>{props.content.Statistics.SearchUserName?.title}</a> */}
                                             <a className="dropbtn" href={"/" + urls.url_eliteserien_live_fixtures}>{props.content.Statistics.LiveFixtures?.title}</a>
+                                            <a className="dropbtn" href={"/" + urls.url_eliteserien_player_statistics}>{props.content.Statistics.PlayerStatistics?.title}</a>
                                             <a className="dropbtn" href={"/" + urls.url_eliteserien_rank_statistics}>{props.content.Statistics.RankStatistics?.title}</a>
                                         </div>
                                     </li>

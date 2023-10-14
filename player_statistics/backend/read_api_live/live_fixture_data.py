@@ -84,14 +84,13 @@ def live_fixtures(league_name=esf, gw=0):
                     gw_i_minutes = minutes_list[gw_idx] if (gw_idx > 0 and has_played) else total_minutes
                     gw_i_opta_or_bps = float(opta_or_bps_list[gw_idx]) if (gw_idx > 0 and has_played) else total_opta_or_bps
                     gw_i_total_points = total_points_list[gw_idx] if (gw_idx > 0 and has_played) else total_points
-                    
+
                     total_minutes -= gw_i_minutes
                     total_opta_or_bps -= gw_i_opta_or_bps
                     total_points -= gw_i_total_points
                     
-                    if minutes_list[gw_idx] > 0:
-                        fixture_id_to_player_list_dict[fixture_id].append([name, gw_i_minutes, gw_i_opta_or_bps, gw_i_total_points, postition, team_id, stats, EO])
-
+                    fixture_id_to_player_list_dict[fixture_id].append([name, gw_i_minutes, gw_i_opta_or_bps, gw_i_total_points, postition, team_id, stats, EO])
+   
     previous_gw = current_gameweek - 1 if min_gw < current_gameweek else -1
     next_gw = current_gameweek + 1 if max_gw > current_gameweek else -1
     fixture_json = []

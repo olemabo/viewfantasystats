@@ -1,23 +1,13 @@
-import json
+import json   
+
 
 class PlayerStatisticsModel:
-    def __init__(self, name, points, bps_list, ict_index, influence, creativity, threat, team_id, 
-                 player_position_id, xG, xA, xGI, xGC, minutes):
+    def __init__(self, Name, player_team_id, player_position_id, player_statistics_list):
         ...
-        self.Name = name
-        self.Points = points
-        self.Bps = bps_list
-        self.ICT = ict_index
-        self.I = influence
-        self.C = creativity
-        self.T = threat
-        self.player_team_id = team_id
+        self.Name = Name
+        self.player_team_id = player_team_id
         self.player_position_id = player_position_id
-        self.xG = xG
-        self.xA = xA
-        self.xGI = xGI
-        self.xGC = xGC
-        self.Mins = minutes
+        self.player_statistics_list = player_statistics_list
     
     def toJson(self):
         return json.dumps(self, default=lambda o: o.__dict__)
