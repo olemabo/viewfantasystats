@@ -85,7 +85,6 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
             let data = JSON.parse(x.data);
 
             if (data.current_gw !== gwStart) { setGwStart(data.current_gw); }
-            console.log(data.gw_end)
             if (data.gw_end !== gwEnd) { setGwEnd(data.gw_end); }
             
             if (maxGw < 0) { setMaxGw(data.max_gw); }
