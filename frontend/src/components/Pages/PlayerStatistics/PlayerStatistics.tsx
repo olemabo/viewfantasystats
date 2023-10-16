@@ -4,7 +4,7 @@ import { Table, TableBody, TableCell, TableHead, TableRow } from '../../Shared/T
 import { TeamNameAndIdModel } from '../../../models/playerOwnership/TeamNameAndIdModel';
 import React, { useState, useEffect, FunctionComponent } from 'react';
 import TableSortHead from '../../Shared/TableSortHead/TableSortHead';
-import { PageProps } from '../../../models/shared/PageProps';
+import { PageProps, esf } from '../../../models/shared/PageProps';
 import { Spinner } from '../../Shared/Spinner/Spinner';
 import { store } from '../../../store/index';
 import Pagination from 'rc-pagination';
@@ -36,7 +36,7 @@ export const PlayerStatisticsPage : FunctionComponent<PageProps> = (props) => {
     
     useEffect(() => {
         store.dispatch({type: "league_type", payload: props.league_type});
-
+        console.log(player_statistics_api_path + "?league_name=" + props.league_type);
         axios.get(player_statistics_api_path + "?league_name=" + props.league_type).then(x => {  
             let data = JSON.parse(x?.data);
             setTotalNumberOfGws(data.total_number_of_gws);
@@ -171,9 +171,12 @@ export const PlayerStatisticsPage : FunctionComponent<PageProps> = (props) => {
     const getMinWidth = (category: string) => {
         if (category === "Name") return 140;
         if (category === "Yellow Cards") return 120;
+        if (category === "Red Cards") return 110;
         if (category === "Opta") return 88;
-        if (category === "Bps") return 70;
-        if (lastXGws === 0) return 100;
+        if (category === "Bps") return 80;
+        if (category === "Assists") return 90;
+        if (category === "Goals") return 90;
+        if (lastXGws === 0 || props.league_type === esf) return 100;
 
         return (1000 / categories.length);
     }
@@ -275,7 +278,7 @@ export const PlayerStatisticsPage : FunctionComponent<PageProps> = (props) => {
                             { player_stat?.player_statistics_list.map( (stat, index) => 
                                 <TableCell cellType='data' minWidth={getMinWidth(categories[index])} className={(currentSorted === categories[index]) ? 'selected' : ''}>
                                     <div>
-                                        { Number(stat).toFixed(categories[index] === "Mins" ? 0 : 1) }
+                                        { Number(stat).toFixed(['Mins'].includes(categories[index]) ? 0 : 1) }
                                     </div>
                                 </TableCell>
                                 

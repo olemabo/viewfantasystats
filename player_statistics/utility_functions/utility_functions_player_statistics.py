@@ -203,11 +203,11 @@ def list_eliteserien_info_from_db(sort_index, last_x_gw):
             points = round(np.mean(esf_player_i.total_points_list[-num_rounds:]), 2)
             bonus = round(np.mean(esf_player_i.bonus_list[-num_rounds:]), 2)
             opta_index = round(np.mean(convert_list_with_strings_to_floats(esf_player_i.opta_index_list[-num_rounds:])), 2) if len(esf_player_i.opta_index_list) > 0 else 0
-            goals = 0 if esf_player_i.goals_scored_list == None else round(np.mean(convert_list_with_strings_to_floats(esf_player_i.goals_scored_list[-num_rounds:])), 0)    
-            assists = 0 if esf_player_i.assists_list == None else round(np.mean(convert_list_with_strings_to_floats(esf_player_i.assists_list[-num_rounds:])), 0)    
-            minutes = 0 if esf_player_i.minutes_list == None else round(np.mean(convert_list_with_strings_to_floats(esf_player_i.minutes_list[-num_rounds:])), 0)    
-            yellow_cards = 0 if esf_player_i.yellow_cards_list == None else round(np.mean(convert_list_with_strings_to_floats(esf_player_i.yellow_cards_list[-num_rounds:])), 0)    
-            red_cards = 0 if esf_player_i.red_cards_list == None else round(np.mean(convert_list_with_strings_to_floats(esf_player_i.red_cards_list[-num_rounds:])), 0)    
+            goals = 0 if esf_player_i.goals_scored_list == None else round(np.mean(convert_list_with_strings_to_floats(esf_player_i.goals_scored_list[-num_rounds:])), 2)    
+            assists = 0 if esf_player_i.assists_list == None else round(np.mean(convert_list_with_strings_to_floats(esf_player_i.assists_list[-num_rounds:])), 2)    
+            minutes = 0 if esf_player_i.minutes_list == None else round(np.mean(convert_list_with_strings_to_floats(esf_player_i.minutes_list[-num_rounds:])), 2)    
+            yellow_cards = 0 if esf_player_i.yellow_cards_list == None else round(np.mean(convert_list_with_strings_to_floats(esf_player_i.yellow_cards_list[-num_rounds:])), 2)    
+            red_cards = 0 if esf_player_i.red_cards_list == None else round(np.mean(convert_list_with_strings_to_floats(esf_player_i.red_cards_list[-num_rounds:])), 2)    
             
             player_statistics_list = [points, minutes, goals, assists, bonus, opta_index, yellow_cards, red_cards]
 
