@@ -246,6 +246,10 @@ def find_best_rotation_combosEliteserien_gw_list(data, gw_list, teams_to_check=5
     :return: combos_with_score [[score, [team_ids], [team_names]], ... ]   ([22.2, [1, 4, 11], ['Arsenal', 'Burnley', 'Liverpool']])
     """
 
+    data_team_id_to_data = {}
+    for i in data:
+        data_team_id_to_data[i.team_id] = i
+    
     if team_names[0] != -1:
         if teams_to_check > len(team_names):
             print("Teams to check must be >= to number of input teams")
@@ -264,13 +268,11 @@ def find_best_rotation_combosEliteserien_gw_list(data, gw_list, teams_to_check=5
     dict_with_team_name_to_team_ids = dict()
     for team in data:
         dict_with_team_name_to_team_ids[str(team.team_name)] = team.team_id
-
     team_ids = []
 
     for team_name in team_names:
         if team_name == -1:
-            number_of_teams = total_number_of_eliteserien_teams # originaly df.shape[0]
-            team_ids = np.arange(1, number_of_teams + 1)
+            team_ids = [team.team_id for team in data]
             break
         team_id = dict_with_team_name_to_team_ids[team_name]
         team_ids.append(team_id)
@@ -327,7 +329,7 @@ def find_best_rotation_combosEliteserien_gw_list(data, gw_list, teams_to_check=5
             GW_scores_new = []
             for team_idx, team_id in enumerate(team_combos):
                 team_name = dict_with_team_ids_to_team_name[team_id]
-                temp_team_data_dict = create_FDR_dict(data[int(team_id - 1)], 10)
+                temp_team_data_dict = create_FDR_dict(data_team_id_to_data[team_id], 10)
                 data_gw = temp_team_data_dict[GW]
                 gws_this_round = len(data_gw)
                 temp_score = 0
@@ -356,7 +358,6 @@ def find_best_rotation_combosEliteserien_gw_list(data, gw_list, teams_to_check=5
                 # fix this for later feature regarding h_a advantage
                 GW_home_scores_new.append([temp_score, H_A])
             
-            
 
             Use_Not_Use_idx = np.array(GW_scores_new).argsort()[:teams_to_play]
             for k in Use_Not_Use_idx:
@@ -380,8 +381,7 @@ def find_best_rotation_combosEliteserien_gw_list(data, gw_list, teams_to_check=5
         combo_names = []
 
         for team_id in team_combos:
-            combo_names.append(dict_with_team_ids_to_team_name[team_id])
-        
+            combo_names.append(dict_with_team_ids_to_team_name[team_id])       
         
         combos_with_score_new.append(
             [round(team_total_score_new / number_of_GW / teams_to_play, 4), team_combos, combo_names, extra_fixtures,
