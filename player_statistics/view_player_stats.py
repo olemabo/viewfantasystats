@@ -18,10 +18,12 @@ from models.statistics.apiResponse.PlayerStatisticsApiResponse import PlayerStat
 class PlayerStatisticsAPIView(APIView):
 
     def get(self, request):
-        league_name = str(request.data.get('league_name')).lower()
+        league_name = str(request.GET.get('league_name')).lower()
 
-        total_number_of_gws = len(EliteserienPlayerStatistic.objects.all()[0].round_list) - 1 if league_name == esf else len(PremierLeaguePlayers.objects.all()[0].round_list) - 1
-        
+        total_number_of_gws = 0
+        max_object = max(EliteserienPlayerStatistic.objects.all() if league_name == esf else PremierLeaguePlayers.objects.all(), key=lambda obj: len(obj.round_list))
+        total_number_of_gws = len(max_object.round_list) - 2
+
         response = PlayerStatisticsApiResponse(3, [], [], [], total_number_of_gws) 
 
         return JsonResponse(response.toJson(), safe=False)
