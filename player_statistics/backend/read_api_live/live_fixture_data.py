@@ -15,7 +15,6 @@ def live_fixtures(league_name=esf, gw=0):
     DFObject = DataFetch(api_url)
 
     fixture_data = DFObject.get_current_fixtures()
-
     current_gameweek = get_current_gw_(DFObject)
     current_gameweek = gw if gw > 0 and gw < current_gameweek else current_gameweek
 

@@ -12,9 +12,7 @@ import TextInput from '../../Shared/TextInput/TextInput';
 import { Button } from '../../Shared/Button/Button';
 import Popover from '../../Shared/Popover/Popover';
 import Spinner from '../../Shared/Spinner/Spinner';
-import { store } from '../../../store/index';
 import axios from 'axios';
-
 
 export const FixturePlannerPage : FunctionComponent<PageProps & { fixture_planning_type: string; }> = (props) => {
     const fixture_planner_kickoff_time_api_path = "/fixture-planner/get-kickoff-times/";
@@ -39,9 +37,6 @@ export const FixturePlannerPage : FunctionComponent<PageProps & { fixture_planni
     const [ initialLoading, setnitialLoading ] = useState(true);
 
     useEffect(() => {
-        store.dispatch({type: "league_type", payload: props.league_type});
-        
-        // Body input for the fdr data API
         let body = { 
             start_gw: gwStart,
             end_gw: gwEnd,
@@ -49,7 +44,6 @@ export const FixturePlannerPage : FunctionComponent<PageProps & { fixture_planni
             combinations: props.fixture_planning_type,
         };
         
-        // Get kickoff time data from the API
         let temp_KickOffTimes: KickOffTimesModel[] = [];        
         axios.get(fixture_planner_kickoff_time_api_path).then(x => {
             if (x.data?.length > 0) {
@@ -57,8 +51,8 @@ export const FixturePlannerPage : FunctionComponent<PageProps & { fixture_planni
                 setKickOffTimes(temp_KickOffTimes);
                 setKickOffTimesToShow(temp_KickOffTimes.slice(body['start_gw'] - 1, body['end_gw']));
                 extractFDRData(body, temp_KickOffTimes);
-            }
-        })
+            };
+        });
 
     }, []);
 
@@ -179,9 +173,10 @@ export const FixturePlannerPage : FunctionComponent<PageProps & { fixture_planni
 
     return <>
     <DefaultPageContainer 
-        pageClassName='fixture-planner-container' 
-        heading={title + " - " + (store.getState().league_type === "fpl" ? "Premier League" : "Eliteserien")} 
-        description={ description }>
+        pageClassName='fixture-planner-container'
+        leagueType={props.league_type}
+        description={description}
+        heading={title}>
         <h1>
             {title}
             <Popover 

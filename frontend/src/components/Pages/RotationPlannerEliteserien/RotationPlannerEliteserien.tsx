@@ -8,13 +8,12 @@ import ThreeStateCheckbox from '../../Shared/FilterButton/ThreeStateCheckbox';
 import React, { useState, useEffect, FunctionComponent } from 'react';
 import * as external_urls from '../../../static_urls/externalUrls';
 import ToggleButton from '../../Shared/ToggleButton/ToggleButton';
-import { PageProps, esf } from '../../../models/shared/PageProps';
+import { PageProps, esf, fpl } from '../../../models/shared/PageProps';
 import FdrBox from '../../Shared/FDR-explaination/FdrBox';
 import TextInput from '../../Shared/TextInput/TextInput';
 import { Spinner } from '../../Shared/Spinner/Spinner';
 import { Popover } from '../../Shared/Popover/Popover';
 import { Button } from '../../Shared/Button/Button';
-import { store } from '../../../store/index';
 import axios from 'axios';
 
 
@@ -42,12 +41,8 @@ export const RotationPlannerEliteserienPage : FunctionComponent<PageProps> = (pr
     const [ longLoadingTimeText, setLongLoadingTimeText ] = useState('');
     const [ excludeGws, setExcludeGws ] = useState([-1]);
 
+    
     useEffect(() => {
-        // get all fpl teams   
-        if (store.getState()?.league_type !== esf) {
-            store.dispatch({type: "league_type", payload: esf});
-        }
-
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
         const exclude_gws = urlParams.getAll('exclude_gws')
@@ -263,8 +258,9 @@ export const RotationPlannerEliteserienPage : FunctionComponent<PageProps> = (pr
     
     return <>
     <DefaultPageContainer 
-        pageClassName='fixture-planner-container' 
-        heading={props.content.Fixture.RotationPlanner?.title + " - " + (store.getState().league_type === "fpl" ? "Premier League" : "Eliteserien")} 
+        pageClassName='fixture-planner-container'
+        leagueType={props.league_type}
+        heading={props.content.Fixture.RotationPlanner?.title} 
         description={'Rotation Planner for Eliteserien Fantasy (ESF). '}>
         <h1>{props.content.Fixture.RotationPlanner?.title}<Popover 
             id={"rotations-planner-id"}
@@ -334,7 +330,7 @@ export const RotationPlannerEliteserienPage : FunctionComponent<PageProps> = (pr
                 <span style={{ color: "red", maxWidth: '375px' }}>{validationErrorMessage}</span>
             </div>
         
-            <ToggleButton 
+            {/* <ToggleButton 
                 onclick={(checked: string) => changeXlsxSheet(checked)} 
                 toggleButtonName="FDR-toggle"
                 defaultToggleList={[ 
@@ -342,7 +338,7 @@ export const RotationPlannerEliteserienPage : FunctionComponent<PageProps> = (pr
                     { name: "FDR", value: "", checked:  fdrType==="", classname: "fdr" },
                     { name: props.content.General.offence, value: "_offensivt", checked:  fdrType==="_offensivt", classname: "offensiv"}
                 ]}
-            />
+            /> */}
 
             <Button 
                 buttonText={props.content.Fixture.filter_button_text} 
@@ -388,7 +384,6 @@ export const RotationPlannerEliteserienPage : FunctionComponent<PageProps> = (pr
             <ShowRotationData 
                 content={props.content}
                 fdrData={fdrDataToShow}
-                fdrToColor={fdrToColor}
                 kickOffTimes={kickOffTimesToShow} />
         }
      </DefaultPageContainer></>

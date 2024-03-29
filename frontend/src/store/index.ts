@@ -1,19 +1,24 @@
-import { createStore } from 'redux';
-import { persistStore, persistReducer } from 'redux-persist'
-import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
+import { configureStore } from '@reduxjs/toolkit';
+import { useDispatch } from 'react-redux';
 
-import rootReducer from './reducer';
+import { languageCodeReducer } from './states/languageCodeStore';
+import { languageReducer } from './states/languageStore';
+import { isMenuOpenReducer } from './states/isMenuOpenStore';
+import { leagueTypeReducer } from './states/leagueTypeStore';
 
-const persistConfig = {
-    key: 'root',
-    storage,
-}
+const store = configureStore({
+    reducer: {
+        leagueTypeStore: leagueTypeReducer,
+        languageCodeStore: languageCodeReducer,
+        languageStore: languageReducer,
+        isMenuOpenStore: isMenuOpenReducer,
+    }
+});
 
-const persistedReducer = persistReducer(persistConfig, rootReducer)
+export type RootState = ReturnType<typeof store.getState>;
 
-export const store = createStore(persistedReducer)
-export const persistor = persistStore(store)
+export type AppDispatch = typeof store.dispatch;
 
-// const store = createStore(rootReducer);
+export const useAppDispatch = () => useDispatch();
 
-// export default store;
+export default store;

@@ -1,8 +1,8 @@
 import { UserSearchHitModel } from '../../../models/SearchUserName/UserSearchHitModel';
-import React, { useState, useEffect, FunctionComponent } from 'react';
+import useLeagueTypeDispatch from '../../../hooks/useLeagueTypeDispatch';
 import { PageProps, esf } from '../../../models/shared/PageProps';
 import { Spinner } from '../../Shared/Spinner/Spinner';
-import { store } from '../../../store/index';
+import React, { useState, FunctionComponent } from 'react';
 import Pagination from 'rc-pagination';
 import './SearchUserName.scss';
 import axios from 'axios';
@@ -17,13 +17,8 @@ export const SearchUserNamePage : FunctionComponent<PageProps> = (props) => {
     const [ query, setQuery ] = useState("");
     const [ isLoading, setIsLoading ] = useState(false);
     const [ fantasy_manager_url, setFantasy_manager_url ] = useState("");
-
-    useEffect(() => {
-        if (store.getState()?.league_type !== esf) {
-            store.dispatch({type: "league_type", payload: esf});
-        }
-
-    }, []);
+    
+    useLeagueTypeDispatch(esf);
 
     function search() {
         setIsLoading(true);

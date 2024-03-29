@@ -5,7 +5,7 @@ import { KickOffTimesModel } from '../../../models/fixturePlanning/KickOffTimes'
 import ShowTeamIDFDRData from '../../Fixtures/ShowFDRData/ShowTeamIdFDRData';
 import React, { useState, useEffect, FunctionComponent } from 'react';
 import * as external_urls from '../../../static_urls/externalUrls';
-import { PageProps, esf } from '../../../models/shared/PageProps';
+import { PageProps, esf, fpl } from '../../../models/shared/PageProps';
 import FdrBox from '../../Shared/FDR-explaination/FdrBox';
 import TextInput from '../../Shared/TextInput/TextInput';
 import "../../Pages/FixturePlanner/FixturePlanner.scss";
@@ -13,7 +13,6 @@ import { Spinner } from '../../Shared/Spinner/Spinner';
 import Popover from '../../Shared/Popover/Popover';
 import Button from '../../Shared/Button/Button';
 import '../../Shared/TextInput/TextInput.scss';
-import { store } from '../../../store/index';
 import Modal from '../../Shared/Modal/Modal';
 import axios from 'axios';
 import { max_gw_esf, max_gw_fpl, min_gw_esf, min_gw_fpl } from '../../../constants/gws';
@@ -55,9 +54,6 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
     const [ newPlayerPostionNumber, setNewPlayerPostionNumber ] = useState(0);
 
     useEffect(() => {
-        store.dispatch({type: "league_type", payload: props.league_type});
-
-        // Get fdr data from the API
         updateFixtureData(true);
     }, []);
 
@@ -170,7 +166,6 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
         // Get fdr data from api
         axios.post(fixture_planner_api_path, body).then((x: any) => {            
             let data = JSON.parse(x.data);
-            
             if (data?.goal_keepers?.length > 0 && data?.defenders?.length > 0 && data?.midtfielders?.length > 0 && data?.forwards?.length > 0){
                 setGoalkeepers(convertToTeamNamePlayerName(data?.goal_keepers));
                 setDefenders(convertToTeamNamePlayerName(data?.defenders));
@@ -245,12 +240,13 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
     };
 
     const playerNames = [props.content.General.goalkeeper, props.content.General.defender, props.content.General.midfielder, props.content.General.forward]
-    
+
     return <div className='team-id-wrapper'><div className='team-id-container'>
     <DefaultPageContainer 
-        pageClassName='fixture-planner-container' 
-        heading={`${props.content.Fixture.TeamPlanner?.title} - ${(store.getState().league_type === "fpl" ? "Premier League" : "Eliteserien")}`} 
-        description={`Fixture Difficulty Rating Planner for a team with a given team-ID for ${(store.getState().league_type === "fpl" ? "Premier League" : "Eliteserien")}. `}>
+        pageClassName='fixture-planner-container'
+        leagueType={props.league_type}
+        heading={props.content.Fixture.TeamPlanner?.title}
+        description={`Fixture Difficulty Rating Planner for a team with a given team-ID for ${(props.league_type === fpl ? "Premier League" : "Eliteserien")}. `}>
         <h1>
             {props.content.Fixture.TeamPlanner?.title}
             <Popover 

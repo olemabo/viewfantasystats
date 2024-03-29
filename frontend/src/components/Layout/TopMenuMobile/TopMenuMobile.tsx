@@ -1,46 +1,56 @@
 import { LanguageSelector, LeagueSelector } from "../../Shared/LeagueAndLanguageSelector/LeagueAndLanguageSelector";
-import { PageProps, en, esf, fpl, no } from "../../../models/shared/PageProps";
+import { LeagueType, PageProps, en, esf, fpl, no } from "../../../models/shared/PageProps";
+import { languageCodeSelector } from "../../../store/selectors/languageCodeSelector";
+import { leagueTypeSelector } from "../../../store/selectors/leagueTypeSelector";
+import { LanguageCodeActions } from "../../../store/states/languageCodeStore";
+import { IsMenuOpenActions } from "../../../store/states/isMenuOpenStore";
+import { LeagueTypeActions } from "../../../store/states/leagueTypeStore";
+import { languageActions } from "../../../store/states/languageStore";
 import { content_json } from "../../../language/languageContent";
 import * as urls from '../../../static_urls/internalUrls';
 import React, { useEffect, useState } from "react";
 import CloseIcon from '@mui/icons-material/Close';
 import MenuIcon from '@mui/icons-material/Menu';
-import { store } from '../../../store/index';
+import { useAppDispatch } from "../../../store";
+import { useSelector } from "react-redux";
 import "./TopMenuMobile.scss";
 
 
 export const TopMenuMobile: React.FunctionComponent<PageProps & { title: string}> = (props) => {
-    
+    const dispatch = useAppDispatch();
+
     function toggleMenu() {
         setMenuOpen(wasOpened => !wasOpened);
-        store.dispatch({type: "isMenuOpen", payload: !MenuOpen })
+        dispatch(IsMenuOpenActions.setisMenuOpen(!MenuOpen));
     }
     
-    function updateSoccerLeague(soccer_league: string) {
-        store.dispatch({type: "league_type", payload: soccer_league});
+    function updateSoccerLeague(leagueType: LeagueType) {
+        dispatch(LeagueTypeActions.setLeagueType(leagueType));
     }
     
     function closeMenu() {
-        store.dispatch({type: "isMenuOpen", payload: false })
+        dispatch(IsMenuOpenActions.setisMenuOpen(false));
     }
-
-    const [ language, setLanguage] = useState(store.getState().language_code);
+    
+    const [ language, setLanguage] = useState(useSelector(languageCodeSelector));
     const [ MenuOpen, setMenuOpen ] = useState(false);
     
     useEffect(() => {
         setMenuOpen(false);
-        store.dispatch({type: "isMenuOpen", payload: false })
+        dispatch(IsMenuOpenActions.setisMenuOpen(false));
     }, [])
     
     function updateLanguage(lang: string) {
         const currentLanguage = lang === en ? en : no;
         const currentContent = lang === en ? content_json.English : content_json.Norwegian;
-        store.dispatch({type: "language", payload: currentContent});
-        store.dispatch({type: "language_code", payload: currentLanguage});
+        
+        dispatch(languageActions.setLanguage(currentContent));
+        dispatch(LanguageCodeActions.setLanguageCode(currentLanguage));
+
         setLanguage(currentLanguage);
     }
     
-    let league_type = store.getState()?.league_type;
+    const leagueType = useSelector(leagueTypeSelector);
 
     return <>
     <div className="top-menu-mobile">
@@ -75,15 +85,15 @@ export const TopMenuMobile: React.FunctionComponent<PageProps & { title: string}
                         }
                     </div>
                     <div>
-                        { league_type === esf && 
+                        { leagueType === esf && 
                             <LeagueSelector 
-                                text={'FPL'}
+                                text='FPL'
                                 onclick={() => updateSoccerLeague(fpl)}
                                 url={"/" + urls.url_premier_league}  />
                         }
-                        { league_type === fpl && 
+                        { leagueType === fpl && 
                             <LeagueSelector 
-                                text={'ESF'}
+                                text='ESF'
                                 onclick={() => updateSoccerLeague(esf)}
                                 url={"/" + urls.url_eliteserien}  />
                         }
@@ -91,7 +101,7 @@ export const TopMenuMobile: React.FunctionComponent<PageProps & { title: string}
                 </div>
                 <nav className="mobile-sub-menu-container">
                     <ul>
-                        { league_type == esf && <>
+                        { leagueType == esf && <>
                             <li className="sub-menu-item">
                                 <a onClick={() => closeMenu()} href={"/" + urls.url_eliteserien_fdr_planner}>{props.content.Fixture.FixturePlanner?.title}</a>
                             </li>
@@ -119,7 +129,7 @@ export const TopMenuMobile: React.FunctionComponent<PageProps & { title: string}
                             </>
                         }   
 
-                        { league_type == fpl && <>
+                        { leagueType == fpl && <>
                             <li className="sub-menu-item">
                                 <a onClick={() => closeMenu()} href={"/" + urls.url_premier_league_fdr_planner}>{props.content.Fixture.FixturePlanner?.title}</a>
                             </li>

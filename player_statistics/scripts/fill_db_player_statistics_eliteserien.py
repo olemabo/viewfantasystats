@@ -2,7 +2,7 @@ import django
 import sys
 import os
 
-path = os.path.abspath('../..') if "ole.borge" in os.getcwd() else "/home/olebo/viewfantasystats/"
+path = os.path.abspath('../..') if "OleMartinBorge" in os.getcwd() else "/home/olebo/viewfantasystats/"
 
 sys.path.append(path)
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'fplwebpage.settings')

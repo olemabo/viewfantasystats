@@ -14,7 +14,7 @@ total_number_of_eliteserien_teams = 16
 # where to store local data
 stored_data = "stored_data"
 
-# path_to_store_local_data = "C:\\Users\\ole.borge\\source\\repos\\django\\viewfantasystats\\" + stored_data
+# path_to_store_local_data = "C:\\Users\\OleMartinBorge\\source\\repos\\projects\\Hobbyprosjekt\\viewfantasystats\\" + stored_data
 path_to_store_local_data = "/home/olebo/viewfantasystats/" + stored_data
 
 # pythonanywhere
@@ -33,12 +33,13 @@ esf = "esf"
 global_stats_folder_name = "global_stats"
 backup_data_folder_name= "backup_data"
 user_stats_folder_name = "user_stats"
+price_change_folder_name = "price_change"
 fixture_folder_name = "fixture_data"
 cup_stats_folder_name = "cup_data"
 
 # must change before each season
 current_season_name_premier_league = "2023-2024"
-current_season_name_eliteserien = "2023"
+current_season_name_eliteserien = "2024"
 
 # txt file names 
 country_population_txt_file_name = "country_population.txt"
@@ -64,7 +65,7 @@ ranking_delimiter = "&"
 cup_delimiter = ":;:"
 cup_db_delimiter = "|-|"
 # wildcard due date NB: MUST BE SET MANUALLY
-eliteserien_wc_due_date = "2023-07-22T15:55:00"
+eliteserien_wc_due_date = "2024-07-19T16:55:00"
 premier_league_wc_due_date = "2023-12-30T13:30:00"
 
 # urls

@@ -31,7 +31,6 @@ export const Popover : FunctionComponent<PopoverProps> = ({
 
     
     if (document.querySelector('[data-popover-target]')) {
-        console.log("test")
         // Create an array of all popover toggle buttons on the page
         let popoverButtonsArray: any = [].slice.call(document.querySelectorAll('[data-popover-target]'));
     

@@ -12,7 +12,6 @@ import { Pagination } from '../../Shared/Pagination/Pagination';
 import { Spinner } from '../../Shared/Spinner/Spinner';
 import Message from '../../Shared/Messages/Messages';
 import Popover from '../../Shared/Popover/Popover';
-import { store } from '../../../store/index';
 import './PlayerOwnership.scss';
 import axios from 'axios';
 
@@ -51,7 +50,6 @@ export const PlayerOwnership : FunctionComponent<PageProps> = (props) => {
     const gwKeys = Object.fromEntries(Array.from({ length: total_number_of_gws }, (_, i) => [i + 1, `gw_${i + 1}` ]));
 
     useEffect(() => {
-        store.dispatch({type: "league_type", payload: props.league_type});
         setIsLoading(true);
 
         axios.get(player_ownership_api_path + "?league_name=" + props.league_type).then(x => {  
@@ -256,8 +254,9 @@ export const PlayerOwnership : FunctionComponent<PageProps> = (props) => {
 
     return <>
     <DefaultPageContainer 
-        pageClassName='player-ownership-container' 
-        heading={props.content.Statistics.PlayerOwnership.title + " - " + (store.getState().league_type === "fpl" ? "Premier League" : "Eliteserien")} 
+        pageClassName='player-ownership-container'
+        leagueType={props.league_type}
+        heading={props.content.Statistics.PlayerOwnership.title} 
         description={'Se eierandelen av ulike spillere fra Eliteserien blant topp 100, 1000 og 5000 managere i Eliteserien Fantasy. Siden viser statistikk rundt EO (Effective Ownership), eierandel, kaptein, visekaptein, benket og total eierandel, samt chips bruk og laginformasjon. Data hentes ut blant topp 100, 1000 og 5000 rett etter byttefrist hver runde. '}>
         <h1>{props.content.Statistics.PlayerOwnership.title}
         <Popover 
