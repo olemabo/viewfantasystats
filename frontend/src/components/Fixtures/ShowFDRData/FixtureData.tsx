@@ -69,7 +69,7 @@ export const FixtureData : FunctionComponent<FixtureDataProps> = ({
             <div className='postition-container'>
                 <span className='text'>{postionName}</span>
                 <div className='button-group'>
-                    { !hasOnlyOneFdrType && 
+                    {/* { !hasOnlyOneFdrType && 
                         <ToggleButton 
                             small={true}
                             onclick={(fdrType: string) => SetFdrType(parseInt(fdrType))} 
@@ -78,7 +78,7 @@ export const FixtureData : FunctionComponent<FixtureDataProps> = ({
                                 { name: content.General.defence, value: defence_number.toString(), checked: fdrType===defence_number, classname: "defensiv" },
                                 { name: "FDR", value: fdr_number.toString(), checked: fdrType===fdr_number, classname: "fdr" },
                                 { name: content.General.offence, value: ofence_number.toString(), checked: fdrType===ofence_number, classname: "offensiv"}
-                            ]} /> }
+                            ]} /> } */}
                 <div> 
                     <Button 
                         buttonText={content.General.add_player} 
