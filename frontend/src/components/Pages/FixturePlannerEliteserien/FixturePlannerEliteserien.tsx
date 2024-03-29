@@ -7,16 +7,15 @@ import { FilterButton } from '../../Shared/FilterButton/FilterButton';
 import { ShowFDRData } from '../../Fixtures/ShowFDRData/ShowFDRData';
 import * as external_urls from '../../../static_urls/externalUrls';
 import ToggleButton from '../../Shared/ToggleButton/ToggleButton';
-import { convertFDRtoHex } from '../../../utils/convertFDRtoHex';
-import { PageProps, esf } from '../../../models/shared/PageProps';
+import { PageProps, esf, fpl } from '../../../models/shared/PageProps';
+import FdrBox from '../../Shared/FDR-explaination/FdrBox';
+import TextInput from '../../Shared/TextInput/TextInput';
 import "../../Pages/FixturePlanner/FixturePlanner.scss";
 import { Spinner } from '../../Shared/Spinner/Spinner';
 import { Button } from '../../Shared/Button/Button';
 import Popover from '../../Shared/Popover/Popover';
-import { store } from '../../../store/index';
 import axios from 'axios';
-import TextInput from '../../Shared/TextInput/TextInput';
-import FdrBox from '../../Shared/FDR-explaination/FdrBox';
+import { setLeagueType } from '../../../hooks/useLeagueTypeDispatch';
  
 
 export const FixturePlannerEliteserienPage : FunctionComponent<PageProps & { fixture_planning_type: string }> = (props) => {
@@ -43,8 +42,6 @@ export const FixturePlannerEliteserienPage : FunctionComponent<PageProps & { fix
     const [ fdrType, SetFdrType ] = useState("");
 
     useEffect(() => {
-        store.dispatch({type: "league_type", payload: props.league_type});
-        
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
         const exclude_gws = urlParams.getAll('exclude_gws')
@@ -191,11 +188,12 @@ export const FixturePlannerEliteserienPage : FunctionComponent<PageProps & { fix
         
         ${props.content.LongTexts.markPeriode_2} '${props.content.Fixture.gw_start}' ${props.content.General.and} '${props.content.Fixture.gw_end}' ${props.content.LongTexts.becomesRes} '${props.content.Fixture.min_fixtures}' ${props.content.LongTexts.leastNumber}`;
     }
-
+    
     return <>
     <DefaultPageContainer 
-        pageClassName='fixture-planner-container' 
-        heading={title + " - " + (store.getState().league_type === "fpl" ? "Premier League" : "Eliteserien")} 
+        pageClassName='fixture-planner-container'
+        leagueType={props.league_type}
+        heading={title} 
         description={'Fixture Difficulty Rating Planner for Eliteserien Fantasy (ESF). '}>
         <h1>
             {title}
@@ -216,7 +214,7 @@ export const FixturePlannerEliteserienPage : FunctionComponent<PageProps & { fix
         </h1>
         { maxGw > 0 && 
             <div className='input-row-container'>
-                <ToggleButton 
+                {/* <ToggleButton 
                     onclick={(checked: string) => changeXlsxSheet(checked)} 
                     toggleButtonName="FDR-toggle"
                     defaultToggleList={[ 
@@ -224,7 +222,7 @@ export const FixturePlannerEliteserienPage : FunctionComponent<PageProps & { fix
                         { name: "FDR", value: "", checked: fdrType === "", classname: "fdr" },
                         { name: props.content.General.offence, value: "_offensivt", checked: fdrType === "_offensivt", classname: "offensiv"}
                     ]}
-                />
+                /> */}
                 <Button buttonText={props.content.Fixture.filter_button_text} 
                     icon_class={"fa fa-chevron-" + (showTeamFilters ? "up" : "down")} 
                     onclick={() => setShowTeamFilters(showTeamFilters ? false : true)} 

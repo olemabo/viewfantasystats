@@ -1,24 +1,13 @@
 import { DefaultLayout } from './Layout/DefaultLayout/DefaultLayout';
-import { PersistGate } from 'redux-persist/integration/react'
-import { BrowserRouter } from "react-router-dom";
-import {store, persistor} from "../store/index";
-import { Provider } from 'react-redux';
-import ReactDOM from 'react-dom';
-import React from "react"; // this must be here
+import axios from 'axios';
+
+axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
+axios.defaults.xsrfCookieName = "csrftoken";
 
 function App() {
-  return (<DefaultLayout />
+  return (
+    <DefaultLayout />
   );
 }
 
 export default App;
-
-ReactDOM.render(
-    <BrowserRouter>
-      <Provider store={store}><PersistGate loading={null} persistor={persistor}>
-            <App />
-          </PersistGate>
-      </Provider>
-    </BrowserRouter>,
-  document.getElementById('app')
-);

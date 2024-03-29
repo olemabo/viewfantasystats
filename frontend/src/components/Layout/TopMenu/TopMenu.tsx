@@ -1,45 +1,46 @@
 import { LanguageSelector, LeagueSelector } from "../../Shared/LeagueAndLanguageSelector/LeagueAndLanguageSelector";
-import { LanguageProps, fpl, esf, no, en } from '../../../models/shared/PageProps';
+import { LanguageProps, fpl, esf, no, en, LeagueType } from '../../../models/shared/PageProps';
+import { languageCodeSelector } from "../../../store/selectors/languageCodeSelector";
+import { leagueTypeSelector } from "../../../store/selectors/leagueTypeSelector";
+import { LanguageCodeActions } from "../../../store/states/languageCodeStore";
+import { LeagueTypeActions } from "../../../store/states/leagueTypeStore";
+import { IsMenuOpenActions } from "../../../store/states/isMenuOpenStore";
 import { useWindowDimensions } from "../../../utils/useWindowDimensions";
-import React, { FunctionComponent, useEffect, useState } from "react";
+import { languageActions } from "../../../store/states/languageStore";
 import { content_json } from "../../../language/languageContent";
 import { TopMenuMobile } from '../TopMenuMobile/TopMenuMobile';
 import * as urls from '../../../static_urls/internalUrls';
-import { store } from '../../../store/index';
+import { FunctionComponent, useState } from "react";
+import { useAppDispatch } from "../../../store";
 import { useSelector } from 'react-redux';
 import { Link } from "react-router-dom";
 import "./TopMenu.scss";
 
 
 export const TopMenu : FunctionComponent<LanguageProps> = (props) => {
-    const { height, width } = useWindowDimensions();
+    const { width } = useWindowDimensions();
     const mobileMaxSize = 800;
-        
-    const isMenuOpenFromRedux = useSelector((state: any) => state?.league_type);
-    const [ leagueType, setLeagueType ] = useState(fpl);
-    const [ language, setLanguage] = useState(store.getState().language_code);
+    const dispatch = useAppDispatch();
 
-    function updateSoccerLeague(soccer_league: string) {
-        store.dispatch({type: "league_type", payload: soccer_league});
+    const leagueType = useSelector(leagueTypeSelector);
+    const [ language, setLanguage] = useState(useSelector(languageCodeSelector));
+
+    function updateSoccerLeague(leagueType: LeagueType) {
+        dispatch(LeagueTypeActions.setLeagueType(leagueType));
     }
 
     function updateLanguage(lang: string) {
         const currentLanguage = lang === en ? en : no;
         const currentContent = lang === en ? content_json.English : content_json.Norwegian;
-        store.dispatch({type: "language", payload: currentContent});
-        store.dispatch({type: "language_code", payload: currentLanguage});
+        
+        dispatch(languageActions.setLanguage(currentContent));
+        dispatch(LanguageCodeActions.setLanguageCode(currentLanguage));
+        
         setLanguage(currentLanguage);
     }
 
-    // useEffect will listen if isMenuOpen property from redux changes
-    useEffect(() => {
-        let isCancelled : boolean = false;
-        setLeagueType(isMenuOpenFromRedux);
-        return () => { isCancelled = true }
-    }, [isMenuOpenFromRedux]);
-
-    if (width > mobileMaxSize && isMenuOpenFromRedux) {
-        store.dispatch({type: "isMenuOpen", payload: false});
+    if (width > mobileMaxSize && leagueType) {
+        dispatch(IsMenuOpenActions.setisMenuOpen(false));
     }
     
     return <>
@@ -50,22 +51,22 @@ export const TopMenu : FunctionComponent<LanguageProps> = (props) => {
                     <div className="top-navbar-language-container">
                         { language === no && 
                             <LanguageSelector 
-                                text={'English'}
+                                text='English'
                                 onclick={() => updateLanguage(en)} /> }
                         { language === en && 
                             <LanguageSelector 
-                                text={'Norsk'}
+                                text='Norsk'
                                 onclick={() => updateLanguage(no)}  /> }
                     </div>
                     <div className="top-navbar-container">
                         { leagueType === esf && 
                             <LeagueSelector 
-                                text={'FPL'}
+                                text={fpl.toUpperCase()}
                                 onclick={() => updateSoccerLeague(fpl)}
                                 url={"/" + urls.url_premier_league}  /> }
                         { leagueType === fpl && 
                             <LeagueSelector 
-                                text={'ESF'}
+                                text={esf.toUpperCase()}
                                 onclick={() => updateSoccerLeague(esf)}
                                 url={"/" + urls.url_eliteserien}  /> }
                     </div>
@@ -73,7 +74,7 @@ export const TopMenu : FunctionComponent<LanguageProps> = (props) => {
                 <div className="navbar">
                     <div className="nav-container">
                         <h1 className="logo">
-                            <Link to={"/" + (leagueType === fpl ? urls.url_premier_league : urls.url_eliteserien)}>
+                            <Link to={`/${(leagueType === fpl ? urls.url_premier_league : urls.url_eliteserien)}`}>
                                 <div>{"Fantasy Stats "}</div>
                                 { "" +  (leagueType === fpl ? "Premier League" : "Eliteserien")}
                             </Link>
@@ -108,7 +109,6 @@ export const TopMenu : FunctionComponent<LanguageProps> = (props) => {
                                         <button className="dropbtn">{props.content.Statistics.statistic}</button>
                                         <div style={{left: '0'}} className="dropdown-content">
                                             <a className="dropbtn" href={"/" + urls.url_eliteserien_player_ownership}>{props.content.Statistics.PlayerOwnership?.title}</a>
-                                            {/* <a className="dropbtn" href={"/" + urls.url_eliteserien_search_user_name}>{props.content.Statistics.SearchUserName?.title}</a> */}
                                             <a className="dropbtn" href={"/" + urls.url_eliteserien_live_fixtures}>{props.content.Statistics.LiveFixtures?.title}</a>
                                             <a className="dropbtn" href={"/" + urls.url_eliteserien_player_statistics}>{props.content.Statistics.PlayerStatistics?.title}</a>
                                             <a className="dropbtn" href={"/" + urls.url_eliteserien_rank_statistics}>{props.content.Statistics.RankStatistics?.title}</a>

@@ -8,10 +8,8 @@ import * as urls from '../../../static_urls/internalUrls';
 import { Spinner } from '../../Shared/Spinner/Spinner';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import Popover from '../../Shared/Popover/Popover';
-import { store } from '../../../store/index';
 import './LiveFixtures.scss';
 import axios from 'axios';
-
 
 export const LiveFixturesPage : FunctionComponent<PageProps> = (props) => {
     const live_fixtures_api_path = "/statistics/live-fixtures-api/";
@@ -26,9 +24,7 @@ export const LiveFixturesPage : FunctionComponent<PageProps> = (props) => {
     const [ isLoading, setIsLoading ] = useState(false);
     const [ hasOwnershipData, setHasOwnershipData ] = useState(false);
 
-    useEffect(() => {
-        store.dispatch({type: "league_type", payload: props.league_type});
-        
+    useEffect(() => {        
         getLiveFixtureData(0);
 
     }, [props.league_type]);
@@ -242,9 +238,10 @@ export const LiveFixturesPage : FunctionComponent<PageProps> = (props) => {
 
     return <>
     <DefaultPageContainer 
-        pageClassName='live-fixtures-container' 
-        heading={props.content.Statistics.LiveFixtures.title + " - " + (store.getState().league_type === "fpl" ? "Premier League" : "Eliteserien")} 
-        description={ description }>
+        pageClassName='live-fixtures-container'
+        leagueType={props.league_type}
+        heading={props.content.Statistics.LiveFixtures.title} 
+        description={description}>
         <h1>{props.content.Statistics.LiveFixtures.title}
         <Popover 
             id={"live-fixture-id"}
@@ -254,7 +251,7 @@ export const LiveFixturesPage : FunctionComponent<PageProps> = (props) => {
             iconSize={14}
             iconpostition={[-10, 0, 0, 3]}
             popover_text=''>
-            { description }
+            {description}
         </Popover>
         </h1>
         { isLoading && 

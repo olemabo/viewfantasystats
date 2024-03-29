@@ -4,13 +4,9 @@ import { ShowRotationData } from '../../Fixtures/ShowRotationData/ShowRotationDa
 import { KickOffTimesModel } from '../../../models/fixturePlanning/KickOffTimes';
 import { TeamCheckedModel } from '../../../models/fixturePlanning/TeamChecked';
 import React, { useState, useEffect, FunctionComponent } from 'react';
-import { store } from '../../../store/index';
 import axios from 'axios';
 import './LeagueFrontPage.scss';
-import { esf, fpl } from '../../../models/shared/PageProps';
-axios.defaults.xsrfCookieName = 'csrftoken';
-axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-
+import { LeagueType, esf, fpl } from '../../../models/shared/PageProps';
 
 interface MostOwnedPlayersModel {
     goalkeeper_list: any[];
@@ -27,7 +23,7 @@ interface RankAndPointsModel {
 
 type FrontPageProps = {
     content: any;
-    league_type: string;
+    league_type: LeagueType;
 }
 
 export const FrontPage : FunctionComponent<FrontPageProps> = (props) => {
@@ -43,9 +39,7 @@ export const FrontPage : FunctionComponent<FrontPageProps> = (props) => {
 
     const [ mostOwnedPlayersData, setMostOwnedPlayersData ] = useState(emptyMostOwnedPlayers);
 
-    useEffect(() => {
-        store.dispatch({type: "league_type", payload: props.league_type});
-        
+    useEffect(() => {        
         let temp_RankAndPoints: RankAndPointsModel[] = [];        
         axios.get(rank_points_api_path).then(x => {
             if (x.data) {
@@ -163,9 +157,9 @@ export const FrontPage : FunctionComponent<FrontPageProps> = (props) => {
       };
 
     return <>
-    <DefaultPageContainer pageClassName='front-page-container' heading={props.content.Fixture?.RotationPlanner?.title + " - " + (store.getState().league_type === "fpl" ? "Premier League" : "Eliteserien")} description={props.content?.Fixture?.RotationPlanner?.title}>
+    <DefaultPageContainer leagueType={props.league_type} pageClassName='front-page-container' heading={props.content.Fixture?.RotationPlanner?.title} description={props.content?.Fixture?.RotationPlanner?.title}>
         { currentGw > 0 && <h1>{props.content.General?.gw} {currentGw}</h1>}
-        <h2> {props.content?.Statistics?.PlayerOwnership?.title} (EO) {props.content?.General?.top} {props.league_type == "FPL" ? "10000" : "1000"} </h2>
+        <h2> {props.content?.Statistics?.PlayerOwnership?.title} (EO) {props.content?.General?.top} {props.league_type == fpl ? "10000" : "1000"} </h2>
         <div className='most-owned-players'>
             <div className='position-container'>
                 {mostOwnedPlayersData.forward_list?.map( (x: any[]) => 

@@ -1,12 +1,12 @@
-import { PlayerStatisticsModel, CategoryTypes } from '../../../models/playerStatistics/PlayerStatisticsModel';
+import { PlayerStatisticsModel } from '../../../models/playerStatistics/PlayerStatisticsModel';
 import { DefaultPageContainer } from '../../Layout/DefaultPageContainer/DefaultPageContainer';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '../../Shared/Table/Table';
 import { TeamNameAndIdModel } from '../../../models/playerOwnership/TeamNameAndIdModel';
 import React, { useState, useEffect, FunctionComponent } from 'react';
 import TableSortHead from '../../Shared/TableSortHead/TableSortHead';
+import { setLeagueType } from '../../../hooks/useLeagueTypeDispatch';
 import { PageProps, esf } from '../../../models/shared/PageProps';
 import { Spinner } from '../../Shared/Spinner/Spinner';
-import { store } from '../../../store/index';
 import Pagination from 'rc-pagination';
 import axios from 'axios';
 
@@ -35,12 +35,10 @@ export const PlayerStatisticsPage : FunctionComponent<PageProps> = (props) => {
     const [ currentSorted, setCurrentSorted ] = useState(0);
     
     useEffect(() => {
-        store.dispatch({type: "league_type", payload: props.league_type});
-        console.log(player_statistics_api_path + "?league_name=" + props.league_type);
         axios.get(player_statistics_api_path + "?league_name=" + props.league_type).then(x => {  
             let data = JSON.parse(x?.data);
             setTotalNumberOfGws(data.total_number_of_gws);
-        })
+        });
 
         var body = {
             league_name: props.league_type,
@@ -190,7 +188,7 @@ export const PlayerStatisticsPage : FunctionComponent<PageProps> = (props) => {
     }
 
     return <>
-        <DefaultPageContainer pageClassName='player-ownership-container' heading={props.content.Statistics.PlayerStatistics?.title + " - " + (store.getState().league_type === "fpl" ? "Premier League" : "Eliteserien")} description={ props.content.Statistics.PlayerStatistics?.title }>
+        <DefaultPageContainer leagueType={props.league_type} pageClassName='player-ownership-container' heading={props.content.Statistics.PlayerStatistics?.title + " - " + (props.league_type === "fpl" ? "Premier League" : "Eliteserien")} description={ props.content.Statistics.PlayerStatistics?.title }>
         <h1>{props.content.Statistics.PlayerStatistics?.title}</h1>
         { !firstLoading && <>
             <form className="form-stuff player-stats text-center">

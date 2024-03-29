@@ -34,9 +34,9 @@ export function compare( a: any, b: any ) {
     return 0;
 }
 
-export const propComparatorRankModel = (prop:number, increasing: boolean) =>
+export const propComparatorRankModel = (prop:string, increasing: boolean) =>
     (a:RankModel, b:RankModel) => {
-    if (prop == 0) {
+    if (prop === 'Rank') {
         if ( a.avg_rank < b.avg_rank){
             return increasing ? -1 : 1;
         }
@@ -45,7 +45,7 @@ export const propComparatorRankModel = (prop:number, increasing: boolean) =>
         }
         return 0;
     }
-    if (prop == 1) {
+    if (prop === 'Points') {
         if ( a.avg_points > b.avg_points){
             return increasing ? -1 : 1;
         }
@@ -54,5 +54,6 @@ export const propComparatorRankModel = (prop:number, increasing: boolean) =>
         }
         return 0;
     }
+    
     return 0;
 } 

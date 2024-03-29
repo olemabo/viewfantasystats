@@ -3,9 +3,9 @@ import { FDR_GW_i, TeamIdFDRModel } from '../../../models/fixturePlanning/TeamFD
 import { defence_number, fdr_number, ofence_number } from '../../../constants/fdr';
 import ToggleButton from '../../Shared/ToggleButton/ToggleButton';
 import React, { FunctionComponent, useState } from 'react';
+import Popover from '../../Shared/Popover/Popover';
 import Button from '../../Shared/Button/Button';
 import './ShowFDRData.scss';
-import Popover from '../../Shared/Popover/Popover';
 
 type FixtureDataProps = {
     content: any;

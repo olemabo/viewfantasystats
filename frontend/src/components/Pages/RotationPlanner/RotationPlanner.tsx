@@ -6,15 +6,14 @@ import { TeamCheckedModel } from '../../../models/fixturePlanning/TeamChecked';
 import ThreeStateCheckbox from '../../Shared/FilterButton/ThreeStateCheckbox';
 import React, { useState, useEffect, FunctionComponent } from 'react';
 import * as external_urls from '../../../static_urls/externalUrls';
-import { PageProps } from '../../../models/shared/PageProps';
+import { PageProps, fpl } from '../../../models/shared/PageProps';
 import { combinations } from '../../../utils/productRange';
 import FdrBox from '../../Shared/FDR-explaination/FdrBox';
+import TextInput from '../../Shared/TextInput/TextInput';
 import { Spinner } from '../../Shared/Spinner/Spinner';
 import { Button } from '../../Shared/Button/Button';
 import Popover from '../../Shared/Popover/Popover';
-import { store } from '../../../store/index';
 import axios from 'axios';
-import TextInput from '../../Shared/TextInput/TextInput';
 
 
 export const RotationPlannerPage : FunctionComponent<PageProps> = (props) => {
@@ -47,7 +46,6 @@ export const RotationPlannerPage : FunctionComponent<PageProps> = (props) => {
     const [ teamData, setTeamData ] = useState(emptyTeamData);
 
     useEffect(() => {
-        store.dispatch({type: "league_type", payload: props.league_type});
 
         // get all fpl teams   
         axios.get("/fixture-planner/data-fdr-ui/").then(team_data => {
@@ -257,8 +255,9 @@ export const RotationPlannerPage : FunctionComponent<PageProps> = (props) => {
 
     return <>
     <DefaultPageContainer 
-        pageClassName='fixture-planner-container' 
-        heading={props.content.Fixture.RotationPlanner?.title + " - " + (store.getState().league_type === "fpl" ? "Premier League" : "Eliteserien")} 
+        pageClassName='fixture-planner-container'
+        leagueType={props.league_type}
+        heading={props.content.Fixture.RotationPlanner?.title} 
         description={ props.content.Fixture.RotationPlanner?.title + " - " + " Rotasjonsplanlegger viser kombinasjoner av lag som kan roteres for å gi best mulig kampprogram. " }>
          <h1>{props.content.Fixture.RotationPlanner?.title}
          <Popover 

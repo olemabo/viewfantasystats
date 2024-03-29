@@ -5,8 +5,8 @@ import { convertFDRtoHex } from '../../../utils/convertFDRtoHex';
 import { lowerCaseText } from '../../../utils/lowerCaseText';
 import Message from '../../Shared/Messages/Messages';
 import React, { FunctionComponent } from 'react';
-import './ShowFDRData.scss';
 import Popover from '../../Shared/Popover/Popover';
+import './ShowFDRData.scss';
 
 type ShowFDRProps = {
     content: any;
@@ -77,7 +77,7 @@ export const ShowFDRData : FunctionComponent<ShowFDRProps> = (props) => {
                         <tbody>
                             <tr className="fdr-row-gws">
                                 { props.kickOffTimes.map(gw =>
-                                    <th>{props.content.General.round_short}{ gw.gameweek}
+                                    <th key={gw.gameweek}>{props.content.General.round_short}{ gw.gameweek}
                                         <div className="day-month">
                                             { gw.day_month }
                                         </div>
@@ -87,7 +87,7 @@ export const ShowFDRData : FunctionComponent<ShowFDRProps> = (props) => {
                             { props.fdrData.map( (fdr, idx) => 
                                 <>
                                     { fdr.checked && (
-                                    <tr id={"fdr-row-" + fdr.team_name}>
+                                    <tr key={"fdr-row-" + fdr.team_name} id={"fdr-row-" + fdr.team_name}>
                                         { fdr.FDR.map(f => (
                                             <td onClick={(e) => toggleBorderLine(e)} scope='col' className={''
                                             + (f.fdr_gw_i.length == 1 ? " colors-" + f.fdr_gw_i[0].difficulty_score + " " : " no-padding ") + 'double-border-' + f.fdr_gw_i[0].Use_Not_Use  }>
