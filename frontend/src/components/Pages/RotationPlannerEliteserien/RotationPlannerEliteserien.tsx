@@ -199,7 +199,7 @@ export const RotationPlannerEliteserienPage : FunctionComponent<PageProps> = (pr
                             checked={team.checked}
                             checked_must_be_in_solution={team.checked_must_be_in_solution}
                             onclick={(e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => toggleFilterButton({e, teamData, setTeamData})} 
-                            buttonText={team.team_name.at(0) + team.team_name.substring(1).toLocaleLowerCase()} 
+                            buttonText={team.team_name} 
                         />
                     )}
                 <div>

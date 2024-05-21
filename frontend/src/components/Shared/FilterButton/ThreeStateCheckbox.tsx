@@ -26,7 +26,7 @@ export const ThreeStateCheckbox : FunctionComponent<ThreeStateCheckboxProps> = (
             className={"checkbox " + defaultFilter}
             onClick={(e) => onclick(e)} 
             id={buttonText}>
-            {buttonText}
+            {buttonText.at(0) + buttonText.substring(1).toLocaleLowerCase()}
         </span>
     </div>
 };
