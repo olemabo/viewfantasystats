@@ -53,8 +53,6 @@ const useFixtureDataFPL = (
                         RotationPlannerTeamInfoList.push(temp);
                     });
 
-                    console.log(RotationPlannerTeamInfoList, "rot")
-
                     setFdrRotationData(RotationPlannerTeamInfoList);
                 } else {
                     const apiFDRList: SimpleTeamFDRDataModel[] = [];

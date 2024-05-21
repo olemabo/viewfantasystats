@@ -46,9 +46,7 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
         isLoading,
         errorLoading
     } = useFixturePlannerTeamIDMetaData(props.league_type, setGwStart, setGwEnd);
-    
-    console.log(errorLoading, "errorLoading")
-    
+        
     useEffect(() => {       
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
