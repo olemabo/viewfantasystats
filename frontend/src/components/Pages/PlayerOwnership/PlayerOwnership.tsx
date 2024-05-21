@@ -122,7 +122,10 @@ export const PlayerOwnership : FunctionComponent<PageProps> = (props) => {
                 { topXPlayersList.length > 0 && <>
                     <label>{props.content.General.top_x_managers}</label>
                     <select 
-                        onChange={(e) => setTopXPlayers(parseInt(e.target.value))} 
+                        onChange={(e) => {
+                            setTopXPlayers(parseInt(e.target.value))
+                            setPaginationNumber(1)
+                        }}
                         defaultValue={topXPlayers}
                         className="input-box" 
                         id="sort_on_dropdown"
@@ -139,7 +142,10 @@ export const PlayerOwnership : FunctionComponent<PageProps> = (props) => {
             <div className='box-3'>
                 <label>{props.content.General.gw}</label>
                 <select 
-                    onChange={(e) => setCurrentGw(parseInt(e.target.value))} 
+                    onChange={(e) => {
+                        setCurrentGw(parseInt(e.target.value))
+                        setPaginationNumber(1)
+                    }} 
                     defaultValue={currentGW}
                     className="input-box" 
                     id="last_x_dropdown" 
