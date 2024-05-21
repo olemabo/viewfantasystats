@@ -1,3 +1,3 @@
-export const fdr_number = 0;
-export const defence_number = 1;
-export const ofence_number = 2;
+export const fdrNumber = 0;
+export const defenceNumber = 1;
+export const offenceNumber = 2;

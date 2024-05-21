@@ -2,7 +2,7 @@ import { leagueTypeSelector } from '../../../store/selectors/leagueTypeSelector'
 import { LanguageProps, fpl, esf } from '../../../models/shared/PageProps';
 import * as ex_urls from '../../../static_urls/externalUrls';
 import * as urls from '../../../static_urls/internalUrls';
-import React, { FunctionComponent } from "react";
+import { FunctionComponent } from "react";
 import Twitter from '@mui/icons-material/Twitter';
 import { Link } from '../../Shared/Link/Link';
 import Code from '@mui/icons-material/Code';

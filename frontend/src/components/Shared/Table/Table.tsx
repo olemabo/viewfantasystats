@@ -7,7 +7,6 @@ import { TableCell } from './TableCell';
 
 export type TableLayoutType = 'fpl' | 'esf';
 
-
 type TableProps = {
     tableLayoutType: TableLayoutType;
     className?: string,

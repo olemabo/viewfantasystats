@@ -9,6 +9,7 @@ import { Spinner } from '../../Shared/Spinner/Spinner';
 import { useState, FunctionComponent } from 'react';
 import { Link } from '../../Shared/Link/Link';
 import './RankStatistics.scss';
+import Message from '../../Shared/Messages/Messages';
 
 export const RankStatisticsPage : FunctionComponent<PageProps> = (props) => {
     const [ lastNumberOfYears, setLastNumberOfYears ] = useState(3);
@@ -66,7 +67,7 @@ export const RankStatisticsPage : FunctionComponent<PageProps> = (props) => {
             </div>
         </form>
 
-        { ranksFiltered.length > 0 &&  
+        { ranksFiltered.length > 0 ?  
         <>
             <div className="container-player-stats">
                 <Table tableLayoutType='esf' className='stat-table'>
@@ -120,9 +121,13 @@ export const RankStatisticsPage : FunctionComponent<PageProps> = (props) => {
                     onChange={(number) => setPaginationNumber(number)}
                     defaultCurrent={1}   
                     defaultPageSize={numberOfHitsPerPagination}
-                    total={ranksFiltered.length} /> 
+                    total={ranksFiltered.length} 
+                /> 
             }
-        </>}
+        </> : <>
+            <Message messageType='info' messageText={props.content.General?.noHitsMessage}/>
+        </>
+        }
     </DefaultPageContainer>
     </>
 };

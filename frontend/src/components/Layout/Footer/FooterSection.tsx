@@ -1,8 +1,8 @@
 import { LanguageProps } from "../../../models/shared/LanguageType";
-import React, { FunctionComponent } from "react";
+import { FunctionComponent } from "react";
 
 interface FooterProps extends LanguageProps {
-    sectionUrls: Record<string, Record<string, string>>; // Change type to nested object
+    sectionUrls: Record<string, Record<string, string>>;
     content: any;
     title: string;
 }

@@ -8,13 +8,11 @@ type TableHeadProps = {
     children?: React.ReactNode;
 }
 
-export const TableHead : FunctionComponent<TableHeadProps> = (props) => {
+export const TableHead : FunctionComponent<TableHeadProps> = ({
+    className, tableHeight = 'normal', children
+}) => {
     
-    return <thead className={`${props.className ?? ''} ${props.tableHeight}`}>
-        { props.children}
+    return <thead className={`${className ?? ''} ${tableHeight}`}>
+        { children}
     </thead>
 };
-
-TableHead.defaultProps = {
-    tableHeight: 'normal'
-}

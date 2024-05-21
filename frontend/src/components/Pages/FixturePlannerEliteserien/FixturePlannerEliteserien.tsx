@@ -1,215 +1,77 @@
-import { TeamFDRDataModel, FDR_GW_i, FDRData } from '../../../models/fixturePlanning/TeamFDRData';
 import { DefaultPageContainer } from '../../Layout/DefaultPageContainer/DefaultPageContainer';
-import { FixturePlanningType } from '../../../models/fixturePlanning/FixturePlanningType';
-import { KickOffTimesModel } from '../../../models/fixturePlanning/KickOffTimes';
-import React, { useState, useEffect, FunctionComponent } from 'react';
-import { FilterButton } from '../../Shared/FilterButton/FilterButton';
+import { useState, FunctionComponent } from 'react';
 import { ShowFDRData } from '../../Fixtures/ShowFDRData/ShowFDRData';
 import * as external_urls from '../../../static_urls/externalUrls';
-import ToggleButton from '../../Shared/ToggleButton/ToggleButton';
-import { PageProps, esf, fpl } from '../../../models/shared/PageProps';
+import { FixturePlanningProps, PageProps, esf, fdrPeriode } from '../../../models/shared/PageProps';
 import FdrBox from '../../Shared/FDR-explaination/FdrBox';
 import TextInput from '../../Shared/TextInput/TextInput';
 import "../../Pages/FixturePlanner/FixturePlanner.scss";
 import { Spinner } from '../../Shared/Spinner/Spinner';
 import { Button } from '../../Shared/Button/Button';
 import Popover from '../../Shared/Popover/Popover';
-import axios from 'axios';
-import { setLeagueType } from '../../../hooks/useLeagueTypeDispatch';
+import useFixtureDataESF from '../../../hooks/useFixtureDataESF';
+import { getTitleAndDescriptionESF } from '../../Fixtures/fixtureTitleDescriptionUtils';
+import { createSearchQueryFromForminput, filterFdrData, setExcludedGwsFromSearchParams } from '../../Fixtures/fixtureUtils';
+import { maxGwEsf, minGwEsf, minNumberOfFixture } from '../../../constants/gws';
+import { FDRFormInput } from '../../../models/fixturePlanning/FDRFormInput';
+import FilterTeamBox from '../../Shared/FilterTeamBox/FilterTeamBox';
  
-
-export const FixturePlannerEliteserienPage : FunctionComponent<PageProps & { fixture_planning_type: string }> = (props) => {
-    const fixture_planner_api_path = "/fixture-planner-eliteserien/get-all-eliteserien-fdr-data/";
-    
-    const min_gw = 1;
-    const max_gw = 30;
-    
-    const empty: TeamFDRDataModel[] = [ { team_name: "-", FDR: [], checked: true, font_color: "FFF", background_color: "FFF", fdr_total_score: 0 }];
-    const emptyGwDate: KickOffTimesModel[] = [{gameweek: 0, day_month: "",kickoff_time: "" }];
-
-    const [ fdrDataToShow, setFdrDataToShow ] = useState(empty);
-    const [ kickOffTimesToShow, setKickOffTimesToShow ] = useState(emptyGwDate);
-    const [ fdrToColor, setFdrToColor ] = useState({0.5: "0.5", 1: "1", 2: "2", 3: "3", 4: "4", 5: "5"});
-
-
-    const [ gwStart, setGwStart ] = useState(-1);
-    const [ gwEnd, setGwEnd ] = useState(max_gw);
-    const [ maxGw, setMaxGw ] = useState(-1);
-    const [ excludeGws, setExcludeGws ] = useState([-1]);
+export const FixturePlannerEliteserienPage : FunctionComponent<PageProps & FixturePlanningProps> = (props) => {       
     const [ showTeamFilters, setShowTeamFilters ] = useState(false);
-    const [ loading, setLoading ] = useState(false);
-    const [ minNumFixtures, setMinNumFixtures ] = useState(3);
-    const [ fdrType, SetFdrType ] = useState("");
+    const [ toggleTeams, SetToggleTeams ] = useState<string[]>([]);
+    const [ formInput, setFormInput ] = useState<FDRFormInput>({
+        startGw: -1,
+        endGw: maxGwEsf,
+        minNumFixtures: 3,
+        fdrType: '',
+        excludeGws: setExcludedGwsFromSearchParams(),
+        fixturePlanningType: props.fixturePlanningType
+    });
 
-    useEffect(() => {
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
-        const exclude_gws = urlParams.getAll('exclude_gws')
+    const [ fixturePlannerSearchQuery, setFixturePlannerSearchQuery ] = useState<string>(
+        createSearchQueryFromForminput(formInput)
+    );
 
-        var temp: number[] = [];
-        if (exclude_gws !== null && Array.isArray(exclude_gws)) {
-            exclude_gws.forEach((x: string) => {
-                const myNumber = Number(x);
-                if (!isNaN(myNumber)) {
-                    temp.push(myNumber)
-                }
+    const { 
+        isLoading, 
+        fdrData,
+        kickOffTimes,
+        maxGw 
+    } = useFixtureDataESF(fixturePlannerSearchQuery, setFormInput, props.fixturePlanningType);
 
-            })
-            setExcludeGws(temp)
-        }
-
-        // Get fdr data from the API
-        let body = { 
-            start_gw: gwStart,
-            end_gw: max_gw,
-            min_num_fixtures: minNumFixtures,
-            combinations: props.fixture_planning_type,
-            fdr_type: fdrType,
-            excludeGws: temp,
-        };
-        
-        extractFDRData(body);
-    }, []);
-
-
-    function updateFDRData(currentFdrType: string) {
-        var body = {
-            start_gw: gwStart,
-            end_gw: gwEnd,
-            min_num_fixtures: minNumFixtures,
-            combinations: props.fixture_planning_type,
-            fdr_type: currentFdrType,
-            excludeGws: excludeGws,
-        };
-
-        extractFDRData(body);
+    function updateFDRData() {
+        const query = createSearchQueryFromForminput(formInput);
+        setFixturePlannerSearchQuery(query);
     }
 
-    function extractFDRData(body: any) {
-        setLoading(true);
-        
-        // Get fdr data from api
-        axios.post(fixture_planner_api_path, body).then((x: any) => {
-            let apiFDRList: TeamFDRDataModel[] = [];
-            let data = JSON.parse(x.data);
+    const filteredFdrData = filterFdrData(fdrData, toggleTeams);
 
-            if (data.gw_start != gwStart) { 
-                setGwStart(data.gw_start);
-            }
-
-            if (data.gw_end != gwEnd) { 
-                setGwEnd(data.gw_end);
-            }
-
-            if (maxGw < 0) { setMaxGw(data.max_gw); }
-            
-            setFdrToColor(data.fdr_to_colors_dict);
-            
-            if (data?.gws_and_dates?.length > 0) {
-                let temp_KickOffTimes: KickOffTimesModel[] = [];
-                data?.gws_and_dates.forEach((kickoff: string) => temp_KickOffTimes.push(JSON.parse(kickoff)));
-                setKickOffTimesToShow(temp_KickOffTimes);
-            }
-            
-            data.fdr_data.forEach((team: any[]) => {
-                let team_name = JSON.parse(team[0][0][0]).team_name;
-                let fdr_total_score = 0;
-                let FDR_gw_i: FDR_GW_i[] = [];
-                
-                team.forEach((fdr_for_each_gw: any[]) => {
-                    let temp: FDRData[] = [];
-                    fdr_for_each_gw.forEach((fdr_in_gw_i: any) => {
-                        let fdr_in_gw_i_json = JSON.parse(fdr_in_gw_i);
-                        fdr_total_score = fdr_in_gw_i_json.FDR_score;
-                        temp.push({
-                            opponent_team_name: fdr_in_gw_i_json.opponent_team_name,
-                            difficulty_score: fdr_in_gw_i_json.difficulty_score,
-                            H_A: fdr_in_gw_i_json.H_A,
-                            Use_Not_Use: fdr_in_gw_i_json.Use_Not_Use,
-                            message: fdr_in_gw_i_json.message,
-                        })
-                    });
-                    FDR_gw_i.push({fdr_gw_i: temp})
-                });
-                let font_color = "black";
-                let background_color = "white";
-                if (data?.team_name_color?.length > 0) {
-                    data?.team_name_color.forEach((team: string[]) => {
-                        if (team_name == team[0]) {
-                            font_color = team[2];
-                            background_color = team[1];
-                        }
-                    }    
-                    );
-                }
-                let tempTeamData = { team_name: team_name, FDR: FDR_gw_i, checked: true, font_color: font_color, background_color: background_color, fdr_total_score: fdr_total_score }
-                apiFDRList.push(tempTeamData);
-            });
-
-            setFdrDataToShow(apiFDRList);
-            setLoading(false);
-        })
+    if (isLoading) {
+        return <Spinner />;
     }
 
-    function toggleCheckbox(e: any) {
-        let temp: TeamFDRDataModel[] = [];
-        fdrDataToShow.forEach(x => {
-            let checked = x.checked;
-            if (x.team_name.toLowerCase() == e.currentTarget.value.toLowerCase()) {
-                checked = !x.checked;
-            }
-            temp.push({ team_name: x.team_name, FDR: x.FDR, checked: checked, font_color: x.font_color, background_color: x.background_color, fdr_total_score: x.fdr_total_score });
-        });
-        setFdrDataToShow(temp);
-    }
-
-    function changeXlsxSheet(fdr_type: string) {
-        SetFdrType(fdr_type);
-        updateFDRData(fdr_type)
-    }
-
-    var title_fixture_planner = props.content.Fixture.FixturePlanner?.title
-    var title_period_planner = props.content.Fixture.PeriodPlanner?.title
-
-    var title = title_fixture_planner;
-    var description = "";
-    
-    if (props.fixture_planning_type == FixturePlanningType.FDR) { 
-        title = title_fixture_planner;
-
-        description = `${title} (Fixture Difficulty Rating) ${props.content.LongTexts.rankTeams} ('${props.content.Fixture.gw_start}' ${props.content.General.and} ' ${props.content.Fixture.gw_end}'). 
-        
-        ${props.content.LongTexts.bestFixture}`;
-    }
-
-    if (props.fixture_planning_type == FixturePlanningType.Periode) { 
-        title = title_period_planner;
-        description = `${title} ${props.content.LongTexts.markPeriode_1}
-        
-        ${props.content.LongTexts.markPeriode_2} '${props.content.Fixture.gw_start}' ${props.content.General.and} '${props.content.Fixture.gw_end}' ${props.content.LongTexts.becomesRes} '${props.content.Fixture.min_fixtures}' ${props.content.LongTexts.leastNumber}`;
-    }
+    const { title, description } = getTitleAndDescriptionESF(props.content, props.fixturePlanningType);
     
     return <>
     <DefaultPageContainer 
         pageClassName='fixture-planner-container'
         leagueType={props.league_type}
+        description={description}
         heading={title} 
-        description={'Fixture Difficulty Rating Planner for Eliteserien Fantasy (ESF). '}>
+        >
         <h1>
             {title}
             <Popover 
-                id={"rotations-planner-id"}
-                title=""
-                algin_left={true}
-                popover_title={title} 
+                id='rotations-planner-id'
+                alignLeft={true}
+                popoverTitle={title} 
                 iconSize={14}
-                iconpostition={[-10, 0, 0, 3]}
-                popover_text={ description }>
+                iconPosition={[-10, 0, 0, 3]}
+                popoverText={description}
+            >
                 { props.content.LongTexts.fixtureAreFrom }
                 <a href={external_urls.url_spreadsheets_dagfinn_thon}>{ props.content.LongTexts.ExcelSheet }</a> { props.content.LongTexts.to } Dagfinn Thon.
-                { fdrToColor != null && 
-                    <FdrBox leagueType={esf} content={props.content} />
-                }
+                <FdrBox leagueType={esf} content={props.content} />
             </Popover>
         </h1>
         { maxGw > 0 && 
@@ -223,36 +85,46 @@ export const FixturePlannerEliteserienPage : FunctionComponent<PageProps & { fix
                         { name: props.content.General.offence, value: "_offensivt", checked: fdrType === "_offensivt", classname: "offensiv"}
                     ]}
                 /> */}
-                <Button buttonText={props.content.Fixture.filter_button_text} 
-                    icon_class={"fa fa-chevron-" + (showTeamFilters ? "up" : "down")} 
+                <Button 
+                    buttonText={props.content.Fixture.filter_button_text} 
+                    iconClass={`fa fa-chevron-${showTeamFilters ? "up" : "down"}`} 
                     onclick={() => setShowTeamFilters(showTeamFilters ? false : true)} 
                     color='white'
                 />
-                <form onSubmit={(e) =>  {updateFDRData(fdrType); e.preventDefault()}}>
+                <form onSubmit={(e) =>  {updateFDRData(); e.preventDefault()}}>
                     <TextInput 
                         htmlFor='input-form-start-gw'
-                        min={min_gw}
+                        min={minGwEsf}
                         max={maxGw}
-                        onInput={(e: number) => setGwStart(e)} 
-                        defaultValue={gwStart}>
+                        onInput={(e: number) => setFormInput((prevFormInput) => ({
+                            ...prevFormInput,
+                            startGw: e,
+                        }))} 
+                        defaultValue={formInput.startGw}>
                         {props.content.Fixture.gw_start}
                     </TextInput>
                     <TextInput 
                         htmlFor='input-form-end-gw'
-                        min={gwStart}
+                        min={formInput.startGw}
                         max={maxGw}
-                        onInput={(e: number) => setGwEnd(e)} 
-                        defaultValue={gwEnd}>
+                        onInput={(e: number) => setFormInput((prevFormInput) => ({
+                            ...prevFormInput,
+                            endGw: e,
+                        }))} 
+                        defaultValue={formInput.endGw}>
                         {props.content.Fixture.gw_end}
                     </TextInput>
 
-                    { props.fixture_planning_type == FixturePlanningType.Periode && 
+                    { props.fixturePlanningType === fdrPeriode && 
                         <TextInput 
-                            onInput={(e: number) => setMinNumFixtures(e)} 
-                            defaultValue={minNumFixtures}
-                            min={minNumFixtures}
+                            onInput={(e: number) => setFormInput((prevFormInput) => ({
+                                ...prevFormInput,
+                                minNumFixtures: e,
+                            }))}
+                            defaultValue={formInput.minNumFixtures}
+                            min={minNumberOfFixture}
                             htmlFor='min-num-fixtures'
-                            max={gwEnd}>
+                            max={formInput.endGw - formInput.startGw}>
                             {props.content.Fixture.min_fixtures.split(/(\s+)/)[0]}<br/>
                             {props.content.Fixture.min_fixtures.split(/(\s+)/)[2]}
                         </TextInput>
@@ -263,28 +135,23 @@ export const FixturePlannerEliteserienPage : FunctionComponent<PageProps & { fix
             </div>
         }
         
-        { fdrDataToShow != null && fdrDataToShow.length > 0 && fdrDataToShow[0].team_name != "empty" && showTeamFilters &&
-            <div className='filter-teams-container'>
-                <div className='filter-teams-list'>
-                { fdrDataToShow.map(team_name => 
-                    <FilterButton
-                        onclick={(e: any) => toggleCheckbox(e)} 
-                        buttonText={team_name.team_name.at(0) + team_name.team_name.substring(1).toLocaleLowerCase()} 
-                        checked={team_name.checked} />
-                )}
-                </div>
-            </div>
+        { filteredFdrData.length > 0 && showTeamFilters &&
+            <FilterTeamBox
+                removeAllText={props.content.Fixture.removeAllText} 
+                addAllText={props.content.Fixture.addAllText} 
+                setToggleTeams={SetToggleTeams}
+                fdrData={filteredFdrData}
+                displayUncheckAll={false}
+            />
         }
 
-        { loading && <Spinner /> }
-
-        { !loading && fdrDataToShow.length > 0 && fdrDataToShow[0].team_name != "-" && kickOffTimesToShow.length > 0 && kickOffTimesToShow[0].gameweek != 0 && (
+        { filteredFdrData.length > 0 && kickOffTimes.length > 0 && (
             <ShowFDRData 
-                content={props.content}
-                fdrData={fdrDataToShow}
-                kickOffTimes={kickOffTimesToShow}
-                allowToggleBorder={true}
                 warningMessage={props.content.Fixture.noTeamsChosen}
+                kickOffTimes={kickOffTimes}
+                fdrData={filteredFdrData}
+                allowToggleBorder={true}
+                content={props.content}
             />
         )}
     </DefaultPageContainer>
