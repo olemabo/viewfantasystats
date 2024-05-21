@@ -57,7 +57,7 @@ export const FixtureDetails: FunctionComponent<{ fixture: FixtureModel, fixtureI
                         <TableRow key={p.id}>
                             <TableCell cellType="data" minWidth={playerNameMinWidth}>{p.name}</TableCell>
                             <TableCell cellType="data">{p.minutes}</TableCell>
-                            <TableCell cellType="data">{p.opta_index.toFixed(leagueType === fpl ? 0 : 1)}</TableCell>
+                            <TableCell cellType="data">{p.opta_index.toFixed(leagueType === fpl ? 0 : 0)}</TableCell>
                             <TableCell cellType="data">{p.total_points}</TableCell>
                             {hasOwnershipData && <TableCell cellType="data">{p.EO}</TableCell>}
                         </TableRow>
@@ -104,8 +104,8 @@ export const FixtureDetails: FunctionComponent<{ fixture: FixtureModel, fixtureI
                 <TableBody>
                     {bonusList.map(bonus => (
                         <TableRow key={bonus.home_player_name + bonus.away_player_name}>
-                            <TableCell cellType="data" className="h">{`${bonus.home_player_name} (${bonus.home_opta.toFixed(1)})`}</TableCell>
-                            <TableCell cellType="data" className="a">{`${bonus.away_player_name} (${bonus.away_opta.toFixed(1)})`}</TableCell>
+                            { bonus.home_opta > 0 && <TableCell cellType="data" className="h">{`${bonus.home_player_name} (${bonus.home_opta.toFixed(0)})`}</TableCell> }
+                            { bonus.away_opta > 0 && <TableCell cellType="data" className="a">{`${bonus.away_player_name} (${bonus.away_opta.toFixed(0)})`}</TableCell> }
                         </TableRow>
                     ))}
                 </TableBody>
