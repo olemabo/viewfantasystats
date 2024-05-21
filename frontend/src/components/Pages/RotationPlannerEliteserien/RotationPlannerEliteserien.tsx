@@ -194,12 +194,12 @@ export const RotationPlannerEliteserienPage : FunctionComponent<PageProps> = (pr
                     <div><span className="dot not-in-solution"></span>{`Lag er ikke i løsning (${number_of_not_in_solution})`}</div>
                 </div>
                 <div className='filter-teams-list'>
-                    { teamData.map(team_name =>
+                    { teamData.map(team =>
                         <ThreeStateCheckbox 
-                            checked={team_name.checked}
-                            checked_must_be_in_solution={team_name.checked_must_be_in_solution}
+                            checked={team.checked}
+                            checked_must_be_in_solution={team.checked_must_be_in_solution}
                             onclick={(e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => toggleFilterButton({e, teamData, setTeamData})} 
-                            buttonText={team_name.team_name} 
+                            buttonText={team.team_name.at(0) + team.team_name.substring(1).toLocaleLowerCase()} 
                         />
                     )}
                 <div>
