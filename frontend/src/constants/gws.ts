@@ -1,5 +1,9 @@
-export const min_gw_esf = 1;
-export const max_gw_esf = 30;
+export const minGwEsf = 1;
+export const maxGwEsf = 30;
 
-export const min_gw_fpl = 1;
-export const max_gw_fpl = 38;
+export const minGwFpl = 1;
+export const maxGwFpl = 38;
+
+export const minNumberOfFixture = 1;
+
+export const fdrToColor = {0.5: "0.5", 1: "1", 2: "2", 3: "3", 4: "4", 5: "5"};

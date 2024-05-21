@@ -1,10 +1,10 @@
-import React, { FunctionComponent } from 'react';
+import { FunctionComponent } from 'react';
 import './Button.scss';
 
 type ButtonProps = {
     buttonText: string,
     onclick: any,
-    icon_class?: string,
+    iconClass?: string,
     small?: boolean,
     color?: 'white' | 'default'
 }
@@ -12,14 +12,14 @@ type ButtonProps = {
 export const Button : FunctionComponent<ButtonProps> = ({ 
     buttonText, 
     onclick, 
-    icon_class = '',
+    iconClass = '',
     small = false,
     color = 'default',
 }) => {
     
     return <button className={`button-component ${(small ? ' small' : '')} ${color}`} onClick={() => onclick()}>
         <span>{buttonText}</span>
-        <i className={icon_class} aria-hidden="true"></i>
+        <i className={iconClass} aria-hidden="true"></i>
     </button>
 };
 

@@ -3,7 +3,7 @@ from models.fixtures.models.TeamFixtureInfoEliteserienModel import TeamFixtureIn
 from fixture_planner_eliteserien.models import EliteserienTeamInfo
 from openpyxl.utils.cell import get_column_letter
 from openpyxl import load_workbook
-
+import os
 
 def read_eliteserien_excel_to_db_format(defensivt=""):
     xlsx_file = "Eliteserien_fixtures" + defensivt + ".xlsx"
@@ -13,6 +13,9 @@ def read_eliteserien_excel_to_db_format(defensivt=""):
 
     max_teams = total_number_of_eliteserien_teams
     max_games = total_number_of_gameweeks_in_eliteserien + 2
+
+    if (not os.path.exists(path)):
+        return None,None,0,0
     
     wb = load_workbook(path, data_only=True)
     sheet_names = wb.sheetnames

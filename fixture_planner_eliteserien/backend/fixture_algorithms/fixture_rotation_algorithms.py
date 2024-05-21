@@ -246,6 +246,9 @@ def find_best_rotation_combosEliteserien_gw_list(data, gw_list, teams_to_check=5
     :return: combos_with_score [[score, [team_ids], [team_names]], ... ]   ([22.2, [1, 4, 11], ['Arsenal', 'Burnley', 'Liverpool']])
     """
 
+    if (len(team_names) == 0):
+        team_names = [-1]
+
     data_team_id_to_data = {}
     for i in data:
         data_team_id_to_data[i.team_id] = i
@@ -270,12 +273,15 @@ def find_best_rotation_combosEliteserien_gw_list(data, gw_list, teams_to_check=5
         dict_with_team_name_to_team_ids[str(team.team_name)] = team.team_id
     team_ids = []
 
-    for team_name in team_names:
-        if team_name == -1:
-            team_ids = [team.team_id for team in data]
-            break
-        team_id = dict_with_team_name_to_team_ids[team_name]
-        team_ids.append(team_id)
+    if (len(team_names) == 0):
+        team_ids = [team.team_id for team in data]
+    else:
+        for team_name in team_names:
+            if team_name == -1:
+                team_ids = [team.team_id for team in data]
+                break
+            team_id = dict_with_team_name_to_team_ids[team_name]
+            team_ids.append(team_id)
 
     number_of_GW = len(gw_list)
     

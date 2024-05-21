@@ -103,14 +103,14 @@ export const ShowFDRData : FunctionComponent<ShowFDRProps> = (props) => {
                                                         <Popover 
                                                             id={`rotations-planner-id-${g.opponent_team_name}-${g.H_A}`}
                                                             title=""
-                                                            html_title={props.content.Fixture.uncertain_match}
-                                                            algin_left={false}
-                                                            popover_title={""} // fdr.team_name + ' - ' + g.opponent_team_name  
+                                                            htmlTitle={props.content.Fixture.uncertain_match}
+                                                            alignLeft={false}
+                                                            popoverTitle={""} // fdr.team_name + ' - ' + g.opponent_team_name  
                                                             iconSize={14}
                                                             className={ idx > (props.fdrData?.length - 4) ? 'bottom-position' : ''}
-                                                            topRigthCornerInDiv={true}
-                                                            iconpostition={[0, 0, 0, 0]}
-                                                            popover_text={ g.message }>
+                                                            topRightCornerInDiv={true}
+                                                            iconPosition={[0, 0, 0, 0]}
+                                                            popoverText={ g.message }>
                                                         </Popover> }
                                                         { g.opponent_team_name == '-' ? "Blank" : (g.opponent_team_name + " (" + g.H_A +  ")") }
                                                     </div>

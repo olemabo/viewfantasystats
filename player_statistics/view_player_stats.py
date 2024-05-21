@@ -17,21 +17,10 @@ from models.statistics.apiResponse.PlayerStatisticsApiResponse import PlayerStat
 
 class PlayerStatisticsAPIView(APIView):
 
-    def get(self, request):
-        league_name = str(request.GET.get('league_name')).lower()
-
-        total_number_of_gws = 0
-        max_object = max(EliteserienPlayerStatistic.objects.all() if league_name == esf else PremierLeaguePlayers.objects.all(), key=lambda obj: len(obj.round_list))
-        total_number_of_gws = len(max_object.round_list) - 2
-
-        response = PlayerStatisticsApiResponse(3, [], [], [], total_number_of_gws) 
-
-        return JsonResponse(response.toJson(), safe=False)
-
-    def post(self, request, format=None):
+    def get(self, request, format=None):
         try:
-            league_name = str(request.data.get('league_name')).lower()
-            last_x_gw = int(request.data.get("last_x_gw"))
+            league_name = str(request.GET.get('league_name')).lower()
+            last_x_gw = int(request.GET.get("last_x_gw"))
             sort_index, list_of_categories, player_info = [], [], []
 
             if league_name == esf:
@@ -43,8 +32,11 @@ class PlayerStatisticsAPIView(APIView):
                 player_info = list_premier_league_info_from_db(sort_index, last_x_gw)
             
             team_names_and_ids_list = get_team_names_and_ids_to_list(league_name)
+
+            max_object = max(EliteserienPlayerStatistic.objects.all() if league_name == esf else PremierLeaguePlayers.objects.all(), key=lambda obj: len(obj.round_list))
+            total_number_of_gws = len(max_object.round_list) - 2
             
-            response = PlayerStatisticsApiResponse(last_x_gw, player_info, list_of_categories, team_names_and_ids_list, -1) 
+            response = PlayerStatisticsApiResponse(last_x_gw, player_info, list_of_categories, team_names_and_ids_list, total_number_of_gws) 
 
             return JsonResponse(response.toJson(), safe=False)
 

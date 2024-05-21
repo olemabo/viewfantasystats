@@ -23,12 +23,17 @@ python_anywhere_path = "/home/olebo/viewfantasystats/"
 
 # link to global ranks
 web_global_league_premier_league = 'https://fantasy.premierleague.com/api/leagues-classic/314/standings/?phase=1&page_new_entries=1&page_standings=X'
-web_global_league_eliteserien = 'https://fantasy.tv2.no/api/leagues-classic/325/standings/?phase=1&page_new_entries=1&page_standings=X'
+web_global_league_eliteserien = 'https://fantasy.tv2.no/api/leagues-classic/329/standings/?phase=1&page_new_entries=1&page_standings=X'
 
 
 # league_type
 fpl = "fpl"
 esf = "esf"
+
+# fdr types
+fdrPlanner = "planner"
+fdrPeriode = 'periode'
+fdrRotation = 'rotation'
 
 global_stats_folder_name = "global_stats"
 backup_data_folder_name= "backup_data"

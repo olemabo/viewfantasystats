@@ -10,7 +10,7 @@ import { languageActions } from "../../../store/states/languageStore";
 import { content_json } from "../../../language/languageContent";
 import { TopMenuMobile } from '../TopMenuMobile/TopMenuMobile';
 import * as urls from '../../../static_urls/internalUrls';
-import { FunctionComponent, useState } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import { useAppDispatch } from "../../../store";
 import { useSelector } from 'react-redux';
 import { Link } from "react-router-dom";
@@ -25,6 +25,12 @@ export const TopMenu : FunctionComponent<LanguageProps> = (props) => {
     const leagueType = useSelector(leagueTypeSelector);
     const [ language, setLanguage] = useState(useSelector(languageCodeSelector));
 
+    useEffect(() => {
+        if (width > mobileMaxSize && leagueType) {
+            dispatch(IsMenuOpenActions.setisMenuOpen(false));
+        }
+    }, [width, leagueType, dispatch]);
+
     function updateSoccerLeague(leagueType: LeagueType) {
         dispatch(LeagueTypeActions.setLeagueType(leagueType));
     }
@@ -37,10 +43,6 @@ export const TopMenu : FunctionComponent<LanguageProps> = (props) => {
         dispatch(LanguageCodeActions.setLanguageCode(currentLanguage));
         
         setLanguage(currentLanguage);
-    }
-
-    if (width > mobileMaxSize && leagueType) {
-        dispatch(IsMenuOpenActions.setisMenuOpen(false));
     }
     
     return <>

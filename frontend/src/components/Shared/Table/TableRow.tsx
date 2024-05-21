@@ -5,8 +5,10 @@ type TableRowProps = {
     children?: React.ReactNode;
 }
 
-export const TableRow : FunctionComponent<TableRowProps> = (props) => {
-    return <tr className={props.className}>
-        { props.children}
+export const TableRow : FunctionComponent<TableRowProps> = ({
+    className, children
+}) => {
+    return <tr className={className}>
+        { children}
     </tr>
 };

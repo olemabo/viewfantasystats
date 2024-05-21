@@ -1,6 +1,7 @@
 from fixture_planner.backend.fixture_planner_best_algorithms import find_best_fixture_with_min_length_each_team
 from fixture_planner.backend.fixture_rotation_algorithms import find_best_rotation_combos
 from fixture_planner.backend.utility_functions import calc_score
+from utils.util_functions.get_request_data import get_request_params, parse_queryparams_to_string_list
 
 from .serializers import PremierLeagueTeamInfoSerializer, GetKickOffTimeSerializer
 import fixture_planner.backend.create_data_objects as create_data_objects
@@ -18,7 +19,7 @@ from models.fixtures.models.FixtureDifficultyModel import FixtureDifficultyModel
 
 from models.fixtures.models.WhichTeamToCheckModel import WhichTeamToCheckModel
 from models.fixtures.models.KickOffTimesModel import KickOffTimesModel
-
+from constants import fdrPlanner, fdrPeriode, fdrRotation
 
 class PremierLeagueTeamInfoView(generics.ListAPIView):
     queryset = PremierLeagueTeamInfo.objects.all()
@@ -53,32 +54,26 @@ class PostFDRView(APIView):
     serializer_class = PremierLeagueTeamInfoSerializer
 
     def get(self, request, format=None):
-        kick_off_time_db = KickOffTime.objects.filter(gameweek__range=(0, 38))
-        for i in range(len(kick_off_time_db)):
-            dates = kick_off_time_db[i].kickoff_time.split("T")[0].split("-")
-        return JsonResponse(kick_off_time_db[0], safe=False)
-
-    def post(self, request, format=None):
         try:
-            start_gw = int(request.data.get("start_gw"))
-            end_gw = int(request.data.get("end_gw"))
-            min_num_fixtures = int(request.data.get("min_num_fixtures"))
-            combinations = str(request.data.get("combinations"))
+            start_gw = int(request.GET.get("startGw"))
+            end_gw = int(request.GET.get("endGw"))
+            min_num_fixtures = int(request.GET.get("minNumFixtures"))
+            combinations = str(request.GET.get("fixturePlanningType"))
 
-            if (combinations == "FDR" or combinations == "Rotation") and start_gw < 0:
+            if (combinations == fdrPlanner or combinations == fdrRotation) and start_gw < 0:
                 start_gw = get_upcoming_gw_premier_league()
                 end_gw = start_gw + 6
                 if (end_gw > 38):
                     end_gw = 38
 
-            if (combinations == "FDR-best" and start_gw < 0):
+            if (combinations == fdrPeriode and start_gw < 0):
                 start_gw = get_upcoming_gw_premier_league()
                 end_gw = 38
                         
             fdr_fixture_data = []
 
             gws = end_gw - start_gw + 1
-            gw_numbers = [gw for gw in range(start_gw, end_gw + 1)]
+            current_gws = [gw for gw in range(start_gw, end_gw + 1)]
 
             fixture_list_db = PremierLeagueTeamInfo.objects.all()
 
@@ -104,7 +99,7 @@ class PostFDRView(APIView):
             home_away_adjustment = 0.1
             blank_score = 10
 
-            if combinations == 'FDR':
+            if combinations == fdrPlanner:
                 fdr_fixture_data, FDR_scores = [], []
                 for i in fixture_list:
                     fdr_dict = create_data_objects.create_FDR_dict(i, blank_score=blank_score, home_away_adjustment=home_away_adjustment)
@@ -120,11 +115,11 @@ class PostFDRView(APIView):
                     temp_gws = team_i.gw
                     for j in range(len(team_i.gw)):
                         temp_gw = temp_gws[j]
-                        if temp_gw in gw_numbers:
+                        if temp_gw in current_gws:
                             possible_blank = ""
                             if len(team_i.possibleBlank) > 0 and len(team_i.possibleBlank) >= j:
                                  possible_blank = team_i.possibleBlank[j]
-                            temp_list2[gw_numbers.index(temp_gw)].append([
+                            temp_list2[current_gws.index(temp_gw)].append([
                                 FixtureDifficultyModel(team_name=team_i.team_name,
                                                       opponent_team_name=team_i.oppTeamNameList[j],
                                                       this_difficulty_score=team_i.oppTeamDifficultyScore[j],
@@ -150,17 +145,20 @@ class PostFDRView(APIView):
                     min_num_fixtures = 1
                     end_gw = start_gw + 1
 
-            if combinations == 'FDR-best':
+            if combinations == fdrPeriode:
                 fdr_fixture_data = find_best_fixture_with_min_length_each_team(fixture_list,
                         GW_start=start_gw, GW_end=end_gw, min_length=min_num_fixtures, 
                         home_away_adjustment=home_away_adjustment, blank_score=blank_score)
            
-            if combinations == 'Rotation':
-                teams_to_check = int(request.data.get("teams_to_check"))
-                teams_to_play = int(request.data.get("teams_to_play"))
-                teams_in_solution = request.data.get("teams_in_solution")
-                fpl_teams = request.data.get("fpl_teams")
-                
+            if combinations == fdrRotation:
+                teams_to_check = get_request_params(request, "teamsToCheck", int)
+                teams_to_play = get_request_params(request, "teamsToPlay", int)
+                teams_in_solution = parse_queryparams_to_string_list(request.GET.get("teamsInSolution"))
+                fpl_teams = parse_queryparams_to_string_list(request.GET.get("fplTeams"))
+
+                if (len(fpl_teams) == 0):
+                    fpl_teams = [-1]
+
                 remove_these_teams = []
                 for team_sol in teams_in_solution:
                     if team_sol not in fpl_teams:
@@ -186,8 +184,18 @@ class PostFDRView(APIView):
                 rotation_data = [['Wrong input', [], [], 0, 0, [[]]]] if rotation_data == -1 else rotation_data[:(min(len(rotation_data), 50))]
                 
                 fdr_fixture_data = rotation_data 
+            
+            kick_off_time_db = KickOffTime.objects.all()
+            temp_kick_off_time = []
+            for kick_off_time in kick_off_time_db:
+                if (kick_off_time.gameweek in current_gws):
+                    temp_kick_off_time.append(KickOffTimesModel(
+                        kick_off_time.gameweek,
+                        kick_off_time.kickoff_time,
+                        kick_off_time.day_month
+                    ).toJson())
 
-            response = FdrApiResponse(fdr_fixture_data, [], [], [], start_gw, end_gw) 
+            response = FdrApiResponse(fdr_fixture_data, temp_kick_off_time, [], [], start_gw, end_gw) 
 
             return JsonResponse(response.toJson(), safe=False)
 

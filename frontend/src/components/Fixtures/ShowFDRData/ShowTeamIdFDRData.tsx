@@ -1,8 +1,8 @@
 import { TeamNamePlayerName } from '../../../models/fixturePlanning/TeamNamePlayerName';
-import { defence_number, fdr_number, ofence_number } from '../../../constants/fdr';
+import { defenceNumber, fdrNumber, offenceNumber } from '../../../constants/fdr';
 import { KickOffTimesModel } from '../../../models/fixturePlanning/KickOffTimes';
 import { TeamIdFDRModel } from '../../../models/fixturePlanning/TeamFDRData';
-import React, { FunctionComponent } from 'react';
+import { FunctionComponent } from 'react';
 import FixtureData from './FixtureData';
 import './ShowTeamIdFDRData.scss';
 
@@ -37,8 +37,8 @@ export const ShowTeamIDFDRData : FunctionComponent<ShowTeamIDFDRProps> = ({
         content.General.forwards, 
     ];
 
-    const defaultDefensive = fixtureData[defence_number].length === 0 ? fdr_number : defence_number;
-    const defaultOffensive = fixtureData[ofence_number].length === 0 ? fdr_number : ofence_number;
+    const defaultDefensive = fixtureData[defenceNumber].length === 0 ? fdrNumber : defenceNumber;
+    const defaultOffensive = fixtureData[offenceNumber].length === 0 ? fdrNumber : offenceNumber;
     const defaultFdrType = [defaultDefensive, defaultDefensive, defaultOffensive, defaultOffensive];
 
     const positionNumber = [0, 1, 2, 3 ];
@@ -50,7 +50,7 @@ export const ShowTeamIDFDRData : FunctionComponent<ShowTeamIDFDRProps> = ({
                     <tr>
                         <th className='fixed-column' />
                         { kickOffTimes.slice(gwStart - 1, gwEnd).map(gw =>
-                            <th>{content.General.round_short}{ gw.gameweek}
+                            <th key={gw.gameweek}>{content.General.round_short}{ gw.gameweek}
                                 <span className="day-month">
                                     { gw.day_month }
                                 </span>
@@ -59,8 +59,9 @@ export const ShowTeamIDFDRData : FunctionComponent<ShowTeamIDFDRProps> = ({
                     </tr>
                 </thead>
                 <tbody>
-                { playerData.map( (player_i, idx) => (
-                    <FixtureData 
+                { playerData.map((player_i, idx) => (
+                    <FixtureData
+                        rowKey={idx}
                         gwStart={gwStart}
                         gwEnd={gwEnd}
                         content={content}

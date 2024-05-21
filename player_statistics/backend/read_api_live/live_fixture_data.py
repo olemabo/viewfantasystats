@@ -22,7 +22,7 @@ def live_fixtures(league_name=esf, gw=0):
     
     player_dict = createPlayerIdToPlayerNameEliteserienDict() if league_name == esf else createPlayerIdToPlayerNamePremierLeagueDict()
     team_dict = createTeamIdToTeamNameEliteserienDict() if league_name == esf else createTeamIdToTeamNamePremierLeagueDict()
-    data_to_show = "opta_index" if league_name == esf else "bps"
+    data_to_show = "bonus" if league_name == esf else "bps"
 
     fixture_id_to_player_list_dict = {}
     min_gw, max_gw = 100, -1

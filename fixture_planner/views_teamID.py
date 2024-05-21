@@ -24,6 +24,9 @@ class PostFDRFromTeamIDView(APIView):
         
         temp_kick_off_time, first_upcoming_game = getKickOffData(fpl)
 
+        if (first_upcoming_game is None):
+            return JsonResponse([], safe=False)
+
         number_of_gws = len(temp_kick_off_time)
         
         fdr_data_list = []

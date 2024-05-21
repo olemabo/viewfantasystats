@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import { FunctionComponent } from 'react';
 import './CheckBox.scss';
 
 type CheckBoxProps = {
@@ -10,34 +10,33 @@ type CheckBoxProps = {
     useTwoCheckBoxes?: boolean
 }
 
-export const CheckBox : FunctionComponent<CheckBoxProps> = (props) => {
+export const CheckBox : FunctionComponent<CheckBoxProps> = ({
+    buttonText, checked1, checked2, onclickBox1, onclickBox2, useTwoCheckBoxes = false,
+}) => {
 
     return <div className='checkbox-component'>
-        <input className='' 
-        onClick={(e) => props.onclickBox1(e)} 
-        type="checkbox" 
-        id={props.buttonText} 
-        value={props.buttonText} 
-        name="fpl-teams" 
-        checked={props.checked1} />
-        
-        { props.useTwoCheckBoxes &&
+        <input 
+            onClick={(e) => onclickBox1(e)} 
+            type='checkbox' 
+            id={buttonText} 
+            value={buttonText} 
+            name='fpl-teams"'
+            checked={checked1} 
+        />
+        { useTwoCheckBoxes &&
             <input className={'solution-box'} 
-            onClick={(e) => props.onclickBox2(e)} 
-            type="checkbox" 
-            id={props.buttonText + "-in-solution"} 
-            value={props.buttonText} 
-            name="fpl-teams-in-solution"
-            checked={props.checked2} /> }
-
-    <label htmlFor={props.buttonText}>
-        <p>{props.buttonText}</p>
-    </label></div>
+                onClick={(e) => onclickBox2(e)} 
+                type='checkbox' 
+                id={buttonText + '-in-solution'} 
+                value={buttonText} 
+                name='fpl-teams-in-solution'
+                checked={checked2} 
+            /> 
+        }
+        <label htmlFor={buttonText}>
+            <p>{buttonText}</p>
+        </label>
+    </div>
 };
 
 export default CheckBox;
-
-
-CheckBox.defaultProps = {
-    useTwoCheckBoxes: false,
-}

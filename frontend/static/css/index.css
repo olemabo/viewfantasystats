@@ -65,6 +65,7 @@
     --fdr-color-blank: #000000ab;
     --fdr-color-blank: #4E4E4E;
     --fdr-greyed-box: #d5d4d4;
+    --fdr-greyed-box: var(--page-background-color);
     --round-row-color: #414c50;
     --fdr-border-color: #00000080;
     --name-column-top-corner: var(--round-row-color);

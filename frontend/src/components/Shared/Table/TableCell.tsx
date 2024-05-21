@@ -7,11 +7,14 @@ type TableCellProps = {
     className?: string;
     minWidth?: number;
     children?: React.ReactNode;
+    tableKey?: string;
 }
 
-export const TableCell : FunctionComponent<TableCellProps> = (props) => {
+export const TableCell : FunctionComponent<TableCellProps> = ({
+    cellType, className, minWidth, children, tableKey
+}) => {
     
-    return props.cellType === 'head' ? 
-        <th style={{ minWidth: props.minWidth ?? undefined }} className={props.className}>{props.children}</th> : 
-        <td style={{ minWidth: props.minWidth ?? undefined }} className={props.className}>{props.children}</td> 
+    return cellType === 'head' ? 
+        <th key={tableKey} style={{ minWidth: minWidth ?? undefined }} className={className}>{children}</th> : 
+        <td key={tableKey} style={{ minWidth: minWidth ?? undefined }} className={className}>{children}</td> 
 };

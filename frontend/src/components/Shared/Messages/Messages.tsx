@@ -1,6 +1,5 @@
-import React, { FunctionComponent, useState } from 'react';
+import { FunctionComponent, useState } from 'react';
 import './Messages.scss';
-
 
 type MessageProps = {
     messageType: 'warning' | 'info';

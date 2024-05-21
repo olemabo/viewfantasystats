@@ -1,7 +1,7 @@
 import { RotationPlannerTeamInfoModel } from '../../../models/fixturePlanning/RotationPlannerTeamInfo';
 import { KickOffTimesModel } from '../../../models/fixturePlanning/KickOffTimes';
 import { lowerCaseText } from '../../../utils/lowerCaseText';
-import React, { FunctionComponent, useState } from 'react';
+import { FunctionComponent, useState } from 'react';
 import '../ShowFDRData/ShowFDRData.scss';
 import Pagination from 'rc-pagination';
 import './ShowRotationData.scss';

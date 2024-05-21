@@ -11,17 +11,11 @@ from player_statistics.backend.read_api_live.live_fixture_data import live_fixtu
 
 
 class LiveFixturesAPIView(APIView):
-
-    def get(self, request):
-        league_name = str(request.GET.get('league_name')).lower()
-
-        return JsonResponse([], safe=False)
-
-    def post(self, request, format=None):
+    def get(self, request, format=None):
         try:
-            league_name = str(request.data.get("league_name")).lower()
+            league_name = str(request.GET.get("league_name")).lower()
 
-            gw = int(request.data.get("gw"))
+            gw = int(request.GET.get("gw"))
 
             response = live_fixtures(league_name, gw)
 

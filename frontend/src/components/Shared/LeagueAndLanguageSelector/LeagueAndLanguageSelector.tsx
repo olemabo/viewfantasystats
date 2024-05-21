@@ -1,6 +1,6 @@
 import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
 import PublicIcon from '@mui/icons-material/Public';
-import React, { FunctionComponent } from 'react';
+import { FunctionComponent } from 'react';
 import './LeagueAndLanguageSelector.scss';
 import { Link } from 'react-router-dom';
 
