@@ -13,6 +13,7 @@ type PopoverProps = {
     children?: React.ReactNode;
     topRightCornerInDiv?: boolean;
     className?: string;
+    adjustLeftPx?: string;
 };
 
 export const Popover : FunctionComponent<PopoverProps> = ({
@@ -27,6 +28,7 @@ export const Popover : FunctionComponent<PopoverProps> = ({
     htmlTitle = '',
     className = '',
     children,
+    adjustLeftPx = ''
 }) => {
     const [ show, setShow ] = useState(false);
 
@@ -144,6 +146,7 @@ export const Popover : FunctionComponent<PopoverProps> = ({
         {show && (
             <div
                 id={`popover-content-${id}`}
+                style={{left: adjustLeftPx}}
                 className={`thin-ui-popover-body ${alignLeft ? 'adjust-left ' : ''} ${
                     topRightCornerInDiv ? 'adjust-top-right-mobile ' : ''
                 } ${className}`}

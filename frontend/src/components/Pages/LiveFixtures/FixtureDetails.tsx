@@ -15,6 +15,7 @@ export const FixtureDetails: FunctionComponent<{ fixture: FixtureModel, fixtureI
                         <TableCell cellType="head" minWidth={playerNameMinWidth}>{propsContent.General.player}</TableCell>
                         <TableCell cellType="head">
                             <Popover
+                                adjustLeftPx="-100px"
                                 id={isHome ? 'Mp-home' : 'Mp-away'}
                                 title="MP"
                                 popoverTitle="Minutes Played"
@@ -23,14 +24,16 @@ export const FixtureDetails: FunctionComponent<{ fixture: FixtureModel, fixtureI
                         </TableCell>
                         <TableCell cellType="head">
                             <Popover
+                                adjustLeftPx="-200px"
                                 id={isHome ? 'Opta-home' : 'Opta-away'}
                                 title={leagueType === fpl ? 'BPS' : 'Bonus'}
                                 popoverTitle={leagueType === fpl ? 'BPS' : 'Bonus'}
-                                popoverText=""
+                                popoverText={leagueType === fpl ? 'Bonus Point System' : 'Bonus'}
                             />
                         </TableCell>
                         <TableCell cellType="head">
                             <Popover
+                                adjustLeftPx="-300px"
                                 id={isHome ? 'Pts-home' : 'Pts-away'}
                                 title="Pts"
                                 popoverTitle="Points"
