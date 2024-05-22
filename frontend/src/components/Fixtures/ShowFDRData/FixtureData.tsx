@@ -102,7 +102,7 @@ export const FixtureData : FunctionComponent<FixtureDataProps> = ({
                 </td>
             { getFixtureData(player.team_id).slice(gwStart - 1, gwEnd).map((team, idx) => (
                     <td
-                        key={`td-fixture-${idx}`}
+                        key={`td-fixture-${idx}-${player.player_name}-${team.fdr_gw_i.length}`}
                         onClick={(e) => toggleBorderLine(e)} 
                         scope='col' 
                         className={''

@@ -156,8 +156,8 @@ class PostFDRFromTeamIDView(APIView):
     
     def get(self, request):
         fixture_list_db, dates, _, _ = read_eliteserien_excel_to_db_format("")
-        fixture_list_db_def, dates, _, _ = read_eliteserien_excel_to_db_format("_defensivt")
-        fixture_list_db_off, dates, _, _ = read_eliteserien_excel_to_db_format("_offensivt")
+        fixture_list_db_def, dates2, _, _ = read_eliteserien_excel_to_db_format("_defensivt2")
+        fixture_list_db_off, dates3, _, _ = read_eliteserien_excel_to_db_format("_offensivt2")
                 
         current_gws = [gw for gw in range(0, len(dates) + 1)]
 
@@ -178,7 +178,7 @@ class PostFDRFromTeamIDView(APIView):
         # fdr_data_list = getFixtureData(fixture_list_db, number_of_gws)
         # fdr_data_defensive_list = getFixtureData(fixture_list_db_def, number_of_gws)
         # fdr_data_offensive_list = getFixtureData(fixture_list_db_off, number_of_gws)
-            
+
         temp_kick_off_time, first_upcoming_game = getKickOffData(esf)
         player_list = getPlayerData(esf)
 

@@ -24,6 +24,7 @@ const useFixturePlannerTeamIDMetaData = (
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     function convertFixtureData(fdr_data: any): TeamIdFDRModel[] {
+        if (!fdr_data || fdr_data?.length < 1) return [];
         var temp: TeamIdFDRModel[] = [];
 
         fdr_data.forEach((team: any) => {
