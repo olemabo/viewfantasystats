@@ -4,7 +4,7 @@ import { ShowRotationData } from '../../Fixtures/ShowRotationData/ShowRotationDa
 import ThreeStateCheckbox from '../../Shared/FilterButton/ThreeStateCheckbox';
 import React, { useState, FunctionComponent } from 'react';
 import * as external_urls from '../../../static_urls/externalUrls';
-import { PageProps, fdrRotation } from '../../../models/shared/PageProps';
+import { FixturePlanningProps, PageProps, fdrRotation } from '../../../models/shared/PageProps';
 import { combinations } from '../../../utils/productRange';
 import FdrBox from '../../Shared/FDR-explaination/FdrBox';
 import TextInput from '../../Shared/TextInput/TextInput';
@@ -17,7 +17,7 @@ import useFetchTeamData from '../../../hooks/useFixtureTeamData';
 import Message from '../../Shared/Messages/Messages';
 import { FDRFormInput } from '../../../models/fixturePlanning/FDRFormInput';
 
-export const RotationPlannerPage : FunctionComponent<PageProps> = (props) => {
+export const RotationPlannerPage : FunctionComponent<PageProps & FixturePlanningProps> = (props) => {
     const [ showTeamFilters, setShowTeamFilters ] = useState(false);
     const [ validationErrorMessage, setValidationErrorMessage ] = useState("");
     const [ longLoadingTimeText, setLongLoadingTimeText ] = useState('');
@@ -40,9 +40,10 @@ export const RotationPlannerPage : FunctionComponent<PageProps> = (props) => {
 
     const { 
         isLoadingFixturedata, 
+        errorLoading,
         fdrRotationData,
         kickOffTimes,
-    } = useFixtureDataFPL(fixturePlannerSearchQuery, setFormInput, fdrRotation);
+    } = useFixtureDataFPL(fixturePlannerSearchQuery, setFormInput, props);
 
     function updateFDRData() {
         let teamsANDteamsinsolution = extractTeamsToUseAndTeamsInSolution(teamData);
@@ -62,7 +63,7 @@ export const RotationPlannerPage : FunctionComponent<PageProps> = (props) => {
 
         const validInput = validateInput({
             body,
-            propsContent: props.content,
+            propsContent: props.languageContent,
             setValidationErrorMessage,
             setShowTeamFilters,
         });
@@ -88,34 +89,38 @@ export const RotationPlannerPage : FunctionComponent<PageProps> = (props) => {
         return combinations(number_can_be_in_solution, formInput.teamsToCheck ?? 0 - number_of_must_be_in_solution)
     }
 
-    const popoverText = `${props.content.Fixture.RotationPlanner?.title} ${props.content.LongTexts.rotationPlannerDescription_first}
-    ${props.content.LongTexts.rotationPlannerDescription_second}'${props.content.Fixture.gw_start}' ${props.content.General.and} '${props.content.Fixture.gw_end}' ${props.content.LongTexts.becomesRes} '${props.content.Fixture.teams_to_check}' ${props.content.LongTexts.rotationPlannerDescription_1} '${props.content.Fixture.teams_to_play}' ${props.content.LongTexts.rotationPlannerDescription_2}`;
+    const popoverText = `${props.languageContent.Fixture.RotationPlanner?.title} ${props.languageContent.LongTexts.rotationPlannerDescription_first}
+    ${props.languageContent.LongTexts.rotationPlannerDescription_second}'${props.languageContent.Fixture.gw_start}' ${props.languageContent.General.and} '${props.languageContent.Fixture.gw_end}' ${props.languageContent.LongTexts.becomesRes} '${props.languageContent.Fixture.teams_to_check}' ${props.languageContent.LongTexts.rotationPlannerDescription_1} '${props.languageContent.Fixture.teams_to_play}' ${props.languageContent.LongTexts.rotationPlannerDescription_2}`;
 
     return <>
     <DefaultPageContainer 
         pageClassName='fixture-planner-container'
-        leagueType={props.league_type}
-        heading={props.content.Fixture.RotationPlanner?.title} 
-        description={props.content.Fixture.RotationPlanner?.title + " - " + " Rotasjonsplanlegger viser kombinasjoner av lag som kan roteres for å gi best mulig kampprogram."}
+        leagueType={props.leagueType}
+        heading={props.languageContent.Fixture.RotationPlanner?.title} 
+        description={props.languageContent.Fixture.RotationPlanner?.title + " - " + " Rotasjonsplanlegger viser kombinasjoner av lag som kan roteres for å gi best mulig kampprogram."}
+        isLoading={isLoadingFixturedata}
+        errorLoading={errorLoading}
+        renderTitle={() => 
+            <h1>
+                {props.languageContent.Fixture.RotationPlanner?.title}
+                <Popover 
+                    id='rotations-planner-id'
+                    alignLeft={true}
+                    popoverTitle={props.languageContent.Fixture.RotationPlanner?.title} 
+                    iconSize={14}
+                    iconPosition={[-10, 0, 0, 3]}
+                    popoverText={popoverText}
+                >
+                    {props.languageContent.LongTexts.fixtureAreFrom }
+                    <a href={external_urls.url_offical_fantasy_premier_league}>Fantasy Premier League.</a>
+                    <FdrBox content={props.languageContent} />
+                </Popover>
+            </h1>
+        }
     >
-        <h1>
-            {props.content.Fixture.RotationPlanner?.title}
-            <Popover 
-                id='rotations-planner-id'
-                alignLeft={true}
-                popoverTitle={props.content.Fixture.RotationPlanner?.title} 
-                iconSize={14}
-                iconPosition={[-10, 0, 0, 3]}
-                popoverText={popoverText}
-            >
-                {props.content.LongTexts.fixtureAreFrom }
-                <a href={external_urls.url_offical_fantasy_premier_league}>Fantasy Premier League.</a>
-                <FdrBox content={props.content} />
-            </Popover>
-        </h1>
         <div className='input-row-container'>
             <Button 
-                buttonText={props.content.Fixture.filter_button_text} 
+                buttonText={props.languageContent.Fixture.filter_button_text} 
                 iconClass={`fa fa-chevron-${showTeamFilters ? 'up' : 'down'}`}
                 onclick={() => setShowTeamFilters(showTeamFilters ? false : true)} 
                 color='white'
@@ -131,7 +136,7 @@ export const RotationPlannerPage : FunctionComponent<PageProps> = (props) => {
                         startGw: e,
                     }))} 
                     defaultValue={formInput.startGw}>
-                    {props.content.Fixture.gw_start}
+                    {props.languageContent.Fixture.gw_start}
                 </TextInput>
                 <TextInput 
                     htmlFor='input-form-end-gw'
@@ -143,7 +148,7 @@ export const RotationPlannerPage : FunctionComponent<PageProps> = (props) => {
                     }))} 
                     defaultValue={formInput.endGw}
                 >
-                    {props.content.Fixture.gw_end}
+                    {props.languageContent.Fixture.gw_end}
                 </TextInput>
                 <TextInput 
                     htmlFor='teams_to_check'                    
@@ -155,8 +160,8 @@ export const RotationPlannerPage : FunctionComponent<PageProps> = (props) => {
                     }))} 
                     defaultValue={formInput.teamsToCheck}
                 >
-                    {props.content.Fixture.teams_to_check_1}<br/>
-                    {props.content.Fixture.teams_to_check_2}
+                    {props.languageContent.Fixture.teams_to_check_1}<br/>
+                    {props.languageContent.Fixture.teams_to_check_2}
                 </TextInput>
                 <TextInput 
                     htmlFor='teams_to_play'                    
@@ -167,11 +172,11 @@ export const RotationPlannerPage : FunctionComponent<PageProps> = (props) => {
                         teamsToPlay: e,
                     }))}
                     defaultValue={formInput.teamsToPlay}>
-                    {props.content.Fixture.teams_to_play_1}<br/>
-                    {props.content.Fixture.teams_to_play_2}
+                    {props.languageContent.Fixture.teams_to_play_1}<br/>
+                    {props.languageContent.Fixture.teams_to_play_2}
                 </TextInput>
 
-                <input className="submit" type="submit" value={props.content.General.search_button_name} />
+                <input className="submit" type="submit" value={props.languageContent.General.search_button_name} />
             </form>
         </div>
         
@@ -184,9 +189,9 @@ export const RotationPlannerPage : FunctionComponent<PageProps> = (props) => {
         { teamData.length > 0 && showTeamFilters &&
             <div className='filter-teams-container'>
                 <div className='filter-teams-description'>
-                    <div><span className="dot can-be-in-solution"></span>{`${props.content.Fixture.RotationPlanner.teams_can_be_in_solution} (${number_can_be_in_solution})`}</div>
-                    <div><span className="dot must-be-in-solution"></span>{`${props.content.Fixture.RotationPlanner.teams_must_be_in_solution} (${number_of_must_be_in_solution})`}</div>
-                    <div><span className="dot not-in-solution"></span>{`${props.content.Fixture.RotationPlanner.teams_cant_be_in_solution} (${number_of_not_in_solution})`}</div>
+                    <div><span className="dot can-be-in-solution"></span>{`${props.languageContent.Fixture.RotationPlanner.teams_can_be_in_solution} (${number_can_be_in_solution})`}</div>
+                    <div><span className="dot must-be-in-solution"></span>{`${props.languageContent.Fixture.RotationPlanner.teams_must_be_in_solution} (${number_of_must_be_in_solution})`}</div>
+                    <div><span className="dot not-in-solution"></span>{`${props.languageContent.Fixture.RotationPlanner.teams_cant_be_in_solution} (${number_of_not_in_solution})`}</div>
                 </div>
                 <div className='filter-teams-list'>
                     { teamData.map(team_name =>
@@ -215,7 +220,7 @@ export const RotationPlannerPage : FunctionComponent<PageProps> = (props) => {
 
         { !isLoadingFixturedata && fdrRotationData.length > 0 &&
             <ShowRotationData 
-                content={props.content}
+                content={props.languageContent}
                 fdrData={fdrRotationData}
                 kickOffTimes={kickOffTimes}    
             />

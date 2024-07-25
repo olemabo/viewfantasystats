@@ -3,15 +3,17 @@ import axios from 'axios';
 import { FDRData, FDR_GW_i, TeamIdFDRModel } from '../models/fixturePlanning/TeamFDRData';
 import { KickOffTimesModel } from '../models/fixturePlanning/KickOffTimes';
 import { PlayerModel } from '../models/fixturePlanning/PlayerModel';
-import { LeagueType, esf } from '../models/shared/PageProps';
+import { PageProps, esf } from '../models/shared/PageProps';
 import { url_get_fdr_data_from_team_id_eliteserien, url_get_fdr_data_from_team_id_premier_league } from '../static_urls/APIUrls';
+import { ErrorLoading, emptyErrorLoadingState } from '../models/shared/errorLoading';
+import { warning } from '../components/Shared/Messages/Messages';
 
 const useFixturePlannerTeamIDMetaData = (
-    leagueType: LeagueType,
+    pageProps: PageProps,
     setGwStart: React.Dispatch<React.SetStateAction<number>>,
     setGwEnd: React.Dispatch<React.SetStateAction<number>>,
 ) => {
-    const fixturePlannerApiPath = leagueType === esf
+    const fixturePlannerApiPath = pageProps.leagueType === esf
     ? url_get_fdr_data_from_team_id_eliteserien 
             : url_get_fdr_data_from_team_id_premier_league;
 
@@ -20,7 +22,7 @@ const useFixturePlannerTeamIDMetaData = (
     const [playerList, setPlayerList] = useState<PlayerModel[]>([]);
     const [fixtureData, setFixtureData] = useState<TeamIdFDRModel[][]>([]);
 
-    const [errorLoading, setErrorLoading] = useState<boolean>(false);
+    const [errorLoading, setErrorLoading] = useState<ErrorLoading>(emptyErrorLoadingState);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     function convertFixtureData(fdr_data: any): TeamIdFDRModel[] {
@@ -62,7 +64,10 @@ const useFixturePlannerTeamIDMetaData = (
                 const response = await axios.get(fixturePlannerApiPath);
 
                 if (response.data?.length == 0) {
-                    setErrorLoading(true);
+                    setErrorLoading({ 
+                        errorMessage: pageProps.languageContent.Fixture?.TeamPlanner?.errorLoadingDataMessage,
+                        messageType: warning,
+                    });
                     return;
                 }
 
@@ -99,15 +104,19 @@ const useFixturePlannerTeamIDMetaData = (
                 setFixtureData([fdrData, fdrDataDef, fdrDataOff]);
 
                 setIsLoading(false);
-                setErrorLoading(false);
+                setErrorLoading(emptyErrorLoadingState);
             } catch (error) {
-                setErrorLoading(true);
+                setErrorLoading({
+                    errorMessage: pageProps.languageContent.General.errorMessage || 'An error occurred',
+                    messageType: warning,
+                });
+            } finally {
                 setIsLoading(false);
             }
         };
 
         fetchData();
-    }, [leagueType]);
+    }, [pageProps.leagueType]);
 
     return {
         maxGw,

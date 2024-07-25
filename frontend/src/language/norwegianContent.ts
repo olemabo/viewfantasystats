@@ -61,6 +61,7 @@ export const norwegianContent = {
         player: 'Spiller',
         here: 'her',
         noHitsMessage: 'Vi fant ingen treff på søket ditt',
+        errorMessage: 'Ukjent feil oppsto ved uthenting av data'
     },
     Fixture: {
         FixturePlanner: {
@@ -154,6 +155,26 @@ export const norwegianContent = {
         LiveFixtures: {
             title: "Kampstatistikk",
         },
+        PriceChange: {
+            title: "Prisendringer",
+            price: "Pris",
+            status: "Status",
+            nettransfer: "Netto bytter",
+            cost_change_event: "Prisendring",
+            position: "Posisjon",
+            percentage: "Eierandel",
+            transfers_in: "Byttet inn",
+            transfers_out: "Byttet ut",
+            Popover: {
+                status: 'En indikator som sier noe om spillerens tilgjengelighet. A = Available, I = Injured, S = Suspended, U = Unavailable.',
+                price: 'Spillerens nåværende pris.',
+                ownership: 'Spillerens nåværende totale eierandel.',
+                pricechange: 'Angir antall prisendringer så langt denne runden. En spiller kan øke eller synke med opptil 0.3 i en enkelt runde.',
+                nettransfers: 'Netto bytteendringer. Det vil si antall ganger byttet inn denne runden minus antall byttet ut.',
+                transfersin: 'Antall ganger byttet inn i denne runden.',
+                transfersout: 'Antall ganger byttet ut i denne runden.',
+            }
+        },
         statistic: "Statistikk",
         search: "Søk",
     },
@@ -177,11 +198,12 @@ export const norwegianContent = {
         rotationPlannerDescription_second: 'Eksempelvis ønsker man å finne to keepere som roterer bra mellom runde 10 og 20.',
         rotationPlannerDescription_1: 'blir 2 fordi man skal ha 2 keepere som skal rotere.',
         rotationPlannerDescription_2: 'blir 1 fordi kun en av de to keeperene skal spille per runde.',
-
+        priceChangeDescription: 'Denne siden viser statistikk rundt antall ganger en spiller er byttet inn eller ut og endret i pris i nåværende runde. Siden viser IKKE om en spiller kommer til å gå opp eller ned i pris (men det jobbes med saken), men kan gi en pekepinn på om det kan skje. Det virker som prisendringer skjer hver kveld rundt kl. 04:30 på natten.'
     },
     Popover: {
         effectiveOwnership: 'Effektivt eierskap er en beregning som tar hensyn til managere som starter en spiller (ikke bare de som eier dem), sammen med de som kapteiner spilleren. Det er altså eierandel som starter spilleren pluss eierandelen som har kapteinet spilleren. ',
         chosenBy: 'Prosentandel som har denne spilleren i troppen sin (trenger ikke være i startelleveren).',
+        captain: 'Prosentandel som har valgt denne spilleren som kaptein i laget sitt (dette inkluderer chips som trippel kaptein, dobbel kaptein og Spissrush).',
         topOwnership: 'Prosentandel blant alle managere som eier denne spilleren (tall hentet ved rundestart). Altså ikke bare blant topp ',
         minutesPlayed: 'Antall minutter spilt. Antall minutter oppdateres live mens kampene spilles.',
         points: 'Antall poeng spilleren har fått denne runden. Poengene oppdateres live mens kampene spilles.',

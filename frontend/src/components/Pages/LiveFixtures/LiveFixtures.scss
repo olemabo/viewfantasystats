@@ -70,6 +70,10 @@
             flex-wrap: wrap;
             background-color: var(--white-color);
             column-gap: 10px;
+
+            table {
+                margin: 12px 0;
+            }
             
             .game-stats {
                 flex-basis: 36%;
@@ -125,12 +129,12 @@
             }
             
             .away-players {
-                margin-right: 6px;
+                margin-right: 12px;
                 flex-basis: 30%;
             }
 
             .home-players {
-                margin-left: 6px;
+                margin-left: 12px;
                 flex-basis: 30%;
             }
 
@@ -149,10 +153,10 @@
 
             @media (max-width: 600px) {
                 .home-players {
-                    margin-right: 6px;
+                    margin-right: 12px;
                 }
                 .away-players {
-                    margin-left: 6px;
+                    margin-left: 12px;
                 }
             }
         }

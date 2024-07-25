@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { BonusModel, FixtureModel, PlayerModel, StatsModel } from '../models/liveFixtures/FixtureModel';
+import { ErrorLoading, emptyErrorLoadingState } from '../models/shared/errorLoading';
+import { warning } from '../components/Shared/Messages/Messages';
 
 
-const useLiveFixtureData = (leagueType: string, gw: number) => {
+const useLiveFixtureData = (leagueType: string, gw: number, languageContent: any) => {
     const liveFixturesApiPath = "/statistics/live-fixtures-api/";
     
     const [gameWeeks, setGameWeeks] = useState({
@@ -16,14 +18,19 @@ const useLiveFixtureData = (leagueType: string, gw: number) => {
     const [fixtureInfoId, setFixtureInfoId] = useState("");
     const [hasOwnershipData, setHasOwnershipData] = useState(false);
 
-    const [errorLoading, setErrorLoading] = useState<boolean>(false);
+    const [ errorLoading, setErrorLoading ] = useState<ErrorLoading>(emptyErrorLoadingState);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     useEffect(() => {
         const fetchData = async () => {
             setIsLoading(true);
             try {
-                const response = await axios.get(liveFixturesApiPath + "?league_name=" + leagueType + "&gw=" + gw.toString());
+                const response = await axios.get(liveFixturesApiPath, {
+                    params: { 
+                        league_name: leagueType, 
+                        gw: gw.toString() 
+                    }
+                });
                  
                 const data = JSON.parse(response?.data);
                 
@@ -99,9 +106,13 @@ const useLiveFixtureData = (leagueType: string, gw: number) => {
                 
                 setFixtureData(listOfLists);
                 setIsLoading(false);
-                setErrorLoading(false);
+                setErrorLoading(emptyErrorLoadingState);
             } catch (error) {
-                setErrorLoading(true);
+                setErrorLoading({
+                    errorMessage: languageContent.General.errorMessage || 'An error occurred',
+                    messageType: warning,
+                });
+            } finally {
                 setIsLoading(false);
             }
         };
@@ -166,7 +177,8 @@ const useLiveFixtureData = (leagueType: string, gw: number) => {
         fixtureInfoId,
         isLoading,
         hasOwnershipData,
-        setFixtureInfoId
+        setFixtureInfoId,
+        errorLoading
     };
 };
 

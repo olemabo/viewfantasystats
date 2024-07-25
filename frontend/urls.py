@@ -19,6 +19,7 @@ urlpatterns = [
     path('eliteserien/fdr-planner-team-id/', index),
     path('eliteserien/rotation-planner/', index),
     path('eliteserien/periode-planner/', index),
+    path('eliteserien/price-change/', index),
     path('eliteserien/player-ownership/', index),
     path('eliteserien/search-user-names/', index),
     path('eliteserien/rank-statistics/', index),

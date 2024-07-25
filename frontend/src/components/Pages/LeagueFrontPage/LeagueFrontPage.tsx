@@ -22,8 +22,8 @@ interface RankAndPointsModel {
 }
 
 type FrontPageProps = {
-    content: any;
-    league_type: LeagueType;
+    languageContent: any;
+    leagueType: LeagueType;
 }
 
 export const FrontPage : FunctionComponent<FrontPageProps> = (props) => {
@@ -52,7 +52,7 @@ export const FrontPage : FunctionComponent<FrontPageProps> = (props) => {
             }
         })
 
-        axios.get(most_owned_api_path + "?league_name=" + props.league_type).then(x => {
+        axios.get(most_owned_api_path + "?league_name=" + props.leagueType).then(x => {
             if (x.data) {
                 let data = JSON.parse(x.data);
                 setCurrentGw(data?.gw);
@@ -65,10 +65,10 @@ export const FrontPage : FunctionComponent<FrontPageProps> = (props) => {
             }
         })
 
-    }, [props?.league_type]);
+    }, [props?.leagueType]);
 
     function getTeamShirtImgSrcUrl(num: number) {
-        if (props.league_type == esf) {
+        if (props.leagueType == esf) {
             if (num == 1) return team_id_to_img_shirt_url_eliteserien[1];
             if (num == 3) return team_id_to_img_shirt_url_eliteserien[3];
             if (num == 4) return team_id_to_img_shirt_url_eliteserien[4];
@@ -87,7 +87,7 @@ export const FrontPage : FunctionComponent<FrontPageProps> = (props) => {
             if (num == 25) return team_id_to_img_shirt_url_eliteserien[25];
             return "https://fantasy.tv2.no/dist/img/shirts/standard/shirt_0_1-66.webp";
         }
-        if (props.league_type == fpl) {
+        if (props.leagueType == fpl) {
             if (num == 1) return team_id_to_img_shirt_url_premier_league[1];
             if (num == 2) return team_id_to_img_shirt_url_premier_league[2];
             if (num == 3) return team_id_to_img_shirt_url_premier_league[3];
@@ -157,9 +157,9 @@ export const FrontPage : FunctionComponent<FrontPageProps> = (props) => {
       };
 
     return <>
-    <DefaultPageContainer leagueType={props.league_type} pageClassName='front-page-container' heading={props.content.Fixture?.RotationPlanner?.title} description={props.content?.Fixture?.RotationPlanner?.title}>
-        { currentGw > 0 && <h1>{props.content.General?.gw} {currentGw}</h1>}
-        <h2> {props.content?.Statistics?.PlayerOwnership?.title} (EO) {props.content?.General?.top} {props.league_type == fpl ? "10000" : "1000"} </h2>
+    <DefaultPageContainer leagueType={props.leagueType} pageClassName='front-page-container' heading={props.languageContent.Fixture?.RotationPlanner?.title} description={props.languageContent?.Fixture?.RotationPlanner?.title}>
+        { currentGw > 0 && <h1>{props.languageContent.General?.gw} {currentGw}</h1>}
+        <h2> {props.languageContent?.Statistics?.PlayerOwnership?.title} (EO) {props.languageContent?.General?.top} {props.leagueType == fpl ? "10000" : "1000"} </h2>
         <div className='most-owned-players'>
             <div className='position-container'>
                 {mostOwnedPlayersData.forward_list?.map( (x: any[]) => 
@@ -205,9 +205,9 @@ export const FrontPage : FunctionComponent<FrontPageProps> = (props) => {
             <table>
                 <thead>
                     <tr>
-                        <th>{props.content.General.ranking}</th>
-                        <th>{props.content.General.points}</th>
-                        <th>{props.content.General.points_away_from_first}</th>
+                        <th>{props.languageContent.General.ranking}</th>
+                        <th>{props.languageContent.General.points}</th>
+                        <th>{props.languageContent.General.points_away_from_first}</th>
                     </tr>
                 </thead>
                 <tbody>

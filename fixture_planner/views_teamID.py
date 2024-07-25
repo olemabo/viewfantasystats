@@ -21,21 +21,19 @@ class PostFDRFromTeamIDView(APIView):
     
     def get(self, request):
         fixture_list_db = PremierLeagueTeamInfo.objects.all()
-        
         temp_kick_off_time, first_upcoming_game = getKickOffData(fpl)
 
-        if (first_upcoming_game is None):
+        if first_upcoming_game is None:
             return JsonResponse([], safe=False)
 
         number_of_gws = len(temp_kick_off_time)
-        
         fdr_data_list = []
+
         for fdr_data in fixture_list_db:
             team_name_short = fdr_data.team_short_name
             team_id = fdr_data.team_id
-
             fdr_dict = create_data_objects.create_FDR_dict(fdr_data)
-            gw_i_list = [ convertFDRToModel(fdr_dict[gw_i]) for gw_i in range(1, number_of_gws + 1) ]
+            gw_i_list = [convertFDRToModel(fdr_dict[gw_i]) for gw_i in range(1, number_of_gws + 1)]
             
             fdr_data_list.append(FDRTeamIDModel(
                 team_name_short,
@@ -44,15 +42,11 @@ class PostFDRFromTeamIDView(APIView):
             ).toJson())
     	
         player_list = getPlayerData(fpl)
-
         current_gws = [gw for gw in range(0, number_of_gws + 1)]
                                             
-        gw_end = first_upcoming_game + 6 if len(current_gws) > 7 else current_gws[-1]
         gw_start = current_gws[0]
         max_gw = current_gws[-1]
-
-        if (gw_end > max_gw):
-            gw_end = max_gw
+        gw_end = min(first_upcoming_game + 6, max_gw) if len(current_gws) > 7 else max_gw
 
         fdr_and_gws = FDRApiResponse(fdr_data_list, [], [], temp_kick_off_time, gw_start, gw_end, first_upcoming_game, max_gw, player_list) 
 
@@ -62,11 +56,9 @@ class PostFDRFromTeamIDView(APIView):
     def post(self, request):
         try:
             goal_keepers, defenders, midtfielders, forwards = [], [], [], []
-
             fdr_and_gws = FDRTeamIDApiResponse(goal_keepers, defenders, midtfielders, forwards) 
 
             current_gw = get_request_body(request, "current_gw", int)
-
             team_id = get_request_body(request, "team_id", int)
 
             if team_id < 1:
@@ -84,13 +76,13 @@ class PostFDRFromTeamIDView(APIView):
                     team_name_short=player_i.team_name_short
                 ).toJson()
                 
-                if (player_i.position_id == 1):
+                if player_i.position_id == 1:
                     goal_keepers.append(team_player_name) 
-                if (player_i.position_id == 2):
+                elif player_i.position_id == 2:
                     defenders.append(team_player_name) 
-                if (player_i.position_id == 3):
+                elif player_i.position_id == 3:
                     midtfielders.append(team_player_name) 
-                if (player_i.position_id == 4):
+                elif player_i.position_id == 4:
                     forwards.append(team_player_name)
 
             fdr_and_gws.goal_keepers = goal_keepers
@@ -100,6 +92,6 @@ class PostFDRFromTeamIDView(APIView):
             
             return JsonResponse(fdr_and_gws.toJson(), safe=False)
 
-        except:
-            return Response({'Bad Request': 'Something went wrong'}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({'Bad Request': 'Something went wrong: ' + str(e), 'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 

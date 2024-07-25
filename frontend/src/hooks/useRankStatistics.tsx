@@ -1,55 +1,54 @@
 import { RankModel } from '../models/RankStatistics/RankStatistics';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { ErrorLoading, emptyErrorLoadingState } from '../models/shared/errorLoading';
+import { warning } from '../components/Shared/Messages/Messages';
 
-interface RankStatisticsData {
-    ranks: RankModel[];
-    fantasyManagerUrl: string;
-    numberOfLastYears: number;
-    isLoading: boolean;
-    errorLoading: boolean;
-}
-
-const useRankStatistics = (numberOfYearsBack: number): RankStatisticsData => {
-    const player_ownership_api_path = "/statistics/rank-statistics-api/";
+const useRankStatistics = (numberOfYearsBack: number, languageContent: any) => {
+    const playerOwnershipApiPath = "/statistics/rank-statistics-api/";
 
     const [ranks, setRanks] = useState<RankModel[]>([]);
-    const [fantasyManagerUrl, setFantasyManagerUrl] = useState("");
-    const [numberOfLastYears, setNumberOfLastYears] = useState(0);
-    
-    const [errorLoading, setErrorLoading] = useState<boolean>(false);
+    const [fantasyManagerUrl, setFantasyManagerUrl] = useState<string>("");
+    const [numberOfLastYears, setNumberOfLastYears] = useState<number>(0);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [errorLoading, setErrorLoading] = useState<ErrorLoading>(emptyErrorLoadingState);
 
     useEffect(() => {
         const fetchData = async () => {
             setIsLoading(true);
             try {
-                var body = {
-                    last_x_years: numberOfYearsBack,
-                };
-
-                const response = await axios.post(player_ownership_api_path, body);
-                let json_data = JSON.parse(response.data);
-                setFantasyManagerUrl(json_data.fantasy_manager_url)
-                const temp: RankModel[] = [];
-                json_data.list_of_ranks.map( (ins: any) => {
-                    let d = JSON.parse(ins);
-                    temp.push({
-                        user_id: d.user_id,
-                        name: d.name,
-                        team_name: d.team_name,
-                        avg_rank: d.avg_rank,
-                        avg_points: d.avg_points,
-                        avg_rank_ranking: d.avg_rank_ranking,
-                        avg_points_ranking: d.avg_points_ranking,
-                    })
+                const response = await axios.get(playerOwnershipApiPath, {
+                    params: { last_x_years: numberOfYearsBack.toString() }
+                });
+                
+                const data = JSON.parse(response.data);
+                
+                const rankModel: RankModel[] = [];
+                data.list_of_ranks.map((rank: string) => {
+                    const parsedData: RankModel = JSON.parse(rank);
+                    rankModel.push({
+                        user_id: parsedData.user_id,
+                        name: parsedData.name,
+                        team_name: parsedData.team_name,
+                        avg_rank: parsedData.avg_rank,
+                        avg_points: parsedData.avg_points,
+                        avg_rank_ranking: parsedData.avg_rank_ranking,
+                        avg_points_ranking: parsedData.avg_points_ranking,
+                    });
                 })
-                setNumberOfLastYears(json_data.number_of_last_years);
-                setRanks(temp);
+                
+                setFantasyManagerUrl(data.fantasy_manager_url)
+                setNumberOfLastYears(data.number_of_last_years);
+                setRanks(rankModel);
+                
                 setIsLoading(false);
-                setErrorLoading(false);
+                setErrorLoading(emptyErrorLoadingState);
             } catch (error) {
-                setErrorLoading(true);
+                setErrorLoading({
+                    errorMessage: languageContent.General.errorMessage || 'An error occurred',
+                    messageType: warning,
+                });
+            } finally {
                 setIsLoading(false);
             }
         };

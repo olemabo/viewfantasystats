@@ -183,20 +183,22 @@ def fill_db_extra_info_statistics_eliteserien(gw, file_path):
             error = "Error occured"
 
     if new_data:
-        fill_model = EliteserienChipsAndUserInfo(gw=gw,
-                                            extra_info_top_1=extra_info_top_1,
-                                            extra_info_top_10=extra_info_top_10,
-                                            extra_info_top_100=extra_info_top_100,
-                                            extra_info_top_1000=extra_info_top_1000,
-                                            extra_info_top_5000=extra_info_top_5000,
-                                            total_chip_usage_1=total_chip_usage_1,
-                                            total_chip_usage_10=total_chip_usage_10,
-                                            total_chip_usage_100=total_chip_usage_100,
-                                            total_chip_usage_1000=total_chip_usage_1000,
-                                            total_chip_usage_5000=total_chip_usage_5000,
-                                            global_chip_usage_this_gw=global_chip_usage_this_gw,
-                                            global_chip_usage_total=global_chip_usage_total,
-                                            number_of_managers=number_of_managers)
+        fill_model = EliteserienChipsAndUserInfo(
+            gw=gw,
+            extra_info_top_1=extra_info_top_1,
+            extra_info_top_10=extra_info_top_10,
+            extra_info_top_100=extra_info_top_100,
+            extra_info_top_1000=extra_info_top_1000,
+            extra_info_top_5000=extra_info_top_5000,
+            total_chip_usage_1=total_chip_usage_1,
+            total_chip_usage_10=total_chip_usage_10,
+            total_chip_usage_100=total_chip_usage_100,
+            total_chip_usage_1000=total_chip_usage_1000,
+            total_chip_usage_5000=total_chip_usage_5000,
+            global_chip_usage_this_gw=global_chip_usage_this_gw,
+            global_chip_usage_total=global_chip_usage_total,
+            number_of_managers=number_of_managers,
+            date_updated=datetime.now())
         fill_model.save()
         print("Filled up Extra Info DB for GW: ", gw)
     else:

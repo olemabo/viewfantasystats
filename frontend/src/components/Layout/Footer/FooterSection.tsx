@@ -3,14 +3,13 @@ import { FunctionComponent } from "react";
 
 interface FooterProps extends LanguageProps {
     sectionUrls: Record<string, Record<string, string>>;
-    content: any;
     title: string;
 }
 
 const FooterSection: FunctionComponent<FooterProps> = ({
     sectionUrls,
-    content,
     title,
+    languageContent,
 }) => {
     if (!title || !sectionUrls || Object.keys(sectionUrls).length === 0) return null;
 
@@ -21,7 +20,7 @@ const FooterSection: FunctionComponent<FooterProps> = ({
                 {Object.entries(sectionUrls).map(([sectionType, urls]) => (
                     Object.entries(urls).map(([key, url]) => (
                         <a key={key} href={`/${url}`}>
-                            {content?.[sectionType]?.[key]?.title}
+                            {languageContent?.[sectionType]?.[key]?.title}
                         </a>
                     ))
                 ))}

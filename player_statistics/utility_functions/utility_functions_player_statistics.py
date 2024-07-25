@@ -109,9 +109,14 @@ def get_sort_index_and_categories_premier_league(sort_on):
 dict_sort_on_short_name_to_sort_on_name_premier_league = {
     "Total points": "total_points_list", 
     "Mins": "Mins", 
-    "xG": "expected_goals_list", "xA": "expected_assists_list", "xGI": "expected_goal_involvements_list", 
+    "xG": "expected_goals_list", 
+    "xA": "expected_assists_list", 
+    "xGI": "expected_goal_involvements_list", 
     "Bps": "bonus_list", 
-    "ICT": "ict_index_list", "I": "influence_list", "C": "creativity_list", "T": "threat_list", 
+    "ICT": "ict_index_list", 
+    "I": "influence_list", 
+    "C": "creativity_list", 
+    "T": "threat_list", 
     "xGC": "expected_goals_conceded_list"
 }
 

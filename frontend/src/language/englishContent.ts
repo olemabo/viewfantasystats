@@ -61,6 +61,7 @@ export const englishContent = {
         player: 'Player',
         here: 'here',
         noHitsMessage: 'No hits found for your search',
+        errorMessage: 'Unknown error'
     },
     Fixture: {
         FixturePlanner: {
@@ -156,6 +157,26 @@ export const englishContent = {
         LiveFixtures: {
             title: "Fixture Statistics",
         },
+        PriceChange: {
+            title: "Price Changes",
+            price: "Price",
+            status: "Status",
+            nettransfer: "Net Transfers",
+            cost_change_event: "Price Change",
+            position: "Position",
+            percentage: "Ownership",
+            transfers_in: "Transfers In",
+            transfers_out: "Transfers Out",
+            Popover: {
+                status: 'An indicator that shows the player\'s availability. A = Available, I = Injured, S = Suspended, U = Unavailable.',
+                price: 'The player\'s current price.',
+                ownership: 'The player\'s current total ownership percentage.',
+                pricechange: 'Indicates the number of price changes so far this gameweek. A player can increase or decrease by up to 0.3 in a single gameweek.',
+                nettransfers: 'Net transfer changes. This means the number of times transferred in this gameweek minus the number transferred out.',
+                transfersin: 'Number of times transferred in this gameweek.',
+                transfersout: 'Number of times transferred out this gameweek.'
+            }
+        },
         statistic: "Statistics",
         search: "Search",
     },
@@ -179,10 +200,12 @@ export const englishContent = {
         rotationPlannerDescription_second: 'For example, you want to find two goalkeepers who rotate well between rounds 10 and 20.',
         rotationPlannerDescription_1: 'will be 2 because you must have 2 keepers who will rotate.',
         rotationPlannerDescription_2: 'becomes 1 because only one of the two goalkeepers will play per round.', 
+        priceChangeDescription: 'This page shows statistics on the number of times a player has been transferred in or out and changed in price in the current round. The page does NOT show whether a player will go up or down in price (but work is being done on it), but it can give an indication of whether it might happen. It seems that price changes happen every night around 4:30 AM.'
     },
     Popover: {
         effectiveOwnership: 'Effective ownership is a calculation that takes into account managers who start a player (not just those who own them), along with those who captain the player. It is therefore the ownership share that starts the player plus the ownership share that has captained the player.',
         chosenBy: 'Percentage who have this player in their squad (does not have to be in the starting eleven).',
+        captain: 'Percentage who have selected this player as captain in their squad (this includes chips like Triple Captain, Double Captain and Spissrush).',
         topOwnership: 'Percentage among all managers who own this player (figures taken at the start of the round). So not just among the top ',
         minutesPlayed: 'Number of minutes played. The number of minutes is updated live while the matches are being played.',
         points: 'The number of points the player has received this round. The scores are updated live as the matches are played.',

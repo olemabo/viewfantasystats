@@ -4,6 +4,7 @@ from player_statistics.db_models.premier_league.player_statistics_model import P
 from constants import eliteserien_api_url, premier_league_api_url, fpl, esf
 from utils.dataFetch.DataFetch import DataFetch
 import time
+from datetime import date
 
 
 def fill_database_all_players(league_name):
@@ -17,9 +18,9 @@ def fill_database_all_players(league_name):
     for idx, id in enumerate(ids):
         player_data = dataFetch.get_current_individual_players(player_id=id)
         name = static_data[id][0] + " & " + static_data[id][1]
+        updated_or_created = fill_database_for_one_player(player_data, static_data, id, league_name)
         print("Filling db for player: ", name, " with id: ", id, " ... (",
-              idx, "/", len(ids), ")")
-        fill_database_for_one_player(player_data, static_data, id, league_name)
+              idx, "/", len(ids), ") | " + updated_or_created)
         time.sleep(0.5)
     
     print("\nFilled db for all ", str(len(ids)), " players. \n")
@@ -29,6 +30,7 @@ def fill_database_for_one_player(player_data_json, static_data, id, league_name)
     """
         Use extracted fpl data to fill db
     """
+    updated_or_created = ""
     element_id = id
     """player_data_json['history'][0]['element']"""
     # all total values from static json
@@ -131,90 +133,183 @@ def fill_database_for_one_player(player_data_json, static_data, id, league_name)
         temp_fixture_ids.append(gw_i_data['fixture'])
     
     if league_name == fpl:
-        fill_model = PremierLeaguePlayers(
-            player_id=element_id,
-            player_team_id=team_id,
-            player_position_id=player_position_id,
-            player_name=player_name,
-            player_web_name=web_name,
-            chance_of_playing=chance_of_playing,
-            assists_list=temp_assists,
-            bonus_list=temp_bonus,
-            bps_list=temp_bps,
-            clean_sheets_list=temp_clean_sheets,
-            creativity_list=temp_creativity,
-            goals_conceded_list=temp_goals_conceded,
-            goals_scored_list=temp_goals_scored,
-            ict_index_list=temp_ict_index,
-            influence_list=temp_influence,
-            minutes_list=temp_minutes,
-            opponent_team_list=temp_opponent_team,
-            own_goals_list=temp_own_goals,
-            penalties_missed_list=temp_penalties_missed,
-            penalties_saved_list=temp_penalties_saved,
-            red_cards_list=temp_red_cards,
-            round_list=temp_round,
-            saves_list=temp_saves,
-            selected_list=temp_selected,
-            team_a_score_list=temp_team_a_score,
-            team_h_score_list=temp_team_h_score,
-            threat_list=temp_threat,
-            total_points_list=temp_total_points,
-            transfers_balance_list=temp_transfers_balance,
-            transfers_in_list=temp_transfers_in,
-            transfers_out_list=temp_transfers_out,
-            value_list=temp_value,
-            was_home_list=temp_was_home,
-            yellow_cards_list=temp_yellow_cards,
-            expected_goals_list=temp_expected_goals,
-            expected_assists_list=temp_expected_assists,
-            expected_goal_involvements_list=temp_expected_goal_involvements,
-            expected_goals_conceded_list=temp_expected_goals_conceded,
-            expected_goals_per_90=temp_expected_goals_per_90,
-            expected_assists_per_90=temp_expected_assists_per_90,
-            expected_goal_involvements_per_90=temp_expected_goal_involvements_per_90,
-            expected_goals_conceded_per_90=temp_expected_goals_conceded_per_90,
-            goals_conceded_per_90=temp_goals_conceded_per_90,
-            saves_per_90=temp_saves_per_90,
-            fixture_id_list=temp_fixture_ids,
-            player_status=player_status
-        )
-
-        fill_model.save()
+        if len(PremierLeaguePlayers.objects.filter(player_id=element_id)) > 0:
+            fill_model = PremierLeaguePlayers.objects.filter(player_id=element_id)
+            fill_model.update(
+                player_id=element_id,
+                player_team_id=team_id,
+                player_position_id=player_position_id,
+                player_name=player_name,
+                player_web_name=web_name,
+                chance_of_playing=chance_of_playing,
+                assists_list=temp_assists,
+                bonus_list=temp_bonus,
+                bps_list=temp_bps,
+                clean_sheets_list=temp_clean_sheets,
+                creativity_list=temp_creativity,
+                goals_conceded_list=temp_goals_conceded,
+                goals_scored_list=temp_goals_scored,
+                ict_index_list=temp_ict_index,
+                influence_list=temp_influence,
+                minutes_list=temp_minutes,
+                opponent_team_list=temp_opponent_team,
+                own_goals_list=temp_own_goals,
+                penalties_missed_list=temp_penalties_missed,
+                penalties_saved_list=temp_penalties_saved,
+                red_cards_list=temp_red_cards,
+                round_list=temp_round,
+                saves_list=temp_saves,
+                selected_list=temp_selected,
+                team_a_score_list=temp_team_a_score,
+                team_h_score_list=temp_team_h_score,
+                threat_list=temp_threat,
+                total_points_list=temp_total_points,
+                transfers_balance_list=temp_transfers_balance,
+                transfers_in_list=temp_transfers_in,
+                transfers_out_list=temp_transfers_out,
+                value_list=temp_value,
+                was_home_list=temp_was_home,
+                yellow_cards_list=temp_yellow_cards,
+                expected_goals_list=temp_expected_goals,
+                expected_assists_list=temp_expected_assists,
+                expected_goal_involvements_list=temp_expected_goal_involvements,
+                expected_goals_conceded_list=temp_expected_goals_conceded,
+                expected_goals_per_90=temp_expected_goals_per_90,
+                expected_assists_per_90=temp_expected_assists_per_90,
+                expected_goal_involvements_per_90=temp_expected_goal_involvements_per_90,
+                expected_goals_conceded_per_90=temp_expected_goals_conceded_per_90,
+                goals_conceded_per_90=temp_goals_conceded_per_90,
+                saves_per_90=temp_saves_per_90,
+                fixture_id_list=temp_fixture_ids,
+                player_status=player_status)
+            updated_or_created = "Updated: " + str(date.today())
+        else:
+            fill_model = PremierLeaguePlayers(
+                player_id=element_id,
+                player_team_id=team_id,
+                player_position_id=player_position_id,
+                player_name=player_name,
+                player_web_name=web_name,
+                chance_of_playing=chance_of_playing,
+                assists_list=temp_assists,
+                bonus_list=temp_bonus,
+                bps_list=temp_bps,
+                clean_sheets_list=temp_clean_sheets,
+                creativity_list=temp_creativity,
+                goals_conceded_list=temp_goals_conceded,
+                goals_scored_list=temp_goals_scored,
+                ict_index_list=temp_ict_index,
+                influence_list=temp_influence,
+                minutes_list=temp_minutes,
+                opponent_team_list=temp_opponent_team,
+                own_goals_list=temp_own_goals,
+                penalties_missed_list=temp_penalties_missed,
+                penalties_saved_list=temp_penalties_saved,
+                red_cards_list=temp_red_cards,
+                round_list=temp_round,
+                saves_list=temp_saves,
+                selected_list=temp_selected,
+                team_a_score_list=temp_team_a_score,
+                team_h_score_list=temp_team_h_score,
+                threat_list=temp_threat,
+                total_points_list=temp_total_points,
+                transfers_balance_list=temp_transfers_balance,
+                transfers_in_list=temp_transfers_in,
+                transfers_out_list=temp_transfers_out,
+                value_list=temp_value,
+                was_home_list=temp_was_home,
+                yellow_cards_list=temp_yellow_cards,
+                expected_goals_list=temp_expected_goals,
+                expected_assists_list=temp_expected_assists,
+                expected_goal_involvements_list=temp_expected_goal_involvements,
+                expected_goals_conceded_list=temp_expected_goals_conceded,
+                expected_goals_per_90=temp_expected_goals_per_90,
+                expected_assists_per_90=temp_expected_assists_per_90,
+                expected_goal_involvements_per_90=temp_expected_goal_involvements_per_90,
+                expected_goals_conceded_per_90=temp_expected_goals_conceded_per_90,
+                goals_conceded_per_90=temp_goals_conceded_per_90,
+                saves_per_90=temp_saves_per_90,
+                fixture_id_list=temp_fixture_ids,
+                player_status=player_status,
+                player_created_date=date.today()
+            )
+            fill_model.save()
+            updated_or_created = "Created: " + str(date.today())
     
     if league_name == esf:
-        fill_model = EliteserienPlayerStatistic(
-            player_id=element_id,
-            player_team_id=team_id,
-            player_position_id=player_position_id,
-            player_name=player_name,
-            player_web_name=web_name,
-            chance_of_playing=chance_of_playing,
-            assists_list=temp_assists,
-            bonus_list=temp_bonus,
-            clean_sheets_list=temp_clean_sheets,
-            goals_conceded_list=temp_goals_conceded,
-            goals_scored_list=temp_goals_scored,
-            minutes_list=temp_minutes,
-            opponent_team_list=temp_opponent_team,
-            own_goals_list=temp_own_goals,
-            penalties_missed_list=temp_penalties_missed,
-            penalties_saved_list=temp_penalties_saved,
-            red_cards_list=temp_red_cards,
-            round_list=temp_round,
-            saves_list=temp_saves,
-            selected_list=temp_selected,
-            team_a_score_list=temp_team_a_score,
-            team_h_score_list=temp_team_h_score,
-            total_points_list=temp_total_points,
-            transfers_balance_list=temp_transfers_balance,
-            transfers_in_list=temp_transfers_in,
-            transfers_out_list=temp_transfers_out,
-            value_list=temp_value,
-            was_home_list=temp_was_home,
-            yellow_cards_list=temp_yellow_cards,
-            opta_index_list=temp_opta_index,
-            fixture_id_list=temp_fixture_ids,
-            player_status=player_status)
+        if len(EliteserienPlayerStatistic.objects.filter(player_id=element_id)) > 0:
+            fill_model = EliteserienPlayerStatistic.objects.filter(player_id=element_id)
+            fill_model.update(
+                player_id=element_id,
+                player_team_id=team_id,
+                player_position_id=player_position_id,
+                player_name=player_name,
+                player_web_name=web_name,
+                chance_of_playing=chance_of_playing,
+                assists_list=temp_assists,
+                bonus_list=temp_bonus,
+                clean_sheets_list=temp_clean_sheets,
+                goals_conceded_list=temp_goals_conceded,
+                goals_scored_list=temp_goals_scored,
+                minutes_list=temp_minutes,
+                opponent_team_list=temp_opponent_team,
+                own_goals_list=temp_own_goals,
+                penalties_missed_list=temp_penalties_missed,
+                penalties_saved_list=temp_penalties_saved,
+                red_cards_list=temp_red_cards,
+                round_list=temp_round,
+                saves_list=temp_saves,
+                selected_list=temp_selected,
+                team_a_score_list=temp_team_a_score,
+                team_h_score_list=temp_team_h_score,
+                total_points_list=temp_total_points,
+                transfers_balance_list=temp_transfers_balance,
+                transfers_in_list=temp_transfers_in,
+                transfers_out_list=temp_transfers_out,
+                value_list=temp_value,
+                was_home_list=temp_was_home,
+                yellow_cards_list=temp_yellow_cards,
+                opta_index_list=temp_opta_index,
+                fixture_id_list=temp_fixture_ids,
+                player_status=player_status)
+            updated_or_created = "Updated: " + str(date.today())
+        else:
+            fill_model = EliteserienPlayerStatistic(
+                player_id=element_id,
+                player_team_id=team_id,
+                player_position_id=player_position_id,
+                player_name=player_name,
+                player_web_name=web_name,
+                chance_of_playing=chance_of_playing,
+                assists_list=temp_assists,
+                bonus_list=temp_bonus,
+                clean_sheets_list=temp_clean_sheets,
+                goals_conceded_list=temp_goals_conceded,
+                goals_scored_list=temp_goals_scored,
+                minutes_list=temp_minutes,
+                opponent_team_list=temp_opponent_team,
+                own_goals_list=temp_own_goals,
+                penalties_missed_list=temp_penalties_missed,
+                penalties_saved_list=temp_penalties_saved,
+                red_cards_list=temp_red_cards,
+                round_list=temp_round,
+                saves_list=temp_saves,
+                selected_list=temp_selected,
+                team_a_score_list=temp_team_a_score,
+                team_h_score_list=temp_team_h_score,
+                total_points_list=temp_total_points,
+                transfers_balance_list=temp_transfers_balance,
+                transfers_in_list=temp_transfers_in,
+                transfers_out_list=temp_transfers_out,
+                value_list=temp_value,
+                was_home_list=temp_was_home,
+                yellow_cards_list=temp_yellow_cards,
+                opta_index_list=temp_opta_index,
+                fixture_id_list=temp_fixture_ids,
+                player_status=player_status,
+                player_created_date=date.today())
         
-        fill_model.save()
+            fill_model.save()
+            updated_or_created = "Created: " + str(date.today())
+    
+    return updated_or_created

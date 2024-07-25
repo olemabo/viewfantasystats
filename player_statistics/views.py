@@ -18,12 +18,10 @@ from player_statistics.db_models.eliteserien.user_statistics_model_eliteserien i
 from player_statistics.db_models.eliteserien.cup_statistics_model_eliteserien import EliteserienCupStatistics
 
 from models.statistics.apiResponse.SearchUserNameApiResponse import SearchUserNameApiResponse
-from models.statistics.apiResponse.RankStatisticsApiResponse import RankStatisticsApiResponse
 from models.statistics.apiResponse.MostOwnedPlayersApiResponse import MostOwnedPlayersApiResponse
 from models.statistics.apiResponse.RankAndPointsApiResponse import RankAndPointsApiResponse
 from models.statistics.apiResponse.CupStatisticsApiResponse import CupStatisticsApiResponse
 
-from models.statistics.models.RankStatisticsModel import RankStatisticsModel
 from models.statistics.models.CupSearchHitModel import CupSearchHitModel
 from models.statistics.models.CupRoundHitModel import CupRoundHitModel
 from models.statistics.models.SearchHitModel import SearchHitModel
@@ -256,59 +254,7 @@ class SearchUserNameAPIView(APIView):
         except:
             return Response({'Bad Request': 'Something went wrong'}, status=status.HTTP_400_BAD_REQUEST)
 
-
-class RankStatisticsAPIView(APIView):
-
-    def post(self, request, format=None):
-        try:
-            last_x_years = int(request.data.get("last_x_years"))
-            list_of_ranks = [] 
-            number_of_last_years = 1
-            userInfo = EliteserienUserInfoStatistics.objects.all()
-            for hit in userInfo:
-                rank_history = hit.ranking_history
-                number_of_last_years = max(number_of_last_years, len(rank_history))
-                if (len(rank_history) >= last_x_years):
-                    avg_rank = 0
-                    avg_points = 0
-                    user_id = hit.user_id
-                    for rank_info in rank_history[-last_x_years:]:
-                        year_points_rank = rank_info.split(ranking_delimiter)
-                        avg_rank += int(year_points_rank[2])
-                        avg_points += int(year_points_rank[1])
-                    list_of_ranks.append(
-                        RankStatisticsModel(
-                            user_id, 
-                            hit.user_first_name + " " + hit.user_last_name,
-                            hit.user_team_name,
-                            round(avg_rank / last_x_years, 0), 
-                            round(avg_points / last_x_years, 1),
-                            -1,
-                            -1
-                        ))
-            ranks_sorted_on_points = sorted(list_of_ranks, key=lambda x: x.avg_points, reverse=True)
-            list_of_ranks = []
-            for idx, i in enumerate(ranks_sorted_on_points):
-                data = i
-                data.avg_points_ranking = idx + 1 
-                list_of_ranks.append(data)  
-            
-            ranks_sorted_on_rank = sorted(list_of_ranks, key=lambda x: x.avg_rank, reverse=False)
-            list_of_ranks = []
-            for idx, i in enumerate(ranks_sorted_on_rank):
-                data = i
-                data.avg_rank_ranking = idx + 1 
-                list_of_ranks.append(data.toJson())  
-
-            fantasy_manager_url = fantasy_manager_eliteserien_url
-            response = RankStatisticsApiResponse(fantasy_manager_url, list_of_ranks[:1000], number_of_last_years) 
-
-            return JsonResponse(response.toJson(), safe=False)
-
-        except:
-            return Response({'Bad Request': 'Something went wrong'}, status=status.HTTP_400_BAD_REQUEST)
-
-
+    
 class RankAndPointsAPIView(APIView):
 
     def get(self, request):
