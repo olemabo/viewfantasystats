@@ -2,7 +2,6 @@ import { FixtureModel } from '../../../models/liveFixtures/FixtureModel';
 import { DefaultPageContainer } from '../../Layout/DefaultPageContainer/DefaultPageContainer';
 import { useState, FunctionComponent } from 'react';
 import { PageProps,  fpl } from '../../../models/shared/PageProps';
-import { Spinner } from '../../Shared/Spinner/Spinner';
 import Popover from '../../Shared/Popover/Popover';
 import './LiveFixtures.scss';
 import { convertDateToTimeString} from './liveFixturesUtils';
@@ -13,41 +12,41 @@ import GameWeekToggle from './GameweekToggle';
 export const LiveFixturesPage : FunctionComponent<PageProps> = (props) => {
     const [ gw, setGw ] = useState(0);
 
-    const { gameWeeks, isLoading, fixtureData, fixtureInfoId, hasOwnershipData, setFixtureInfoId } = useLiveFixtureData(props.league_type, gw);
+    const { gameWeeks, isLoading, fixtureData, fixtureInfoId, hasOwnershipData, setFixtureInfoId, errorLoading } = useLiveFixtureData(props.leagueType, gw, props.languageContent);
 
     function toggleFixtureBox(id: string) {
         setFixtureInfoId(id === fixtureInfoId ? "" : id);
     }
 
-    if (isLoading) {
-        return <Spinner />;
-    }
-
     const playerNameMinWidth = 120;
 
-    const description = props.league_type === fpl ? props.content.LongTexts.liveFixturesDescriptionFPL : props.content.LongTexts.liveFixturesDescription;
+    const description = props.leagueType === fpl ? props.languageContent.LongTexts.liveFixturesDescriptionFPL : props.languageContent.LongTexts.liveFixturesDescription;
 
     return <>
     <DefaultPageContainer 
         pageClassName='live-fixtures-container'
-        leagueType={props.league_type}
-        heading={props.content.Statistics.LiveFixtures.title} 
+        leagueType={props.leagueType}
+        heading={props.languageContent.Statistics.LiveFixtures.title} 
         description={description}
+        isLoading={isLoading}
+        errorLoading={errorLoading}
+        renderTitle={() => (
+            <h1>
+                {props.languageContent.Statistics.LiveFixtures.title}
+                <Popover 
+                    id='live-fixture-id'
+                    alignLeft={true}
+                    popoverTitle={props.languageContent.Statistics.LiveFixtures.title} 
+                    iconSize={14}
+                    iconPosition={[-10, 0, 0, 3]}
+                >
+                    {description}
+                </Popover>
+            </h1>
+        )}
     >
-        <h1>
-            {props.content.Statistics.LiveFixtures.title}
-            <Popover 
-                id='live-fixture-id'
-                alignLeft={true}
-                popoverTitle={props.content.Statistics.LiveFixtures.title} 
-                iconSize={14}
-                iconPosition={[-10, 0, 0, 3]}
-            >
-                {description}
-            </Popover>
-        </h1>
         {fixtureData?.length > 0 && <>
-            <GameWeekToggle gameWeeks={gameWeeks} setGw={setGw} content={props.content} />
+            <GameWeekToggle gameWeeks={gameWeeks} setGw={setGw} content={props.languageContent} />
             <div className='fixture-boxes-container'>
                 { fixtureData.map((fixture_date: any[]) => (
                     <div>
@@ -73,9 +72,9 @@ export const LiveFixturesPage : FunctionComponent<PageProps> = (props) => {
                                         fixtureInfoId={fixtureInfoId}
                                         playerNameMinWidth={playerNameMinWidth}
                                         hasOwnershipData={hasOwnershipData}
-                                        leagueType={props.league_type}
+                                        leagueType={props.leagueType}
                                         gameWeeks={gameWeeks}
-                                        propsContent={props.content}
+                                        propsContent={props.languageContent}
                                     />
                                 }
                             </>

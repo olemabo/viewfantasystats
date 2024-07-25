@@ -5,7 +5,6 @@ import useRankStatistics from '../../../hooks/useRankStatistics';
 import { Pagination } from '../../Shared/Pagination/Pagination';
 import { PageProps } from '../../../models/shared/PageProps';
 import { sortAndFilterRankData } from './sortAndFilter';
-import { Spinner } from '../../Shared/Spinner/Spinner';
 import { useState, FunctionComponent } from 'react';
 import { Link } from '../../Shared/Link/Link';
 import './RankStatistics.scss';
@@ -13,7 +12,7 @@ import Message from '../../Shared/Messages/Messages';
 
 export const RankStatisticsPage : FunctionComponent<PageProps> = (props) => {
     const [ lastNumberOfYears, setLastNumberOfYears ] = useState(3);
-    const { ranks, fantasyManagerUrl, numberOfLastYears, isLoading } = useRankStatistics(lastNumberOfYears);
+    const { ranks, fantasyManagerUrl, numberOfLastYears, isLoading, errorLoading } = useRankStatistics(lastNumberOfYears, props.languageContent);
 
     const [ query, setQuery ] = useState<string>("");
     const [ sortType, setSortType ] = useState<string>("Rank");
@@ -27,33 +26,32 @@ export const RankStatisticsPage : FunctionComponent<PageProps> = (props) => {
         setSortType('Rank');
         setPaginationNumber(1);
     };
-
-    if (isLoading) {
-        return <Spinner />;
-    }
     
     const ranksFiltered = sortAndFilterRankData(ranks, query, sortType, decreasing);
     
-    let title = props.content.Statistics.RankStatistics?.title;
+    const title = props.languageContent.Statistics.RankStatistics?.title;
     
     return <>
     <DefaultPageContainer 
-        leagueType={props.league_type} 
+        leagueType={props.leagueType} 
         pageClassName='search-user-name-container' 
         heading={title} 
-        description={title}>
-        <h1>{title}</h1>
+        description={title}
+        pageTitle={title}
+        errorLoading={errorLoading}
+        isLoading={isLoading}
+    >
         <form className="form-stuff text-center">
             <div className='last-x-seasons-select'>
-                <label>{props.content.Statistics.RankStatistics.last_season}</label>
+                <label>{props.languageContent.Statistics.RankStatistics.last_season}</label>
                 <select onChange={(e) => changeLastXYears(parseInt(e.target.value))} className="input-box" id="sort_on_dropdown" name="sort_on">
                     { Array.from(Array(numberOfLastYears), (e, i) => 
                         <option 
                             key={`option-${i}`}
                             selected={lastNumberOfYears == (i + 1)} 
                             value={(i + 1).toString()}>
-                            { i == 0 && props.content.General.previous + " " + props.content.General.season }
-                            { i > 0 && props.content.General.last + " " + (i+ 1).toString() + " " + props.content.General.seasons}
+                            { i == 0 && props.languageContent.General.previous + " " + props.languageContent.General.season }
+                            { i > 0 && props.languageContent.General.last + " " + (i+ 1).toString() + " " + props.languageContent.General.seasons}
                         </option>
                     )}
                 </select>
@@ -63,7 +61,7 @@ export const RankStatisticsPage : FunctionComponent<PageProps> = (props) => {
 
             <div className='box-5'>
                 <label htmlFor="site-search" className='hidden'>Search bar</label>
-                <input onChange={(e) => setQuery(e.target.value)} placeholder={props.content.Statistics.PlayerOwnership.search_text} className='input-box' type="search" id="site-search" name="q"></input>
+                <input onChange={(e) => setQuery(e.target.value)} placeholder={props.languageContent.Statistics.PlayerOwnership.search_text} className='input-box' type="search" id="site-search" name="q"></input>
             </div>
         </form>
 
@@ -73,12 +71,12 @@ export const RankStatisticsPage : FunctionComponent<PageProps> = (props) => {
                 <Table tableLayoutType='esf' className='stat-table'>
                     <TableHead>
                         <TableRow key='table-head'>
-                            <TableCell cellType='head' className="narrow">{props.content.General.rank}</TableCell>
-                            <TableCell cellType='head' className="name-col">{props.content.General.teamname}</TableCell>
+                            <TableCell cellType='head' className="narrow">{props.languageContent.General.rank}</TableCell>
+                            <TableCell cellType='head' className="name-col">{props.languageContent.General.teamname}</TableCell>
                             <TableCell cellType='head' minWidth={145}>
                                 <TableSortHead 
                                     defaultSortType={'Increasing'} 
-                                    text={props.content.Statistics.RankStatistics.rank} 
+                                    text={props.languageContent.Statistics.RankStatistics.rank} 
                                     reset={sortType !== 'Rank'} 
                                     onclick={(increase: boolean) => {
                                         setSortType("Rank");
@@ -87,7 +85,7 @@ export const RankStatisticsPage : FunctionComponent<PageProps> = (props) => {
                                 </TableCell>
                             <TableCell cellType='head' minWidth={145}>
                                 <TableSortHead 
-                                    text={props.content.Statistics.RankStatistics.points} 
+                                    text={props.languageContent.Statistics.RankStatistics.points} 
                                     reset={sortType !== 'Points'} 
                                     onclick={(increase: boolean) => {
                                         setSortType("Points");
@@ -125,7 +123,9 @@ export const RankStatisticsPage : FunctionComponent<PageProps> = (props) => {
                 /> 
             }
         </> : <>
-            <Message messageType='info' messageText={props.content.General?.noHitsMessage}/>
+            { query && 
+                <Message messageType='info' messageText={props.languageContent.General?.noHitsMessage}/>
+            }
         </>
         }
     </DefaultPageContainer>

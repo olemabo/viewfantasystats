@@ -4,7 +4,7 @@ import { ShowRotationData } from '../../Fixtures/ShowRotationData/ShowRotationDa
 import ThreeStateCheckbox from '../../Shared/FilterButton/ThreeStateCheckbox';
 import React, { useState, FunctionComponent } from 'react';
 import * as external_urls from '../../../static_urls/externalUrls';
-import { PageProps, esf, fdrRotation } from '../../../models/shared/PageProps';
+import { FixturePlanningProps, PageProps, esf, fdrRotation } from '../../../models/shared/PageProps';
 import FdrBox from '../../Shared/FDR-explaination/FdrBox';
 import TextInput from '../../Shared/TextInput/TextInput';
 import { Spinner } from '../../Shared/Spinner/Spinner';
@@ -15,7 +15,7 @@ import { createSearchQueryFromForminput, extractTeamsToUseAndTeamsInSolution, fi
 import { maxGwEsf, minGwEsf } from '../../../constants/gws';
 import { FDRFormInput } from '../../../models/fixturePlanning/FDRFormInput';
 
-export const RotationPlannerEliteserienPage : FunctionComponent<PageProps> = (props) => {
+export const RotationPlannerEliteserienPage : FunctionComponent<PageProps & FixturePlanningProps> = (props) => {
     const [ showTeamFilters, setShowTeamFilters ] = useState(false);
     const [ validationErrorMessage, setValidationErrorMessage ] = useState("");
     const [ longLoadingTimeText, setLongLoadingTimeText ] = useState('');    
@@ -44,7 +44,7 @@ export const RotationPlannerEliteserienPage : FunctionComponent<PageProps> = (pr
         fdrRotationData,
         kickOffTimes,
         maxGw 
-    } = useFixtureDataESF(fixturePlannerSearchQuery, setFormInput, fdrRotation, setTeamData);
+    } = useFixtureDataESF(fixturePlannerSearchQuery, setFormInput, props, setTeamData);
     
     function updateFDRData() {
         let teamsANDteamsinsolution = extractTeamsToUseAndTeamsInSolution(teamData);
@@ -64,7 +64,7 @@ export const RotationPlannerEliteserienPage : FunctionComponent<PageProps> = (pr
 
         const validInput = validateInput({
             body,
-            propsContent: props.content,
+            propsContent: props.languageContent,
             setValidationErrorMessage,
             setShowTeamFilters,
         });
@@ -79,28 +79,28 @@ export const RotationPlannerEliteserienPage : FunctionComponent<PageProps> = (pr
 
     const { number_of_not_in_solution, number_of_must_be_in_solution, number_can_be_in_solution } = filterTeamData(teamData);
     
-    const popoverText = `${props.content.Fixture.RotationPlanner?.title} ${props.content.LongTexts.rotationPlannerDescription_first} 
+    const popoverText = `${props.languageContent.Fixture.RotationPlanner?.title} ${props.languageContent.LongTexts.rotationPlannerDescription_first} 
 
-    ${props.content.LongTexts.rotationPlannerDescription_second} '${props.content.Fixture.gw_start}' ${props.content.General.and} '${props.content.Fixture.gw_end}' ${props.content.LongTexts.becomesRes} '${props.content.Fixture.teams_to_check}' ${props.content.LongTexts.rotationPlannerDescription_1} '${props.content.Fixture.teams_to_play}' ${props.content.LongTexts.rotationPlannerDescription_2}`;
+    ${props.languageContent.LongTexts.rotationPlannerDescription_second} '${props.languageContent.Fixture.gw_start}' ${props.languageContent.General.and} '${props.languageContent.Fixture.gw_end}' ${props.languageContent.LongTexts.becomesRes} '${props.languageContent.Fixture.teams_to_check}' ${props.languageContent.LongTexts.rotationPlannerDescription_1} '${props.languageContent.Fixture.teams_to_play}' ${props.languageContent.LongTexts.rotationPlannerDescription_2}`;
     
     return <>
     <DefaultPageContainer 
         pageClassName='fixture-planner-container'
-        leagueType={props.league_type}
-        heading={props.content.Fixture.RotationPlanner?.title} 
+        leagueType={props.leagueType}
+        heading={props.languageContent.Fixture.RotationPlanner?.title} 
         description={'Rotation Planner for Eliteserien Fantasy (ESF). '}
     >
-        <h1>{props.content.Fixture.RotationPlanner?.title}<Popover 
+        <h1>{props.languageContent.Fixture.RotationPlanner?.title}<Popover 
             id='rotations-planner-id'
             alignLeft={true}
-            popoverTitle={props.content.Fixture.RotationPlanner?.title} 
+            popoverTitle={props.languageContent.Fixture.RotationPlanner?.title} 
             iconSize={14}
             iconPosition={[-10, 0, 0, 3]}
             popoverText={ popoverText }>
-            { props.content.LongTexts.fixtureAreFrom }
-            <a href={external_urls.url_spreadsheets_dagfinn_thon}>{ props.content.LongTexts.ExcelSheet }</a>
-            { props.content.LongTexts.to } Dagfinn Thon.
-            <FdrBox content={props.content} leagueType={esf} />
+            { props.languageContent.LongTexts.fixtureAreFrom }
+            <a href={external_urls.url_spreadsheets_dagfinn_thon}>{ props.languageContent.LongTexts.ExcelSheet }</a>
+            { props.languageContent.LongTexts.to } Dagfinn Thon.
+            <FdrBox content={props.languageContent} leagueType={esf} />
             </Popover>
         </h1>
         { maxGw > 0 && <>
@@ -115,7 +115,7 @@ export const RotationPlannerEliteserienPage : FunctionComponent<PageProps> = (pr
                             startGw: e,
                         }))} 
                         defaultValue={formInput.startGw}>
-                        {props.content.Fixture.gw_start}
+                        {props.languageContent.Fixture.gw_start}
                     </TextInput>
 
                     <TextInput 
@@ -128,7 +128,7 @@ export const RotationPlannerEliteserienPage : FunctionComponent<PageProps> = (pr
                         }))} 
                         defaultValue={formInput.endGw}
                     >
-                        {props.content.Fixture.gw_end}
+                        {props.languageContent.Fixture.gw_end}
                     </TextInput>
                     
                     <TextInput 
@@ -141,8 +141,8 @@ export const RotationPlannerEliteserienPage : FunctionComponent<PageProps> = (pr
                         }))} 
                         defaultValue={formInput.teamsToCheck}
                     >
-                        {props.content.Fixture.teams_to_check_1}<br/>
-                        {props.content.Fixture.teams_to_check_2}
+                        {props.languageContent.Fixture.teams_to_check_1}<br/>
+                        {props.languageContent.Fixture.teams_to_check_2}
                     </TextInput>
 
                     <TextInput 
@@ -155,11 +155,11 @@ export const RotationPlannerEliteserienPage : FunctionComponent<PageProps> = (pr
                         }))} 
                         defaultValue={formInput.teamsToPlay}
                     >
-                        {props.content.Fixture.teams_to_play_1}<br/>
-                        {props.content.Fixture.teams_to_play_2}
+                        {props.languageContent.Fixture.teams_to_play_1}<br/>
+                        {props.languageContent.Fixture.teams_to_play_2}
                     </TextInput>
 
-                    <input className="submit" type="submit" value={props.content.General.search_button_name}>
+                    <input className="submit" type="submit" value={props.languageContent.General.search_button_name}>
                     </input>
                 </form>
             </div>
@@ -172,14 +172,14 @@ export const RotationPlannerEliteserienPage : FunctionComponent<PageProps> = (pr
                 onclick={(checked: string) => changeXlsxSheet(checked)} 
                 toggleButtonName="FDR-toggle"
                 defaultToggleList={[ 
-                    { name: props.content.General.defence, value: "_defensivt", checked: fdrType==="_defensivt", classname: "defensiv" },
+                    { name: props.languageContent.General.defence, value: "_defensivt", checked: fdrType==="_defensivt", classname: "defensiv" },
                     { name: "FDR", value: "", checked:  fdrType==="", classname: "fdr" },
-                    { name: props.content.General.offence, value: "_offensivt", checked:  fdrType==="_offensivt", classname: "offensiv"}
+                    { name: props.languageContent.General.offence, value: "_offensivt", checked:  fdrType==="_offensivt", classname: "offensiv"}
                 ]}
             /> */}
 
             <Button 
-                buttonText={props.content.Fixture.filter_button_text} 
+                buttonText={props.languageContent.Fixture.filter_button_text} 
                 iconClass={`fa fa-chevron-${showTeamFilters ? "up" : "down"}`} 
                 onclick={() => setShowTeamFilters(!showTeamFilters)} 
                 color="white" 
@@ -221,7 +221,7 @@ export const RotationPlannerEliteserienPage : FunctionComponent<PageProps> = (pr
 
         { !isLoading && fdrRotationData.length > 0 &&
             <ShowRotationData 
-                content={props.content}
+                content={props.languageContent}
                 fdrData={fdrRotationData}
                 kickOffTimes={kickOffTimes} 
             />

@@ -45,6 +45,7 @@ const Footer: FunctionComponent<LanguageProps> = (props) => {
         PlayerOwnership: urls.url_eliteserien_player_ownership,
         LiveFixtures: urls.url_eliteserien_live_fixtures,
         PlayerStatistics: urls.url_eliteserien_player_statistics,
+        PriceChange: urls.url_eliteserien_price_change,
         RankStatistics: urls.url_eliteserien_rank_statistics,
     },
   };
@@ -55,28 +56,28 @@ const Footer: FunctionComponent<LanguageProps> = (props) => {
               {leagueType === fpl && (
                   <>
                       <FooterSection
-                          title={props.content.Fixture.fixture}
+                          title={props.languageContent.Fixture.fixture}
                           sectionUrls={fixturePlannerUrlsFpl}
-                          content={props.content}
+                          languageContent={props.languageContent}
                       />
                       <FooterSection
-                          title={props.content.Fixture.fixture}
+                          title={props.languageContent.Statistics.statistic}
                           sectionUrls={statisticsUrlsFpl}
-                          content={props.content}
+                          languageContent={props.languageContent}
                       />
                   </>
               )}
               {leagueType === esf && (
                   <>
                       <FooterSection
-                          title={props.content.Fixture.fixture}
+                          title={props.languageContent.Fixture.fixture}
                           sectionUrls={fixturePlannerUrlsEsf}
-                          content={props.content}
+                          languageContent={props.languageContent}
                       />
                       <FooterSection
-                          title={props.content.Fixture.fixture}
+                          title={props.languageContent.Statistics.statistic}
                           sectionUrls={statisticsUrlsEsf}
-                          content={props.content}
+                          languageContent={props.languageContent}
                       />
                   </>
               )}

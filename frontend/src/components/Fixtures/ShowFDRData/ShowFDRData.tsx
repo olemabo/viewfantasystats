@@ -7,15 +7,15 @@ import Message from '../../Shared/Messages/Messages';
 import React, { FunctionComponent } from 'react';
 import Popover from '../../Shared/Popover/Popover';
 import './ShowFDRData.scss';
+import { LanguageProps } from '../../../models/shared/LanguageType';
 
 type ShowFDRProps = {
-    content: any;
     fdrData: SimpleTeamFDRDataModel[] | TeamFDRDataModel[];
     kickOffTimes: KickOffTimesModel[];
     allowToggleBorder?: boolean;
     fdrToColor?: any;
     warningMessage: string;
-}
+} & LanguageProps;
 
 export const ShowFDRData : FunctionComponent<ShowFDRProps> = (props) => {
     
@@ -55,7 +55,7 @@ export const ShowFDRData : FunctionComponent<ShowFDRProps> = (props) => {
                         <tbody id="fdr-names">
                             <tr>
                                 <td className="name-column-top-corner">
-                                    {/* {props.content.Fixture.team} */}
+                                    {/* {props.languageContent.Fixture.team} */}
                                 </td>
                             </tr>
                             { props.fdrData.map(fdr => (
@@ -77,7 +77,7 @@ export const ShowFDRData : FunctionComponent<ShowFDRProps> = (props) => {
                         <tbody>
                             <tr className="fdr-row-gws">
                                 { props.kickOffTimes.map(gw =>
-                                    <th key={gw.gameweek}>{props.content.General.round_short}{ gw.gameweek}
+                                    <th key={gw.gameweek}>{props.languageContent.General.round_short}{ gw.gameweek}
                                         <div className="day-month">
                                             { gw.day_month }
                                         </div>
@@ -103,7 +103,7 @@ export const ShowFDRData : FunctionComponent<ShowFDRProps> = (props) => {
                                                         <Popover 
                                                             id={`rotations-planner-id-${g.opponent_team_name}-${g.H_A}`}
                                                             title=""
-                                                            htmlTitle={props.content.Fixture.uncertain_match}
+                                                            htmlTitle={props.languageContent.Fixture.uncertain_match}
                                                             alignLeft={false}
                                                             popoverTitle={""} // fdr.team_name + ' - ' + g.opponent_team_name  
                                                             iconSize={14}

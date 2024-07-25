@@ -16,14 +16,13 @@ import axios from 'axios';
 import { maxGwEsf, maxGwFpl, minGwEsf, minGwFpl } from '../../../constants/gws';
 import { url_get_fdr_data_from_team_id_eliteserien, url_get_fdr_data_from_team_id_premier_league } from '../../../static_urls/APIUrls';
 import useFixturePlannerTeamIDMetaData from '../../../hooks/useFixturePlannerTeamIDPlayers';
-import Message from '../../Shared/Messages/Messages';
 
 export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) => {
-    const fixturePlannerApiPath = props.league_type === esf
+    const fixturePlannerApiPath = props.leagueType === esf
         ? url_get_fdr_data_from_team_id_eliteserien 
         : url_get_fdr_data_from_team_id_premier_league;
     
-    const initMaxGw = props.league_type === esf ? maxGwEsf : maxGwFpl;
+    const initMaxGw = props.leagueType === esf ? maxGwEsf : maxGwFpl;
     
     const [ goalKeepers, setGoalkeepers ] = useState<TeamNamePlayerName[]>([]);
     const [ defenders, setDefenders ] = useState<TeamNamePlayerName[]>([]);
@@ -45,7 +44,7 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
         fixtureData,
         isLoading,
         errorLoading
-    } = useFixturePlannerTeamIDMetaData(props.league_type, setGwStart, setGwEnd);
+    } = useFixturePlannerTeamIDMetaData(props, setGwStart, setGwEnd);
         
     useEffect(() => {       
         const queryString = window.location.search;
@@ -135,41 +134,40 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
         fetchFDRData(body);
     };
 
-    const playerNames = [props.content.General.goalkeeper, props.content.General.defender, props.content.General.midfielder, props.content.General.forward]
-    const initMinGw = props.league_type === esf ? minGwEsf : minGwFpl;
+    const playerNames = [props.languageContent.General.goalkeeper, props.languageContent.General.defender, props.languageContent.General.midfielder, props.languageContent.General.forward]
+    const initMinGw = props.leagueType === esf ? minGwEsf : minGwFpl;
 
     return ( 
     <div className='team-id-wrapper'>
         <div className='team-id-container'>
             <DefaultPageContainer 
                 pageClassName='fixture-planner-container'
-                leagueType={props.league_type}
-                heading={props.content.Fixture.TeamPlanner?.title}
-                description={`Fixture Difficulty Rating Planner for a team with a given team-ID for ${(props.league_type === fpl ? "Premier League" : "Eliteserien")}. `}>
-                <h1>
-                    {props.content.Fixture.TeamPlanner?.title}
-                    <Popover 
-                        id='rotations-planner-id'
-                        title=''
-                        alignLeft={true}
-                        popoverTitle={props.content.Fixture.TeamPlanner?.title} 
-                        iconSize={14}
-                        iconPosition={[-10, 0, 0, 3]}
-                        popoverText={ "" }>
-                        <p>{ props.content.Fixture.TeamPlanner.description_1}</p>
-                        <p>{ props.content.Fixture.TeamPlanner.description_2}</p>
-                        <p>{ props.content.Fixture.TeamPlanner.description_3}</p>
-                        { props.content.LongTexts.fixtureAreFrom }
-                        <a href={external_urls.url_spreadsheets_dagfinn_thon}>{ props.content.LongTexts.ExcelSheet }</a> { props.content.LongTexts.to } Dagfinn Thon.
-                        <FdrBox content={props.content} leagueType={esf}/>
-                    </Popover>
-                </h1>
-                { errorLoading && 
-                    <Message 
-                        messageType='warning' 
-                        messageText={props.content.Fixture?.TeamPlanner?.errorLoadingDataMessage}
-                    />
-                }
+                leagueType={props.leagueType}
+                heading={props.languageContent.Fixture.TeamPlanner?.title}
+                description={`Fixture Difficulty Rating Planner for a team with a given team-ID for ${(props.leagueType === fpl ? "Premier League" : "Eliteserien")}. `}
+                errorLoading={errorLoading}
+                isLoading={isLoading}
+                renderTitle={() => 
+                    <h1>
+                        {props.languageContent.Fixture.TeamPlanner?.title}
+                        <Popover 
+                            id='rotations-planner-id'
+                            title=''
+                            alignLeft={true}
+                            popoverTitle={props.languageContent.Fixture.TeamPlanner?.title} 
+                            iconSize={14}
+                            iconPosition={[-10, 0, 0, 3]}
+                            popoverText={ "" }>
+                            <p>{ props.languageContent.Fixture.TeamPlanner.description_1}</p>
+                            <p>{ props.languageContent.Fixture.TeamPlanner.description_2}</p>
+                            <p>{ props.languageContent.Fixture.TeamPlanner.description_3}</p>
+                            { props.languageContent.LongTexts.fixtureAreFrom }
+                            <a href={external_urls.url_spreadsheets_dagfinn_thon}>{ props.languageContent.LongTexts.ExcelSheet }</a> { props.languageContent.LongTexts.to } Dagfinn Thon.
+                            <FdrBox content={props.languageContent} leagueType={esf}/>
+                        </Popover>
+                    </h1>
+                }    
+            >
                 { maxGw > 0 && 
                     <div className='input-row-container'>
                         <form onSubmit={(e) => { handleUpdateFDRData(); e.preventDefault()}}>
@@ -179,7 +177,7 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
                                 max={maxGw}
                                 onInput={(e: number) => setGwStart(e)} 
                                 defaultValue={gwStart}>
-                                {props.content.Fixture.gw_start}
+                                {props.languageContent.Fixture.gw_start}
                             </TextInput>
                             
                             <TextInput 
@@ -188,7 +186,7 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
                                 max={maxGw}
                                 onInput={(e: number) => setGwEnd(e)} 
                                 defaultValue={gwEnd}>
-                                {props.content.Fixture.gw_end}
+                                {props.languageContent.Fixture.gw_end}
                             </TextInput>
                             
                             <TextInput 
@@ -198,10 +196,10 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
                                 minWidth={80}
                                 onInput={(e: number) => setTeamId(e)}
                                 defaultValue={teamID} >
-                                {props.content.Fixture.teamId}
+                                {props.languageContent.Fixture.teamId}
                             </TextInput>
 
-                            <input className="submit" type="submit" value={props.content.General.search_button_name} />
+                            <input className="submit" type="submit" value={props.languageContent.General.search_button_name} />
                         </form> 
                     </div>
                 }
@@ -211,16 +209,16 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
                 { <Modal 
                     toggleModal={(showModal: boolean) => setOpenModal(showModal)} 
                     openModal={openModal} 
-                    title={`${props.content.General.add} ${props.content.General.new} ${playerNames[newPlayerPositionNumber]}`}>
+                    title={`${props.languageContent.General.add} ${props.languageContent.General.new} ${playerNames[newPlayerPositionNumber]}`}>
                         <div className='text-input-container border'>
-                            <label htmlFor='team_short_name_dropdown'>{props.content.Fixture.team}</label>
+                            <label htmlFor='team_short_name_dropdown'>{props.languageContent.Fixture.team}</label>
                             <select 
                                 onChange={(e) => { setNewPlayerTeam(e.target.value) }} 
                                 id="team_short_name_dropdown" 
                                 name="team_short_name_dropdown"
                                 defaultValue={newPlayerTeam}
                             >
-                                <option value="">{props.content.General.all_teams}</option>
+                                <option value="">{props.languageContent.General.all_teams}</option>
                                 {fixtureData[0]?.map(x => (
                                     <option key={x.team_id} value={x.team_id}>                                
                                         {x.team_name_short}
@@ -229,7 +227,7 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
                             </select>
                         </div>
                         <div className='text-input-container border'>
-                            <label htmlFor='player_dropdown'>{props.content.General.player}</label>
+                            <label htmlFor='player_dropdown'>{props.languageContent.General.player}</label>
                                 <select 
                                     onChange={(e) => { setNewPlayerName(e.target.value)} } 
                                     id="player_dropdown" 
@@ -248,14 +246,14 @@ export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) =
                         </div>
                         <Button 
                             onclick={handleAddPlayer} 
-                            buttonText={props.content.General.add_player}
+                            buttonText={props.languageContent.General.add_player}
                             iconClass='fa fa-plus' />
                     </Modal> 
                 }
 
                 {!loading && fixtureData.length > 0 && kickOffTimes.length > 0 && (
                     <ShowTeamIDFDRData 
-                        content={props.content}
+                        content={props.languageContent}
                         playerData={[goalKeepers, defenders, midfielders, forwards]}
                         fixtureData={fixtureData}
                         gwStart={gwStart}

@@ -732,6 +732,8 @@ class EliteserienChipsAndUserInfo(models.Model):
 
     number_of_managers = models.IntegerField(help_text='Number of managers (130328)', blank=True, null=True)
 
+    date_updated = models.DateTimeField(help_text='Dato eierandel og chips ble lastet ned', blank=True, null=True)
+
     # Metadata
     class Meta:
         ordering = ['gw']
@@ -770,7 +772,7 @@ class EliteserienGwsChecked(models.Model):
         base_field=models.IntegerField(help_text='All GWs that have been updated'),
         size=number_of_gws,  # Maximum of 100 ids in list
     )
-
+    
     # Metadata
     class Meta:
         ordering = ['id']

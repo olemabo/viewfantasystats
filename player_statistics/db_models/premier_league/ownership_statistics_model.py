@@ -754,6 +754,8 @@ class PremierLeagueChipsAndUserInfo(models.Model):
 
     number_of_managers = models.IntegerField(help_text='Number of managers (130328)', blank=True, null=True)
 
+    date_updated = models.DateTimeField(help_text='Dato eierandel og chips ble lastet ned', blank=True, null=True)
+
     # Metadata
     class Meta:
         ordering = ['gw']

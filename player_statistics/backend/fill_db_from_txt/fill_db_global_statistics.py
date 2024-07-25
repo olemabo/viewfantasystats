@@ -141,18 +141,19 @@ def fill_db_extra_info_statistics(gw, file_path):
             #print("Didn't find file: ", current_path)
 
     if new_data:
-        fill_model = PremierLeagueChipsAndUserInfo(gw=gw,
-                                            extra_info_top_1=extra_info_top_1,
-                                            extra_info_top_10=extra_info_top_10,
-                                            extra_info_top_100=extra_info_top_100,
-                                            extra_info_top_1000=extra_info_top_1000,
-                                            extra_info_top_10000=extra_info_top_10000,
-                                            total_chip_usage_1=total_chip_usage_1,
-                                            total_chip_usage_10=total_chip_usage_10,
-                                            total_chip_usage_100=total_chip_usage_100,
-                                            total_chip_usage_1000=total_chip_usage_1000,
-                                            total_chip_usage_10000=total_chip_usage_10000,
-                                            )
+        fill_model = PremierLeagueChipsAndUserInfo(
+            gw=gw,
+            extra_info_top_1=extra_info_top_1,
+            extra_info_top_10=extra_info_top_10,
+            extra_info_top_100=extra_info_top_100,
+            extra_info_top_1000=extra_info_top_1000,
+            extra_info_top_10000=extra_info_top_10000,
+            total_chip_usage_1=total_chip_usage_1,
+            total_chip_usage_10=total_chip_usage_10,
+            total_chip_usage_100=total_chip_usage_100,
+            total_chip_usage_1000=total_chip_usage_1000,
+            total_chip_usage_10000=total_chip_usage_10000,
+            date_updated=datetime.now())
         fill_model.save()
         print("Filled up Extra Info DB for GW: ", gw)
 

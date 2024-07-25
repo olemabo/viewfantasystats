@@ -16,5 +16,5 @@ export type { FixturePlanningType };
 export { fdrPeriode, fdrPlanner, fdrRotation }
 
 export type PageProps = LanguageProps & LeagueProps & {
-    top_x_managers_default?: number;
+    topXManagersDefault?: number;
 }

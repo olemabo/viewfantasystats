@@ -55,14 +55,14 @@ export const SearchUserNamePage : FunctionComponent<PageProps> = (props) => {
     
     return <>
      <div className='search-user-name-container' id="rotation-planner-container">
-         <h1>{props.content.Statistics.SearchUserName?.title}</h1>
+         <h1>{props.languageContent.Statistics.SearchUserName?.title}</h1>
         <form className="" onSubmit={(e) => {search(); e.preventDefault()}}>
 
             <div className='search-box'>
                 <label className='hidden'>Search bar</label>
-                <input onChange={(e) => setQuery(e.currentTarget.value)} placeholder={props.content.Statistics.PlayerOwnership.search_text} type="search" id="site-search" name="q"></input>
+                <input onChange={(e) => setQuery(e.currentTarget.value)} placeholder={props.languageContent.Statistics.PlayerOwnership.search_text} type="search" id="site-search" name="q"></input>
             </div>
-            <input className="submit" type="submit" value={props.content.General.search_button_name}>
+            <input className="submit" type="submit" value={props.languageContent.General.search_button_name}>
             </input>
         </form>
 
@@ -77,7 +77,7 @@ export const SearchUserNamePage : FunctionComponent<PageProps> = (props) => {
                             <p>{x.user_first_name} {x.user_last_name}</p>
                             <p>{x.user_team_name}</p>
                         </div>
-                        <a target="_blank" href={fantasy_manager_url.replace("X", x.user_id)}>{props.content.General.see_team}</a>
+                        <a target="_blank" href={fantasy_manager_url.replace("X", x.user_id)}>{props.languageContent.General.see_team}</a>
                     </div>
                 </>)}
                 <Pagination 

@@ -61,7 +61,7 @@ export const TopMenuMobile: React.FunctionComponent<PageProps & { title: string}
                 </div>
                 <div className="header-menu-section">
                     <div onClick={ () => toggleMenu() } className="header-menu-text">
-                        { !MenuOpen ? props.content.General.menu : props.content.General.close }
+                        { !MenuOpen ? props.languageContent.General.menu : props.languageContent.General.close }
                     </div>
                     <div onClick={ () => toggleMenu() } className="header-menu-icon">
                     { !MenuOpen ? <MenuIcon /> : <CloseIcon /> }
@@ -103,53 +103,53 @@ export const TopMenuMobile: React.FunctionComponent<PageProps & { title: string}
                     <ul>
                         { leagueType == esf && <>
                             <li className="sub-menu-item">
-                                <a onClick={() => closeMenu()} href={"/" + urls.url_eliteserien_fdr_planner}>{props.content.Fixture.FixturePlanner?.title}</a>
+                                <a onClick={() => closeMenu()} href={"/" + urls.url_eliteserien_fdr_planner}>{props.languageContent.Fixture.FixturePlanner?.title}</a>
                             </li>
                             <li className="sub-menu-item">
-                                <a onClick={() => closeMenu()} href={"/" + urls.url_eliteserien_rotation_planner}>{props.content.Fixture.RotationPlanner?.title}</a>
+                                <a onClick={() => closeMenu()} href={"/" + urls.url_eliteserien_rotation_planner}>{props.languageContent.Fixture.RotationPlanner?.title}</a>
                             </li>
                             <li className="sub-menu-item">
-                                <a onClick={() => closeMenu()} href={"/" + urls.url_eliteserien_periode_planner}>{props.content.Fixture.PeriodPlanner?.title}</a>
+                                <a onClick={() => closeMenu()} href={"/" + urls.url_eliteserien_periode_planner}>{props.languageContent.Fixture.PeriodPlanner?.title}</a>
                             </li>
                             <li className="sub-menu-item">
-                                <a onClick={() => closeMenu()} href={"/" + urls.url_eliteserien_fdr_planner_team_id}>{props.content.Fixture.TeamPlanner?.title}</a>
+                                <a onClick={() => closeMenu()} href={"/" + urls.url_eliteserien_fdr_planner_team_id}>{props.languageContent.Fixture.TeamPlanner?.title}</a>
                             </li>
                             <li className="sub-menu-item">
-                                <a onClick={() => closeMenu()} href={"/" + urls.url_eliteserien_player_ownership}>{props.content.Statistics.PlayerOwnership?.title}</a>
+                                <a onClick={() => closeMenu()} href={"/" + urls.url_eliteserien_player_ownership}>{props.languageContent.Statistics.PlayerOwnership?.title}</a>
                             </li>
                             <li className="sub-menu-item">
-                                <a onClick={() => closeMenu()} href={"/" + urls.url_eliteserien_live_fixtures}>{props.content.Statistics.LiveFixtures?.title}</a>
+                                <a onClick={() => closeMenu()} href={"/" + urls.url_eliteserien_live_fixtures}>{props.languageContent.Statistics.LiveFixtures?.title}</a>
                             </li>
                             <li className="sub-menu-item">
-                                <a onClick={() => closeMenu()} href={"/" + urls.url_eliteserien_player_statistics}>{props.content.Statistics.PlayerStatistics?.title}</a>
+                                <a onClick={() => closeMenu()} href={"/" + urls.url_eliteserien_player_statistics}>{props.languageContent.Statistics.PlayerStatistics?.title}</a>
                             </li>
                             <li className="sub-menu-item">
-                                <a onClick={() => closeMenu()} href={"/" + urls.url_eliteserien_rank_statistics}>{props.content.Statistics.RankStatistics?.title}</a>
+                                <a onClick={() => closeMenu()} href={"/" + urls.url_eliteserien_rank_statistics}>{props.languageContent.Statistics.RankStatistics?.title}</a>
                             </li>
                             </>
                         }   
 
                         { leagueType == fpl && <>
                             <li className="sub-menu-item">
-                                <a onClick={() => closeMenu()} href={"/" + urls.url_premier_league_fdr_planner}>{props.content.Fixture.FixturePlanner?.title}</a>
+                                <a onClick={() => closeMenu()} href={"/" + urls.url_premier_league_fdr_planner}>{props.languageContent.Fixture.FixturePlanner?.title}</a>
                             </li>
                             <li className="sub-menu-item">
-                                <a onClick={() => closeMenu()} href={"/" + urls.url_premier_league_rotation_planner}>{props.content.Fixture.RotationPlanner?.title}</a>
+                                <a onClick={() => closeMenu()} href={"/" + urls.url_premier_league_rotation_planner}>{props.languageContent.Fixture.RotationPlanner?.title}</a>
                             </li>
                             <li className="sub-menu-item">
-                                <a onClick={() => closeMenu()} href={"/" + urls.url_premier_league_periode_planner}>{props.content.Fixture.PeriodPlanner?.title}</a>
+                                <a onClick={() => closeMenu()} href={"/" + urls.url_premier_league_periode_planner}>{props.languageContent.Fixture.PeriodPlanner?.title}</a>
                             </li>
                             <li className="sub-menu-item">
-                                <a onClick={() => closeMenu()} href={"/" + urls.url_premier_league_fdr_planner_team_id}>{props.content.Fixture.TeamPlanner?.title}</a>
+                                <a onClick={() => closeMenu()} href={"/" + urls.url_premier_league_fdr_planner_team_id}>{props.languageContent.Fixture.TeamPlanner?.title}</a>
                             </li>
                             <li className="sub-menu-item">
-                                <a onClick={() => closeMenu()} href={"/" + urls.url_premier_league_player_ownership}>{props.content.Statistics.PlayerOwnership?.title}</a>
+                                <a onClick={() => closeMenu()} href={"/" + urls.url_premier_league_player_ownership}>{props.languageContent.Statistics.PlayerOwnership?.title}</a>
                             </li>
                             <li className="sub-menu-item">
-                                <a onClick={() => closeMenu()} href={"/" + urls.url_premier_league_live_fixtures}>{props.content.Statistics.LiveFixtures?.title}</a>
+                                <a onClick={() => closeMenu()} href={"/" + urls.url_premier_league_live_fixtures}>{props.languageContent.Statistics.LiveFixtures?.title}</a>
                             </li>
                             <li className="sub-menu-item">
-                                <a onClick={() => closeMenu()} href={"/" + urls.url_premier_league_player_statistics}>{props.content.Statistics.PlayerStatistics?.title}</a>
+                                <a onClick={() => closeMenu()} href={"/" + urls.url_premier_league_player_statistics}>{props.languageContent.Statistics.PlayerStatistics?.title}</a>
                             </li>
                             </>
                         }

@@ -4,6 +4,9 @@ import { setLeagueType } from '../../../hooks/useLeagueTypeDispatch';
 import { LeagueType, fpl } from '../../../models/shared/LeagueType';
 import { useSelector } from 'react-redux';
 import React from 'react';
+import Message, { MessageErrorLoading } from '../../Shared/Messages/Messages';
+import { Spinner } from '../../Shared/Spinner/Spinner';
+import { ErrorLoading, isEmptyErrorLoadingState } from '../../../models/shared/errorLoading';
 
 type DefaultPageContainerProps = {
     heading: string;
@@ -11,6 +14,10 @@ type DefaultPageContainerProps = {
     leagueType: LeagueType;
     pageClassName?: string;
     children?: React.ReactNode;
+    renderTitle?: () => React.ReactNode;
+    errorLoading?: ErrorLoading;
+    isLoading?: boolean;
+    pageTitle?: string;
 }
 
 export const DefaultPageContainer : React.FunctionComponent<DefaultPageContainerProps> = ({
@@ -19,17 +26,22 @@ export const DefaultPageContainer : React.FunctionComponent<DefaultPageContainer
     pageClassName = '',
     leagueType,
     children,
+    renderTitle,
+    errorLoading,
+    isLoading,
+    pageTitle
   }) => {  
     setLeagueType(leagueType);
-    const langaugeCodeFromRedux = useSelector(languageCodeSelector);
-    document.documentElement.lang = langaugeCodeFromRedux;
+    const languageCode  = useSelector(languageCodeSelector);
+    document.documentElement.lang = languageCode ;
 
     const fullHeading = `${heading} - ${(leagueType === fpl ? "Premier League" : "Eliteserien")}`;
 
     return (
-        <div className={pageClassName} key={`${heading}-container`} lang={langaugeCodeFromRedux}>
+        <div className={pageClassName} key={`${heading}-container`} lang={languageCode }>
             <HelmetAndMetaData description={description} heading={fullHeading} />
-            {children}
+            {renderTitle ? renderTitle() : pageTitle && <h1>{pageTitle}</h1>}
+            {isLoading ? <Spinner /> : isEmptyErrorLoadingState(errorLoading) ? children : <MessageErrorLoading errorLoading={errorLoading} />}
         </div>
     );
 };

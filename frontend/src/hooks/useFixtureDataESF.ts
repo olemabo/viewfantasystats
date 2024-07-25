@@ -1,16 +1,18 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { FixturePlanningType, fdrRotation } from '../models/shared/PageProps';
+import { FixturePlanningProps, FixturePlanningType, PageProps, fdrRotation } from '../models/shared/PageProps';
 import { FDRData, FDR_GW_i, TeamFDRDataModel } from '../models/fixturePlanning/TeamFDRData';
 import { KickOffTimesModel } from '../models/fixturePlanning/KickOffTimes';
 import { RotationPlannerTeamModel } from '../models/fixturePlanning/RotationPlannerTeam';
 import { TeamCheckedModel } from '../models/fixturePlanning/TeamChecked';
 import { FDRFormInput } from '../models/fixturePlanning/FDRFormInput';
+import { ErrorLoading, emptyErrorLoadingState } from '../models/shared/errorLoading';
+import { warning } from '../components/Shared/Messages/Messages';
 
 const useFixtureDataESF = (
     searchQuery: string, 
     setFormInput: React.Dispatch<React.SetStateAction<FDRFormInput>>,
-    fixturePlanningType: FixturePlanningType,
+    pageProps: PageProps & FixturePlanningProps,
     setTeamData?: React.Dispatch<React.SetStateAction<TeamCheckedModel[]>>,
 ) => {
     const fixturePlannerApiPath = '/fixture-planner-eliteserien/get-all-eliteserien-fdr-data/';
@@ -21,7 +23,7 @@ const useFixtureDataESF = (
     const [maxGw, setMaxGw ] = useState(-1);
     const [teamData, setTeamDataLocal] = useState<TeamCheckedModel[]>([]);
 
-    const [errorLoading, setErrorLoading] = useState<boolean>(false);
+    const [errorLoading, setErrorLoading] = useState<ErrorLoading>(emptyErrorLoadingState);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     useEffect(() => {
@@ -44,7 +46,7 @@ const useFixtureDataESF = (
                 const updatedKickOffTimes = data?.gws_and_dates?.map((kickoff: string) => JSON.parse(kickoff)) || [];
                 setKickOffTimes(updatedKickOffTimes);
                 
-                if (fixturePlanningType === fdrRotation) {
+                if (pageProps.fixturePlanningType === fdrRotation) {
                     const RotationPlannerTeamInfoList: RotationPlannerTeamModel[] = [];
                     data.fdr_data.forEach((team: any) => {
                 
@@ -121,15 +123,19 @@ const useFixtureDataESF = (
                 }
 
                 setIsLoading(false);
-                setErrorLoading(false);
+                setErrorLoading(emptyErrorLoadingState);
             } catch (error) {
-                setErrorLoading(true);
+                setErrorLoading({
+                    errorMessage: pageProps.languageContent.General.errorMessage || 'An error occurred',
+                    messageType: warning,
+                });
+            } finally {
                 setIsLoading(false);
             }
         };
 
         fetchData();
-    }, [searchQuery, fixturePlanningType]);
+    }, [searchQuery, pageProps.fixturePlanningType]);
 
     return { isLoading, errorLoading, fdrData, kickOffTimes, maxGw, fdrRotationData };
 };

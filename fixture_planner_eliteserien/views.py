@@ -158,6 +158,7 @@ class PostFDRFromTeamIDView(APIView):
         fixture_list_db, dates, _, _ = read_eliteserien_excel_to_db_format("")
         fixture_list_db_def, dates2, _, _ = read_eliteserien_excel_to_db_format("_defensivt2")
         fixture_list_db_off, dates3, _, _ = read_eliteserien_excel_to_db_format("_offensivt2")
+
                 
         current_gws = [gw for gw in range(0, len(dates) + 1)]
 
@@ -174,10 +175,6 @@ class PostFDRFromTeamIDView(APIView):
             fdr_data_offensive_list = getFixtureData(fixture_list_db_off, number_of_gws)
         else:
             fdr_data_offensive_list = None
-        
-        # fdr_data_list = getFixtureData(fixture_list_db, number_of_gws)
-        # fdr_data_defensive_list = getFixtureData(fixture_list_db_def, number_of_gws)
-        # fdr_data_offensive_list = getFixtureData(fixture_list_db_off, number_of_gws)
 
         temp_kick_off_time, first_upcoming_game = getKickOffData(esf)
         player_list = getPlayerData(esf)
@@ -199,7 +196,6 @@ class PostFDRFromTeamIDView(APIView):
             goal_keepers, defenders, midtfielders, forwards = [], [], [], []
 
             fdr_and_gws = FDRTeamIDApiResponse(goal_keepers, defenders, midtfielders, forwards) 
-
             current_gw = get_request_body(request, "current_gw", int)
 
             team_id = get_request_body(request, "team_id", int)
@@ -208,7 +204,7 @@ class PostFDRFromTeamIDView(APIView):
                 return JsonResponse(fdr_and_gws.toJson(), safe=False)
 
             player_info = read_team_players_from_team_id(team_id, current_gw)
-            
+
             if player_info == 0:
                 return JsonResponse(fdr_and_gws.toJson(), safe=False)
                                                 
@@ -235,8 +231,8 @@ class PostFDRFromTeamIDView(APIView):
             
             return JsonResponse(fdr_and_gws.toJson(), safe=False)
 
-        except:
-            return Response({'Bad Request': 'Something went wrong'}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({'Bad Request': 'Something went wrong: ' + str(e), 'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 def getFixtureData(fixture_list_db, number_of_gws):
@@ -254,7 +250,6 @@ def getFixtureData(fixture_list_db, number_of_gws):
         ).toJson())
 
     return fdr_data_list
-
 
 
 

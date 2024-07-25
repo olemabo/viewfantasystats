@@ -4,5 +4,5 @@ export const no: LanguageType = 'no';
 export const en: LanguageType = 'en';
 
 export type LanguageProps = {
-    content: any;
+    languageContent: any;
 }

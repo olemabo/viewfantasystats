@@ -69,7 +69,7 @@ def read_price_change_statistics(league_name, props_to_store=props_to_store):
         # Write header with property names
         price_change_props = ",".join(props_to_store)
         if price_change_props:
-            price_change_props = price_change_props[:-1] + "\n"
+            price_change_props = price_change_props + "\n"
         file.write(price_change_props)
 
         # Write player data
@@ -83,12 +83,18 @@ def check_if_txt_file_exist(league_name, current_gw):
     season_name = current_season_name_eliteserien if league_name == esf else current_season_name_premier_league
     season_path = os.path.join(league_path, season_name)
     price_change_path = os.path.join(season_path, price_change_folder_name)
+    gw_path = os.path.join(price_change_path, str(current_gw))
     
-    current_datetime = datetime.now().strftime("%Y-%m-%d-%H")
-    txt_file_path = os.path.join(price_change_path, f"{price_change_folder_name}_{current_gw}_{current_datetime}.txt")
+    # Create a folder with the current date
+    current_date = datetime.now().strftime("%Y-%m-%d")
+    date_folder_path = os.path.join(gw_path, current_date)
+    
+    
+    current_hour_minute = datetime.now().strftime("%Y-%m-%d-%H-%M")
+    txt_file_path = os.path.join(date_folder_path, f"{current_hour_minute}.txt")
 
     # Create directories if they don't exist
-    for directory in [league_path, season_path, price_change_path]:
+    for directory in [league_path, season_path, gw_path, date_folder_path, price_change_path]:
         if not os.path.isdir(directory):
             print("Create folder: ", directory)
             os.makedirs(directory)

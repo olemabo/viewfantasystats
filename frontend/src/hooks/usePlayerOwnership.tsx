@@ -5,6 +5,8 @@ import { TeamNameAndIdModel } from '../models/playerOwnership/TeamNameAndIdModel
 import { ChipUsageModel } from '../models/playerOwnership/ChipUsageModel';
 import { PlayerOwnershipModel } from '../models/playerOwnership/PlayerOwnershipModel';
 import { getObjectDataFromKeys } from '../utils/getObjectDataFromKeys';
+import { ErrorLoading, emptyErrorLoadingState } from '../models/shared/errorLoading';
+import { info, warning } from '../components/Shared/Messages/Messages';
 
 interface ChipStats {
     chipUsageRound: number[];
@@ -20,7 +22,7 @@ interface OwnershipMetaData {
     teamNameAndIds: TeamNameAndIdModel[];
 }
 
-const usePlayerOwnership = (leagueType: LeagueType, currentUserGw: number, topXPlayers: number) => {
+const usePlayerOwnership = (leagueType: LeagueType, currentUserGw: number, topXPlayers: number, languageContent: any) => {
     const playeyOwnershipApiPath = '/statistics/player-ownership-api/';
 
     const [chipData, setChipData] = useState<ChipStats>({
@@ -39,9 +41,8 @@ const usePlayerOwnership = (leagueType: LeagueType, currentUserGw: number, topXP
 
     const [ allOwnershipData, setAllOwnershipData ] = useState<PlayerOwnershipModel[]>([]);
 
-    const [ errorLoading, setErrorLoading] = useState<boolean>(false);
+    const [ errorLoading, setErrorLoading ] = useState<ErrorLoading>(emptyErrorLoadingState);
     const [ isLoading, setIsLoading] = useState<boolean>(false);
-    const [ emptyDataMessage, setEmptyDataMessage ] = useState(false);
     
     const total_number_of_gws = 38;
     const gwKeys = Object.fromEntries(Array.from({ length: total_number_of_gws }, (_, i) => [i + 1, `gw_${i + 1}` ]));
@@ -49,11 +50,20 @@ const usePlayerOwnership = (leagueType: LeagueType, currentUserGw: number, topXP
     useEffect(() => {
         const fetchData = async () => {
             setIsLoading(true);
-            try {      
-                const response = await axios.get(`${playeyOwnershipApiPath}?league_name=${leagueType}&top_x_players=${topXPlayers}&current_gw=${currentUserGw}`);
+            try {                      
+                const response = await axios.get(playeyOwnershipApiPath, {
+                    params: { 
+                        league_name: leagueType, 
+                        top_x_players: topXPlayers,
+                        current_gw: currentUserGw,
+                    }
+                });
 
                 if (response?.data?.length === 0) {
-                    setEmptyDataMessage(true)
+                    setErrorLoading({ 
+                        errorMessage: languageContent.Statistics?.PlayerOwnership?.no_data_found,
+                        messageType: info,
+                    });
                     setIsLoading(false);
                     return;
                 }
@@ -93,15 +103,19 @@ const usePlayerOwnership = (leagueType: LeagueType, currentUserGw: number, topXP
                 setAllOwnershipData(tempOwnershipModel);
 
                 setIsLoading(false);
-                setErrorLoading(false);
+                setErrorLoading(emptyErrorLoadingState);
             } catch (error) {
-                setErrorLoading(true);
+                setErrorLoading({
+                    errorMessage: languageContent.General.errorMessage || 'An error occurred',
+                    messageType: warning,
+                });
+            } finally {
                 setIsLoading(false);
             }
         };
 
         fetchData();
-    }, [leagueType, currentUserGw, topXPlayers]);
+    }, [leagueType, currentUserGw, topXPlayers, languageContent]);
 
     function UpdateTeamNameAndIds(data: any) {
         return data.map((team: any) => {
@@ -112,11 +126,10 @@ const usePlayerOwnership = (leagueType: LeagueType, currentUserGw: number, topXP
             };
         });
     }
-
+    
     return { 
         isLoading, 
         errorLoading, 
-        emptyDataMessage, 
         chipData, 
         allOwnershipData,
         ownershipMetaData,

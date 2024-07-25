@@ -2,15 +2,17 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FDRData, FDR_GW_i, SimpleTeamFDRDataModel } from '../models/fixturePlanning/TeamFDRData';
 import { KickOffTimesModel } from '../models/fixturePlanning/KickOffTimes';
-import { FixturePlanningType, fdrRotation } from '../models/shared/PageProps';
+import { FixturePlanningProps, PageProps, fdrRotation } from '../models/shared/PageProps';
 import { RotationPlannerTeamInfoModel } from '../models/fixturePlanning/RotationPlannerTeamInfo';
 import { RotationPlannerTeamModel } from '../models/fixturePlanning/RotationPlannerTeam';
 import { FDRFormInput } from '../models/fixturePlanning/FDRFormInput';
+import { ErrorLoading, emptyErrorLoadingState } from '../models/shared/errorLoading';
+import { warning } from '../components/Shared/Messages/Messages';
 
 const useFixtureDataFPL = (
     searchQuery: string,
     setFormInput: React.Dispatch<React.SetStateAction<FDRFormInput>>,
-    fixturePlanningType: FixturePlanningType,
+    pageProps: PageProps & FixturePlanningProps,
 ) => {
     const fixturePlannerApiPath = "/fixture-planner/get-all-fdr-data/";
     
@@ -18,7 +20,7 @@ const useFixtureDataFPL = (
     const [fdrData, setFdrData] = useState<SimpleTeamFDRDataModel[]>([]); 
     const [kickOffTimes, setKickOffTimes] = useState<KickOffTimesModel[]>([]);
 
-    const [errorLoading, setErrorLoading] = useState<boolean>(false);
+    const [errorLoading, setErrorLoading] = useState<ErrorLoading>(emptyErrorLoadingState);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     useEffect(() => {
@@ -37,7 +39,7 @@ const useFixtureDataFPL = (
                 const updatedKickOffTimes = data?.gws_and_dates?.map((kickoff: string) => JSON.parse(kickoff)) || [];
                 setKickOffTimes(updatedKickOffTimes);
 
-                if (fixturePlanningType === fdrRotation) {
+                if (pageProps.fixturePlanningType === fdrRotation) {
                     const RotationPlannerTeamInfoList: RotationPlannerTeamInfoModel[] = [];
                     data?.fdr_data.forEach((team: any) => {
                         const team_i_json = JSON.parse(team);
@@ -83,9 +85,12 @@ const useFixtureDataFPL = (
                     setFdrData(apiFDRList);
                 }
 
-                setErrorLoading(false);
+                setErrorLoading(emptyErrorLoadingState);
             } catch (error) {
-                setErrorLoading(true);
+                setErrorLoading({
+                    errorMessage: pageProps.languageContent.General.errorMessage || 'An error occurred',
+                    messageType: warning,
+                });
             } finally {
                 setIsLoading(false);
             }

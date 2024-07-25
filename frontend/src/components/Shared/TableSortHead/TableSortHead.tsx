@@ -8,17 +8,23 @@ import './TableSortHead.scss';
 type TableSortHeadProps = {
     text: string,
     onclick: any,
-    defaultSortType?: string,
+    defaultSortType?: TableSortType,
     reset?: boolean,
     popover_title?: string,
     popover_text?: string,
 }
 
 const SortType = {
-	Decreasing: "Decreasing",
-	Increasing: "Increasing",
-	NotSorted: "NotSorted",
+	Decreasing: 'Decreasing',
+	Increasing: 'Increasing',
+	NotSorted: 'NotSorted',
 }
+
+export type TableSortType = 'Decreasing' | 'Increasing' | 'NotSorted';
+
+export const Decreasing: TableSortType = 'Decreasing';
+export const Increasing: TableSortType = 'Increasing';
+export const NotSorted: TableSortType = 'NotSorted';
 
 export const TableSortHead : FunctionComponent<TableSortHeadProps> = ({
     text,

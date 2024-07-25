@@ -8,7 +8,6 @@ import FdrBox from '../../Shared/FDR-explaination/FdrBox';
 import TextInput from '../../Shared/TextInput/TextInput';
 import { Button } from '../../Shared/Button/Button';
 import Popover from '../../Shared/Popover/Popover';
-import Spinner from '../../Shared/Spinner/Spinner';
 import { getTitleAndDescriptionFPL } from '../../Fixtures/fixtureTitleDescriptionUtils';
 import useFixtureDataFPL from '../../../hooks/useFixtureDataFPL';
 import { createSearchQueryFromForminput, filterFdrData } from '../../Fixtures/fixtureUtils';
@@ -31,10 +30,11 @@ export const FixturePlannerPage : FunctionComponent<PageProps & FixturePlanningP
     
     const { 
         isLoadingFixturedata,
+        errorLoading,
         kickOffTimes,
         fdrData,
-    } = useFixtureDataFPL(fixturePlannerSearchQuery, setFormInput, props.fixturePlanningType);
-
+    } = useFixtureDataFPL(fixturePlannerSearchQuery, setFormInput, props);
+    
     function updateFDRData() {
         const query = createSearchQueryFromForminput(formInput);
         setFixturePlannerSearchQuery(query);
@@ -42,37 +42,37 @@ export const FixturePlannerPage : FunctionComponent<PageProps & FixturePlanningP
 
     const filteredFdrData = filterFdrData(fdrData, toggleTeams);
 
-    if (isLoadingFixturedata) {
-        return <Spinner />;
-    }
-
-    const { title, description } = getTitleAndDescriptionFPL(props.content, props.fixturePlanningType);
+    const { title, description } = getTitleAndDescriptionFPL(props.languageContent, props.fixturePlanningType);
 
     return <>
     <DefaultPageContainer 
         pageClassName='fixture-planner-container'
-        leagueType={props.league_type}
+        leagueType={props.leagueType}
         description={description}
-        heading={title}>
-        <h1>
-            {title}
-            <Popover 
-                id='rotations-planner-id'
-                alignLeft={true}
-                popoverTitle={title} 
-                iconSize={14}
-                iconPosition={[-10, 0, 0, 3]}
-                popoverText={description}
-            >
-                { props.content.LongTexts.fixtureAreFrom }
-                <a href={external_urls.url_offical_fantasy_premier_league}>Fantasy Premier League.</a>
-                <FdrBox content={props.content} />
-            </Popover>
-        </h1>
-        
+        heading={title}
+        isLoading={isLoadingFixturedata}
+        errorLoading={errorLoading}
+        renderTitle={() => 
+            <h1>
+                {title}
+                <Popover 
+                    id='rotations-planner-id'
+                    alignLeft={true}
+                    popoverTitle={title} 
+                    iconSize={14}
+                    iconPosition={[-10, 0, 0, 3]}
+                    popoverText={description}
+                >
+                    { props.languageContent.LongTexts.fixtureAreFrom }
+                    <a href={external_urls.url_offical_fantasy_premier_league}>Fantasy Premier League.</a>
+                    <FdrBox content={props.languageContent} />
+                </Popover>
+            </h1>
+        }    
+    >
         <div className='input-row-container'>
             <Button 
-                buttonText={props.content.Fixture.filter_button_text} 
+                buttonText={props.languageContent.Fixture.filter_button_text} 
                 iconClass={`fa fa-chevron-${showTeamFilters ? "up" : "down"}`}
                 onclick={() => setShowTeamFilters(showTeamFilters ? false : true)} 
                 color='white' 
@@ -88,7 +88,7 @@ export const FixturePlannerPage : FunctionComponent<PageProps & FixturePlanningP
                         startGw: e,
                     }))} 
                     defaultValue={formInput.startGw}>
-                    {props.content.Fixture.gw_start}
+                    {props.languageContent.Fixture.gw_start}
                 </TextInput>
                 <TextInput 
                     htmlFor='input-form-end-gw'
@@ -99,7 +99,7 @@ export const FixturePlannerPage : FunctionComponent<PageProps & FixturePlanningP
                         endGw: e,
                     }))} 
                     defaultValue={formInput.endGw}>
-                    {props.content.Fixture.gw_end}
+                    {props.languageContent.Fixture.gw_end}
                 </TextInput>
 
                 { props.fixturePlanningType === fdrPeriode && 
@@ -112,19 +112,19 @@ export const FixturePlannerPage : FunctionComponent<PageProps & FixturePlanningP
                         min={minNumberOfFixture}
                         htmlFor='min-num-fixtures'
                         max={formInput.endGw - formInput.startGw}>
-                        {props.content.Fixture.min_fixtures.split(/(\s+)/)[0]}<br/>
-                        {props.content.Fixture.min_fixtures.split(/(\s+)/)[2]}
+                        {props.languageContent.Fixture.min_fixtures.split(/(\s+)/)[0]}<br/>
+                        {props.languageContent.Fixture.min_fixtures.split(/(\s+)/)[2]}
                     </TextInput>
                 }
 
-                <input className="submit" type="submit" value={props.content.General.search_button_name} />
+                <input className="submit" type="submit" value={props.languageContent.General.search_button_name} />
             </form>
         </div>
 
         { filteredFdrData.length > 0 && showTeamFilters &&
             <FilterTeamBox
-                removeAllText={props.content.Fixture.removeAllText} 
-                addAllText={props.content.Fixture.addAllText} 
+                removeAllText={props.languageContent.Fixture.removeAllText} 
+                addAllText={props.languageContent.Fixture.addAllText} 
                 setToggleTeams={SetToggleTeams}
                 fdrData={filteredFdrData}
                 displayUncheckAll={true}
@@ -133,11 +133,11 @@ export const FixturePlannerPage : FunctionComponent<PageProps & FixturePlanningP
 
         { filteredFdrData.length > 0 && kickOffTimes.length > 0 && (
             <ShowFDRData 
-                warningMessage={props.content.Fixture.noTeamsChosen}
+                warningMessage={props.languageContent.Fixture.noTeamsChosen}
                 kickOffTimes={kickOffTimes}
                 fdrData={filteredFdrData}
                 allowToggleBorder={true}
-                content={props.content}
+                languageContent={props.languageContent}
             />
         )}
     </DefaultPageContainer>
