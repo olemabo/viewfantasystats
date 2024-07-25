@@ -126,6 +126,9 @@ export const TopMenuMobile: React.FunctionComponent<PageProps & { title: string}
                             <li className="sub-menu-item">
                                 <a onClick={() => closeMenu()} href={"/" + urls.url_eliteserien_rank_statistics}>{props.languageContent.Statistics.RankStatistics?.title}</a>
                             </li>
+                            <li className="sub-menu-item">
+                                <a onClick={() => closeMenu()} href={"/" + urls.url_eliteserien_price_change}>{props.languageContent.Statistics.PriceChange?.title}</a>
+                            </li>
                             </>
                         }   
 
