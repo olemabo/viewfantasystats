@@ -3,8 +3,8 @@ from constants import (
     premier_league_api_url, 
     eliteserien_api_url
 )
-from ml.extract_data import calculate_net_transfer_prev_gws
 from models.statistics.models.TransferModel import TransferModel
+from player_statistics.db_models.eliteserien.player_statistics_model import EliteserienPlayerStatistic
 from utils.dataFetch.DataFetch import DataFetch
 from constants import esf
 
@@ -67,3 +67,64 @@ def get_current_gw(DFObject: DataFetch):
         if event['is_current']:
             return int(event['id'])
     return 1
+
+
+def calculate_net_transfer_prev_gws(id, now_cost, cost_change_event, current_gw):
+    # Check if cost_change_event_status is 0
+    if cost_change_event != 0:
+        return 0
+    
+    try:
+        # Fetch the player data from the database
+        player = EliteserienPlayerStatistic.objects.get(player_id=id)
+    except EliteserienPlayerStatistic.DoesNotExist:
+        # If the player does not exist, return 0
+        return 0
+    
+    # Find the current_gw index in the round_list
+    try:
+        # current_gw = current_gw - 1
+        max_gw = max(player.round_list)
+        if (current_gw < max_gw):
+            round_index = player.round_list.index(current_gw)
+        else:
+            round_index = player.round_list.index(max_gw)
+        # round_index = round_index
+    except ValueError:
+        # If current_gw is not in round_list, return 0
+        return 0
+    
+    # this means that the price last gw was changed, and old transfer should not be included in new gw
+    if int(player.value_list[round_index]) != int(now_cost):
+        return 0
+
+    # Compare now_cost with the value in value_list at the found index
+    # if (id == 4):
+    #     print(player.value_list, player.value_list[round_index],round_index, now_cost, id, now_cost, cost_change_event, current_gw)
+    # Initialize net_transfer_prev_gws
+    net_transfer_prev_gws = player.transfers_balance_list[round_index]
+    # if (id == 57 or id == 329):
+    #     print(net_transfer_prev_gws, id, now_cost, player.value_list[round_index], player.player_name, cost_change_event, current_gw, player.round_list.index(current_gw))
+    last_sum = net_transfer_prev_gws
+    # if (id != 329):
+    while True:
+        old_current_now_cost = player.value_list[round_index]
+        old_current_gw = player.round_list[round_index]
+        round_index -= 1
+        new_current_now_cost = player.value_list[round_index]
+        new_current_gw = player.round_list[round_index]
+        if old_current_now_cost != new_current_now_cost or new_current_gw == 0:
+            break
+        # if the check above is true, then we dont want to add transfers
+        if (new_current_gw != old_current_gw):
+            net_transfer_prev_gws += player.transfers_balance_list[round_index]
+            last_sum = player.transfers_balance_list[round_index]
+        # else:
+        #     a = 10
+            # print(f"Double gw for id {id}. GW: {old_current_gw} (transfers: {old_current_now_cost}) and gw: {new_current_gw} (transfers: {new_current_now_cost})")
+        # print(net_transfer_prev_gws, current_gw)
+        # print(1/0)
+    
+    last = net_transfer_prev_gws - last_sum
+    # return net_transfer_prev_gws = last_sum
+    return last
