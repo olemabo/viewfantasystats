@@ -198,7 +198,7 @@ def fill_db_extra_info_statistics_eliteserien(gw, file_path):
             global_chip_usage_this_gw=global_chip_usage_this_gw,
             global_chip_usage_total=global_chip_usage_total,
             number_of_managers=number_of_managers,
-            date_updated=datetime.now())
+            date_updated=datetime.datetime.today())
         fill_model.save()
         print("Filled up Extra Info DB for GW: ", gw)
     else:
