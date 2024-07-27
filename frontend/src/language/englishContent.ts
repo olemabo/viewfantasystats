@@ -172,7 +172,7 @@ export const englishContent = {
                 price: 'The player\'s current price.',
                 ownership: 'The player\'s current total ownership percentage.',
                 pricechange: 'Indicates the number of price changes so far this gameweek. A player can increase or decrease by up to 0.3 in a single gameweek.',
-                nettransfers: 'Net transfer changes. This means the number of times transferred in this gameweek minus the number transferred out.',
+                nettransfers: 'Net transfer changes this gameweek. This means the number of times transferred in this gameweek minus the number transferred out.',
                 transfersin: 'Number of times transferred in this gameweek.',
                 transfersout: 'Number of times transferred out this gameweek.'
             }

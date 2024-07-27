@@ -170,7 +170,7 @@ export const norwegianContent = {
                 price: 'Spillerens nåværende pris.',
                 ownership: 'Spillerens nåværende totale eierandel.',
                 pricechange: 'Angir antall prisendringer så langt denne runden. En spiller kan øke eller synke med opptil 0.3 i en enkelt runde.',
-                nettransfers: 'Netto bytteendringer. Det vil si antall ganger byttet inn denne runden minus antall byttet ut.',
+                nettransfers: 'Netto bytteendringer nåværende runde. Det vil si antall ganger byttet inn denne runden minus antall byttet ut.',
                 transfersin: 'Antall ganger byttet inn i denne runden.',
                 transfersout: 'Antall ganger byttet ut i denne runden.',
             }

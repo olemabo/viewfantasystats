@@ -153,7 +153,7 @@ def fill_db_extra_info_statistics(gw, file_path):
             total_chip_usage_100=total_chip_usage_100,
             total_chip_usage_1000=total_chip_usage_1000,
             total_chip_usage_10000=total_chip_usage_10000,
-            date_updated=datetime.now())
+            date_updated=datetime.datetime.today())
         fill_model.save()
         print("Filled up Extra Info DB for GW: ", gw)
 
