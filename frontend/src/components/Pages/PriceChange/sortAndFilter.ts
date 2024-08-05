@@ -1,6 +1,5 @@
-import { PlayerStatisticsModel } from "../../../models/playerStatistics/PlayerStatisticsModel";
 import { PriceChangeModel } from "../../../models/priceChange/PriceChangeModel";
-import { propComparatorPlayerStatistics, propComparatorPriceChangeModel } from "../../../utils/compareFunctions";
+import { propComparatorPriceChangeModel } from "../../../utils/compareFunctions";
 
 export function sortAndFilterPriceChange(priceChange: PriceChangeModel[], query: string, teamId: string, positionId: string, sortType: string, decreasing: boolean) {
     const temp: PriceChangeModel[] = [];

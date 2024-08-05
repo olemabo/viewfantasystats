@@ -17,6 +17,7 @@ export const PriceChange : FunctionComponent<PageProps> = (props) => {
     const [ sortingTeamId, setSortingTeamId ] = useState(defaultFormValueAllSelected);
     const [ sortingPositionId, setSortingPositionId ] = useState(defaultFormValueAllSelected);
 
+    const [ currentGw, setCurrentGw ] = useState(0);
     const [ query, setQuery ] = useState<string>("");
     const [ sortType, setSortType ] = useState<string>("NetTransfers");
     const [ decreasing, setDecreasing ] = useState<boolean>(true);
@@ -24,9 +25,10 @@ export const PriceChange : FunctionComponent<PageProps> = (props) => {
     const  { isLoading, 
         errorLoading, 
         priceChange,
+        gwList,
         teamNameAndIds
-     } = usePriceChange(props.leagueType, props.languageContent);
-
+     } = usePriceChange(props.leagueType, props.languageContent, currentGw);
+    
     const priceChangeSorted =  sortAndFilterPriceChange(priceChange, query, sortingTeamId, sortingPositionId, sortType, decreasing);
     
     const [ pagingationNumber, setPaginationNumber ] = useState(1);
@@ -40,9 +42,12 @@ export const PriceChange : FunctionComponent<PageProps> = (props) => {
 
     const [ currentSorted, setCurrentSorted ] = useState("NetTransfers");
 
+    const isLatestGw = currentGw === 0;
+
     return <>
-    <DefaultPageContainer 
+    <DefaultPageContainer
         pageClassName='player-ownership-container'
+        style={isLatestGw ? undefined : {maxWidth: 615}}
         leagueType={props.leagueType}
         heading={props.languageContent.Statistics.PriceChange.title} 
         description={'Se eierandelen av ulike spillere fra Eliteserien blant topp 100, 1000 og 5000 managere i Eliteserien Fantasy. Siden viser statistikk rundt EO (Effective Ownership), eierandel, kaptein, visekaptein, benket og total eierandel, samt chips bruk og laginformasjon. Data hentes ut blant topp 100, 1000 og 5000 rett etter byttefrist hver runde. '}
@@ -61,7 +66,7 @@ export const PriceChange : FunctionComponent<PageProps> = (props) => {
             </Popover>
         </h1>}
     >
-        <form className="form-stuff player-stats text-center">
+        <form className="form-stuff price-change text-center">
                 <div className='box-1'>
                     <label>{props.languageContent.General.view}</label>
                     <select 
@@ -94,14 +99,33 @@ export const PriceChange : FunctionComponent<PageProps> = (props) => {
                 </div>
                 
                 <div className='box-3'>
-                </div>
+                <label>{props.languageContent.General.gw}</label>
+                <select 
+                    onChange={(e) => {
+                        setCurrentGw(parseInt(e.target.value))
+                        setPaginationNumber(1)
+                    }} 
+                    defaultValue={currentGw > 0 ? currentGw : -1}
+                    className="input-box" 
+                    id="last_x_dropdown" 
+                    name="last_x"
+                >
+                    { gwList.map(gw => (
+                        <option key={gw} value={gw}>
+                            {gw}
+                        </option>
+                    ))}
+                    <option key="current-gw" value={-1}>{Math.max(...gwList) + 1}</option>
+                </select>
+            </div>
 
                 <div className='box-4'></div>
 
                 <div className='box-5'>
                     <label htmlFor='site-search' className='hidden'>Search bar</label>
                     <input 
-                        onChange={(e) => setQuery(e.target.value)} 
+                        onChange={(e) => setQuery(e.target.value)}
+                        value={query}
                         placeholder={props.languageContent.Statistics.PlayerOwnership.search_text} 
                         className='input-box' 
                         type="search" 
@@ -119,15 +143,17 @@ export const PriceChange : FunctionComponent<PageProps> = (props) => {
                         <TableCell cellType='head' minWidth={144}>
                             {props.languageContent.General.player}
                         </TableCell>
-                        <TableCell cellType='head' minWidth={80}>
-                            <TableSortHead
-                                text={props.languageContent.Statistics.PriceChange.status}
-                                popover_title={props.languageContent.Statistics.PriceChange.status}
-                                popover_text={props.languageContent.Statistics.PriceChange.Popover.status}
-                                reset={currentSorted != 'Status'}
-                                onclick={(increase: boolean) => sortPriceChangeData('Status', increase)}
-                            />
-                        </TableCell>
+                        { isLatestGw &&
+                            <TableCell cellType='head' minWidth={80}>
+                                <TableSortHead
+                                    text={props.languageContent.Statistics.PriceChange.status}
+                                    popover_title={props.languageContent.Statistics.PriceChange.status}
+                                    popover_text={props.languageContent.Statistics.PriceChange.Popover.status}
+                                    reset={currentSorted != 'Status'}
+                                    onclick={(increase: boolean) => sortPriceChangeData('Status', increase)}
+                                />
+                            </TableCell>
+                        }
                         <TableCell cellType='head' minWidth={90}>
                             <TableSortHead
                                 text={props.languageContent.Statistics.PriceChange.price} 
@@ -165,24 +191,26 @@ export const PriceChange : FunctionComponent<PageProps> = (props) => {
                                 onclick={(increase: boolean) => sortPriceChangeData('NetTransfers', increase)}
                             />
                         </TableCell>
-                        <TableCell cellType='head' minWidth={105} className='last-element'>
-                            <TableSortHead
-                                text={props.languageContent.Statistics.PriceChange.transfers_in}
-                                popover_title={props.languageContent.Statistics.PriceChange.transfers_in}
-                                popover_text={props.languageContent.Statistics.PriceChange.Popover.transfersin}
-                                reset={currentSorted != 'TransfersIn'}
-                                onclick={(increase: boolean) => sortPriceChangeData('TransfersIn', increase)}
-                            />
-                        </TableCell>
-                        <TableCell cellType='head'minWidth={120} className='last-element'>
-                            <TableSortHead
-                                text={props.languageContent.Statistics.PriceChange.transfers_out}
-                                popover_title={props.languageContent.Statistics.PriceChange.transfers_out}
-                                popover_text={props.languageContent.Statistics.PriceChange.Popover.transfersout}
-                                reset={currentSorted != 'TransfersOut'}
-                                onclick={(increase: boolean) => sortPriceChangeData('TransfersOut', increase)}
-                            />
-                        </TableCell>
+                        { isLatestGw && <>
+                            <TableCell cellType='head' minWidth={105} className='last-element'>
+                                <TableSortHead
+                                    text={props.languageContent.Statistics.PriceChange.transfers_in}
+                                    popover_title={props.languageContent.Statistics.PriceChange.transfers_in}
+                                    popover_text={props.languageContent.Statistics.PriceChange.Popover.transfersin}
+                                    reset={currentSorted != 'TransfersIn'}
+                                    onclick={(increase: boolean) => sortPriceChangeData('TransfersIn', increase)}
+                                />
+                            </TableCell>
+                            <TableCell cellType='head'minWidth={120} className='last-element'>
+                                <TableSortHead
+                                    text={props.languageContent.Statistics.PriceChange.transfers_out}
+                                    popover_title={props.languageContent.Statistics.PriceChange.transfers_out}
+                                    popover_text={props.languageContent.Statistics.PriceChange.Popover.transfersout}
+                                    reset={currentSorted != 'TransfersOut'}
+                                    onclick={(increase: boolean) => sortPriceChangeData('TransfersOut', increase)}
+                                />
+                            </TableCell>
+                        </>}
                     </TableRow>
                 </TableHead>
 
@@ -190,22 +218,24 @@ export const PriceChange : FunctionComponent<PageProps> = (props) => {
                     {priceChangeSorted
                         .slice((pagingationNumber - 1) * numberOfHitsPerPagination, (pagingationNumber - 1) * numberOfHitsPerPagination + numberOfHitsPerPagination)
                         .map((player, index) => 
-                    <TableRow key={`ownership-key-${index}`}>
+                    <TableRow key={`ownership-key-${index}-${currentGw}`}>
                         <TableCell cellType='data' minWidth={144}><div>{player.web_name}</div> </TableCell>
-                        <TableCell cellType='data' minWidth={80} className={(currentSorted == 'Status') ? 'selected' : ''}>{player.status.toUpperCase()}</TableCell>
+                        { isLatestGw && <TableCell cellType='data' minWidth={80} className={(currentSorted == 'Status') ? 'selected' : ''}>{player.status.toUpperCase()}</TableCell>}
                         <TableCell cellType='data' minWidth={90} className={(currentSorted == 'Price') ? 'selected' : ''}>{(player.now_cost / 10).toFixed(1)}</TableCell>
                         <TableCell cellType='data' minWidth={105} className={(currentSorted == 'Percentage') ? 'selected' : ''}>{player.selected_by_percent}</TableCell>
                         <TableCell cellType='data' className={(currentSorted == 'Change') ? 'selected' : ''}>{(player.cost_change_event / 10).toFixed(1)}</TableCell>
                         <TableCell cellType='data' minWidth={145} className={(currentSorted == 'NetTransfers') ? 'selected' : ''}>{
-                            <>{(player.transfers_in_event - player.transfers_out_event).toFixed(0)}
-                            { (player.transfers_in_event - player.transfers_out_event) === 0 ? <></> : (player.transfers_in_event - player.transfers_out_event) > 0 ? 
+                            <>{(player.net_transfers).toFixed(0)}
+                            { (player.net_transfers) === 0 ? <></> : (player.net_transfers) > 0 ? 
                             <ExpandLess style={{position: 'relative', top: '3px', left: '5px'}} color='success' fontSize={'inherit'} /> :
                             <ExpandMore style={{position: 'relative', top: '3px', left: '5px'}} color='error' fontSize={'inherit'} />
                             }                           
                             </>
                         }</TableCell>
-                        <TableCell cellType='data' minWidth={105} className={(currentSorted == 'TransfersIn') ? 'selected' : ''}>{(player.transfers_in_event).toFixed(0)} </TableCell>
-                        <TableCell cellType='data' minWidth={120} className={(currentSorted == 'TransfersOut') ? 'selected' : ''}>{(player.transfers_out_event).toFixed(0)} </TableCell>
+                        { isLatestGw && <>
+                            <TableCell cellType='data' minWidth={105} className={(currentSorted == 'TransfersIn') ? 'selected' : ''}>{(player.transfers_in_event).toFixed(0)} </TableCell>
+                            <TableCell cellType='data' minWidth={120} className={(currentSorted == 'TransfersOut') ? 'selected' : ''}>{(player.transfers_out_event).toFixed(0)} </TableCell>
+                        </>}
                     </TableRow>
                     )}             
                 </TableBody>

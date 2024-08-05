@@ -66,6 +66,10 @@
             grid-template-columns: 138px 110px 140px 1fr 170px;
         }
 
+        &.price-change {
+            grid-template-columns: 138px 110px 60px 1fr 170px;
+        }
+
         select {
             border: 1px solid var(--white-color);
             background-color: var(--white-color);

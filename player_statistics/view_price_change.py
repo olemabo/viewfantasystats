@@ -17,15 +17,18 @@ class PriceChangeAPIView(APIView):
     def get(self, request, format=None):
         try:
             league_name = request.GET.get('league_name', '').lower()
+            current_gw = int(request.GET.get('gw', -1))
 
-            player_transfers = GetTransferData(league_name, useJson=True)
+            player_transfers, current_gw = GetTransferData(league_name, useJson=True, gw=current_gw)
 
             team_names_and_ids = EliteserienTeamInfo.objects.all() if league_name == esf else PremierLeagueTeamInfo.objects.all()
             team_names_and_ids_list = [TeamAndIdModel(team.team_name, team.team_id).toJson() for team in team_names_and_ids]
+            gw_list = [gw for gw in range(1, current_gw + 1)]
 
             response = PriceChangeApiModel(
                 player_transfers,
-                team_names_and_ids_list
+                team_names_and_ids_list,
+                gw_list
             )
 
             return JsonResponse(response.toJson(), safe=False)

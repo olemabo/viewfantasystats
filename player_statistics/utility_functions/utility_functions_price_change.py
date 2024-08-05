@@ -5,61 +5,99 @@ from constants import (
 )
 from models.statistics.models.TransferModel import TransferModel
 from player_statistics.db_models.eliteserien.player_statistics_model import EliteserienPlayerStatistic
+from player_statistics.db_models.premier_league.player_statistics_model import PremierLeaguePlayers
 from utils.dataFetch.DataFetch import DataFetch
 from constants import esf
 
-def GetTransferData(league_name = esf, useJson = True):
+def GetTransferData(league_name = esf, useJson = True, gw = -1):
     api_url = eliteserien_api_url if league_name == esf else premier_league_api_url
 
     DFObject = DataFetch(api_url)
     
     current_gameweek = get_current_gw(DFObject)
-    static_bootstrap = DFObject.get_current_fpl_info()
-
-    elements = static_bootstrap["elements"]
-
     transferList = []
+    if gw > 0 and gw <= current_gameweek:
+        players = EliteserienPlayerStatistic.objects.all() if league_name == esf else PremierLeaguePlayers.objects.all()
+        for player in players:
+            if gw in player.round_list:
+                round_index = player.round_list.index(gw)
+            else:
+                round_index = 0
 
-    for player in elements:
-        cost_change_event = player["cost_change_event"]
-        cost_change_start = player["cost_change_start"]
-        transfers_in = player["transfers_in"]
-        transfers_in_event = player["transfers_in_event"]
-        transfers_out = player["transfers_out"]
-        transfers_out_event = player["transfers_out_event"]
-        selected_by_percent = player["selected_by_percent"]
-        web_name = player["web_name"]
-        team_code = player["team"]
-        element_type = player["element_type"]
-        status = player["status"]
-        now_cost = player["now_cost"]
+            if round_index != 0:
+                if round_index == 1:
+                    cost_change_event = 0
+                else:
+                    cost_change_event = player.value_list[round_index] - player.value_list[round_index-1]
 
-        net_transfer_prev_gws = calculate_net_transfer_prev_gws(
-            player['id'], 
-            now_cost - cost_change_event, 
-            0, 
-            current_gameweek
-        )
+                transfers_in_event = -1
+                transfers_out_event = -1
+                selected_by_percent = player.selected_list[round_index]
+                web_name = player.player_web_name
+                team_code = player.player_team_id
+                element_type = player.player_position_id
+                status = player.player_status
+                now_cost = player.value_list[round_index]
+                net_transfers = player.transfers_balance_list[round_index]
+                net_transfer_prev_gws = -1
 
-        transferModel = TransferModel(
-            cost_change_event,
-            cost_change_start,
-            transfers_in,
-            transfers_in_event,
-            transfers_out,
-            transfers_out_event,
-            web_name,
-            team_code,
-            element_type,
-            status,
-            now_cost,
-            selected_by_percent,
-            net_transfer_prev_gws,
-        )
+                transferModel = TransferModel(
+                    cost_change_event=cost_change_event,
+                    transfers_in_event=transfers_in_event,
+                    transfers_out_event=transfers_out_event,
+                    web_name=web_name,
+                    team_code=team_code,
+                    element_type=element_type,
+                    status=status,
+                    now_cost=now_cost,
+                    selected_by_percent=selected_by_percent,
+                    net_transfers = net_transfers,
+                    net_transfer_prev_gws=net_transfer_prev_gws,
+                )
 
-        transferList.append(transferModel.toJson() if useJson else transferModel)
+                transferList.append(transferModel.toJson() if useJson else transferModel)
 
-    return transferList
+    else:
+        static_bootstrap = DFObject.get_current_fpl_info()
+
+        elements = static_bootstrap["elements"]
+        total_number_of_players = static_bootstrap["total_players"]
+
+        for player in elements:
+            cost_change_event = player["cost_change_event"]
+            transfers_in_event = player["transfers_in_event"]
+            transfers_out_event = player["transfers_out_event"]
+            selected_by_percent = int(float(player["selected_by_percent"]) * int(total_number_of_players) / 100)
+            web_name = player["web_name"]
+            team_code = player["team"]
+            element_type = player["element_type"]
+            status = player["status"]
+            now_cost = player["now_cost"]
+
+            net_transfer_prev_gws = calculate_net_transfer_prev_gws(
+                player['id'], 
+                now_cost - cost_change_event, 
+                0, 
+                current_gameweek
+            )
+
+            transferModel = TransferModel(
+                cost_change_event=cost_change_event,
+                transfers_in_event=transfers_in_event,
+                transfers_out_event=transfers_out_event,
+                web_name=web_name,
+                team_code=team_code,
+                element_type=element_type,
+                status=status,
+                now_cost=now_cost,
+                selected_by_percent=selected_by_percent,
+                net_transfers=transfers_in_event-transfers_out_event,
+                net_transfer_prev_gws=net_transfer_prev_gws,
+            )
+
+            transferList.append(transferModel.toJson() if useJson else transferModel)
+
+    return transferList, current_gameweek
 
 def get_current_gw(DFObject: DataFetch):
     events = DFObject.get_current_fpl_info()['events']
