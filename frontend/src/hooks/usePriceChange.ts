@@ -6,11 +6,12 @@ import { LeagueType } from '../models/shared/LeagueType';
 import { PriceChangeModel } from '../models/priceChange/PriceChangeModel';
 import { TeamNameAndIdModel } from '../models/playerOwnership/TeamNameAndIdModel';
 
-const usePriceChange = (leagueType: LeagueType, languageContent: any) => {
+const usePriceChange = (leagueType: LeagueType, languageContent: any, currentGw: number) => {
     const playerOwnershipApiPath = "/statistics/price-change-api/";
 
     const [priceChange, setPriceChange] = useState<PriceChangeModel[]>([]);
     const [teamNameAndIds, setTeamNameAndIds] = useState<TeamNameAndIdModel[]>([]);
+    const [gwList, setGwList] = useState<number[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [errorLoading, setErrorLoading] = useState<ErrorLoading>(emptyErrorLoadingState);
 
@@ -19,26 +20,28 @@ const usePriceChange = (leagueType: LeagueType, languageContent: any) => {
             setIsLoading(true);
             try {
                 const response = await axios.get(playerOwnershipApiPath, {
-                    params: { league_name: leagueType }
+                    params: { 
+                        league_name: leagueType, 
+                        gw: currentGw
+                    }
                 });
                 
                 const data = JSON.parse(response.data);
                 
                 const priceChangeModel: PriceChangeModel[] = [];
-                data.player_transfers.map((rank: string) => {
-                    const parsedData: PriceChangeModel = JSON.parse(rank);
+                data.player_transfers.map((transfers: string) => {
+                    const parsedData: PriceChangeModel = JSON.parse(transfers);
                     priceChangeModel.push({
                         cost_change_event: parsedData.cost_change_event,
                         cost_change_start: parsedData.cost_change_start,
-                        transfers_in: parsedData.transfers_in,
                         transfers_in_event: parsedData.transfers_in_event,
-                        transfers_out: parsedData.transfers_out,
                         transfers_out_event: parsedData.transfers_out_event,
                         web_name: parsedData.web_name,
                         team_code: parsedData.team_code,
                         element_type: parsedData.element_type,
                         status: parsedData.status,
                         now_cost: parsedData.now_cost,
+                        net_transfers: parsedData.net_transfers,
                         selected_by_percent: parsedData.selected_by_percent,
                         net_transfer_prev_gws: parsedData.net_transfer_prev_gws,
                     });
@@ -46,7 +49,8 @@ const usePriceChange = (leagueType: LeagueType, languageContent: any) => {
                 
                 setPriceChange(priceChangeModel);
                 setTeamNameAndIds(UpdateTeamNameAndIds(data.team_names_and_ids))
-                
+                setGwList(data.gw_list);
+
                 setIsLoading(false);
                 setErrorLoading(emptyErrorLoadingState);
             } catch (error) {
@@ -60,7 +64,7 @@ const usePriceChange = (leagueType: LeagueType, languageContent: any) => {
         };
 
         fetchData();
-    }, [leagueType]);
+    }, [leagueType, currentGw]);
 
     function UpdateTeamNameAndIds(data: any) {
         return data.map((team: any) => {
@@ -72,7 +76,7 @@ const usePriceChange = (leagueType: LeagueType, languageContent: any) => {
         });
     }
 
-    return { priceChange, teamNameAndIds, isLoading, errorLoading };
+    return { priceChange, teamNameAndIds, gwList, isLoading, errorLoading };
 };
 
 export default usePriceChange;

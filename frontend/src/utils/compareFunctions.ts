@@ -92,12 +92,10 @@ export const propComparatorPriceChangeModel = (prop: string, increasing: boolean
         return 0;
     }
     if (prop === 'NetTransfers') {
-        const netTransfersA = a.transfers_in_event - a.transfers_out_event;
-        const netTransfersB = b.transfers_in_event - b.transfers_out_event;
-        if ( netTransfersA > netTransfersB){
+        if ( a.net_transfers > b.net_transfers){
             return increasing ? -1 : 1;
         }
-        if (netTransfersA < netTransfersB){
+        if (a.net_transfers < b.net_transfers){
             return increasing ? 1 : -1;
         }
         return 0;

@@ -1,10 +1,9 @@
 export interface PriceChangeModel {
     cost_change_event: number;
     cost_change_start: number;
-    transfers_in: number;
     transfers_in_event: number;
-    transfers_out: number;
     transfers_out_event: number;
+    net_transfers: number;
     web_name: string;
     team_code: string;
     element_type: number;

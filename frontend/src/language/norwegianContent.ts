@@ -162,13 +162,13 @@ export const norwegianContent = {
             nettransfer: "Netto bytter",
             cost_change_event: "Prisendring",
             position: "Posisjon",
-            percentage: "Eierandel",
+            percentage: "Valgt av",
             transfers_in: "Byttet inn",
             transfers_out: "Byttet ut",
             Popover: {
                 status: 'En indikator som sier noe om spillerens tilgjengelighet. A = Available, I = Injured, S = Suspended, U = Unavailable.',
                 price: 'Spillerens nåværende pris.',
-                ownership: 'Spillerens nåværende totale eierandel.',
+                ownership: 'Antall lag som eier spilleren.',
                 pricechange: 'Angir antall prisendringer så langt denne runden. En spiller kan øke eller synke med opptil 0.3 i en enkelt runde.',
                 nettransfers: 'Netto bytteendringer nåværende runde. Det vil si antall ganger byttet inn denne runden minus antall byttet ut.',
                 transfersin: 'Antall ganger byttet inn i denne runden.',
@@ -198,7 +198,7 @@ export const norwegianContent = {
         rotationPlannerDescription_second: 'Eksempelvis ønsker man å finne to keepere som roterer bra mellom runde 10 og 20.',
         rotationPlannerDescription_1: 'blir 2 fordi man skal ha 2 keepere som skal rotere.',
         rotationPlannerDescription_2: 'blir 1 fordi kun en av de to keeperene skal spille per runde.',
-        priceChangeDescription: 'Denne siden viser statistikk rundt antall ganger en spiller er byttet inn eller ut og endret i pris i nåværende runde. Siden viser IKKE om en spiller kommer til å gå opp eller ned i pris (men det jobbes med saken), men kan gi en pekepinn på om det kan skje. Det virker som prisendringer skjer hver kveld rundt kl. 04:30 på natten.'
+        priceChangeDescription: 'Denne siden viser statistikk rundt antall ganger en spiller er byttet inn eller ut og endret i pris for ulike runder. Rundenummeret betyr at statistikken gjelder for bytter inn mot oppskrevet runde (Velger man runde 15 så viser statistikken bytter gjort fra runde 14 ble lukket frem til runde 15 starter). \n \n Siden viser IKKE om en spiller kommer til å gå opp eller ned i pris (men det jobbes med å få til det), men kan gi en pekepinn på om det kan skje. \n \n Det virker som prisendringer skjer hver kveld rundt kl. 04:30 på natten.'
     },
     Popover: {
         effectiveOwnership: 'Effektivt eierskap er en beregning som tar hensyn til managere som starter en spiller (ikke bare de som eier dem), sammen med de som kapteiner spilleren. Det er altså eierandel som starter spilleren pluss eierandelen som har kapteinet spilleren. ',
