@@ -17,7 +17,7 @@ export const PriceChange : FunctionComponent<PageProps> = (props) => {
     const [ sortingTeamId, setSortingTeamId ] = useState(defaultFormValueAllSelected);
     const [ sortingPositionId, setSortingPositionId ] = useState(defaultFormValueAllSelected);
 
-    const [ currentGw, setCurrentGw ] = useState(0);
+    const [ currentGw, setCurrentGw ] = useState(-1);
     const [ query, setQuery ] = useState<string>("");
     const [ sortType, setSortType ] = useState<string>("NetTransfers");
     const [ decreasing, setDecreasing ] = useState<boolean>(true);
@@ -42,7 +42,8 @@ export const PriceChange : FunctionComponent<PageProps> = (props) => {
 
     const [ currentSorted, setCurrentSorted ] = useState("NetTransfers");
 
-    const isLatestGw = currentGw === 0;
+    const latestGw = Math.max(...gwList) + 1;
+    const isLatestGw = currentGw === -1 || currentGw === latestGw;
 
     return <>
     <DefaultPageContainer
@@ -115,7 +116,7 @@ export const PriceChange : FunctionComponent<PageProps> = (props) => {
                             {gw}
                         </option>
                     ))}
-                    <option key="current-gw" value={-1}>{Math.max(...gwList) + 1}</option>
+                    <option key="current-gw" value={-1}>{latestGw}</option>
                 </select>
             </div>
 
