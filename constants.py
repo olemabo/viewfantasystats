@@ -62,6 +62,7 @@ cup_data_file = "cup_data.txt"
 cup_processed_rounds = "cup_processed_rounds.txt"
 finished_file_name = "finished.txt"
 global_chip_usage = "global_chip_usage.txt"
+price_change_deadline = "gw_deadline.txt"
 
 # delimiters
 user_stats_special_delimiter = ":;:"
