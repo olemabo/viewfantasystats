@@ -7,7 +7,8 @@ from constants import (
     esf, 
     price_change_folder_name, 
     premier_league_api_url, 
-    eliteserien_api_url
+    eliteserien_api_url,
+    price_change_deadline
 )
 from utils.dataFetch.DataFetch import DataFetch
 
@@ -23,7 +24,10 @@ props_to_store = [
     "transfers_out",
     "selected_by_percent", 
     "total_players",
-    "current_gw"
+    "current_gw",
+    "transfers_in",
+    "transfers_out",
+    "cost_change_start"
 ]
 
 def get_current_gw(DFObject: DataFetch):
@@ -33,7 +37,7 @@ def get_current_gw(DFObject: DataFetch):
             return int(event['id'])
     return 1
 
-def read_price_change_statistics(league_name, props_to_store=props_to_store):
+def read_price_change_statistics(league_name, is_gw_deadline=False):
      # Choose API URL based on league
     api_url = eliteserien_api_url if league_name == esf else premier_league_api_url
     
@@ -42,7 +46,7 @@ def read_price_change_statistics(league_name, props_to_store=props_to_store):
     current_gw = get_current_gw(DFObject)
 
     # Check and get the path for storing data
-    path = check_if_txt_file_exist(league_name, current_gw)
+    path = check_if_txt_file_exist(league_name, current_gw, is_gw_deadline)
 
     print("\n\nRead data from API | Price Change Statistics\n")
 
@@ -77,7 +81,7 @@ def read_price_change_statistics(league_name, props_to_store=props_to_store):
             file.write(line + "\n")
 
 
-def check_if_txt_file_exist(league_name, current_gw):    
+def check_if_txt_file_exist(league_name, current_gw, is_gw_deadline):    
     # Construct paths
     league_path = os.path.join(path_to_store_local_data, league_name)
     season_name = current_season_name_eliteserien if league_name == esf else current_season_name_premier_league
@@ -89,9 +93,12 @@ def check_if_txt_file_exist(league_name, current_gw):
     current_date = datetime.now().strftime("%Y-%m-%d")
     date_folder_path = os.path.join(gw_path, current_date)
     
-    
     current_hour_minute = datetime.now().strftime("%Y-%m-%d-%H-%M")
-    txt_file_path = os.path.join(date_folder_path, f"{current_hour_minute}.txt")
+    
+    if (is_gw_deadline):
+        txt_file_path = os.path.join(date_folder_path, f"{current_hour_minute}-{price_change_deadline}")
+    else:
+        txt_file_path = os.path.join(date_folder_path, f"{current_hour_minute}.txt")
 
     # Create directories if they don't exist
     for directory in [league_path, season_path, gw_path, date_folder_path, price_change_path]:
