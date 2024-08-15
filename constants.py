@@ -41,6 +41,7 @@ user_stats_folder_name = "user_stats"
 price_change_folder_name = "price_change"
 fixture_folder_name = "fixture_data"
 cup_stats_folder_name = "cup_data"
+player_statistics_folder_name = "player_stats"
 
 # must change before each season
 current_season_name_premier_league = "2023-2024"
