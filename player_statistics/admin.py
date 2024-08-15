@@ -1,3 +1,4 @@
+from player_statistics.db_models.eliteserien.season_metadata_model import EliteserienSeasonMetadata
 from player_statistics.db_models.premier_league.ownership_statistics_model import PremierLeagueChipsAndUserInfo, PremierLeagueGlobalOwnershipStats100, \
     PremierLeagueGlobalOwnershipStats1000, PremierLeagueGlobalOwnershipStats10000, PremierLeagueGwsChecked
 from player_statistics.db_models.premier_league.nationality_statistics_model import PremierLeagueNationalityStatistics
@@ -9,6 +10,8 @@ from player_statistics.db_models.eliteserien.player_statistics_model import Elit
 from player_statistics.db_models.eliteserien.rank_and_points_eliteserien import EliteserienRankAndPoints
 from player_statistics.db_models.eliteserien.cup_statistics_model_eliteserien import EliteserienCupStatistics
 from django.contrib import admin
+
+from player_statistics.db_models.premier_league.season_metadata_model import PremierLeagueSeasonMetadata
 
 
 class CupAdmin(admin.ModelAdmin):
@@ -29,6 +32,8 @@ class GWCheckedAdmin(admin.ModelAdmin):
 class UserAdmin(admin.ModelAdmin):
     list_display = ('user_first_name', 'user_last_name', 'user_team_name', 'user_id')
 
+class SeasonMetadata(admin.ModelAdmin):
+    list_display = ('__str__', 'season_name')
 
 admin.site.register(PremierLeagueNationalityStatistics, NationalityAdmin)
 admin.site.register(PremierLeagueGlobalOwnershipStats10000, OwnershipAdmin)
@@ -37,6 +42,7 @@ admin.site.register(PremierLeagueGlobalOwnershipStats100, OwnershipAdmin)
 admin.site.register(PremierLeagueGwsChecked, GWCheckedAdmin)
 admin.site.register(PremierLeaguePlayers, PlayerAdmin)
 admin.site.register(PremierLeagueChipsAndUserInfo)
+admin.site.register(PremierLeagueSeasonMetadata, SeasonMetadata)
 
 admin.site.register(EliteserienNationalityStatistics, NationalityAdmin)
 admin.site.register(EliteserienGlobalOwnershipStats5000, OwnershipAdmin)
@@ -48,3 +54,4 @@ admin.site.register(EliteserienGwsChecked, GWCheckedAdmin)
 admin.site.register(EliteserienCupStatistics, CupAdmin)
 admin.site.register(EliteserienChipsAndUserInfo)
 admin.site.register(EliteserienRankAndPoints)
+admin.site.register(EliteserienSeasonMetadata, SeasonMetadata)
