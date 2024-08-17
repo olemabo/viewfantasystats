@@ -2,7 +2,7 @@ import { DefaultPageContainer } from '../../Layout/DefaultPageContainer/DefaultP
 import { useState, FunctionComponent } from 'react';
 import { ShowFDRData } from '../../Fixtures/ShowFDRData/ShowFDRData';
 import FilterTeamBox from '../../Shared/FilterTeamBox/FilterTeamBox';
-import * as external_urls from '../../../static_urls/externalUrls';
+import * as external_urls from '../../../staticUrls/externalUrls';
 import { FixturePlanningProps, PageProps, fdrPeriode } from '../../../models/shared/PageProps';
 import FdrBox from '../../Shared/FDR-explaination/FdrBox';
 import TextInput from '../../Shared/TextInput/TextInput';

@@ -17,7 +17,7 @@ import PriceChange from "../../Pages/PriceChange/PriceChange";
 import LeagueFrontPage from "../../Pages/LeagueFrontPage/LeagueFrontPage";
 import LiveFixturesPage from "../../Pages/LiveFixtures/LiveFixtures";
 import { en, esf, fdrPeriode, fdrPlanner, fdrRotation, fpl } from "../../../models/shared/PageProps";
-import * as urls from '../../../static_urls/internalUrls';
+import * as urls from '../../../staticUrls/internalUrls';
 import './DefaultLayout.scss';
 import FixturePlannerTeamIdPage from '../../Pages/FixturePlannerTeamID/FixturePlannerTeamID';
 import { languageCodeSelector } from '../../../store/selectors/languageCodeSelector';
@@ -79,6 +79,7 @@ export const DefaultLayout = () => {
                             <Route path={urls.url_premier_league_player_ownership} element={<PlayerOwnership leagueType={fpl} topXManagersDefault={10000}  languageContent={langagueContent} />} />
                             <Route path={urls.url_premier_league_player_statistics} element={<PlayerStatisticsPage leagueType={fpl} languageContent={langagueContent} />} />
                             <Route path={urls.url_premier_league_live_fixtures} element={<LiveFixturesPage leagueType={fpl} languageContent={langagueContent} />} />
+                            <Route path={urls.url_premier_league_price_change} element={<PriceChange leagueType={fpl} languageContent={langagueContent} />} />
 
                             <Route path={urls.url_eliteserien} element={<PlayerOwnership topXManagersDefault={1000} leagueType={esf} languageContent={langagueContent} />} />
                             <Route path={urls.url_eliteserien_rotation_planner} element={<RotationPlannerEliteserienPage leagueType={esf} languageContent={langagueContent} fixturePlanningType={fdrRotation} />} />

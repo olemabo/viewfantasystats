@@ -5,6 +5,7 @@ from player_statistics.db_models.premier_league.nationality_statistics_model imp
 import numpy as np
 import datetime
 import os
+from django.utils import timezone
 
 
 def write_global_stats_to_db(current_gw=0):
@@ -153,7 +154,7 @@ def fill_db_extra_info_statistics(gw, file_path):
             total_chip_usage_100=total_chip_usage_100,
             total_chip_usage_1000=total_chip_usage_1000,
             total_chip_usage_10000=total_chip_usage_10000,
-            date_updated=datetime.datetime.today())
+            date_updated=timezone.now())
         fill_model.save()
         print("Filled up Extra Info DB for GW: ", gw)
 

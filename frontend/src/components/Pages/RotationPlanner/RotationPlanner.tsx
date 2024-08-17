@@ -3,7 +3,7 @@ import { DefaultPageContainer } from '../../Layout/DefaultPageContainer/DefaultP
 import { ShowRotationData } from '../../Fixtures/ShowRotationData/ShowRotationData';
 import ThreeStateCheckbox from '../../Shared/FilterButton/ThreeStateCheckbox';
 import React, { useState, FunctionComponent } from 'react';
-import * as external_urls from '../../../static_urls/externalUrls';
+import * as external_urls from '../../../staticUrls/externalUrls';
 import { FixturePlanningProps, PageProps, fdrRotation } from '../../../models/shared/PageProps';
 import { combinations } from '../../../utils/productRange';
 import FdrBox from '../../Shared/FDR-explaination/FdrBox';

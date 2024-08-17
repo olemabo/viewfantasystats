@@ -47,6 +47,6 @@ def fill_fixture_planner_and_kick_off_time_db():
         fill_kick_off_time_model = KickOffTime(gameweek=gw_info[0], kickoff_time=gw_info[1], day_month=gw_info[2])
         fill_kick_off_time_model.save()
 
-
-fill_fixture_planner_and_kick_off_time_db()
+if __name__ == '__main__':
+    fill_fixture_planner_and_kick_off_time_db()
 

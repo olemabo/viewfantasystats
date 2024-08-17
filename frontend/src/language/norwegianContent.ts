@@ -64,6 +64,7 @@ export const norwegianContent = {
         errorMessage: 'Ukjent feil oppsto ved uthenting av data'
     },
     Fixture: {
+        title: "Kampprogram",
         FixturePlanner: {
             title: "FDR Planner",
         },
@@ -91,7 +92,6 @@ export const norwegianContent = {
         removeAllText: "Skjul alle lag",
         addAllText: "Vis alle lag",
         must_be_smaller: 'må være mindre enn',
-        fixture: "Kampprogram",
         gw_start: "Fra runde",
         gw_end: "Til runde",
         teams_to_check: "Antall lag",
@@ -106,6 +106,7 @@ export const norwegianContent = {
         uncertain_match: "Kamp kan bli utsatt",
     },
     Statistics: {
+        title: "Statistikk",
         PlayerOwnership: {
             title: "Eierandel",
             owned_by: "Valgt av",
@@ -175,7 +176,6 @@ export const norwegianContent = {
                 transfersout: 'Antall ganger byttet ut i denne runden.',
             }
         },
-        statistic: "Statistikk",
         search: "Søk",
     },
     LongTexts: {

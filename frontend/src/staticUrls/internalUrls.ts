@@ -9,6 +9,7 @@ export const url_premier_league_periode_planner =  url_premier_league + 'periode
 export const url_premier_league_player_ownership = url_premier_league + 'player-ownership/';
 export const url_premier_league_player_statistics = url_premier_league + 'player-statistics/';
 export const url_premier_league_live_fixtures = url_premier_league + 'live-fixtures/';
+export const url_premier_league_price_change = url_premier_league + 'price-change/';
 
 // eliteserien
 export const url_eliteserien = 'eliteserien/';
