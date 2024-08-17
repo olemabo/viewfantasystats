@@ -4,7 +4,7 @@ import { FDRData, FDR_GW_i, TeamIdFDRModel } from '../models/fixturePlanning/Tea
 import { KickOffTimesModel } from '../models/fixturePlanning/KickOffTimes';
 import { PlayerModel } from '../models/fixturePlanning/PlayerModel';
 import { PageProps, esf } from '../models/shared/PageProps';
-import { url_get_fdr_data_from_team_id_eliteserien, url_get_fdr_data_from_team_id_premier_league } from '../static_urls/APIUrls';
+import { url_get_fdr_data_from_team_id_eliteserien, url_get_fdr_data_from_team_id_premier_league } from '../staticUrls/APIUrls';
 import { ErrorLoading, emptyErrorLoadingState } from '../models/shared/errorLoading';
 import { warning } from '../components/Shared/Messages/Messages';
 

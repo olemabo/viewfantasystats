@@ -2,7 +2,7 @@ import { DefaultPageContainer } from '../../Layout/DefaultPageContainer/DefaultP
 import { TeamNamePlayerName } from '../../../models/fixturePlanning/TeamNamePlayerName';
 import ShowTeamIDFDRData from '../../Fixtures/ShowFDRData/ShowTeamIdFDRData';
 import { useState, useEffect, FunctionComponent } from 'react';
-import * as external_urls from '../../../static_urls/externalUrls';
+import * as external_urls from '../../../staticUrls/externalUrls';
 import { PageProps, esf, fpl } from '../../../models/shared/PageProps';
 import FdrBox from '../../Shared/FDR-explaination/FdrBox';
 import TextInput from '../../Shared/TextInput/TextInput';
@@ -14,7 +14,7 @@ import '../../Shared/TextInput/TextInput.scss';
 import Modal from '../../Shared/Modal/Modal';
 import axios from 'axios';
 import { maxGwEsf, maxGwFpl, minGwEsf, minGwFpl } from '../../../constants/gws';
-import { url_get_fdr_data_from_team_id_eliteserien, url_get_fdr_data_from_team_id_premier_league } from '../../../static_urls/APIUrls';
+import { url_get_fdr_data_from_team_id_eliteserien, url_get_fdr_data_from_team_id_premier_league } from '../../../staticUrls/APIUrls';
 import useFixturePlannerTeamIDMetaData from '../../../hooks/useFixturePlannerTeamIDPlayers';
 
 export const FixturePlannerTeamIdPage : FunctionComponent<PageProps> = (props) => {

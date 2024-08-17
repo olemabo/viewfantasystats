@@ -59,5 +59,6 @@ def fill_eliteserien_kickoff_times_and_team_info_db():
         fill_kick_off_time_model.save()
 
 
-fill_eliteserien_kickoff_times_and_team_info_db()
+if __name__ == '__main__':
+    fill_eliteserien_kickoff_times_and_team_info_db()
 

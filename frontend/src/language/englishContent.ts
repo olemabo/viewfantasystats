@@ -64,6 +64,7 @@ export const englishContent = {
         errorMessage: 'Unknown error'
     },
     Fixture: {
+        title: "Fixture Planning",
         FixturePlanner: {
             title: "FDR Planner",
         }, 
@@ -91,7 +92,6 @@ export const englishContent = {
         removeAllText: "Show all teams",
         addAllText: "Hide all teams",
         must_be_smaller: 'must be smaller than',
-        fixture: "Fixture Planning",
         gw_start: "From GW",
         gw_end: "To GW",
         teams_to_check: "Teams to check",
@@ -107,6 +107,7 @@ export const englishContent = {
         uncertain_match: "Match may be postponed",
     },
     Statistics: {
+        title: "Statistics",
         PlayerOwnership: {
             title: "Player Ownership",
             owned_by: "Owned by",
@@ -177,7 +178,6 @@ export const englishContent = {
                 transfersout: 'Number of times transferred out this gameweek.'
             }
         },
-        statistic: "Statistics",
         search: "Search",
     },
     LongTexts: {

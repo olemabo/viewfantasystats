@@ -3,7 +3,7 @@ import { BonusModel, FixtureModel } from "../../../models/liveFixtures/FixtureMo
 import Popover from "../../Shared/Popover/Popover";
 import { Table, TableBody, TableCell, TableHead, TableRow } from "../../Shared/Table/Table";
 import { LeagueType, esf, fpl } from "../../../models/shared/LeagueType";
-import * as urls from '../../../static_urls/internalUrls';
+import * as urls from '../../../staticUrls/internalUrls';
 import { convertIdentifierToReadableName, convertListToString } from "./liveFixturesUtils";
 
 export const FixtureDetails: FunctionComponent<{ fixture: FixtureModel, fixtureInfoId: string, playerNameMinWidth: number, hasOwnershipData: boolean, leagueType: LeagueType, gameWeeks: any, propsContent: any }> = ({ fixture, fixtureInfoId, playerNameMinWidth, hasOwnershipData, leagueType, gameWeeks, propsContent }) => {
