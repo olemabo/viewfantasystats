@@ -1,0 +1,198 @@
+
+:root {
+    --col-1: 25%;
+    --col-2: 12%;
+    --col-3: 7%;
+    --col-4: 15%;
+    --margin-left: 1.25px;
+    --margin-right: 1.25px;
+}
+
+.player-ownership-container {
+    max-width: 920px;
+    margin: auto;
+    
+    .container-player-stats {
+        margin: 5px auto;
+        display: flex;
+        justify-content: center;
+    }
+    
+    .input-box {
+        height: 30px;
+        margin-right: var(--margin-right);
+        border-radius: 0 !important;
+        background-color: var(--white-color) !important;
+    }
+    
+    .player-input-box {
+        width: var(--col-1);
+        margin-left: 0;
+    }
+    
+    .category-input-box {
+        width: var(--col-2);
+    }
+    
+    .last-x-input-box {
+        width: var(--col-3);
+    }
+    
+    .search-box {
+        width: var(--col-4);
+        background: var(--search-box-color);
+        color: var(--white-color);
+        position: relative;
+        margin-right: 0;
+    }
+    
+    .form-stuff {
+        label {
+            color: var(--black-color);
+            display: block;
+            text-align: left;
+            margin-top: 20px;
+            font-size: 10px;
+            font-weight: 900;
+            margin-left: 2px;
+        }
+
+        display: grid;
+        grid-template-columns: 150px 90px 60px 1fr 170px;
+        font-size: 14px;
+        grid-gap: 5px;
+        
+        &.player-stats {
+            grid-template-columns: 138px 110px 140px 1fr 170px;
+        }
+
+        &.price-change {
+            grid-template-columns: 138px 110px 60px 1fr 170px;
+        }
+
+        select {
+            border: 1px solid var(--white-color);
+            background-color: var(--white-color);
+        }
+        
+        .hidden {
+            color: transparent;
+        }
+
+        .input-box {
+            float: left;
+            width: 100%;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .form-stuff {
+            margin-top: 10px;
+            grid-gap: 7px 5px;
+            grid-template-columns: 47% 30% 20% !important;
+            grid-template-rows: auto 1fr;
+
+            grid-template-areas: 
+                "box-1 box-2 box-3"
+                "box-4 box-4 box-4";
+
+            .box-1 {
+                grid-area: box-1;
+            }
+
+            .box-2 {
+                grid-area: box-2;
+
+            }
+
+            .box-3 {
+                grid-area: box-3;
+
+            }
+
+            .box-5 {
+                grid-area: box-4;
+            }
+            
+            .input-box {
+                height: 35px !important;
+            }
+
+            label {
+                margin-top: 5px;
+            }
+
+            .hidden {
+                margin-top: -10px;
+            }
+        }
+    }
+    
+    .form-info {
+        margin-top: 20px;
+        display: flex;
+        font-size: 10px;
+        font-weight: 900;
+    }
+    
+    .describe-boxes {
+        text-align: left;
+        margin: 0 1px;
+    }
+    
+    .fixture-planner-container {
+        max-width: 600px;
+    }
+
+    input {
+        border: 1px solid var(--white-color);
+        margin-left: auto !important;
+        padding-left: 5px;
+    }
+}
+
+.player-ownership-container {
+    table {
+        margin: auto auto auto auto;
+        height: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        align-content: flex-start;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+
+        th, td {
+            min-width: 130px;
+        }
+    }
+}
+
+.chips-section {
+    margin-top: 30px;
+    column-gap: 10px;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    
+    table {
+        display: inline-flex !important;
+        width: min-content !important;
+        margin-bottom: 25px;
+    }
+}
+
+@media (max-width: 600px) {
+    .chips-section {
+        table {
+            width: 100% !important;
+            margin-bottom: 25px;
+
+            td, th {
+                width: 400px !important;
+            }
+        }
+    }
+}

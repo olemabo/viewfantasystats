@@ -1,0 +1,26 @@
+.filter-teams-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 20px 0 10px 0;
+
+    .filter-teams-list {
+        max-width: 600px;
+        
+        .filter-check-box {
+            margin-right: 3px;
+            top: 1px;
+            clip: rect(0px, 0px, 0px, 0px);
+            position: absolute;
+        }
+
+        .filter-team {
+            display: inline-block;
+        }
+        
+        p {
+            display: inline;
+            margin-right: 15px;
+        }
+    }
+}

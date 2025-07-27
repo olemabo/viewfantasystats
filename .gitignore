@@ -26,3 +26,6 @@ fplwebpage/__pycache__/urls.cpython-39.pyc
 fplwebpage/__pycache__/wsgi.cpython-39.pyc
 
 frontend/static/frontend/main.js
+
+
+src/backend/frontend/node_modules/*

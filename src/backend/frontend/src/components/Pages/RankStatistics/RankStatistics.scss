@@ -1,0 +1,156 @@
+
+.search-user-name-container {
+    margin-bottom: 25px;
+    max-width: 697px;
+    margin: auto;
+         
+    .container-player-stats {
+        margin: 0 auto;
+        display: flex;
+        justify-content: center;
+        
+        table {
+            // SKAL VÆRE MED
+            .narrow {
+                max-width: 100px !important;
+                min-width: 80px !important;
+            }
+            
+            // SKAL VÆRE MED
+            .name-col {
+                padding-left: 10px;
+                min-width: 210px !important;
+                text-align: left;
+                width: 200px;
+            }
+        }
+    }
+
+    .form-stuff {
+        display: grid;
+        grid-template-columns: 130px 1fr 170px;
+        font-size: 14px;
+        grid-gap: 5px;
+        
+        .input-box {
+            height: 30px;
+            margin-right: 1.25px;
+            border-color: white;
+        }
+        
+        label {
+            color: black;
+            display: block;
+            text-align: left;
+            margin-top: 20px;
+            font-size: 10px;
+            font-weight: 900;
+            margin-left: 2px;
+        }
+
+        
+        .hidden {
+            color: transparent;
+        }
+
+        .input-box {
+            float: left;
+            width: 100%;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .form-stuff {
+                        
+            .input-box {
+                height: 35px !important;
+            }
+        }
+        table {
+            display: flex;
+            flex-wrap: wrap; 
+        }
+    }
+
+    @media (max-width: 300px) {
+        .form-stuff {
+            grid-template-columns: 0.5fr 0.5fr;
+            
+            label {
+                margin-top: 5px !important;
+            }
+        }
+    }
+
+    @media (max-width: 300px) {
+        .form-stuff {
+            grid-template-areas: 
+                "head head"
+                "aside main"
+                "foot foot";
+            
+            .box-1 {
+                grid-area: head;
+            }
+
+            .box-5 {
+                grid-area: foot;
+            }
+            
+            .input-box {
+                height: 35px !important;
+            }
+            
+            .last-x-seasons-select {
+                grid-area: head;
+            }
+        }
+    }
+    
+    .form-info {
+        margin-top: 20px;
+        display: flex;
+        font-size: 10px;
+        font-weight: 900;
+    }
+    
+    .describe-boxes {
+        text-align: left;
+        margin: 0 1px;
+    }
+    
+    .fixture-planner-container {
+        max-width: 600px;
+    }
+
+
+    input {
+        border: 1px solid white;
+        margin-left: auto !important;
+        padding-left: 5px;
+    }
+
+    select {
+        border: 1px solid var(--white-color);
+        background-color: var(--white-color);
+    }
+}
+
+@media (max-width: 400px) {
+    .team-info-table {
+        margin-left: 0px !important;
+        margin-bottom: 25px;
+    }
+
+    .team-info {
+        min-width: 145px !important; 
+    }
+
+    .form-stuff {
+        grid-template-columns: 1fr !important;
+    }
+
+    .search-user-name-container .hidden {
+        display: none !important;
+    }
+}

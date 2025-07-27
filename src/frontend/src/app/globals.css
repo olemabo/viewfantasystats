@@ -1,0 +1,162 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300&display=swap');
+
+:root {
+    /* Default styles */
+    --background-color: #FFFFFF;
+    --white-color: #FFFFFF;
+    --black-color: #000000;
+    --text-color: #333;
+
+    --font-family: 'Lato';
+    --max-width: 1000px;
+    /* --page-background-color: #eeeeee; */
+    --page-background-color: #f5f5f5;
+    --size-of-top-bar-mobile: 60px;
+    --link-color: var(--black-color);
+    --border-color: #b9b9b9;
+
+    --primary-dark-blue-color: #0f3443;
+    
+    /* Layout */
+    --fpl-linear-gradient-first-color: #0F3443;
+    --fpl-linear-gradient-second-color: #8decc4;
+    --fpl-linear-gradient-second-color-darker: rgba(15, 97, 63, 0.73);
+    
+    --eliteserien-linear-gradient-first-color: #37d7feb3;
+    --eliteserien-linear-gradient-first-color: #7cd9f0b3;
+    --eliteserien-linear-gradient-second-color: #1b2f44;
+    --eliteserien-linear-gradient-first-color-darker: #47abd8;
+    
+    --eliteserien-linear-gradient-first-color: #7cd9f0b3;
+    --eliteserien-linear-gradient-second-color: #1b2f44;
+    
+    /* Header */
+    --logo-color: var(--white-color);
+    --top-menu-items-color: var(--black-color);
+    --font-size-menu-items: 18px;
+    --font-size-menu-sub-items: 16px;
+    --font-size-header-title: 26px;
+    --height-menu-items: 42px;
+
+    /* Footer */
+    --footer-background-color: var(--primary-dark-blue-color);
+    --footer-h2-color-eliteserien: #7fd9ff;
+    --footer-h2-color-premier-league: var(--fpl-linear-gradient-second-color);
+
+    /* Fixture Planning */
+    --fdr-premier-league-1: #375523;
+    /* --fdr-premier-league-1: #A9D3CA; */
+    --fdr-premier-league-2: #7ce0ac;
+    /* --fdr-premier-league-2: #DAECE8; */
+    --fdr-premier-league-3: #bfbfbf;
+    /* --fdr-premier-league-3: #F3E7DA; */
+    --fdr-premier-league-4: #f86c8f;
+    /* --fdr-premier-league-4: #F7D9E3; */
+    --fdr-premier-league-5: #ab7083;
+    /* --fdr-premier-league-5: #F2BFCF; */
+
+    --fdr-eliteserien-1: #87C5E1;
+    --fdr-eliteserien-2: #BDDFED;
+    --fdr-eliteserien-3: #EAF4F7;
+    --fdr-eliteserien-4: #F98080;
+    --fdr-eliteserien-5: #D95858;
+    --fdr-eliteserien-double: #52647D;
+
+    --fdr-color-blank: #000000ab;
+    --fdr-color-blank: #4E4E4E;
+    --fdr-greyed-box: #d5d4d4;
+    --fdr-greyed-box: var(--page-background-color);
+    --round-row-color: #414c50;
+    --fdr-border-color: #00000080;
+    --name-column-top-corner: var(--round-row-color);
+
+    --fdr-box-padding-height: 12px;
+    --fdr-box-padding-width: 15px;
+    --fdr-box-th-height: 55px;
+    
+    --fdr-box-padding-width-small-screen: 4px;
+    --fdr-box-padding-height-small-screen: 10px;
+    --fdr-font-size-small-screen: 13px;
+    --fdr-box-th-heigh-small-screen: 48px;
+    --fdr-box-min-width-small-screen: 90px;
+
+    --fdr-border-width: 3px;
+    --fdr-box-gap: 1px;
+
+    /* Statistiscs */
+    --table-even-rows: #F8F9F9;
+    --table-odd-rows: var(--white-color);;
+    --table-thead-tr-color:  var(--black-color);
+    --table-thead-tr-background-color-eliteserien: #cbe5eff7;
+    --table-thead-tr-background-color-fpl: #cce8cf;
+    --table-thead-height: 40px;
+    --table-thead-height-compact: 30px;
+    
+    /* Components */
+    --submit-button-color: var(--primary-dark-blue-color);
+    --submit-button-text-color: var(--white-color);
+    --search-box-color: var(--primary-dark-blue-color);
+
+    --filter-all-background-color: #e3e3e3;
+    --filter-all-color: var(--black-color);
+    
+    /* Pagination */
+    --pagination-item-color: var(--primary-dark-blue-color);
+    --pagination-item-border-color: #9ea5a8;
+    --pagination-item-hover-color: var(--primary-dark-blue-color);
+}
+
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+#app {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    background-color: var(--page-background-color);
+    position: relative;
+    flex: 1;
+}
+
+ul {
+    list-style-type: none;
+}
+
+a {
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+p {
+    margin: 10px 0;
+}
+
+h1 {
+    line-height: 1.2;
+    font-weight: 300;
+    margin: 30px 0 10px 0;
+    font-size: 28px;
+}
+
+h2 {
+    font-weight: 600;
+    font-size: 20px;
+}

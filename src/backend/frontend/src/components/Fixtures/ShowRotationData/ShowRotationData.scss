@@ -1,0 +1,20 @@
+
+.big-container {
+    display: flex;
+    margin-top: 10px;
+    margin-bottom: 35px;
+
+    .container-rotation {
+        margin: 3px auto;
+        display: inline-block;
+        background-color: var(--name-col-color);
+        overflow-y: auto;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    caption {
+        display: block;
+        margin: 2px 0 24px 0;
+    }
+}

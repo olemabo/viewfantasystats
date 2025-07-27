@@ -1,0 +1,42 @@
+.sort-text {
+    display: inline;
+    position: relative;
+    bottom: 2px;
+}
+
+.sort-text-adjusted {
+    display: inline;
+    position: relative;
+    top: 13px;
+}
+
+.sort-arrows-container { 
+    background-color: transparent;
+    border: transparent;
+    margin-left: 10px;
+    margin-top: 8px;
+    font-size: 0.85rem;
+    cursor: pointer;
+
+    .sort-arrow-top {
+        display: inline-block;
+        vertical-align: middle;
+        color: green;
+    }
+    
+    .sort-arrow-top-adjusted {
+        position: relative;
+        top: 8px;
+    }
+
+    .sort-arrow-bottom {
+        display: inline-block;
+        vertical-align: middle;
+        color: red;
+    }
+    
+    .sort-arrow-bottom-adjusted {
+        position: relative;
+        top: -4px;
+    }
+}

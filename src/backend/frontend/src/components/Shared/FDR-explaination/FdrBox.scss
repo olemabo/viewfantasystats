@@ -1,0 +1,47 @@
+.diff-introduction-container {
+    margin-top: 25px;
+
+    span:nth-of-type(1) {
+        margin-left: 5px;
+    }
+
+    .diff-introduction-box {
+        width: 18px;
+        display: inline-block;
+        text-align: center;
+    
+        &.wide {
+            width: 33px;
+            color: var(--white-color);
+        }
+    
+        &.black {
+            background-color: var(--fdr-color-blank);
+            color: var(--white-color);
+            width: 22px;
+        }
+    
+        &.diff-1 {
+            background-color: var(--fdr-premier-league-1);
+            color: var(--white-color);
+        }
+    
+        &.diff-2 {
+            background-color: var(--fdr-premier-league-2);
+        }
+    
+        &.diff-3 {
+            background-color: var(--fdr-premier-league-3);
+        }
+    
+        &.diff-4 {
+            background-color: var(--fdr-premier-league-4);
+            color: var(--white-color);
+        }
+    
+        &.diff-5 {
+            background-color: var(--fdr-premier-league-5);
+            color: var(--white-color);
+        }
+    }
+}

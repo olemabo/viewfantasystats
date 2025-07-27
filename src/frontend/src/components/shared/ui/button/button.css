@@ -1,0 +1,28 @@
+.button-component {
+    padding: 6px 10px;
+    margin-top: 12px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    font-size: 14px;
+    height: fit-content;
+    width: fit-content;
+
+    background-color: var(--submit-button-color);
+    color: var(--white-color);
+
+    &.small {
+        height: 23px;
+        padding: 2px 8px;
+        font-size: 13px;
+        margin-top: 0;
+    }
+
+    &.white {
+        background-color: var(--white-color);
+        color: var(--black-color);
+    }
+
+    i {
+        margin-left: 8px;
+    }
+}
