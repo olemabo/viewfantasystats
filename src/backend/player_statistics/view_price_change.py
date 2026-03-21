@@ -2,7 +2,6 @@ from models.statistics.apiResponse.PriceChangeApiResponse import PriceChangeApiM
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.http import JsonResponse
 from rest_framework import status
 
 from player_statistics.utility_functions.utility_functions_price_change import GetTransferData
@@ -24,9 +23,10 @@ class PriceChangeAPIView(APIView):
                 gw_list
             )
 
-            return JsonResponse(response.toJson(), safe=False)
+            return Response(response.to_dict(), status=status.HTTP_200_OK)
 
         except ValueError as e:
             return Response({'Bad Request': str(e)}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
+            print(e)
             return Response({'Bad Request': 'Something went wrong: ' + str(e)}, status=status.HTTP_400_BAD_REQUEST)

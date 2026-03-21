@@ -1,18 +1,15 @@
 "use server"
 
 import DefaultPageContainer from "@/components/layout/default-page-container/default-page-container";
-import FixturePlannerPage from "@/components/pages/fixture-planner/fixture-planner";
-import FdrBox from "@/components/shared/FDR-explaination/fdr-box";
-
-import Popover from "@/components/shared/Popover/Popover";
-import { externalUrls } from "@/constants/urls/externalUrls";
-import { getFixtureDataFPLServer } from "@/lib/api/fixturePlanner/getFixturePlannerData";
-import { getKickoffTimesFPL } from "@/lib/api/kickoffTimes/getKickOffTimes";
+import FixturePlannerPage from "@/components/features/fixtures/fixture-planner/fixture-planner";
 import { FDRFormInput } from "@/models/fixturePlanning/FDRFormInput";
 import { FixturePlanningTypes } from "@/types/fixturePlanningType";
 import { LeaguePath, LeagueTypeByPath } from "@/types/league";
 import { getTranslations } from "next-intl/server";
-
+import { esf } from "@/models/shared/LeagueType";
+import { maxGwEsf, maxGwFpl } from "@/constants/gws";
+import FixturePlannerHeader from "@/components/features/fixtures/utils/header-and-popover";
+import { getFixtureData, getKickoffTimes } from "@/components/features/fixtures/utils/api";
 type PageProps = {
   params: Promise<{ leagueName: LeaguePath }>;
   searchParams: Promise<{
@@ -33,43 +30,35 @@ export default async function Page({
     const t = await getTranslations('Fixture.PeriodPlanner');
     const leagueType = LeagueTypeByPath[leagueName];
 
-    // MÅ HÅNDTERE start og end gw midt i sesongen
+    const maxGw = leagueType === esf ? maxGwEsf : maxGwFpl;
+
     const defaultForm: FDRFormInput = {
-        startGw: Number(startGw ?? 1),
-        endGw: Number(endGw ?? 38),
+        startGw: Number(startGw ?? -1),
+        endGw: Number(endGw ?? maxGw),
         minNumFixtures: Number(minNumFixtures ?? 3),
         fdrType: fdrType ?? '',
-        fixturePlanningType: FixturePlanningTypes.PERIODE
+        fixturePlanningType: FixturePlanningTypes.PERIODE,
+        maxGw: maxGw
     };
 
     const [fixtureData, kickOffTimes] = await Promise.all([
-        getFixtureDataFPLServer(defaultForm),
-        getKickoffTimesFPL(),
+        getFixtureData(defaultForm, leagueType),
+        getKickoffTimes(leagueType),
     ]);
+
+    defaultForm.startGw = fixtureData.startGw;
+    defaultForm.endGw = fixtureData.endGw;
+    defaultForm.maxGw = fixtureData.maxGw;
 
     return (
         <DefaultPageContainer 
-        pageClassName='fixture-planner-container'
-        leagueType={leagueType}
-        heading={t('Title')} 
-        description={t('Description')}
+            pageClassName='fixture-planner-container'
+            heading={t('Title')}
         >
-            <h1>
-                {t('Title')}
-                <Popover 
-                    popoverTitle={t('Title')} 
-                    iconSize={14}
-                    iconPosition={[-10, 0, 0, 3]}
-                    alignLeft
-                >
-                    { t("FixtureAreFrom")}
-                        <a href={externalUrls.official.fpl}>Fantasy Premier League.</a>
-                        <FdrBox 
-                            fdrValues={t("FdrValues")}
-                            FdrDescription={t("FdrDescription")}
-                        />
-                </Popover>
-            </h1>
+            <FixturePlannerHeader 
+                fixturePlanningType={defaultForm.fixturePlanningType}
+                leagueType={leagueType}
+            />
             <FixturePlannerPage 
                 fixturePlanningType={FixturePlanningTypes.PERIODE}
                 fixtureData={fixtureData.fdrData}

@@ -246,13 +246,14 @@ def find_best_rotation_combosEliteserien_gw_list(data, gw_list, teams_to_check=5
     :return: combos_with_score [[score, [team_ids], [team_names]], ... ]   ([22.2, [1, 4, 11], ['Arsenal', 'Burnley', 'Liverpool']])
     """
 
+    print(data, gw_list, teams_to_check, teams_to_play, team_names,teams_in_solution, teams_not_in_solution)
+
     if (len(team_names) == 0):
         team_names = [-1]
 
     data_team_id_to_data = {}
     for i in data:
         data_team_id_to_data[i.team_id] = i
-    
     if team_names[0] != -1:
         if teams_to_check > len(team_names):
             print("Teams to check must be >= to number of input teams")
@@ -268,22 +269,27 @@ def find_best_rotation_combosEliteserien_gw_list(data, gw_list, teams_to_check=5
             print("Teams to check must be >= 1")
             return -1
 
+    print("dhdhdhhdhd")
     dict_with_team_name_to_team_ids = dict()
     for team in data:
-        dict_with_team_name_to_team_ids[str(team.team_name)] = team.team_id
+        dict_with_team_name_to_team_ids[str(team.team_name).upper()] = team.team_id
     team_ids = []
 
     if (len(team_names) == 0):
         team_ids = [team.team_id for team in data]
     else:
         for team_name in team_names:
+            print(team_name, dict_with_team_name_to_team_ids)
             if team_name == -1:
                 team_ids = [team.team_id for team in data]
                 break
-            team_id = dict_with_team_name_to_team_ids[team_name]
+            team_id = dict_with_team_name_to_team_ids[str(team_name).upper()]
+            print(team_id, team_ids)
             team_ids.append(team_id)
 
     number_of_GW = len(gw_list)
+
+    print("ddddd")
     
     dict_with_team_ids_to_team_name = dict()
     for team in data:
@@ -292,12 +298,12 @@ def find_best_rotation_combosEliteserien_gw_list(data, gw_list, teams_to_check=5
     # ids for the teams that must be in the solution
     ids_must_be_in_solution = []
     for team in teams_in_solution:
-        ids_must_be_in_solution.append(dict_with_team_name_to_team_ids[team])
+        ids_must_be_in_solution.append(dict_with_team_name_to_team_ids[str(team).upper()])
 
     # ids for the teams that cannot be in the solution
     ids_must_not_be_in_solution = []
     for team in teams_not_in_solution:
-        ids_must_be_in_solution.append(dict_with_team_name_to_team_ids[team])
+        ids_must_be_in_solution.append(dict_with_team_name_to_team_ids[str(team).upper()])
 
     if one_double_up:
         # allow combinations with one double up from one team
@@ -322,6 +328,8 @@ def find_best_rotation_combosEliteserien_gw_list(data, gw_list, teams_to_check=5
     unique_team_ids = temp_unique_team_ids
 
     combos_with_score_new = []
+
+    print("Hele")
 
     for team_combos in unique_team_ids:
         # team_combos = [1, 3]
@@ -400,6 +408,7 @@ def find_best_rotation_combosEliteserien_gw_list(data, gw_list, teams_to_check=5
 
     for team in combos_with_score_new:
         team1 = [ str(i) for i in team[1]]
-        combos_with_score_json.append(RotationPlannerTeamInfoModel(team[0], team1, team[2], team[3], team[4], team[5]).toJson())
+        combos_with_score_json.append(
+            RotationPlannerTeamInfoModel(team[0], team1, team[2], team[3], team[4], team[5]).toJson())
 
     return combos_with_score_json

@@ -4,6 +4,7 @@ from fixture_planner_eliteserien.backend.fixture_algorithms.fixture_planner_alor
 from fixture_planner_eliteserien.backend.read_team_players_from_team_id import read_team_players_from_team_id
 from fixture_planner_eliteserien.backend.read_eliteserien_data import read_eliteserien_excel_to_db_format
 from fixture_planner_eliteserien.backend.utility_functions import create_eliteserien_fdr_dict
+from fixture_planner_eliteserien.serializers import ElitserienTeamInfoSerializer
 from utils.util_functions.convertFDRdata_to_FDR_Model import convertFDRToModel
 from utils.util_functions.get_player_data import getPlayerData
 from utils.util_functions.get_upcoming_gw import get_upcoming_gw_eliteserien
@@ -12,23 +13,27 @@ from utils.util_functions.get_kickoff_data import getKickOffData
 
 from models.fixtures.apiResponse.FDRTeamIDApiResponse import FDRApiResponse, FDRTeamIDApiResponse
 from models.fixtures.models.TeamNameShortPlayerNameModel import TeamNameShortPlayerNameModel
-from fixture_planner_eliteserien.models import EliteserienKickOffTime
+from fixture_planner_eliteserien.models import EliteserienKickOffTime, EliteserienTeamInfo
 from models.fixtures.models.FDRTeamIdModel import FDRTeamIDModel
 from django.http import JsonResponse
 from constants import esf, fdrRotation, fdrPeriode, fdrPlanner
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import status
+from rest_framework import status, generics
 
 from models.fixtures.apiResponse.EliteserienFDRApiResponse import EliteserienFDRApiResponse
 from models.fixtures.models.WhichTeamToCheckModel import WhichTeamToCheckModel
 from models.fixtures.models.KickOffTimesModel import KickOffTimesModel
 
+class EliteserienTeamInfoView(generics.ListAPIView):
+    queryset = EliteserienTeamInfo.objects.all()
+    serializer_class = ElitserienTeamInfoSerializer
+
 
 class KickoffTimes(APIView):
 
-    def get(self):
+    def get(self, request):
         response_list = []
         
         kick_off_times_db = EliteserienKickOffTime.objects.all()
@@ -38,7 +43,7 @@ class KickoffTimes(APIView):
                 gameweek=kick_of_time.gameweek,
                 kickoff_time=kick_of_time.kickoff_time,
                 day_month=kick_of_time.day_month,
-            ).toJson())
+            ).to_dict())
         
         return JsonResponse(response_list, safe=False)
  
@@ -102,6 +107,7 @@ class FDRData(APIView):
                 teams_to_play = get_request_params(request, "teamsToPlay", int)
                 teams_in_solution = parse_queryparams_to_string_list(request.GET.get("teamsInSolution"))
                 fpl_teams = parse_queryparams_to_string_list(request.GET.get("fplTeams"))
+                print(fpl_teams, teams_in_solution, teams_to_play, teams_to_check)
                 
                 rotation_data = []
                 remove_these_teams = []
@@ -116,13 +122,16 @@ class FDRData(APIView):
                 for i in team_name_list:
                     if i.team_name in teams_in_solution:
                         i.checked_must_be_in_solution = 'checked'
+                print("gee")
                 rotation_data = find_best_rotation_combosEliteserien_gw_list(
                     fixture_list_db, current_gws, teams_to_check=teams_to_check, 
                     teams_to_play=teams_to_play, team_names=fpl_teams, 
                     teams_in_solution=teams_in_solution, teams_not_in_solution=[],
                     top_teams_adjustment=False, one_double_up=False,
                     home_away_adjustment=True, include_extra_good_games=False)
-
+                
+                print(rotation_data)
+                
                 if rotation_data == -1:
                     rotation_data = [['Wrong input', [], [], 0, 0, [[]]]]
                 else:
@@ -130,21 +139,17 @@ class FDRData(APIView):
                 
                 fdr_fixture_data = rotation_data
             
-            kick_off_times_db = EliteserienKickOffTime.objects.all()
-            temp_kick_off_time = []
-            
-            for kick_off_time in kick_off_times_db:
-                if (kick_off_time.gameweek in current_gws):
-                    temp_kick_off_time.append(KickOffTimesModel(
-                        kick_off_time.gameweek,
-                        kick_off_time.kickoff_time,
-                        kick_off_time.day_month
-                    ).toJson())
             max_gw = len(dates)
             
-            fdr_and_gws = EliteserienFDRApiResponse(fdr_fixture_data, temp_kick_off_time, fdr_to_colors_dict, team_name_color, start_gw, end_gw, max_gw) 
-            
-            return JsonResponse(fdr_and_gws.toJson(), safe=False)
+            fdr_and_gws = EliteserienFDRApiResponse(
+                fdr_fixture_data, 
+                fdr_to_colors_dict, 
+                team_name_color, 
+                start_gw, 
+                end_gw, 
+                max_gw) 
+
+            return JsonResponse(fdr_and_gws.to_dict(), safe=False)
 
         except Exception as e:
             print(e)
@@ -159,7 +164,6 @@ class PostFDRFromTeamIDView(APIView):
         fixture_list_db_def, dates2, _, _ = read_eliteserien_excel_to_db_format("_defensivt2")
         fixture_list_db_off, dates3, _, _ = read_eliteserien_excel_to_db_format("_offensivt2")
 
-                
         current_gws = [gw for gw in range(0, len(dates) + 1)]
 
         number_of_gws = len(dates)
@@ -186,9 +190,17 @@ class PostFDRFromTeamIDView(APIView):
         if (gw_end > max_gw):
             gw_end = max_gw
             
-        fdr_and_gws = FDRApiResponse(fdr_data_list, fdr_data_defensive_list, fdr_data_offensive_list, temp_kick_off_time, gw_start, gw_end, first_upcoming_game, max_gw, player_list) 
+        fdr_and_gws = FDRApiResponse(
+            fdr_data_list, 
+            fdr_data_defensive_list, 
+            fdr_data_offensive_list, 
+            temp_kick_off_time, 
+            gw_start, 
+            gw_end, 
+            first_upcoming_game, 
+            max_gw, player_list) 
 
-        return JsonResponse(fdr_and_gws.toJson(), safe=False)
+        return JsonResponse(fdr_and_gws.to_dict(), safe=False)
 
 
     def post(self, request):
@@ -201,19 +213,19 @@ class PostFDRFromTeamIDView(APIView):
             team_id = get_request_body(request, "team_id", int)
 
             if team_id < 1:
-                return JsonResponse(fdr_and_gws.toJson(), safe=False)
+                return JsonResponse(fdr_and_gws.to_dict(), safe=False)
 
             player_info = read_team_players_from_team_id(team_id, current_gw)
 
             if player_info == 0:
-                return JsonResponse(fdr_and_gws.toJson(), safe=False)
+                return JsonResponse(fdr_and_gws.to_dict(), safe=False)
                                                 
             for player_i in player_info:
                 
                 team_player_name = TeamNameShortPlayerNameModel(
                     player_name=player_i.player_name,
                     team_name_short=player_i.team_name_short
-                ).toJson()
+                ).to_dict()
                 
                 if (player_i.position_id == 1):
                     goal_keepers.append(team_player_name) 
@@ -229,7 +241,7 @@ class PostFDRFromTeamIDView(APIView):
             fdr_and_gws.midtfielders = midtfielders
             fdr_and_gws.forwards = forwards
             
-            return JsonResponse(fdr_and_gws.toJson(), safe=False)
+            return JsonResponse(fdr_and_gws.to_dict(), safe=False)
 
         except Exception as e:
             return Response({'Bad Request': 'Something went wrong: ' + str(e), 'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
@@ -241,13 +253,13 @@ def getFixtureData(fixture_list_db, number_of_gws):
         team_name_short = fdr_data.team_short_name
         team_id = fdr_data.team_id
         fdr_dict = create_eliteserien_fdr_dict(fdr_data)
-        gw_i_list = [ convertFDRToModel(fdr_dict[gw_i]) for gw_i in range(1, number_of_gws + 1) ]
+        gw_i_list = [convertFDRToModel(fdr_dict[gw_i]) for gw_i in range(1, number_of_gws + 1)]
         
         fdr_data_list.append(FDRTeamIDModel(
             team_name_short,
             gw_i_list,
             team_id
-        ).toJson())
+        ).to_dict())
 
     return fdr_data_list
 
@@ -256,6 +268,7 @@ def getFixtureData(fixture_list_db, number_of_gws):
 def get_data_from_params(request, dates):
     start_gw = get_request_params(request, "startGw", int)
     end_gw = get_request_params(request, "endGw", int)
+    print(start_gw, end_gw, "s")
     min_num_fixtures = get_request_params(request, "minNumFixtures", int)
     combinations = get_request_params(request, "fixturePlanningType", str)
     if start_gw < 0:
@@ -263,9 +276,7 @@ def get_data_from_params(request, dates):
         end_gw = start_gw + 5
         if (end_gw > len(dates)):
             end_gw = len(dates)
-
     end_gw = max(dates) + 1 if max(dates) + 1 < 5 else 5 if (max(dates) + 1 < end_gw) else end_gw
 
     start_gw = 1 if start_gw > end_gw else start_gw    
-    
     return start_gw, end_gw, min_num_fixtures, combinations

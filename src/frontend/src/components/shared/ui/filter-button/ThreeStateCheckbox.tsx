@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import './FilterButton.scss';
+import './filter-button.css';
 
 type ThreeStateCheckboxProps = {
     checked: boolean,

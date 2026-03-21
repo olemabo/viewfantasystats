@@ -1,29 +1,19 @@
-"use server"
+"use client"
 
 import Link from "next/link";
-import { LeagueProps, LeagueType, LeagueTypes } from "@/types/league";
-import { leagueUrls } from '@/constants/urls/menuUrls';
-import { getTranslations } from "next-intl/server";
+import { LeagueProps } from "@/types/league";
+import { getSectionUrlsByLeague } from "../get-menu-urls";
+import { useTranslations } from "next-intl";
 
 type HeaderProps = LeagueProps;
 
-type SectionUrls = typeof leagueUrls.urlsFpl;
-
-const urlsByLeague: Record<LeagueType, SectionUrls> = {
-  [LeagueTypes.FPL]: leagueUrls.urlsFpl,
-  [LeagueTypes.ESF]: leagueUrls.urlsEsf
-} as const;
-
-export default async function  MenuSection({ 
+export default function MenuSection({ 
     leagueType
 }: HeaderProps){
-    const sectionUrls = urlsByLeague[leagueType];
-    
-    if (!sectionUrls || Object.keys(sectionUrls).length === 0) { 
-        return null;
-    }
+    const sectionUrls = getSectionUrlsByLeague(leagueType);
+    if (!sectionUrls) return null;
 
-    const t = await getTranslations('Layout.Footer');
+    const t = useTranslations('Layout.Footer');
 
     return (
         <nav >

@@ -22,5 +22,22 @@ class LiveFixtureModel:
         self.players_a = players_a
         self.players_h = players_h
     
-    def toJson(self):
-        return json.dumps(self, default=lambda o: o.__dict__)
+    def to_dict(self):
+        return {
+            "finished": self.finished,
+            "finished_provisional": self.finished_provisional,
+            "id": self.id,
+            "kickoff_time": self.kickoff_time,
+            "minutes": self.minutes,
+            "started": self.started,
+            "team_a": self.team_a,
+            "team_a_name": self.team_a_name,
+            "team_a_score": self.team_a_score,
+            "team_h": self.team_h,
+            "team_h_name": self.team_h_name,
+            "team_h_score": self.team_h_score,
+            "is_live": self.is_live,
+            "stats": self.stats,
+            "players_a": self.players_a,
+            "players_h": self.players_h
+        }

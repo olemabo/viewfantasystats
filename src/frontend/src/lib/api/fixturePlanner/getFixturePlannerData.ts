@@ -1,25 +1,31 @@
 import { API_ENDPOINTS } from '@/lib/api-endpoints';
 import { getApiUrl } from '@/lib/api';
 import { SimpleTeamFDRDataModel, FDRData, FDR_GW_i } from '@/models/fixturePlanning/TeamFDRData';
-import { KickOffTimesModel } from '@/models/fixturePlanning/KickOffTimes';
 import { RotationPlannerTeamModel } from '@/models/fixturePlanning/RotationPlannerTeam';
 import { FixturePlanningType } from '@/types/fixturePlanningType';
+import { maxGwFpl } from '@/constants/gws';
 
 export interface FixtureDataResult {
   fdrData: SimpleTeamFDRDataModel[];
   fdrRotationData: RotationPlannerTeamModel[];
-  kickOffTimes: KickOffTimesModel[];
+  startGw: number;
+  endGw: number;
+  maxGw: number;
 }
 
-interface FixtureDataParams {
+export interface FixtureDataParams {
   startGw: number;
   endGw: number;
   minNumFixtures: number;
   fdrType: string;
   fixturePlanningType: FixturePlanningType;
+  teamsToCheck?: number;
+  teamsToPlay?: number;
+  teamsInSolution?: string[];
+  fplTeams?: string[];
 }
 
-export async function getFixtureDataFPLServer(
+export async function getFixtureDataFPLServerFPL(
   params: FixtureDataParams
 ): Promise<FixtureDataResult> {
   const url = getApiUrl(API_ENDPOINTS.FIXTURE_PLANNER, {
@@ -28,6 +34,14 @@ export async function getFixtureDataFPLServer(
     minNumFixtures: params.minNumFixtures,
     fdrType: params.fdrType,
     fixturePlanningType: params.fixturePlanningType,
+    teamsToCheck: params.teamsToCheck ?? 0,
+    teamsToPlay: params.teamsToPlay ?? 0,
+    fplTeams: Array.isArray(params.fplTeams)
+      ? params.fplTeams.join(",")
+      : params.fplTeams ?? "",
+    teamsInSolution: Array.isArray(params.teamsInSolution)
+      ? params.teamsInSolution.join(",")
+      : params.teamsInSolution ?? "",
   });
 
   const res = await fetch(url, {
@@ -41,11 +55,7 @@ export async function getFixtureDataFPLServer(
   const parsed = await res.json();
 
   
-  const { gw_start, gw_end, fdr_data, gws_and_dates } = parsed;
-  
-  const kickOffTimes: KickOffTimesModel[] = gws_and_dates?.map((item: string) =>
-    JSON.parse(item)
-  ) ?? [];
+  const { gw_start, gw_end, fdr_data } = parsed;
 
   if (params.fixturePlanningType === 'rotation') {
     const rotationData: RotationPlannerTeamModel[] = fdr_data.map((team: string) => {
@@ -63,7 +73,9 @@ export async function getFixtureDataFPLServer(
     return {
       fdrData: [],
       fdrRotationData: rotationData,
-      kickOffTimes,
+      startGw: gw_start,
+      endGw: gw_end,
+      maxGw: maxGwFpl
     };
   } else {
     const fdrTeamData: SimpleTeamFDRDataModel[] = fdr_data.map((team: any[]) => {
@@ -99,7 +111,9 @@ export async function getFixtureDataFPLServer(
     return {
       fdrData: fdrTeamData,
       fdrRotationData: [],
-      kickOffTimes,
+      startGw: gw_start,
+      endGw: gw_end,
+      maxGw: maxGwFpl
     };
   }
 }

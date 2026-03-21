@@ -43,7 +43,7 @@ class GetKickOffTimes(APIView):
                     kick_off_time_db[gw_i].gameweek,
                     kick_off_time_db[gw_i].kickoff_time,
                     kick_off_time_db[gw_i].day_month
-                ).toJson())
+                ).to_dict())
             return JsonResponse(temp_kick_off_time, safe=False)
 
         except:
@@ -59,7 +59,7 @@ class PostFDRView(APIView):
             end_gw = int(request.GET.get("endGw"))
             min_num_fixtures = int(request.GET.get("minNumFixtures"))
             combinations = str(request.GET.get("fixturePlanningType"))
-            print("hde")
+
             if (combinations == fdrPlanner or combinations == fdrRotation) and start_gw < 0:
                 start_gw = get_upcoming_gw_premier_league()
                 end_gw = start_gw + 6
@@ -183,26 +183,15 @@ class PostFDRView(APIView):
 
                 rotation_data = [['Wrong input', [], [], 0, 0, [[]]]] if rotation_data == -1 else rotation_data[:(min(len(rotation_data), 50))]
                 
-                fdr_fixture_data = rotation_data 
+                fdr_fixture_data = rotation_data
             
-            kick_off_time_db = KickOffTime.objects.all()
-            temp_kick_off_time = []
-            for kick_off_time in kick_off_time_db:
-                if (kick_off_time.gameweek in current_gws):
-                    temp_kick_off_time.append(KickOffTimesModel(
-                        kick_off_time.gameweek,
-                        kick_off_time.kickoff_time,
-                        kick_off_time.day_month
-                    ).toJson())
-
             response = FdrApiResponse(
                 fdr_fixture_data, 
-                temp_kick_off_time, 
                 [], 
                 [], 
-                start_gw, end_gw)
-
-            print("Helele")
+                [], 
+                start_gw, 
+                end_gw)
 
             return JsonResponse(response.to_dict(), safe=False)
 

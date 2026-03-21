@@ -1,4 +1,4 @@
-import { MessageType, emptyState } from "../../components/Shared/Messages/Messages";
+import { MessageType, emptyState } from "../../components/shared/messages/messages";
 
 export type ErrorLoading = {
     messageType: MessageType;

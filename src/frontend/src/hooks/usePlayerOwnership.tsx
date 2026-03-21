@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
 import { LeagueType } from '../models/shared/LeagueType';
-import { TeamNameAndIdModel } from '../models/playerOwnership/TeamNameAndIdModel';
 import { ChipUsageModel } from '../models/playerOwnership/ChipUsageModel';
 import { PlayerOwnershipModel } from '../models/playerOwnership/PlayerOwnershipModel';
 import { getObjectDataFromKeys } from '../utils/getObjectDataFromKeys';
 import { ErrorLoading, emptyErrorLoadingState } from '../models/shared/errorLoading';
-import { info, warning } from '@/components/shared/Messages/Messages';
+import { info, warning } from '@/components/shared/messages/messages';
 import { useTranslations } from 'next-intl';
 import { getApiUrl } from '@/lib/api';
 import { API_ENDPOINTS } from '@/lib/api-endpoints';
@@ -40,6 +39,7 @@ export default function usePlayerOwnership(
   topXPlayers: number
 ) {
   const t = useTranslations('General');
+  const s = useTranslations('Statistics');
 
   const [ownershipData, setOwnershipData] = useState<PlayerOwnershipData>({
     chip: { chipUsageRound: [], chipUsageTotal: [] },
@@ -54,7 +54,7 @@ export default function usePlayerOwnership(
   });
 
   const [errorLoading, setErrorLoading] = useState<ErrorLoading>(emptyErrorLoadingState);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -75,7 +75,7 @@ export default function usePlayerOwnership(
 
         if (!data?.ownershipdata?.length) {
           setErrorLoading({
-            errorMessage: 'languageContent.Statistics?.PlayerOwnership?.no_data_found',
+            errorMessage: s("PlayerOwnership.no_data_found"),
             messageType: info,
           });
           return;

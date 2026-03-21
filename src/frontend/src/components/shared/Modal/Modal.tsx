@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useEffect } from 'react';
-import './Modal.scss';
+import './modal.css';
 
 type ModalProps = {
     title: string;

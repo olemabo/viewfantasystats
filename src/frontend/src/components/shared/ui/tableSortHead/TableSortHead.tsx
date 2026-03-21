@@ -1,5 +1,5 @@
 import { FunctionComponent, useEffect, useState } from 'react';
-import { Popover } from '../../Popover/Popover';
+import { Popover } from '../../popover/popover';
 import UnfoldMore from '@mui/icons-material/UnfoldMore';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';

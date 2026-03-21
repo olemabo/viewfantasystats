@@ -8,7 +8,7 @@ import { sortAndFilterRankData } from './sortAndFilter';
 import { useState, FunctionComponent } from 'react';
 import { Link } from '../../shared/ui/link/Link';
 import './RankStatistics.scss';
-import Message from '../../shared/Messages/Messages';
+import Message from '../../shared/messages/messages';
 
 export const RankStatisticsPage : FunctionComponent<PageProps> = (props) => {
     const [ lastNumberOfYears, setLastNumberOfYears ] = useState(3);

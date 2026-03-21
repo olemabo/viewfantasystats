@@ -2,7 +2,7 @@
 
 import DefaultPageContainer from "@/components/layout/default-page-container/default-page-container";
 import PlayerOwnership from "@/components/pages/player-ownership/player-ownership";
-import Popover from "@/components/shared/Popover/Popover";
+import Popover from "@/components/shared/popover/popover";
 import { TOP_X_MANAGERS_DEFAULT } from "@/constants/constants";
 import { getTeamData } from "@/lib/api/teamData/getTeamData";
 import { LeaguePath, LeagueTypeByPath, LeagueTypes } from "@/types/league";
@@ -20,13 +20,11 @@ export default async function Page({
   const teamData = await getTeamData(leagueType);
 
   const ownershipDescription = leagueType === LeagueTypes.FPL ? t('OwnershiptDescriptionFPL') : t('OwnershiptDescription');
-
+  
   return (
     <DefaultPageContainer 
       pageClassName='player-ownership-container'
-      leagueType={leagueType}
       heading={t('Title')} 
-      description={t('Description')}
     >
       <h1>
           {t('Title')}

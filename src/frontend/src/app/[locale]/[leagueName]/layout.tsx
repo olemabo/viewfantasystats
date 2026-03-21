@@ -15,12 +15,10 @@ export default async function LeagueNameLayout({
   const {leagueName, locale} = await params;
   const leagueType = LeagueTypeByPath[leagueName];
 
-  // Kanskje fjerne NextIntlClientProvider hvis det bare hentes Server Side
-  
   return (
     <>
-      <TopMenu leagueType={leagueType} language={locale} />
       <NextIntlClientProvider>
+        <TopMenu leagueType={leagueType} language={locale} />
         <main className={leagueType}>
           <PageContainer>
               {children}

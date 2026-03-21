@@ -23,6 +23,12 @@
         height: 50px;
         padding: 0 40px;
         color: var(--top-menu-items-color);
+
+        @media (max-width: 800px) {
+            .logo-full {
+                display: none;
+            }
+        }
                 
         .top-navbar-container {
             margin-right: 10px;
@@ -111,6 +117,13 @@
             a {
                 color: var(--logo-color);
                 font-size: var(--font-size-header-title);
+            }
+
+        }
+        
+        @media (max-width: 800px) {
+            .logo-full {
+                display: none;
             }
         }
 

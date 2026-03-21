@@ -4,7 +4,7 @@ import { ErrorLoading, emptyErrorLoadingState } from '../models/shared/errorLoad
 import { LeagueType } from '../models/shared/LeagueType';
 import { PriceChangeModel } from '../models/priceChange/PriceChangeModel';
 import { TeamNameAndIdModel } from '../models/playerOwnership/TeamNameAndIdModel';
-import { warning } from '@/components/shared/Messages/Messages';
+import { warning } from '@/components/shared/messages/messages';
 
 const usePriceChange = (leagueType: LeagueType, languageContent: any, currentGw: number) => {
     const playerOwnershipApiPath = "/statistics/price-change-api/";

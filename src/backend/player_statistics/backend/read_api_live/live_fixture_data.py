@@ -51,7 +51,7 @@ def live_fixtures(league_name=esf, gw=0):
             EO = dict_ownership[id] if (has_ownership_data and id in dict_ownership) else None
             player_info = player_dict[str(id)] 
             name, postition, team_id = player_info[0], player_info[1], player_info[2]
-            
+            print(stats, "stats")
             total_opta_or_bps = float(stats[data_to_show])
             total_points = stats["total_points"]
             
@@ -108,7 +108,7 @@ def live_fixtures(league_name=esf, gw=0):
         
         num3 = [x for n in (players_h, players_a) for x in n]
         num3.sort(key = lambda x: x[2], reverse=True)
-        fixture_json.append(fixture.toJson())
+        fixture_json.append(fixture.to_dict())
 
     response = LiveFixturesApiResponse(previous_gw, next_gw, current_gameweek, fixture_json, has_ownership_data) 
 

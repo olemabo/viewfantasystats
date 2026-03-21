@@ -1,8 +1,8 @@
 "use client"
 
 import { FunctionComponent, useState } from 'react';
-import './Messages.css';
 import { ErrorLoading, isEmptyErrorLoadingState } from '../../../models/shared/errorLoading';
+import './messages.css';
 
 export type MessageType = 'empty' | 'warning' | 'info';
 

@@ -2,7 +2,7 @@ import { RankModel } from '../models/RankStatistics/RankStatistics';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { ErrorLoading, emptyErrorLoadingState } from '../models/shared/errorLoading';
-import { warning } from '../components/Shared/Messages/Messages';
+import { warning } from '../components/shared/messages/messages';
 
 const useRankStatistics = (numberOfYearsBack: number, languageContent: any) => {
     const playerOwnershipApiPath = "/statistics/rank-statistics-api/";

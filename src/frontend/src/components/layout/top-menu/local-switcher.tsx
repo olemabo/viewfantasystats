@@ -4,6 +4,7 @@ import { Locale, routing } from "@/i18n/routing";
 import { LanguageProps } from "@/types/language";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import PublicIcon from '@mui/icons-material/Public';
 
 export default function LocaleSwitcher({ language }: LanguageProps) {
   const pathname = usePathname();
@@ -43,7 +44,7 @@ export default function LocaleSwitcher({ language }: LanguageProps) {
     // </div>
     (
     <><Link href={redirectedPathname("en")} className="button-with-icon">
-        {/* <PublicIcon fontSize="small" className="adjust-height-lang"/> */}
+        <PublicIcon fontSize="small" className="adjust-height-lang"/>
         <span className="adjust-height-lang lang">
             English
         </span>

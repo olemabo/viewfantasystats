@@ -3,7 +3,7 @@
 import DefaultPageContainer from "@/components/layout/default-page-container/default-page-container";
 import PlayerOwnership from "@/components/pages/player-ownership/player-ownership";
 import PlayerStatisticsPage from "@/components/pages/player-statistics/player-statistics";
-import Popover from "@/components/shared/Popover/Popover";
+import Popover from "@/components/shared/popover/popover";
 import { TOP_X_MANAGERS_DEFAULT } from "@/constants/constants";
 import { getPlayerStatistics } from "@/lib/api/get-player-statistics";
 import { getTeamData } from "@/lib/api/teamData/getTeamData";
@@ -34,8 +34,6 @@ export default async function Page({
     });
 
     const teamData = await getTeamData(leagueType);
-
-    console.log(playerStats.totalNumberOfGws, "ss")
 
     return (
         <DefaultPageContainer 

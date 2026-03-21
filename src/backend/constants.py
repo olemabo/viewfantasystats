@@ -14,7 +14,7 @@ total_number_of_eliteserien_teams = 16
 # where to store local data
 stored_data = "stored_data"
 
-path_to_store_local_data = "C:\\Users\\OleMartinBorge\\source\\repos\\projects\\Hobbyprosjekt\\viewfantasystats\\" + stored_data
+path_to_store_local_data = "C:\\Users\\OleMartinBorge\\source\\repos\\projects\\Hobbyprosjekt\\viewfantasystats\\src\\backend\\" + stored_data
 # path_to_store_local_data = "/home/olebo/viewfantasystats/" + stored_data
 
 # pythonanywhere
@@ -44,7 +44,7 @@ cup_stats_folder_name = "cup_data"
 player_statistics_folder_name = "player_stats"
 
 # must change before each season
-current_season_name_premier_league = "2024-2025"
+current_season_name_premier_league = "2025-2026"
 current_season_name_eliteserien = "2025"
 
 # txt file names 

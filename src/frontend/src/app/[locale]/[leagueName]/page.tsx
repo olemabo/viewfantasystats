@@ -1,11 +1,22 @@
-import {useTranslations} from 'next-intl';
-import {Link} from '@/i18n/navigation';
- 
-export default function HomePage() {
+import { esf } from '@/models/shared/LeagueType';
+import { LeaguePath, LeagueTypeByPath } from '@/types/league';
+import { redirect } from 'next/navigation';
 
-  return (
-    <div>
-      LEAGUE
-    </div>
-  );
+type PageProps = {
+  params: Promise<{ leagueName: LeaguePath }>;
+};
+
+export default async function Page({
+  params,
+  
+}: PageProps) {
+    const {leagueName} = await params;
+
+    const leagueType = LeagueTypeByPath[leagueName];
+
+    if (leagueType === esf) {
+      redirect('/no/eliteserien/player-ownership/');
+    }
+
+    redirect('/no/premier-league/fdr-planner');
 }

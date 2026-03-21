@@ -4,7 +4,7 @@ import Table, { TableBody, TableCell, TableHead, TableRow } from '../../shared/u
 import { TableSortHead } from '../../shared/ui/tableSortHead/TableSortHead';
 import  { useState } from 'react';
 import { Pagination } from '../../shared/pagination/pagination';
-import Message from '../../shared/Messages/Messages';
+import Message, { MessageErrorLoading } from '../../shared/messages/messages';
 import usePlayerOwnership from '../../../hooks/usePlayerOwnership';
 import { sortAndFilterPlayerOwnership, SORTING_KEYWORDS } from './sort-and-filter';
 import { defaultFormValueAllSelected } from '../../../constants/formValue';
@@ -14,11 +14,13 @@ import { useTranslations } from 'next-intl';
 import { DEFAULT_PAGINATION_SIZE } from '@/constants/constants';
 import './player-ownership.css';
 import { TeamModel } from '@/lib/api/teamData/teamData';
+import Spinner from '@/components/shared/ui/spinner/Spinner';
+import { isEmptyErrorLoadingState } from '@/types/errorLoading';
 
 interface PlayerOwnershipProps extends PageProps {
   teamData: TeamModel[];
 }
-export function PlayerOwnership({ 
+export default function PlayerOwnership({ 
     topXManagersDefault,
     teamData,
     leagueType
@@ -39,7 +41,7 @@ export function PlayerOwnership({
         isLoading, 
         errorLoading, 
         ownershipData,
-     } = usePlayerOwnership(leagueType, currentGw, topXPlayers);
+    } = usePlayerOwnership(leagueType, currentGw, topXPlayers);
 
 
     const { chip, metadata, ownership } = ownershipData;
@@ -66,6 +68,14 @@ export function PlayerOwnership({
     };
 
     const [ currentSorted, setCurrentSorted ] = useState("EO");
+
+    if (isLoading) {
+        return <Spinner />
+    }
+
+    if (!isEmptyErrorLoadingState(errorLoading)) {
+        return <MessageErrorLoading errorLoading={errorLoading} />
+    }
 
     return <>
         { updatingPrecentage > 0 && updatingGw > 0 && 
@@ -279,5 +289,3 @@ export function PlayerOwnership({
         />
     </>
 };
-
-export default PlayerOwnership;

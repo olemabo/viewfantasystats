@@ -7,7 +7,6 @@ from models.statistics.models.TransferModel import TransferModel
 from player_statistics.db_models.eliteserien.player_statistics_model import EliteserienPlayerStatistic
 from player_statistics.db_models.premier_league.player_statistics_model import PremierLeaguePlayers
 from utils.dataFetch.DataFetch import DataFetch
-from constants import esf
 
 def GetTransferData(league_name = esf, useJson = True, gw = -1):
     api_url = eliteserien_api_url if league_name == esf else premier_league_api_url

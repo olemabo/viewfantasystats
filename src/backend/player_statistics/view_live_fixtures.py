@@ -17,7 +17,7 @@ class LiveFixturesAPIView(APIView):
             gw = int(request.GET.get("gw", 0))
 
             response = live_fixtures(league_name, gw)
-            return JsonResponse(response.toJson(), safe=False)
+            return JsonResponse(response.to_dict(), safe=False)
 
         except ValueError as e:
             # Log the exception message if needed

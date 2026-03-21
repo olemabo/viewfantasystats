@@ -8,6 +8,10 @@ class KickOffTimesModel:
         self.kickoff_time = kickoff_time
         self.day_month = day_month
 
-    def toJson(self):
-        return json.dumps(self, default=lambda o: o.__dict__)
+    def to_dict(self):
+        return {
+            "gameweek": self.gameweek,
+            "kickoff_time": self.kickoff_time,
+            "day_month": self.day_month
+        }
  

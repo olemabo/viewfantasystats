@@ -1,6 +1,6 @@
 import { RotationPlannerTeamInfoModel } from '../../../models/fixturePlanning/RotationPlannerTeamInfo';
 import { DefaultPageContainer } from '../../layout/default-page-container/default-page-container';
-import { ShowRotationData } from '../../fixtures/ShowRotationData/ShowRotationData';
+import { ShowRotationData } from '../../features/fixtures/shared/show-rotation-data/show-rotation-data';
 import { KickOffTimesModel } from '../../../models/fixturePlanning/KickOffTimes';
 import { TeamCheckedModel } from '../../../models/fixturePlanning/TeamChecked';
 import React, { useState, useEffect, FunctionComponent } from 'react';

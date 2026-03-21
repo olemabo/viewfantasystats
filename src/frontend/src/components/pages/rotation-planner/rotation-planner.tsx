@@ -1,86 +1,82 @@
-import { createSearchQueryFromForminput, extractTeamsToUseAndTeamsInSolution, filterTeamData, toggleFilterButton, validateInput } from '../../fixtures/fixtureUtils';
-import { DefaultPageContainer } from '../../layout/default-page-container/default-page-container';
-import { ShowRotationData } from '../../fixtures/ShowRotationData/ShowRotationData';
-import ThreeStateCheckbox from '../../shared/ui/filter-button/ThreeStateCheckbox';
-import React, { useState, FunctionComponent } from 'react';
-import * as external_urls from '../../../staticUrls/externalUrls';
-import { FixturePlanningProps, PageProps, fdrRotation } from '../../../models/shared/PageProps';
-import { combinations } from '../../../utils/productRange';
-import FdrBox from '../../shared/FDR-explaination/fdr-box';
-import TextInput from '../../shared/ui/text-input/TextInput';
-import { Spinner } from '../../shared/ui/spinner/Spinner';
-import { Button } from '../../shared/ui/button/button';
-import Popover from '../../shared/Popover/Popover';
-import useFixtureDataFPL from '../../../hooks/useFixtureDataFPL';
-import { maxGwFpl, minGwFpl } from '../../../constants/gws';
-import useFetchTeamData from '../../../hooks/useFixtureTeamData';
-import Message from '../../shared/Messages/Messages';
-import { FDRFormInput } from '../../../models/fixturePlanning/FDRFormInput';
+"use client"
 
-export const RotationPlannerPage : FunctionComponent<PageProps & FixturePlanningProps> = (props) => {
+import { createSearchQueryFromForminput, extractTeamsToUseAndTeamsInSolution, filterTeamData, toggleFilterButton, validateInput } from '../../features/fixtures/utils/fixture-utils';
+import { ShowRotationData } from '../../features/fixtures/shared/show-rotation-data/show-rotation-data';
+import ThreeStateCheckbox from '../../shared/ui/filter-button/ThreeStateCheckbox';
+import React, { useState } from 'react';
+import { combinations } from '../../../utils/productRange';
+import TextInput from '../../shared/ui/text-input/TextInput';
+import { Button } from '../../shared/ui/button/button';
+import { minGwFpl } from '../../../constants/gws';
+import { FDRFormInput } from '../../../models/fixturePlanning/FDRFormInput';
+import { useTranslations } from 'next-intl';
+import { RotationPlannerTeamModel } from '@/models/fixturePlanning/RotationPlannerTeam';
+import { useRouter } from 'next/navigation';
+import '../../features/fixtures/fixture-planner/fixture-planner.css';
+import { TeamCheckedModel } from '@/models/fixturePlanning/TeamChecked';
+import '../../shared/filter-team-box/filter-team-box.css';
+import { KickOffTime } from '@/components/features/fixtures/types/kickoff-times.types';
+
+interface RotationPlannerPageProps {
+  fixtureData: RotationPlannerTeamModel[];
+  kickOffTimes: KickOffTime[];
+  defaultForm: FDRFormInput;
+  defaultTeamData: TeamCheckedModel[];
+}
+
+export default function RotationPlannerPage({
+    fixtureData,
+    kickOffTimes,
+    defaultForm,
+    defaultTeamData
+}: RotationPlannerPageProps) {
+    const f = useTranslations('Fixture');
+    const g = useTranslations('General');
+    const router = useRouter();
+
     const [ showTeamFilters, setShowTeamFilters ] = useState(false);
     const [ validationErrorMessage, setValidationErrorMessage ] = useState("");
     const [ longLoadingTimeText, setLongLoadingTimeText ] = useState('');
-    const [ formInput, setFormInput ] = useState<FDRFormInput>({
-        startGw: -1,
-        endGw: maxGwFpl,
-        minNumFixtures: 3,
-        fdrType: "",
-        teamsToCheck: 2,
-        teamsToPlay: 1,
-        fplTeams: [],
-        teamsInSolution: [],
-        fixturePlanningType: fdrRotation
-    });
-    const [ fixturePlannerSearchQuery, setFixturePlannerSearchQuery ] = useState<string>(
-        createSearchQueryFromForminput(formInput)
-    );
 
-    const { teamData, setTeamData, loadingTeamData } = useFetchTeamData(); 
+    const [formInput, setFormInput] = useState<FDRFormInput>(defaultForm);
+    const [isLoading, setIsLoading] = useState(false);
+    const [teamData, setTeamData] = useState(defaultTeamData);
 
-    const { 
-        isLoadingFixturedata, 
-        errorLoading,
-        fdrRotationData,
-        kickOffTimes,
-    } = useFixtureDataFPL(fixturePlannerSearchQuery, setFormInput, props);
+    function handleSubmit(e: React.FormEvent) {
+        e.preventDefault();
 
-    function updateFDRData() {
-        let teamsANDteamsinsolution = extractTeamsToUseAndTeamsInSolution(teamData);
+        const teamsANDteamsinsolution = extractTeamsToUseAndTeamsInSolution(teamData);
 
-        var body: FDRFormInput = {
-            startGw: formInput.startGw,
-            endGw: formInput.endGw,
-            minNumFixtures: formInput.minNumFixtures,
-            fixturePlanningType: fdrRotation,
-            teamsToCheck: formInput.teamsToCheck,
-            teamsToPlay: formInput.teamsToPlay,
+        const body: FDRFormInput = {
+            ...formInput,
             teamsInSolution: teamsANDteamsinsolution[1],
             fplTeams: teamsANDteamsinsolution[0],
-            fdrType: "", // This is for changing excel sheets
-            excludeGws: formInput.excludeGws,
+            fdrType: "", 
         };
 
-        const validInput = validateInput({
+         const validInput = validateInput({
             body,
-            propsContent: props.languageContent,
+            propsContent: {}, // You can pass translations or propsContent if needed here
             setValidationErrorMessage,
             setShowTeamFilters,
         });
 
-        if (validInput) {
-            setValidationErrorMessage("");
-            const searchQuery = createSearchQueryFromForminput(body);
+        if (!validInput) return;
 
-            const numberOfCombintaions = numberOfUniqueCombinations();
-            if (numberOfCombintaions > 1000) {
-                setLongLoadingTimeText(numberOfCombintaions + " kombinasjoner skal sjekkes så denne utregningen kan ta litt tid."
-                + " For å redusere utregningstiden kan du bruke 'Filtrer lag' til å velge lag du vet skal være i løsningen, eller fjern lag du vet ikke skal være i løsningen :)"
-                )
-            };
-
-            setFixturePlannerSearchQuery(searchQuery);
+        const numComb = numberOfUniqueCombinations();
+        if (numComb > 1000) {
+        setLongLoadingTimeText(
+            `${numComb} kombinasjoner skal sjekkes så denne utregningen kan ta litt tid. For å redusere utregningstiden kan du bruke 'Filtrer lag' til å velge lag du vet skal være i løsningen, eller fjern lag du vet ikke skal være i løsningen :)`
+        );
+        } else {
+        setLongLoadingTimeText("");
         }
+
+        // Build query params to push to router
+        const query = createSearchQueryFromForminput(body);
+
+        setIsLoading(true);
+        router.push(`?${query}`);
     }
 
     const { number_of_not_in_solution, number_of_must_be_in_solution, number_can_be_in_solution } = filterTeamData(teamData);
@@ -89,66 +85,40 @@ export const RotationPlannerPage : FunctionComponent<PageProps & FixturePlanning
         return combinations(number_can_be_in_solution, formInput.teamsToCheck ?? 0 - number_of_must_be_in_solution)
     }
 
-    const popoverText = `${props.languageContent.Fixture.RotationPlanner?.title} ${props.languageContent.LongTexts.rotationPlannerDescription_first}
-    ${props.languageContent.LongTexts.rotationPlannerDescription_second}'${props.languageContent.Fixture.gw_start}' ${props.languageContent.General.and} '${props.languageContent.Fixture.gw_end}' ${props.languageContent.LongTexts.becomesRes} '${props.languageContent.Fixture.teams_to_check}' ${props.languageContent.LongTexts.rotationPlannerDescription_1} '${props.languageContent.Fixture.teams_to_play}' ${props.languageContent.LongTexts.rotationPlannerDescription_2}`;
+    const filteredKickoffTimes = kickOffTimes.slice(defaultForm.startGw - 1, defaultForm.endGw);
 
     return <>
-    <DefaultPageContainer 
-        pageClassName='fixture-planner-container'
-        leagueType={props.leagueType}
-        heading={props.languageContent.Fixture.RotationPlanner?.title} 
-        description={props.languageContent.Fixture.RotationPlanner?.title + " - " + " Rotasjonsplanlegger viser kombinasjoner av lag som kan roteres for å gi best mulig kampprogram."}
-        isLoading={isLoadingFixturedata}
-        errorLoading={errorLoading}
-        renderTitle={() => 
-            <h1>
-                {props.languageContent.Fixture.RotationPlanner?.title}
-                <Popover 
-                    id='rotations-planner-id'
-                    alignLeft={true}
-                    popoverTitle={props.languageContent.Fixture.RotationPlanner?.title} 
-                    iconSize={14}
-                    iconPosition={[-10, 0, 0, 3]}
-                    popoverText={popoverText}
-                >
-                    {props.languageContent.LongTexts.fixtureAreFrom }
-                    <a href={external_urls.url_offical_fantasy_premier_league}>Fantasy Premier League.</a>
-                    <FdrBox content={props.languageContent} />
-                </Popover>
-            </h1>
-        }
-    >
         <div className='input-row-container'>
             <Button 
-                buttonText={props.languageContent.Fixture.filter_button_text} 
+                buttonText={f("filter_button_text")} 
                 iconClass={`fa fa-chevron-${showTeamFilters ? 'up' : 'down'}`}
                 onclick={() => setShowTeamFilters(showTeamFilters ? false : true)} 
                 color='white'
             />
             
-            <form onSubmit={(e) =>  {updateFDRData(); e.preventDefault()}}>
+            <form onSubmit={handleSubmit}>
                 <TextInput 
                     htmlFor='input-form-start-gw'
                     min={minGwFpl}
-                    max={maxGwFpl}
+                    max={formInput.maxGw}
                     onInput={(e: number) => setFormInput((prevFormInput) => ({
                         ...prevFormInput,
                         startGw: e,
                     }))} 
                     defaultValue={formInput.startGw}>
-                    {props.languageContent.Fixture.gw_start}
+                    {f("gw_start")}
                 </TextInput>
                 <TextInput 
                     htmlFor='input-form-end-gw'
                     min={formInput.startGw}
-                    max={maxGwFpl}
+                    max={formInput.maxGw}
                     onInput={(e: number) => setFormInput((prevFormInput) => ({
                         ...prevFormInput,
                         endGw: e,
                     }))} 
                     defaultValue={formInput.endGw}
                 >
-                    {props.languageContent.Fixture.gw_end}
+                    {f("gw_end")}
                 </TextInput>
                 <TextInput 
                     htmlFor='teams_to_check'                    
@@ -160,8 +130,8 @@ export const RotationPlannerPage : FunctionComponent<PageProps & FixturePlanning
                     }))} 
                     defaultValue={formInput.teamsToCheck}
                 >
-                    {props.languageContent.Fixture.teams_to_check_1}<br/>
-                    {props.languageContent.Fixture.teams_to_check_2}
+                    {f("teams_to_check_1")}<br/>
+                    {f("teams_to_check_2")}
                 </TextInput>
                 <TextInput 
                     htmlFor='teams_to_play'                    
@@ -172,11 +142,11 @@ export const RotationPlannerPage : FunctionComponent<PageProps & FixturePlanning
                         teamsToPlay: e,
                     }))}
                     defaultValue={formInput.teamsToPlay}>
-                    {props.languageContent.Fixture.teams_to_play_1}<br/>
-                    {props.languageContent.Fixture.teams_to_play_2}
+                    {f("teams_to_play_1")}<br/>
+                    {f("teams_to_play_2")}
                 </TextInput>
 
-                <input className="submit" type="submit" value={props.languageContent.General.search_button_name} />
+                <input className="submit" type="submit" value={g("search_button_name")} />
             </form>
         </div>
         
@@ -189,9 +159,9 @@ export const RotationPlannerPage : FunctionComponent<PageProps & FixturePlanning
         { teamData.length > 0 && showTeamFilters &&
             <div className='filter-teams-container'>
                 <div className='filter-teams-description'>
-                    <div><span className="dot can-be-in-solution"></span>{`${props.languageContent.Fixture.RotationPlanner.teams_can_be_in_solution} (${number_can_be_in_solution})`}</div>
-                    <div><span className="dot must-be-in-solution"></span>{`${props.languageContent.Fixture.RotationPlanner.teams_must_be_in_solution} (${number_of_must_be_in_solution})`}</div>
-                    <div><span className="dot not-in-solution"></span>{`${props.languageContent.Fixture.RotationPlanner.teams_cant_be_in_solution} (${number_of_not_in_solution})`}</div>
+                    <div><span className="dot can-be-in-solution"></span>{`${f("RotationPlanner.teams_can_be_in_solution")} (${number_can_be_in_solution})`}</div>
+                    <div><span className="dot must-be-in-solution"></span>{`${f("RotationPlanner.teams_must_be_in_solution")} (${number_of_must_be_in_solution})`}</div>
+                    <div><span className="dot not-in-solution"></span>{`${f("RotationPlanner.teams_cant_be_in_solution")} (${number_of_not_in_solution})`}</div>
                 </div>
                 <div className='filter-teams-list'>
                     { teamData.map(team_name =>
@@ -207,7 +177,7 @@ export const RotationPlannerPage : FunctionComponent<PageProps & FixturePlanning
             </div>
         }
 
-        { loadingTeamData || isLoadingFixturedata && <div>
+        {/* { loadingTeamData || isLoadingFixturedata && <div>
             <Spinner />
             {longLoadingTimeText && 
                 <div style={{ display: 'flex', justifyContent: 'center'}}>
@@ -216,17 +186,13 @@ export const RotationPlannerPage : FunctionComponent<PageProps & FixturePlanning
                     </p>
                 </div> 
                 }
-        </div>}
+        </div>} */}
 
-        { !isLoadingFixturedata && fdrRotationData.length > 0 &&
+        { fixtureData.length > 0 &&
             <ShowRotationData 
-                content={props.languageContent}
-                fdrData={fdrRotationData}
-                kickOffTimes={kickOffTimes}    
+                fdrData={fixtureData}
+                kickOffTimes={filteredKickoffTimes}    
             />
         }
-    </DefaultPageContainer>
     </>
 };
-
-export default RotationPlannerPage;

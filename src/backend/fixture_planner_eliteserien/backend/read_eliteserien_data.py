@@ -57,7 +57,6 @@ def read_eliteserien_excel_to_db_format(defensivt=""):
                 all_games_in_gw = value.split(":")[0].split("+")
                 for game in all_games_in_gw:
                     fdr = color_to_fdr_dict[ws_fdr[cell_name].fill.start_color.index]
-                    print(fdr, game, team_name)
                     opponent = game
                     home_away = "A" if game.islower() else "H"
                     temp_oppTeamNameList.append(opponent)

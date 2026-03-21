@@ -3,18 +3,17 @@
 import { Table, TableBody, TableCell, TableHead, TableRow } from '../../shared/ui/table/Table';
 import { useState } from 'react';
 import TableSortHead from '../../shared/ui/tableSortHead/TableSortHead';
-import usePlayerStatistics from '../../../hooks/usePlayerStatistics';
 import { sortAndFilterPlayerStatistics } from './sortAndFilter';
-import { convertCategoryToName, getMinWidth } from './playerStatisticsUtils';
-import Message from '../../shared/Messages/Messages';
+import { getMinWidth } from './playerStatisticsUtils';
+import Message from '../../shared/messages/messages';
 import { defaultFormValueAllSelected } from '../../../constants/formValue';
-import { LeagueProps, LeagueType } from '@/types/league';
+import { LeagueType } from '@/types/league';
 import { useTranslations } from 'next-intl';
 import { TeamNameAndIdModel } from '@/models/playerOwnership/TeamNameAndIdModel';
 import { PlayerStatisticsModel } from '@/models/playerStatistics/PlayerStatisticsModel';
 import { useRouter } from 'next/navigation';
-import '../player-ownership/player-ownership.css';
 import { Pagination } from '@/components/shared/pagination/pagination';
+import '../player-ownership/player-ownership.css';
 
 type PlayerStatisticsProps = {
     categories: string[];

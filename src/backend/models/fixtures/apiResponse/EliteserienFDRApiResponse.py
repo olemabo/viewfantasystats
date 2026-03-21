@@ -1,16 +1,18 @@
-import json
-
-
 class EliteserienFDRApiResponse:
-    def __init__(self, fdr_data, gws_and_dates, fdr_to_colors_dict, team_name_color, gw_start, gw_end, max_gw):
-        ...
+    def __init__(self, fdr_data, fdr_to_colors_dict, team_name_color, gw_start, gw_end, max_gw):
         self.fdr_data = fdr_data
-        self.gws_and_dates = gws_and_dates
         self.fdr_to_colors_dict = fdr_to_colors_dict
         self.team_name_color = team_name_color
         self.gw_start = gw_start
         self.gw_end = gw_end
         self.max_gw = max_gw
 
-    def toJson(self):
-        return json.dumps(self, default=lambda o: o.__dict__)
+    def to_dict(self):
+        return {
+            "fdr_data": self.fdr_data,
+            "fdr_to_colors_dict": self.fdr_to_colors_dict,
+            "team_name_color": self.team_name_color,
+            "gw_start": self.gw_start,
+            "gw_end": self.gw_end,
+            "max_gw": self.max_gw
+        }

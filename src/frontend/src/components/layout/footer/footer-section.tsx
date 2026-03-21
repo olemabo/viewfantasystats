@@ -1,25 +1,16 @@
 "use server";
 
 import Link from 'next/link'
-import { LeagueProps, LeagueType, LeagueTypes } from '@/types/league';
-import { leagueUrls } from '@/constants/urls/menuUrls';
+import { LeagueProps } from '@/types/league';
 import { getTranslations } from 'next-intl/server';
+import { getSectionUrlsByLeague } from '../get-menu-urls';
 
 type FooterProps = LeagueProps;
 
-type SectionUrls = typeof leagueUrls.urlsFpl;
-
-const urlsByLeague: Record<LeagueType, SectionUrls> = {
-  [LeagueTypes.FPL]: leagueUrls.urlsFpl,
-  [LeagueTypes.ESF]: leagueUrls.urlsEsf
-} as const;
-
 export default async function FooterContainer({ leagueType }: FooterProps) {
-    const sectionUrls = urlsByLeague[leagueType];
-    
-    if (!sectionUrls || Object.keys(sectionUrls).length === 0) { 
-        return null;
-    }
+    const sectionUrls = getSectionUrlsByLeague(leagueType);
+
+    if (!sectionUrls) return null;
 
     const t = await getTranslations('Layout.Footer');
 

@@ -1,8 +1,8 @@
+import { KickOffTime } from '@/components/features/fixtures/types/kickoff-times.types';
 import { getApiUrl } from '@/lib/api';
 import { API_ENDPOINTS } from '@/lib/api-endpoints';
-import { KickOffTimesModel } from '@/models/fixturePlanning/KickOffTimes';
 
-export async function getKickoffTimesFPL(): Promise<KickOffTimesModel[]> {
+export async function getKickoffTimesFPL(): Promise<KickOffTime[]> {
   try {
     const url = getApiUrl(API_ENDPOINTS.GET_KICKOFF_TIMES);
     
@@ -16,13 +16,40 @@ export async function getKickoffTimesFPL(): Promise<KickOffTimesModel[]> {
       return [];
     }
 
-    const rawData = await res.json();
+    const rawData: { gameweek: number; kickoff_time: string; day_month: string }[] = await res.json();
 
-    const parsedKickoffTimes: KickOffTimesModel[] = rawData.map((item: string) =>
-      JSON.parse(item)
-    );
+    return rawData.map(item => ({
+      gameweek: item.gameweek,
+      dateTime: item.kickoff_time,
+      dayMonth: item.day_month
+    }));
+  } catch (err) {
+    console.error("Error fetching kickoff times:", err);
+    return [];
+  }
+}
 
-    return parsedKickoffTimes;
+export async function getKickoffTimesESF(): Promise<KickOffTime[]> {
+  try {
+    const url = getApiUrl(API_ENDPOINTS.GET_KICKOFF_TIMES_ESF);
+    
+    const res = await fetch(url, {
+      method: 'GET',
+      cache: 'no-cache',
+    });
+
+    if (!res.ok) {
+      console.error("Failed to fetch kickoff times:", res.status);
+      return [];
+    }
+
+    const rawData: { gameweek: number; kickoff_time: string; day_month: string }[] = await res.json();
+
+    return rawData.map(item => ({
+      gameweek: item.gameweek,
+      dateTime: item.kickoff_time,
+      dayMonth: item.day_month
+    }));
   } catch (err) {
     console.error("Error fetching kickoff times:", err);
     return [];
