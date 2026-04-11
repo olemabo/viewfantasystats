@@ -150,13 +150,13 @@ def fill_db_extra_info_statistics_eliteserien(gw, file_path):
                 avg_transfer_cost = int(np.mean(np.array(avg_data[:, 3], dtype=float))*10)
 
             db_data = [chips_data[0], chips_data[1], chips_data[2], chips_data[3], chips_data[4],
-                        avg_team_value, avg_gw_transfer, avg_transfer_cost]
-            
+                        avg_team_value, avg_gw_transfer, avg_transfer_cost, chips_data[5]]
+                        
             total_chip_usage = file_path + "/top_" + str(top_x) + "/" + total_chip_usage_txt_file_name
             total_chip_usage_data = []
             if (os.path.exists(total_chip_usage)):
                 temp = np.loadtxt(total_chip_usage, dtype="str", delimiter=",", skiprows=1, max_rows=1)
-                total_chip_usage_data = [temp[0], temp[1], temp[2], temp[3], temp[4]]
+                total_chip_usage_data = list(temp)
             
             if top_x == 1:
                 extra_info_top_1 = db_data

@@ -118,18 +118,41 @@ def save_all_global_stats_for_current_gw(league_name=fpl):
     
     print("All ids successfully extracted for gw ", str(current_gameweek), "\n")
 
-    # [free hit, bench boost, triple captain, wildcard, no chips] chips usage this round
-    fpl_player_chip_info = [0, 0, 0, 0, 0]
+    # [free hit, bench boost, triple captain, wildcard, no chips, pdbus] chips usage this round
+    fpl_player_chip_info = [0, 0, 0, 0, 0, 0]
+
     
     # [ team_value, event_transfer, event_transfer_cost, total points, bank ]
     event_fpl_team_info = np.zeros((top_x_players, 5))
 
-    dict_chip_to_index_premier_league = {"freehit": 0, "bboost": 1, "3xc": 2, "wildcard": 3, None: 4}
-    dict_chip_to_index_eliteserien = {"rich": 0, "frush": 1, "2capt": 2, "wildcard": 3, None: 4}
+    dict_chip_to_index_premier_league = {
+        "freehit": 0, 
+        "bboost": 1, 
+        "3xc": 2, 
+        "wildcard": 3, 
+        None: 4
+    }
+
+    dict_chip_to_index_eliteserien = {
+        "rich": 0,
+        "frush": 1,
+        "2capt": 2,
+        "wildcard": 3,
+        None: 4,
+        "pdbus": 5,
+    }
+    
     dict_chip_to_index = dict_chip_to_index_eliteserien if league_name == esf else dict_chip_to_index_premier_league
 
     # data for total chip usage
-    total_chip_usage_eliteserien_dict = {"wildcard": [0, 0], "rich": 0, "frush": 0, "2capt": 0}
+    total_chip_usage_eliteserien_dict = {
+        "wildcard": [0, 0],
+        "rich": 0,
+        "frush": 0,
+        "2capt": 0,
+        "pdbus": 0
+    }
+
     total_chip_usage_premier_league_dict = {"wildcard": [0, 0], "freehit": 0, "3xc": 0, "bboost": 0}
     dict_total_chip_usage_to_index = total_chip_usage_eliteserien_dict if league_name == esf else total_chip_usage_premier_league_dict
     wildcard_date = eliteserien_wc_due_date if league_name == esf else premier_league_wc_due_date
@@ -269,7 +292,7 @@ def save_all_global_stats_for_current_gw(league_name=fpl):
 
 def fill_global_chip_usage(DFObject: DataFetch, global_stats_path, current_gameweek, league_name):
     dict_total_chip_usage_to_index = {"wildcard": [0, 0], "rich": 0, "frush": 0, "2capt": 0} if league_name == esf else {"wildcard": [0, 0], "freehit": 0, "3xc": 0, "bboost": 0}
-    dict_total_chip_usage_global_to_index = {"wildcard": [0, 0], "rich": 0, "frush": 0, "2capt": 0} if league_name == esf else {"wildcard": [0, 0], "freehit": 0, "3xc": 0, "bboost": 0}
+    dict_total_chip_usage_global_to_index = {"wildcard": [0, 0], "rich": 0, "frush": 0, "2capt": 0, "pdbus": 0} if league_name == esf else {"wildcard": [0, 0], "freehit": 0, "3xc": 0, "bboost": 0}
     wildcard_date = eliteserien_wc_due_date if league_name == esf else premier_league_wc_due_date
     wildcard_deadline = get_tz_notation_to_seconds(wildcard_date)
     
@@ -405,11 +428,27 @@ def write_date_to_files(general_folder_path, ids, ids_dict,
     store_extra_info = general_folder_path + "/" + name_of_extra_info_file
 
     f2 = open(store_extra_info, "w", encoding="utf-8")
-    first_line = "Rich Uncle, Forward Rush, 2 Captains, Wildcard, None\n" if league_name == esf else "Freehit, Bench Boost, Triple Captain, Wildcard, None\n"
+    first_line = "Rich Uncle, Forward Rush, 2 Captains, Wildcard, None, Park The Bus\n" if league_name == esf else "Freehit, Bench Boost, Triple Captain, Wildcard, None\n"
     f2.write(first_line)
-    f2.write(str(fpl_player_chip_info[0]) + "," + 
-        str(fpl_player_chip_info[1]) + "," + str(fpl_player_chip_info[2]) + "," + 
-        str(fpl_player_chip_info[3]) + "," + str(fpl_player_chip_info[4]) + "\n\n")
+
+    if league_name == esf:
+        f2.write(
+            str(fpl_player_chip_info[0]) + "," + 
+            str(fpl_player_chip_info[1]) + "," + 
+            str(fpl_player_chip_info[2]) + "," + 
+            str(fpl_player_chip_info[3]) + "," + 
+            str(fpl_player_chip_info[4]) + "," + 
+            str(fpl_player_chip_info[5]) + "\n\n"
+        )
+    else:
+        f2.write(
+            str(fpl_player_chip_info[0]) + "," + 
+            str(fpl_player_chip_info[1]) + "," + 
+            str(fpl_player_chip_info[2]) + "," + 
+            str(fpl_player_chip_info[3]) + "," + 
+            str(fpl_player_chip_info[4]) + "\n\n"
+        )
+
     f2.write("Overall rank, team value, event transfers, event transfer cost, total points, bank\n")
     
     for n in range(top_x_players_i):
@@ -539,6 +578,7 @@ def get_tz_notation_to_seconds(time_str):
 
 
 def read_chips_and_event_info(top_x_players, path):
+    print(path)
     fpl_player_chip_info = np.loadtxt(path, dtype="int", delimiter=",", skiprows=1, max_rows=1,  encoding="utf-8")
     event_fpl_team_info = np.zeros((top_x_players, 5))
     event_fpl_team_info_data = np.loadtxt(path, dtype="int", delimiter=",", skiprows=4,  encoding="utf-8")
