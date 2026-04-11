@@ -123,6 +123,7 @@ export const norwegianContent = {
             rich_uncle: "Rik Onkel",
             forward_rush: "Spiss Rush",
             two_captain: "2 Kapteiner",
+            park_the_bus: "Parker bussen",
             three_captain: "Trippel Kaptein",
             free_hit: "Free Hit",
             bench_boost: "Bench Boost",

@@ -124,6 +124,7 @@ export const englishContent = {
             rich_uncle: "Rich Uncle",
             forward_rush: "Forward Rush",
             two_captain: "2 Captains",
+            park_the_bus: "Park The Bus",
             three_captain: "Triple Captain",
             free_hit: "Free Hit",
             bench_boost: "Bench Boost",
