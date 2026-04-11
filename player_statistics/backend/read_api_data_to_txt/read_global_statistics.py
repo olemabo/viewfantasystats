@@ -578,7 +578,6 @@ def get_tz_notation_to_seconds(time_str):
 
 
 def read_chips_and_event_info(top_x_players, path):
-    print(path)
     fpl_player_chip_info = np.loadtxt(path, dtype="int", delimiter=",", skiprows=1, max_rows=1,  encoding="utf-8")
     event_fpl_team_info = np.zeros((top_x_players, 5))
     event_fpl_team_info_data = np.loadtxt(path, dtype="int", delimiter=",", skiprows=4,  encoding="utf-8")
