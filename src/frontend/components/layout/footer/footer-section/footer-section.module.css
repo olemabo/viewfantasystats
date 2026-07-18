@@ -1,0 +1,49 @@
+.footerSection {
+  margin-right: 50px;
+}
+
+.footerSection h2 {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  font-size: 18px;
+  color: var(--footer-h2-color-eliteserien);
+}
+
+.footerSection svg {
+  color: var(--footer-h2-color-eliteserien);
+}
+
+.footerSection a {
+  color: var(--white-color);
+  display: block;
+  border-bottom: 1px solid transparent;
+  font-size: 14px;
+  margin-top: 7px;
+}
+
+.footerSection a:hover {
+  border-color: var(--white-color);
+  width: fit-content;
+}
+
+/* Premier League-tema (esf bruker default eliteserien-farger) */
+.fpl h2,
+.fpl svg {
+  color: var(--footer-h2-color-premier-league);
+}
+
+@media (max-width: 600px) {
+  .footerSection {
+    margin-bottom: 15px;
+  }
+
+  .footerSection h2 {
+    font-size: 18px;
+    margin-bottom: 15px;
+  }
+
+  .footerSection a {
+    margin-top: 10px;
+    font-size: 14px;
+  }
+}

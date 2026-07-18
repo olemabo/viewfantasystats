@@ -14,12 +14,12 @@ total_number_of_eliteserien_teams = 16
 # where to store local data
 stored_data = "stored_data"
 
-path_to_store_local_data = "C:\\Users\\OleMartinBorge\\source\\repos\\projects\\Hobbyprosjekt\\viewfantasystats\\src\\backend\\" + stored_data
+path_to_store_local_data = "C:\\Users\\OleMartinBorge\\source\\repos\\projects\\Hobbyprosjekt\\viewfantasystats\\" + stored_data
 # path_to_store_local_data = "/home/olebo/viewfantasystats/" + stored_data
 
 # pythonanywhere
-# python_anywhere_path = "/home/olebo/viewfantasystats/"
-python_anywhere_path = ""
+python_anywhere_path = "/home/olebo/viewfantasystats/"
+#python_anywhere_path = ""
 
 # link to global ranks
 web_global_league_premier_league = 'https://fantasy.premierleague.com/api/leagues-classic/314/standings/?phase=1&page_new_entries=1&page_standings=X'
@@ -44,8 +44,8 @@ cup_stats_folder_name = "cup_data"
 player_statistics_folder_name = "player_stats"
 
 # must change before each season
-current_season_name_premier_league = "2025-2026"
-current_season_name_eliteserien = "2025"
+current_season_name_premier_league = "2024-2025"
+current_season_name_eliteserien = "2026"
 
 # txt file names 
 country_population_txt_file_name = "country_population.txt"
@@ -72,7 +72,7 @@ ranking_delimiter = "&"
 cup_delimiter = ":;:"
 cup_db_delimiter = "|-|"
 # wildcard due date NB: MUST BE SET MANUALLY
-eliteserien_wc_due_date = "2025-07-27T14:55:00"
+eliteserien_wc_due_date = "2026-07-26T16:55:00"
 premier_league_wc_due_date = "2024-12-29T13:30:00"
 
 # urls
@@ -85,11 +85,11 @@ all_top_x_players_premier_league = [1, 10, 100, 1000, 10000]
 all_top_x_players_premier_league_nationality = [1]
 all_top_x_players_premier_league_total_chips = [1, 10, 100, 1000]
 
-all_top_x_players_eliteserien = [1, 10, 100, 1000, 5000]
+all_top_x_players_eliteserien = [1, 10, 100, 1000]
 all_top_x_players_eliteserien_nationality = [1]
 all_top_x_players_eliteserien_total_chips = [1, 10, 100, 1000]
 
-how_often_do_back_up_of_global_data = 250
+how_often_do_back_up_of_global_data = 100
 time_to_sleep_for_each_iteration = 0.3
 
 # https://fantasy.tv2.no/entry/417/history fra 2017, update this manually each year
