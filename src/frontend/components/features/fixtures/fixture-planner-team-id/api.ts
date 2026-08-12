@@ -4,6 +4,7 @@ import { TeamNamePlayerName } from '../../../../models/fixturePlanning/TeamNameP
 import { LeagueType } from '../../../../types/league';
 import { esf } from '../../../../models/shared/LeagueType';
 import { URLS } from '../../../../constants/urls';
+import { API_ENDPOINTS } from '@/lib/api-endpoints';
 
 export function useFDRFromTeamId(teamId: number, currentGw: number, leagueType: LeagueType) {
   const [players, setPlayers] = useState<TeamNamePlayerName[][]>([[], [], [], []]);
@@ -19,7 +20,7 @@ export function useFDRFromTeamId(teamId: number, currentGw: number, leagueType: 
 
       try {
         const fixturePlannerApiPath = leagueType === esf
-            ? URLS.API.FDR.ELITESERIEN_FROM_TEAM_ID 
+            ? API_ENDPOINTS.ESF.FIXTURE_PLANNER.FANTASY_TEAM_FDR 
             : URLS.API.FDR.PREMIER_LEAGUE_FROM_TEAM_ID;
 
         const url = getApiUrl(fixturePlannerApiPath);

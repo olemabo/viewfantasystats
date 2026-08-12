@@ -8,8 +8,8 @@ export interface FDRFormInput {
     minNumFixtures: number;
     teamsToCheck?: number;
     teamsToPlay?: number;
-    fplTeams?: string[];
-    teamsInSolution?: string[];
+    fplTeams?: number[];
+    teamsInSolution?: number[];
     fixturePlanningType: FixturePlanningType;
     maxGw: number;
 }

@@ -1,5 +1,6 @@
 export interface TeamCheckedModel {
-    team_name: string;
+    teamName: string;
+    teamId: number;
     checked: boolean;
-    checked_must_be_in_solution: boolean;
+    mustBeInSolution: boolean;
 }

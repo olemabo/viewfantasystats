@@ -2,27 +2,26 @@
 
 import { TeamNamePlayerName } from "../../../../models/fixturePlanning/TeamNamePlayerName";
 import ShowTeamIDFDRData from "../shared/show-fdr-data/show-teamId-fdr-data";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { esf } from "../../../../models/shared/PageProps";
 import TextInput from "../../../shared/ui/text-input/TextInput";
-import { Spinner } from "../../../shared/ui/spinner/Spinner";
 import Button from "../../../shared/ui/button/button";
 import "../../../shared/ui/text-input/text-input.css";
 import Modal from "../../../shared/modal/modal";
 import { minGwEsf, minGwFpl } from "../../../../constants/gws";
 import { LeagueType } from "../../../../types/league";
-import { FixturePlannerResult } from "../../../../app/[locale]/[leagueName]/fdr-planner-team-id/api";
-import { KickOffTimesModel } from "../../../../models/fixturePlanning/KickOffTimes";
 import { useTranslations } from "next-intl";
-import { useFDRFromTeamId } from "./api";
 import "../fixture-planner/fixture-planner.css";
 import { KickOffTime } from "../types/kickoff-times.types";
+import { FixturePlannerResult } from "@/app/[locale]/eliteserien/fdr-planner-team-id/api";
+import { useRouter } from "next/dist/client/components/navigation";
 
 type FixturePlannerTeamIdProps = {
   leagueType: LeagueType;
   data: FixturePlannerResult;
   teamIdFromSearch?: string;
   kickoffTimes: KickOffTime[];
+  initialPlayers: TeamNamePlayerName[][];
 };
 
 export function FixturePlannerTeamIdPage({
@@ -30,10 +29,12 @@ export function FixturePlannerTeamIdPage({
   data,
   teamIdFromSearch,
   kickoffTimes,
+  initialPlayers,
 }: FixturePlannerTeamIdProps) {
   const { maxGw, playerList, fixtureData } = data;
   const g = useTranslations("General");
   const f = useTranslations("Fixture");
+  const router = useRouter();
 
   const [gwStart, setGwStart] = useState(data.currentGw);
   const [gwEnd, setGwEnd] = useState(data.gwEnd);
@@ -47,26 +48,18 @@ export function FixturePlannerTeamIdPage({
   const [newPlayerName, setNewPlayerName] = useState("");
   const [newPlayerTeam, setNewPlayerTeam] = useState("");
   const [newPlayerPositionNumber, setNewPlayerPositionNumber] = useState(0);
-  const [goalKeepers, setGoalkeepers] = useState<TeamNamePlayerName[]>([]);
-  const [defenders, setDefenders] = useState<TeamNamePlayerName[]>([]);
-  const [midfielders, setMidfielders] = useState<TeamNamePlayerName[]>([]);
-  const [forwards, setForwards] = useState<TeamNamePlayerName[]>([]);
-
-  const { players, loading, error } = useFDRFromTeamId(
-    teamIDCorrect,
-    gwStart,
-    leagueType,
+  const [goalKeepers, setGoalkeepers] = useState<TeamNamePlayerName[]>(
+    initialPlayers ? initialPlayers[0] : [],
   );
-
-  useEffect(() => {
-    if (players.length === 4) {
-      const [gk, def, mid, fwd] = players;
-      setGoalkeepers(gk);
-      setDefenders(def);
-      setMidfielders(mid);
-      setForwards(fwd);
-    }
-  }, [players]);
+  const [defenders, setDefenders] = useState<TeamNamePlayerName[]>(
+    initialPlayers ? initialPlayers[1] : [],
+  );
+  const [midfielders, setMidfielders] = useState<TeamNamePlayerName[]>(
+    initialPlayers ? initialPlayers[2] : [],
+  );
+  const [forwards, setForwards] = useState<TeamNamePlayerName[]>(
+    initialPlayers ? initialPlayers[3] : [],
+  );
 
   function toggleModal(postionNumber: number) {
     setNewPlayerPositionNumber(postionNumber);
@@ -112,9 +105,12 @@ export function FixturePlannerTeamIdPage({
       );
   };
 
-  const handleUpdateFDRData = (e: any) => {
+  const handleUpdateFDRData = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setTeamIdCorrect(teamID);
+
+    if (!teamID || teamID < 1) return;
+
+    router.push(`?team_id=${teamID}`);
   };
 
   const playerNames = [
@@ -170,8 +166,6 @@ export function FixturePlannerTeamIdPage({
             </form>
           </div>
         )}
-
-        {loading && <Spinner />}
 
         {
           <Modal
@@ -239,7 +233,7 @@ export function FixturePlannerTeamIdPage({
           </Modal>
         }
 
-        {!loading && fixtureData.length > 0 && kickoffTimes.length > 0 && (
+        {fixtureData.length > 0 && kickoffTimes.length > 0 && (
           <ShowTeamIDFDRData
             playerData={[goalKeepers, defenders, midfielders, forwards]}
             fixtureData={fixtureData}

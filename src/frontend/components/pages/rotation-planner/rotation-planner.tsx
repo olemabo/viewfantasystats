@@ -22,6 +22,8 @@ import "../../shared/filter-team-box/filter-team-box.css";
 import { KickOffTime } from "../../features/fixtures/types/kickoff-times.types";
 import { minGwFpl } from "@/constants/gws";
 import { combinations } from "@/utils/productRange";
+import Spinner from "@/components/shared/ui/spinner/Spinner";
+import { Message } from "@/components/shared/messages/messages";
 
 interface RotationPlannerPageProps {
   fixtureData: RotationPlannerTeamModel[];
@@ -209,17 +211,15 @@ export default function RotationPlannerPage({
             </div>
           </div>
           <div className="filter-teams-list">
-            {teamData.map((team_name) => (
+            {teamData.map(({ teamName, checked, mustBeInSolution }) => (
               <ThreeStateCheckbox
-                key={team_name.team_name}
-                checked={team_name.checked}
-                checked_must_be_in_solution={
-                  team_name.checked_must_be_in_solution
-                }
+                key={teamName}
+                checked={checked}
+                mustBeInSolution={mustBeInSolution}
                 onclick={(e: React.MouseEvent<HTMLSpanElement, MouseEvent>) =>
                   toggleFilterButton({ e, teamData, setTeamData })
                 }
-                buttonText={team_name.team_name}
+                buttonText={teamName}
               />
             ))}
             <div></div>
@@ -227,16 +227,18 @@ export default function RotationPlannerPage({
         </div>
       )}
 
-      {/* { loadingTeamData || isLoadingFixturedata && <div>
-            <Spinner />
-            {longLoadingTimeText && 
-                <div style={{ display: 'flex', justifyContent: 'center'}}>
-                    <p style={{ width: '300px', textAlign: 'center'}}>
-                        <Message messageType='info' messageText={longLoadingTimeText}/>
-                    </p>
-                </div> 
-                }
-        </div>} */}
+      {/* {isLoading && (
+        <div>
+          <Spinner />
+          {longLoadingTimeText && (
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <p style={{ width: "300px", textAlign: "center" }}>
+                <Message messageType="info" messageText={longLoadingTimeText} />
+              </p>
+            </div>
+          )}
+        </div>
+      )} */}
 
       {fixtureData.length > 0 && (
         <ShowRotationData

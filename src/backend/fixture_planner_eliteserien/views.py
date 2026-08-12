@@ -10,13 +10,14 @@ from utils.util_functions.get_player_data import getPlayerData
 from utils.util_functions.get_upcoming_gw import get_upcoming_gw_eliteserien
 from utils.util_functions.get_request_data import get_request_body, get_request_params, parse_queryparams_to_int_list, parse_queryparams_to_string_list
 from utils.util_functions.get_kickoff_data import getKickOffData
+from utils.dataFetch.DataFetch import DataFetch
 
 from models.fixtures.apiResponse.FDRTeamIDApiResponse import FDRApiResponse, FDRTeamIDApiResponse
 from models.fixtures.models.TeamNameShortPlayerNameModel import TeamNameShortPlayerNameModel
 from fixture_planner_eliteserien.models import EliteserienKickOffTime, EliteserienTeamInfo
 from models.fixtures.models.FDRTeamIdModel import FDRTeamIDModel
 from django.http import JsonResponse
-from constants import esf, fdrRotation, fdrPeriode, fdrPlanner
+from constants import esf, fdrRotation, fdrPeriode, fdrPlanner, eliteserien_api_url
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -26,29 +27,29 @@ from models.fixtures.apiResponse.EliteserienFDRApiResponse import EliteserienFDR
 from models.fixtures.models.WhichTeamToCheckModel import WhichTeamToCheckModel
 from models.fixtures.models.KickOffTimesModel import KickOffTimesModel
 
-class EliteserienTeamInfoView(generics.ListAPIView):
+class FixtureTeamsView(generics.ListAPIView):
     queryset = EliteserienTeamInfo.objects.all()
     serializer_class = ElitserienTeamInfoSerializer
 
 
-class KickoffTimes(APIView):
+class KickoffTimesView(APIView):
 
     def get(self, request):
-        response_list = []
-        
-        kick_off_times_db = EliteserienKickOffTime.objects.all()
-        
-        for kick_of_time in kick_off_times_db:
-            response_list.append(KickOffTimesModel(
-                gameweek=kick_of_time.gameweek,
-                kickoff_time=kick_of_time.kickoff_time,
-                day_month=kick_of_time.day_month,
-            ).to_dict())
-        
+        kick_off_times = EliteserienKickOffTime.objects.all()
+
+        response_list = [
+            KickOffTimesModel(
+                gameweek=kick_off_time.gameweek,
+                kickoff_time=kick_off_time.kickoff_time,
+                day_month=kick_off_time.day_month,
+            ).to_dict()
+            for kick_off_time in kick_off_times
+        ]
+
         return JsonResponse(response_list, safe=False)
  
 
-class FDRData(APIView):
+class FDRDataView(APIView):
 
     def get(self, request):
         try:
@@ -68,11 +69,15 @@ class FDRData(APIView):
                 current_gws = [x for x in current_gws if x not in excludeGws]
 
             number_of_teams = len(fixture_list_db)
+
             fixture_list = [fixture_list_db[i] for i in range(0, number_of_teams)]
 
             team_dict = {}
             for i in range(number_of_teams):
-                team_dict[fixture_list[i].team_name] = WhichTeamToCheckModel(fixture_list[i].team_name, 'checked')
+                team_dict[fixture_list[i].team_name] = WhichTeamToCheckModel(
+                    fixture_list[i].team_name, 
+                    'checked'
+                )
             
             team_name_list = []
             fixture_list = []
@@ -107,7 +112,6 @@ class FDRData(APIView):
                 teams_to_play = get_request_params(request, "teamsToPlay", int)
                 teams_in_solution = parse_queryparams_to_string_list(request.GET.get("teamsInSolution"))
                 fpl_teams = parse_queryparams_to_string_list(request.GET.get("fplTeams"))
-                print(fpl_teams, teams_in_solution, teams_to_play, teams_to_check)
                 
                 rotation_data = []
                 remove_these_teams = []
@@ -122,16 +126,20 @@ class FDRData(APIView):
                 for i in team_name_list:
                     if i.team_name in teams_in_solution:
                         i.checked_must_be_in_solution = 'checked'
-                print("gee")
+
                 rotation_data = find_best_rotation_combosEliteserien_gw_list(
-                    fixture_list_db, current_gws, teams_to_check=teams_to_check, 
-                    teams_to_play=teams_to_play, team_names=fpl_teams, 
-                    teams_in_solution=teams_in_solution, teams_not_in_solution=[],
-                    top_teams_adjustment=False, one_double_up=False,
-                    home_away_adjustment=True, include_extra_good_games=False)
-                
-                print(rotation_data)
-                
+                    fixture_list_db, 
+                    current_gws, 
+                    teams_to_check=teams_to_check, 
+                    teams_to_play=teams_to_play, 
+                    team_ids=fpl_teams, 
+                    teams_in_solution=teams_in_solution, 
+                    teams_not_in_solution=[],
+                    top_teams_adjustment=False, 
+                    one_double_up=False,
+                    home_away_adjustment=True, 
+                    include_extra_good_games=False)
+                                
                 if rotation_data == -1:
                     rotation_data = [['Wrong input', [], [], 0, 0, [[]]]]
                 else:
@@ -156,96 +164,110 @@ class FDRData(APIView):
             return Response({'Bad Request': 'Something went wrong'}, status=status.HTTP_400_BAD_REQUEST)
 
 
+class FantasyTeamFDRView(APIView):
 
-class PostFDRFromTeamIDView(APIView):
-    
     def get(self, request):
         fixture_list_db, dates, _, _ = read_eliteserien_excel_to_db_format("")
-        fixture_list_db_def, dates2, _, _ = read_eliteserien_excel_to_db_format("_defensivt2")
-        fixture_list_db_off, dates3, _, _ = read_eliteserien_excel_to_db_format("_offensivt2")
-
-        current_gws = [gw for gw in range(0, len(dates) + 1)]
+        fixture_list_db_def, _, _, _ = read_eliteserien_excel_to_db_format("_defensivt2")
+        fixture_list_db_off, _, _, _ = read_eliteserien_excel_to_db_format("_offensivt2")
 
         number_of_gws = len(dates)
+        current_gws = range(0, number_of_gws + 1)
 
-        fdr_data_list = getFixtureData(fixture_list_db, number_of_gws)
-        
-        if (fixture_list_db_def is not None):
-            fdr_data_defensive_list = getFixtureData(fixture_list_db_def, number_of_gws)
-        else:
-            fdr_data_defensive_list = None
-        
-        if (fixture_list_db_off is not None):
-            fdr_data_offensive_list = getFixtureData(fixture_list_db_off, number_of_gws)
-        else:
-            fdr_data_offensive_list = None
+        fdr_data = getFixtureData(fixture_list_db, number_of_gws)
+        fdr_data_defensive = (
+            getFixtureData(fixture_list_db_def, number_of_gws)
+            if fixture_list_db_def
+            else None
+        )
+        fdr_data_offensive = (
+            getFixtureData(fixture_list_db_off, number_of_gws)
+            if fixture_list_db_off
+            else None
+        )
 
-        temp_kick_off_time, first_upcoming_game = getKickOffData(esf)
+        kickoff_times, first_upcoming_gw = getKickOffData(esf)
         player_list = getPlayerData(esf)
 
-        gw_end = first_upcoming_game + 6 if len(current_gws) > 7 else current_gws[-1]
         gw_start = current_gws[0]
         max_gw = current_gws[-1]
+        gw_end = min(first_upcoming_gw + 6, max_gw)
 
-        if (gw_end > max_gw):
-            gw_end = max_gw
-            
-        fdr_and_gws = FDRApiResponse(
-            fdr_data_list, 
-            fdr_data_defensive_list, 
-            fdr_data_offensive_list, 
-            temp_kick_off_time, 
-            gw_start, 
-            gw_end, 
-            first_upcoming_game, 
-            max_gw, player_list) 
+        response = FDRApiResponse(
+            fdr_data,
+            fdr_data_defensive,
+            fdr_data_offensive,
+            kickoff_times,
+            gw_start,
+            gw_end,
+            first_upcoming_gw,
+            max_gw,
+            player_list,
+        )
 
-        return JsonResponse(fdr_and_gws.to_dict(), safe=False)
+        return JsonResponse(response.to_dict(), safe=False)
 
 
-    def post(self, request):
+class FantasyTeamFDRTeamView(APIView):
+
+    def get(self, request, team_id):
         try:
-            goal_keepers, defenders, midtfielders, forwards = [], [], [], []
-
-            fdr_and_gws = FDRTeamIDApiResponse(goal_keepers, defenders, midtfielders, forwards) 
-            current_gw = get_request_body(request, "current_gw", int)
-
-            team_id = get_request_body(request, "team_id", int)
+            current_gw = get_upcoming_gw_eliteserien()
 
             if team_id < 1:
-                return JsonResponse(fdr_and_gws.to_dict(), safe=False)
+                return JsonResponse(
+                    FDRTeamIDApiResponse([], [], [], []).to_dict(),
+                    safe=False
+                )
 
-            player_info = read_team_players_from_team_id(team_id, current_gw)
+            player_info = read_team_players_from_team_id(
+                team_id,
+                current_gw
+            )
 
             if player_info == 0:
-                return JsonResponse(fdr_and_gws.to_dict(), safe=False)
-                                                
-            for player_i in player_info:
-                
-                team_player_name = TeamNameShortPlayerNameModel(
-                    player_name=player_i.player_name,
-                    team_name_short=player_i.team_name_short
-                ).to_dict()
-                
-                if (player_i.position_id == 1):
-                    goal_keepers.append(team_player_name) 
-                if (player_i.position_id == 2):
-                    defenders.append(team_player_name) 
-                if (player_i.position_id == 3):
-                    midtfielders.append(team_player_name) 
-                if (player_i.position_id == 4):
-                    forwards.append(team_player_name)
+                return JsonResponse(
+                    FDRTeamIDApiResponse([], [], [], []).to_dict(),
+                    safe=False
+                )
 
-            fdr_and_gws.goal_keepers = goal_keepers
-            fdr_and_gws.defenders = defenders
-            fdr_and_gws.midtfielders = midtfielders
-            fdr_and_gws.forwards = forwards
-            
-            return JsonResponse(fdr_and_gws.to_dict(), safe=False)
+            goalkeepers = []
+            defenders = []
+            midfielders = []
+            forwards = []
+
+            for player in player_info:
+                team_player = TeamNameShortPlayerNameModel(
+                    player_name=player.player_name,
+                    team_name_short=player.team_name_short
+                ).to_dict()
+
+                if player.position_id == 1:
+                    goalkeepers.append(team_player)
+                elif player.position_id == 2:
+                    defenders.append(team_player)
+                elif player.position_id == 3:
+                    midfielders.append(team_player)
+                elif player.position_id == 4:
+                    forwards.append(team_player)
+
+            response = FDRTeamIDApiResponse(
+                goalkeepers,
+                defenders,
+                midfielders,
+                forwards
+            )
+
+            return JsonResponse(response.to_dict(), safe=False)
 
         except Exception as e:
-            return Response({'Bad Request': 'Something went wrong: ' + str(e), 'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
+            return Response(
+                {
+                    "Bad Request": f"Something went wrong: {e}",
+                    "error": str(e),
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
 def getFixtureData(fixture_list_db, number_of_gws):
     fdr_data_list = []
@@ -268,7 +290,6 @@ def getFixtureData(fixture_list_db, number_of_gws):
 def get_data_from_params(request, dates):
     start_gw = get_request_params(request, "startGw", int)
     end_gw = get_request_params(request, "endGw", int)
-    print(start_gw, end_gw, "s")
     min_num_fixtures = get_request_params(request, "minNumFixtures", int)
     combinations = get_request_params(request, "fixturePlanningType", str)
     if start_gw < 0:

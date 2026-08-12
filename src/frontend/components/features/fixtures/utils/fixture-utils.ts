@@ -3,15 +3,17 @@ import { TeamCheckedModel } from "../../../../models/fixturePlanning/TeamChecked
 import { SimpleTeamFDRDataModel } from "../../../../models/fixturePlanning/TeamFDRData";
 
 export function createSearchQueryFromForminput(forminput: FDRFormInput): string {
-    const queryString = Object.entries(forminput)
+    return Object.entries(forminput)
         .map(([key, value]) => {
             if (Array.isArray(value)) {
-                return `${encodeURIComponent(key)}=${value.join(',')}`;
+                return `${encodeURIComponent(key)}=${value
+                    .map((item) => encodeURIComponent(String(item)))
+                    .join(",")}`;
             }
-            return `${encodeURIComponent(key)}=${value as string | number}`;
+
+            return `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`;
         })
-        .join('&');
-    return queryString;
+        .join("&");
 }
 
 export function setExcludedGwsFromSearchParams(): number[] {
@@ -36,7 +38,7 @@ export function setExcludedGwsFromSearchParams(): number[] {
 export const filterFdrData = (fdrData: SimpleTeamFDRDataModel[], toggleTeams: string[]) => {
     return fdrData.map((x) => ({
         ...x,
-        checked: !toggleTeams.includes(x.team_name.toLowerCase()) ? x.checked : !x.checked
+        checked: !toggleTeams.includes(x.teamName.toLowerCase()) ? x.checked : !x.checked
     }));
 };
 
@@ -62,7 +64,7 @@ export const uncheckAll = (
     if (uncheck) {
         setToggleTeams([]);
     } else {
-        const listTeams = fdrData.map((x) => x.team_name.toLowerCase());
+        const listTeams = fdrData.map((x) => x.teamName.toLowerCase());
         setToggleTeams(listTeams);
     }
 };
@@ -92,9 +94,9 @@ export const toggleFilterButton = ({ e, teamData, setTeamData }: ToggleFilterBut
     }
 
     teamData.forEach((x) => {
-        const clickedOnCurrent = x.team_name === elementId;
+        const clickedOnCurrent = x.teamName === elementId;
         let canBeInSolution = x.checked;
-        let mustBeInSolution = x.checked_must_be_in_solution;
+        let mustBeInSolution = x.mustBeInSolution;
 
         if (newClassName === 'can-be-in-solution' && clickedOnCurrent) {
             canBeInSolution = true;
@@ -110,9 +112,10 @@ export const toggleFilterButton = ({ e, teamData, setTeamData }: ToggleFilterBut
         }
 
         temp.push({
-            team_name: x.team_name,
+            teamName: x.teamName,
+            teamId: x.teamId,
             checked: canBeInSolution,
-            checked_must_be_in_solution: mustBeInSolution,
+            mustBeInSolution: mustBeInSolution,
         });
     });
 
@@ -125,11 +128,11 @@ export function filterTeamData(teamData: TeamCheckedModel[]) {
     const must_be_in_solution: string[] = [];
     
     teamData.map(team_data => {
-        if (team_data.checked_must_be_in_solution) {
-            must_be_in_solution.push(team_data.team_name)
+        if (team_data.mustBeInSolution) {
+            must_be_in_solution.push(team_data.teamName)
         }
         if (!team_data.checked) {
-            not_in_solution.push(team_data.team_name)
+            not_in_solution.push(team_data.teamName)
         }
     });
 
@@ -177,22 +180,25 @@ export const validateInput = ({
     return true;
 };
 
-export const extractTeamsToUseAndTeamsInSolution = (teamData: TeamCheckedModel[]) => {
-    var teamsToCheck: any[] = [];
-    const teamsMustBeInSolution: string[] = [];
+export const extractTeamsToUseAndTeamsInSolution = (
+    teamData: TeamCheckedModel[]
+) => {
+    const teamsToCheck: number[] = [];
+    const teamsMustBeInSolution: number[] = [];
 
     teamData.forEach((team) => {
         if (team.checked) {
-            teamsToCheck.push(team.team_name);
+            teamsToCheck.push(team.teamId);
         }
-        if (team.checked_must_be_in_solution) {
-            teamsMustBeInSolution.push(team.team_name);
+
+        if (team.mustBeInSolution) {
+            teamsMustBeInSolution.push(team.teamId);
         }
     });
 
     if (teamsToCheck.length === 0) {
-        teamsToCheck = [-1];
+        teamsToCheck.push(-1);
     }
 
-    return [teamsToCheck, teamsMustBeInSolution];
+    return [teamsToCheck, teamsMustBeInSolution] as const;
 };

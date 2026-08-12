@@ -17,6 +17,7 @@ export const ShowRotationData: FunctionComponent<ShowRotationProps> = ({
   fdrData,
   kickOffTimes,
 }) => {
+  console.log(fdrData, "fdrData");
   const t = useTranslations("General");
   const f = useTranslations("Fixture.RotationPlanner");
 
@@ -33,18 +34,20 @@ export const ShowRotationData: FunctionComponent<ShowRotationProps> = ({
       <div
         className={
           "color-" +
-          Number(fdrData.difficulty_score).toFixed(0) +
+          Number(fdrData.difficultyScore).toFixed(0) +
           " height-" +
-          num_teams.toString() +
+          num_teams?.toString() +
           (num_teams > 1 ? " multiple-fixtures" : "")
         }
       >
-        {fdrData.opponent_team_name == "-"
+        {fdrData.opponentTeamName == "-"
           ? "Blank"
-          : fdrData.opponent_team_name + " (" + fdrData.H_A + ")"}
+          : fdrData.opponentTeamName + " (" + fdrData.homeAway + ")"}
       </div>
     );
   }
+
+  console.log("kickOffTimes", fdrData);
 
   return (
     <>
@@ -65,64 +68,61 @@ export const ShowRotationData: FunctionComponent<ShowRotationProps> = ({
                         <tr className="fdr-row-gws">
                           <td className="name-column-top-corner" />
                           {kickOffTimes.map((gw) => (
-                            <th>
+                            <th key={gw.gameweek}>
                               {t("round_short")}
                               {gw.gameweek}
                               <div className="day-month">{gw.dayMonth}</div>
                             </th>
                           ))}
                         </tr>
-                        {row.fixture_list.map((team_i: any[]) => (
-                          <tr>
-                            {team_i.map((team_i_j: any, index) => (
-                              <>
-                                {index == 0 &&
-                                  JSON.parse(team_i_j[0]).team_name && (
-                                    <td className="name-column">
-                                      {lowerCaseText(
-                                        JSON.parse(team_i_j[0]).team_name,
-                                      )}
-                                    </td>
-                                  )}
-                                {team_i_j.length == 1 ? (
-                                  <td
-                                    scope="col"
-                                    className={
-                                      " double-border-" +
-                                      JSON.parse(team_i_j[0]).Use_Not_Use
-                                    }
-                                  >
-                                    {team_i_j.map((team: any) => {
-                                      var num_teams = team_i_j.length;
-                                      var json_team_data = JSON.parse(team);
-                                      return getFDRDiv(
-                                        json_team_data,
-                                        num_teams,
-                                      );
-                                    })}
-                                  </td>
-                                ) : (
-                                  <td
-                                    scope="col"
-                                    className={
-                                      " no-padding double-border-" +
-                                      JSON.parse(team_i_j[0]).Use_Not_Use
-                                    }
-                                  >
-                                    {team_i_j.map((team: any) => {
-                                      var num_teams = team_i_j.length;
-                                      var json_team_data = JSON.parse(team);
-                                      return getFDRDiv(
-                                        json_team_data,
-                                        num_teams,
-                                      );
-                                    })}
-                                  </td>
-                                )}
-                              </>
-                            ))}
-                          </tr>
-                        ))}
+                        {row.fixture_list.map(
+                          (fixtureCombination: FDRData[][]) => (
+                            <tr
+                              key={fixtureCombination
+                                .map((team) => team[0]?.teamName)
+                                .join("-")}
+                            >
+                              {fixtureCombination.map(
+                                (gwFixtures: FDRData[], index) => (
+                                  <>
+                                    {index == 0 && gwFixtures[0].teamName && (
+                                      <td className="name-column">
+                                        {lowerCaseText(gwFixtures[0].teamName)}
+                                      </td>
+                                    )}
+                                    {gwFixtures.length == 1 ? (
+                                      <td
+                                        scope="col"
+                                        className={
+                                          " double-border-" +
+                                          gwFixtures[0].useNotUse
+                                        }
+                                      >
+                                        {gwFixtures.map((team: FDRData) => {
+                                          const num_teams = gwFixtures.length;
+                                          return getFDRDiv(team, num_teams);
+                                        })}
+                                      </td>
+                                    ) : (
+                                      <td
+                                        scope="col"
+                                        className={
+                                          " no-padding double-border-" +
+                                          gwFixtures[0].useNotUse
+                                        }
+                                      >
+                                        {gwFixtures.map((fixture: FDRData) => {
+                                          const num_teams = gwFixtures.length;
+                                          return getFDRDiv(fixture, num_teams);
+                                        })}
+                                      </td>
+                                    )}
+                                  </>
+                                ),
+                              )}
+                            </tr>
+                          ),
+                        )}
                       </tbody>
                     </table>
                     <caption>

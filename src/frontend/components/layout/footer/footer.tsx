@@ -1,8 +1,8 @@
 import FooterContainer from "./footer-section/footer-section";
-import { LeagueProps } from "../../../types/league";
+import { LeagueProps } from "@/types/league";
 import Link from "next/link";
 import { Code, Twitter } from "@mui/icons-material";
-import { URLS } from "../../../constants/urls";
+import { URLS } from "@/constants/urls";
 import styles from "./footer.module.css";
 
 export default async function Footer({ leagueType }: LeagueProps) {

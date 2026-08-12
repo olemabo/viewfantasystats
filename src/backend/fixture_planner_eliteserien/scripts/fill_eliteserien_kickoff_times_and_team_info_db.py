@@ -52,10 +52,13 @@ def fill_eliteserien_kickoff_times_and_team_info_db():
         month = int(kick_off_time.split("-")[1])
         day = str(kick_off_time.split("T")[0].split("-")[2])
         kick_off_time_short = day + " " + dict_month_number_to_month_name_short[str(month)]
-        kick_off_time_info.append([gw + 1, kick_off_time, kick_off_time_short])
+        kick_off_time_info.append([gw_info["id"], kick_off_time, kick_off_time_short])
     
     for gw_info in kick_off_time_info:
-        fill_kick_off_time_model = EliteserienKickOffTime(gameweek=gw_info[0], kickoff_time=gw_info[1], day_month=gw_info[2])
+        fill_kick_off_time_model = EliteserienKickOffTime(
+            gameweek=gw_info[0], 
+            kickoff_time=gw_info[1], 
+            day_month=gw_info[2])
         fill_kick_off_time_model.save()
 
 

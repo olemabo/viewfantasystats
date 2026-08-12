@@ -72,9 +72,9 @@ export const ShowTeamIDFDRData: FunctionComponent<ShowTeamIDFDRProps> = ({
             </tr>
           </thead>
           <tbody>
-            {/* {playerData.map((player_i, idx) => (
+            {playerData.map((player_i, idx) => (
               <FixtureData
-                rowKey={idx}
+                key={idx}
                 gwStart={gwStart}
                 gwEnd={gwEnd}
                 playerData={player_i}
@@ -88,7 +88,7 @@ export const ShowTeamIDFDRData: FunctionComponent<ShowTeamIDFDRProps> = ({
                   removePlayer(postionNumber, playerName)
                 }
               />
-            ))} */}
+            ))}
           </tbody>
         </table>
       </div>

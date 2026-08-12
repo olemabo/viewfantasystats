@@ -1,7 +1,7 @@
-import { LeagueType } from "../../../types/league";
-import { FixtureModel, PlayerModel, BonusModel, StatsModel } from "../../../models/liveFixtures/FixtureModel";
-import { getApiUrl } from "../../../lib/api";
-import { API_ENDPOINTS } from "../../../lib/api-endpoints";
+import { LeagueType } from "@/types/league";
+import { FixtureModel, PlayerModel, BonusModel, StatsModel } from "@/models/liveFixtures/FixtureModel";
+import { getApiUrl } from "@/lib/api";
+import { API_ENDPOINTS } from "@/lib/api-endpoints";
 
 export interface GetLiveFixtureDataOptions {
   leagueType: LeagueType;

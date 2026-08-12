@@ -1,11 +1,32 @@
 from django.urls import path
+
 from . import views
 
 
 urlpatterns = [
-    # APIs used to extract data to frontend
-    path("get-eliteserien-team-data/", views.EliteserienTeamInfoView.as_view(), name="eliteserien-team-data"),
-    path("get-eliteserien-kickoff-times/", views.KickoffTimes.as_view(), name="eliteserien-kickoff-times"),
-    path("get-all-eliteserien-fdr-data/", views.FDRData.as_view(), name="eliteserien-fdr"),
-    path("get-fdr-data-from-team-id/", views.PostFDRFromTeamIDView.as_view()),
+    path(
+        "fixture-teams/",
+        views.FixtureTeamsView.as_view(),
+        name="fixture-teams",
+    ),
+    path(
+        "kickoff-times/",
+        views.KickoffTimesView.as_view(),
+        name="kickoff-times",
+    ),
+    path(
+        "fdr/",
+        views.FDRDataView.as_view(),
+        name="fdr",
+    ),
+    path(
+        "fantasy-team-fdr/",
+        views.FantasyTeamFDRView.as_view(),
+        name="fantasy-team-fdr",
+    ),
+    path(
+        "fantasy-team-fdr/<int:team_id>/players/",
+        views.FantasyTeamFDRTeamView.as_view(),
+        name="fantasy-team-fdr-team",
+    ),
 ]

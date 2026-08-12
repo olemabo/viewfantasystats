@@ -5,6 +5,7 @@ from . import views_teamID
 urlpatterns = [
     # api-s used in react
     path("data-fdr-ui/", views.PremierLeagueTeamInfoView.as_view()),
+    path("team-data/", views.PremierLeagueTeamInfoView.as_view()),
     path("data-kickoff-time-ui/", views.KickOffTimeView.as_view()),
     path("get-all-fdr-data/", views.PostFDRView.as_view()),
     path("get-kickoff-times/", views.GetKickOffTimes.as_view()),

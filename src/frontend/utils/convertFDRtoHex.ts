@@ -1,9 +1,10 @@
 export function convertFDRtoHex(fdr: string, fdrToColor: any) {
     if (isEmpty(fdrToColor)) return "";
-    var float = parseFloat(fdr);
+    
+    const float = parseFloat(fdr);
     if (float == 0.5) return "#df78df";
-    if (float == 0.5) return "#" + fdrToColor[0.5].substring(2);
-    var int = parseInt(fdr);
+    
+    const int = parseInt(fdr);
     if (int == 1) return "#8EB88A"; // grønn
     if (int == 1) return "#6bc895";
     if (int == 1) return "#" + fdrToColor[1].substring(2);

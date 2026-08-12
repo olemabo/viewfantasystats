@@ -30,7 +30,7 @@ export const URLS = {
   API: {
     FDR: {
       PREMIER_LEAGUE_FROM_TEAM_ID: '/fixture-planner/get-fdr-data-from-team-id/',
-      ELITESERIEN_FROM_TEAM_ID: '/fixture-planner-eliteserien/get-fdr-data-from-team-id/',
+      ELITESERIEN_FROM_TEAM_ID: 'eliteserien/fixture-planner/fantasy-team-fdr/',
     },
   },
 

@@ -18,8 +18,8 @@ path_to_store_local_data = "C:\\Users\\OleMartinBorge\\source\\repos\\projects\\
 # path_to_store_local_data = "/home/olebo/viewfantasystats/" + stored_data
 
 # pythonanywhere
-python_anywhere_path = "/home/olebo/viewfantasystats/"
-#python_anywhere_path = ""
+#python_anywhere_path = "/home/olebo/viewfantasystats/"
+python_anywhere_path = ""
 
 # link to global ranks
 web_global_league_premier_league = 'https://fantasy.premierleague.com/api/leagues-classic/314/standings/?phase=1&page_new_entries=1&page_standings=X'
@@ -44,7 +44,7 @@ cup_stats_folder_name = "cup_data"
 player_statistics_folder_name = "player_stats"
 
 # must change before each season
-current_season_name_premier_league = "2024-2025"
+current_season_name_premier_league = "2025-2026"
 current_season_name_eliteserien = "2026"
 
 # txt file names 

@@ -22,17 +22,24 @@ export interface PlayerModel {
     stats: StatsModel[];
 }
 
+export interface FixtureStats {
+    identifier: string;
+    h: string[];
+    a: string[];
+}
+
+
 export interface FixtureModel {
     team_a_name: string;
     team_h_name: string;
     team_a_score: number;
     team_h_score: number;
     is_live: boolean;
-    id: string;
+    id: number;
     started: boolean;
     finished: boolean;
     kickoff_time: string;
-    stats: any;
+    stats: FixtureStats[];
     players_h: PlayerModel[];
     players_a: PlayerModel[];
     bonus_list: BonusModel[];

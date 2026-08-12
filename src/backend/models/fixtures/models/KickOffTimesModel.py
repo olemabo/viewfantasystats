@@ -1,6 +1,3 @@
-import json
-
-
 class KickOffTimesModel:
     def __init__(self, gameweek, kickoff_time, day_month):
         ...
@@ -11,7 +8,7 @@ class KickOffTimesModel:
     def to_dict(self):
         return {
             "gameweek": self.gameweek,
-            "kickoff_time": self.kickoff_time,
-            "day_month": self.day_month
+            "dateTime": self.kickoff_time,
+            "dayMonth": self.day_month
         }
  

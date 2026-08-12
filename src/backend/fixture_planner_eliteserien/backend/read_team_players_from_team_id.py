@@ -13,11 +13,14 @@ def read_team_players_from_team_id(user_id, gw, league_name=esf):
         else createPlayerIdToPlayerNamePremierLeagueDict())
 
     team_info = DFObject.get_current_ind_team(user_id, gw)
+    print(team_info, "team_info", gw)
     if 'detail' in team_info:
         start_gw = (get_upcoming_gw_eliteserien() 
                     if league_name == esf 
                     else get_upcoming_gw_premier_league())
+        print("team_info['detail']", team_info['detail'], "start_gw", start_gw)
         if start_gw > 1:
+            print("start:", start_gw)
             team_info = DFObject.get_current_ind_team(user_id, start_gw - 1)
         else:
             return 0
@@ -25,12 +28,19 @@ def read_team_players_from_team_id(user_id, gw, league_name=esf):
     player_list = []
     for player_row in team_info['picks']:
         player_id = player_row["element"]
-        player = playerIdToPlayerName[str(player_id)] if str(player_id) in playerIdToPlayerName else ["", "", ""] 
+        player = playerIdToPlayerName[
+            str(player_id)] if str(player_id) in playerIdToPlayerName else ["", "", ""] 
         
         player_name = player[0]
         position_id = player[1]
         team_id = player[2]
-        player_i = PlayerIdAndPosition(player_id, position_id, player_name, team_id)
+
+        player_i = PlayerIdAndPosition(
+            player_id, 
+            position_id, 
+            player_name, 
+            team_id)
+        
         player_list.append(player_i)
         
     return player_list

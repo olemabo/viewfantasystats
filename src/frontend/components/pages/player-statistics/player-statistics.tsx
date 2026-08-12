@@ -10,7 +10,7 @@ import {
 import { useState } from "react";
 import TableSortHead from "../../shared/ui/tableSortHead/TableSortHead";
 import { sortAndFilterPlayerStatistics } from "./sortAndFilter";
-import { getMinWidth } from "./playerStatisticsUtils";
+import { getMinWidth } from "./utils";
 import Message from "../../shared/messages/messages";
 import { defaultFormValueAllSelected } from "../../../constants/formValue";
 import { LeagueType } from "../../../types/league";

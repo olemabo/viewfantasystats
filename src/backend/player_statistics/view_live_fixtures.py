@@ -20,8 +20,6 @@ class LiveFixturesAPIView(APIView):
             return JsonResponse(response.to_dict(), safe=False)
 
         except ValueError as e:
-            # Log the exception message if needed
             return Response({'Bad Request': f'Invalid input: {str(e)}'}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            # Log the exception message if needed
-            return Response({'Bad Request': f'Something went wrong: {str(e)}'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'Internal Error': f'Something went wrong: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

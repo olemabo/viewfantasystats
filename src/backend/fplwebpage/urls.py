@@ -20,10 +20,9 @@ urlpatterns = [
 ]
 
 urlpatterns += [
-    path('fixture-planner-eliteserien/', include('fixture_planner_eliteserien.urls')),
+    path('elitserien/fixture-planner/', include('fixture_planner_eliteserien.urls')),
     path('fixture-planner/', include("fixture_planner.urls")),
     path('statistics/', include('player_statistics.urls')),
-    path('', include("frontend.urls")),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

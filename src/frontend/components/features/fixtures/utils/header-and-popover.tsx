@@ -21,7 +21,8 @@ export default async function FixturePlannerHeader({
 }: FixturePlannerHeaderProps) {
   const t = await getTranslations();
 
-  const { title, description } = getTitleAndDescription(fixturePlanningType, t);
+  const { title, description } =
+    await getTitleAndDescription(fixturePlanningType);
 
   return (
     <h1>
@@ -56,10 +57,11 @@ export default async function FixturePlannerHeader({
   );
 }
 
-export const getTitleAndDescription = (
+export const getTitleAndDescription = async (
   fixturePlanningType: FixturePlanningType,
-  t: Function,
 ) => {
+  const t = await getTranslations();
+
   const title_fixture_planner = t("Fixture.FixturePlanner.Title");
   const title_rotation_planner = t("Fixture.RotationPlanner.Title");
   const title_period_planner = t("Fixture.PeriodPlanner.Title");

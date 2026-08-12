@@ -37,16 +37,14 @@ export function FixturePlannerPage({
   const [toggleTeams, SetToggleTeams] = useState<string[]>([]);
   const [formInput, setFormInput] = useState<FDRFormInput>(defaultForm);
 
-  function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     const query = new URLSearchParams({
-      startGw: formInput.startGw.toString(),
-      endGw: formInput.endGw.toString(),
-      minNumFixtures: formInput.minNumFixtures
-        ? formInput.minNumFixtures.toString()
-        : "0",
-      fdrType: formInput.fdrType || "",
+      startGw: String(formInput.startGw),
+      endGw: String(formInput.endGw),
+      minNumFixtures: String(formInput.minNumFixtures ?? 0),
+      fdrType: formInput.fdrType ?? "",
     });
 
     router.push(`?${query.toString()}`);
@@ -68,11 +66,7 @@ export function FixturePlannerPage({
           color="white"
         />
 
-        <form
-          onSubmit={(e) => {
-            handleSubmit(e);
-          }}
-        >
+        <form onSubmit={handleSubmit}>
           <TextInput
             htmlFor="input-form-start-gw"
             min={minGwFpl}

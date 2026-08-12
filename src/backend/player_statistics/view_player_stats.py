@@ -22,7 +22,6 @@ class PlayerStatisticsAPIView(APIView):
         try:
             league_name = request.GET.get('league_name', '').lower()
             last_x_gw = int(request.GET.get("last_x_gw", 0))
-            print(league_name, last_x_gw)
 
             if league_name == esf:
                 sort_index, categories = get_sort_index_and_categories_eliteserien(sort_on="Total points")

@@ -1,5 +1,5 @@
-import { LeagueType, LeagueTypes } from '../../types/league';
-import { URLS } from "../../constants/urls";
+import { LeagueType, LeagueTypes } from '@/types/league';
+import { URLS } from "@/constants/urls";
 
 const MENU_URLS = {
     FPL: {

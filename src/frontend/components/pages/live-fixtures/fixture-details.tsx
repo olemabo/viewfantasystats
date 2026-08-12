@@ -1,45 +1,42 @@
-"use client";
-
 import {
   BonusModel,
   FixtureModel,
-} from "../../../models/liveFixtures/FixtureModel";
-import Popover from "../../shared/popover/popover";
+  FixtureStats,
+  PlayerModel,
+} from "@/models/liveFixtures/FixtureModel";
+import Popover from "@/components/shared/popover/popover";
 import {
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
-} from "../../shared/ui/table/Table";
-import { LeagueType, esf, fpl } from "../../../models/shared/LeagueType";
-import {
-  convertIdentifierToReadableName,
-  convertListToString,
-} from "./liveFixturesUtils";
-import { useTranslations } from "next-intl";
-import { URLS } from "../../../constants/urls";
+} from "@/components/shared/ui/table/Table";
+import { LeagueType, esf, fpl } from "@/models/shared/LeagueType";
+import { convertIdentifierToReadableName, convertListToString } from "./utils";
+import { URLS } from "@/constants/urls";
+import { GameWeeks } from "./live-fixtures";
+import { getTranslations } from "next-intl/server";
 
 type FixtureDetailsProps = {
-  gameWeeks: any;
+  gameWeeks: GameWeeks;
   leagueType: LeagueType;
   hasOwnershipData: boolean;
-  playerNameMinWidth: number;
   fixture: FixtureModel;
 };
 
-export function FixtureDetails({
+export async function FixtureDetails({
   fixture,
-  playerNameMinWidth,
   hasOwnershipData,
   leagueType,
   gameWeeks,
 }: FixtureDetailsProps) {
-  const g = useTranslations("General");
-  const p = useTranslations("Popover");
-  const t = useTranslations();
+  const playerNameMinWidth = 120;
+  const g = await getTranslations("General");
+  const p = await getTranslations("Popover");
+  const t = await getTranslations();
 
-  const renderPlayerData = (players: any[], isHome: boolean) => {
+  const renderPlayerData = (players: PlayerModel[], isHome: boolean) => {
     return (
       <Table tableLayoutType={leagueType}>
         <TableHead tableHeight="compact">
@@ -82,7 +79,7 @@ export function FixtureDetails({
                   id={isHome ? "EO-home" : "EO-away"}
                   title="EO"
                   popoverTitle="Effective Ownership"
-                  popoverText={`${p("EO")} ${gameWeeks.currentGW}.`}
+                  popoverText={`${p("EO")} ${gameWeeks.current}.`}
                 >
                   {p("moreInfoEO")}
                   <a
@@ -100,7 +97,7 @@ export function FixtureDetails({
           {players
             .filter((p) => p.minutes > 0)
             .map((p) => (
-              <TableRow key={p.id}>
+              <TableRow key={p.name}>
                 <TableCell cellType="data" minWidth={playerNameMinWidth}>
                   {p.name}
                 </TableCell>
@@ -119,7 +116,7 @@ export function FixtureDetails({
     );
   };
 
-  const renderStats = (stats: any[]) => {
+  const renderStats = (stats: FixtureStats[]) => {
     return (
       <Table tableLayoutType={leagueType} className="stats">
         <TableHead tableHeight="compact">

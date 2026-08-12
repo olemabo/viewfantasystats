@@ -9,7 +9,6 @@ import {
 } from "../../../models/shared/errorLoading";
 
 type DefaultPageContainerProps = {
-  heading: string;
   pageClassName?: string;
   children?: React.ReactNode;
   renderTitle?: () => React.ReactNode;
@@ -20,7 +19,6 @@ type DefaultPageContainerProps = {
 };
 
 export default async function DefaultPageContainer({
-  heading,
   pageClassName = "",
   children,
   renderTitle,
@@ -30,7 +28,7 @@ export default async function DefaultPageContainer({
   style,
 }: DefaultPageContainerProps) {
   return (
-    <div style={style} className={pageClassName} key={`${heading}-container`}>
+    <div style={style} className={pageClassName}>
       {renderTitle ? renderTitle() : pageTitle && <h1>{pageTitle}</h1>}
       {isLoading ? (
         <Spinner />

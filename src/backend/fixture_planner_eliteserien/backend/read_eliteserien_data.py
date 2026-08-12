@@ -16,12 +16,10 @@ def read_eliteserien_excel_to_db_format(defensivt=""):
 
     if (not os.path.exists(path)):
         return None,None,0,0
-    
+
     wb = load_workbook(path, data_only=True)
     sheet_names = wb.sheetnames
     ws_fdr = wb[sheet_names[0]]
-
-    print(sheet_names)
 
     color_to_fdr_dict = get_fdr_colors_to_difficulty_rating_dict(ws_fdr)
     column_letters_list = get_list_of_column_letters_from_int_range(2, max_games)
@@ -37,8 +35,12 @@ def read_eliteserien_excel_to_db_format(defensivt=""):
         temp_oppTeamNameList, temp_oppTeamHomeAwayList, temp_oppTeamDifficultyScore, temp_gw, temp_messages = [], [], [], [], []
         
         team_name_cell_name = "{}{}".format('A', row)
-        team_name = ws_fdr[team_name_cell_name].value.split("(")[0]
-        team_name_short = ws_fdr[team_name_cell_name].value.split("(")[1][:-1]
+
+        team_info = ws_fdr[team_name_cell_name].value
+
+        team_name = team_info.split("(")[0].strip()
+        team_name_short = team_info.split("(")[1].split(")")[0].strip()
+
         team_color_hex = "0" if ws_fdr[team_name_cell_name].fill.start_color.index == "00000000" else  ws_fdr[team_name_cell_name].fill.start_color.index
         team_font_color_hex = ws_fdr[team_name_cell_name].font.color.index
         
@@ -70,18 +72,21 @@ def read_eliteserien_excel_to_db_format(defensivt=""):
         team_id = team_id_idx
         
         for team_i in eliteserienTeamDataDB:
-            if (team_i.team_short_name == team_name_short):
+            if (team_i.team_short_name.upper() == team_name_short.upper()):
                 team_id = team_i.team_id
         
-        fixture_info_list.append(TeamFixtureInfoEliteserienModel(team_name=team_name,
-            team_id=team_id, 
-            team_short_name=team_name_short, 
-            date="",
-            opp_team_name_list=temp_oppTeamNameList,
-            opp_team_home_away_list=temp_oppTeamHomeAwayList,
-            opp_team_difficulty_score=temp_oppTeamDifficultyScore,
-            gw=temp_gw,
-            messages_list=temp_messages)
+        fixture_info_list.append(
+            TeamFixtureInfoEliteserienModel(
+                team_name=team_name,
+                team_id=team_id, 
+                team_short_name=team_name_short, 
+                date="",
+                opp_team_name_list=temp_oppTeamNameList,
+                opp_team_home_away_list=temp_oppTeamHomeAwayList,
+                opp_team_difficulty_score=temp_oppTeamDifficultyScore,
+                gw=temp_gw,
+                messages_list=temp_messages
+            )
         )
         
         team_id_idx += 1
