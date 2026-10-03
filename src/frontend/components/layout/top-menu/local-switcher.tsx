@@ -16,8 +16,6 @@ export default function LocaleSwitcher({ language }: LanguageProps) {
     return segments.join("/");
   };
 
-  console.log(language, "lang");
-
   if (language === "en") {
     return (
       <>

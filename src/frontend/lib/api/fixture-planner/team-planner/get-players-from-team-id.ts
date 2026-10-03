@@ -1,6 +1,6 @@
-import { getApiUrl } from "@/lib/api";
-import { API_ENDPOINTS } from "@/lib/api-endpoints";
+import { API_ENDPOINTS } from "@/lib/api/shared/api-endpoints";
 import { TeamNamePlayerName } from "@/models/fixturePlanning/TeamNamePlayerName";
+import { getApiUrl } from "../../shared/api-url";
 
 export async function getPlayersFromTeamIdESF(
   teamId: number,

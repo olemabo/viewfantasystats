@@ -5,7 +5,7 @@ import Popover from "@/components/shared/popover/popover";
 import { Spinner } from "@/components/shared/ui/spinner/Spinner";
 import { getPlayerStatistics } from "@/lib/api/get-player-statistics";
 import { getTeamData } from "@/lib/api/teamData/getTeamData";
-import { LeagueType, mapPathToLeagueType } from "@/types/league";
+import { LeagueType, LeagueTypes } from "@/types/league";
 import { getTranslations } from "next-intl/server";
 
 interface SearchParamsProps {
@@ -13,11 +13,8 @@ interface SearchParamsProps {
 }
 
 export default async function Page({
-  params,
   searchParams,
-}: PageProps<"/[locale]/[leagueName]/player-statistics">) {
-  const { leagueName } = await params;
-  const leagueType = mapPathToLeagueType(leagueName);
+}: PageProps<"/[locale]/eliteserien/player-statistics">) {
   const t = await getTranslations("Statistics.PlayerStatistics");
 
   return (
@@ -36,7 +33,7 @@ export default async function Page({
 
       <Suspense fallback={<Spinner />}>
         <PlayerStatisticsContent
-          leagueType={leagueType}
+          leagueType={LeagueTypes.ESF}
           searchParams={searchParams}
         />
       </Suspense>

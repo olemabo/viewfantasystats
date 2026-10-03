@@ -1,14 +1,14 @@
 import Popover from "../../../shared/popover/popover";
 import FdrBox from "../../../shared/FDR-explaination/fdr-box";
-import { FixturePlanningType } from "../../../../types/page";
+import { FixturePlanningType } from "@/types/page";
 import { getTranslations } from "next-intl/server";
-import { esf, fpl, LeagueType } from "../../../../models/shared/LeagueType";
+import { esf, fpl, LeagueType } from "@/models/shared/LeagueType";
 import {
   fdrPeriode,
   fdrPlanner,
   fdrRotation,
-} from "../../../../models/shared/FixturePlanningType";
-import { URLS } from "../../../../constants/urls";
+} from "@/models/shared/FixturePlanningType";
+import { URLS } from "@/constants/urls";
 
 type FixturePlannerHeaderProps = {
   fixturePlanningType: FixturePlanningType;

@@ -4,30 +4,19 @@ import { getLiveFixtureData } from "@/components/pages/live-fixtures/api";
 import { LiveFixturePage } from "@/components/pages/live-fixtures/live-fixtures";
 import { Spinner } from "@/components/shared/ui/spinner/Spinner";
 import PageHeaderWithPopover from "@/components/shared/page-header";
-import {
-  LeaguePath,
-  LeagueType,
-  LeagueTypeByPath,
-  LeagueTypes,
-} from "@/types/league";
+import { LeagueType, LeagueTypes } from "@/types/league";
 import { getTranslations } from "next-intl/server";
 
-interface PageProps {
-  params: Promise<{ leagueName: LeaguePath }>;
-  searchParams: Promise<{
-    gw?: string;
-  }>;
-}
+type SearchParams = {
+  gw?: string;
+};
 
-export default async function Page({ params, searchParams }: PageProps) {
-  const { leagueName } = await params;
-  const leagueType = LeagueTypeByPath[leagueName];
+export default async function Page({
+  searchParams,
+}: PageProps<"/[locale]/eliteserien/live-fixtures">) {
   const t = await getTranslations("Statistics.LiveFixtures");
 
-  const description =
-    leagueType === LeagueTypes.FPL
-      ? t("SiteDescription.FPL")
-      : t("SiteDescription.ESF");
+  const description = t("SiteDescription.ESF");
 
   return (
     <DefaultPageContainer pageClassName="live-fixtures-container">
@@ -35,7 +24,7 @@ export default async function Page({ params, searchParams }: PageProps) {
 
       <Suspense fallback={<Spinner />}>
         <LiveFixturesContent
-          leagueType={leagueType}
+          leagueType={LeagueTypes.ESF}
           searchParams={searchParams}
         />
       </Suspense>
@@ -48,7 +37,7 @@ async function LiveFixturesContent({
   searchParams,
 }: {
   leagueType: LeagueType;
-  searchParams: PageProps["searchParams"];
+  searchParams: Promise<SearchParams>;
 }) {
   const { gw } = await searchParams;
   const currentGw = gw ? parseInt(gw) : 0;

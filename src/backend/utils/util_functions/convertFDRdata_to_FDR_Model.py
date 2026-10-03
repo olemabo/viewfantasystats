@@ -9,6 +9,6 @@ def convertFDRToModel(fdr_data):
             H_A=fdr_data_i[1],
             this_difficulty_score=fdr_data_i[2],
             message=fdr_data_i[3]
-        ).toJson())
+        ).to_dict())
     
     return temp

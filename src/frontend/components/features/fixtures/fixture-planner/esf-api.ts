@@ -1,9 +1,9 @@
 import { RotationPlannerTeamModel } from '../../../../models/fixturePlanning/RotationPlannerTeam';
 import { FDRData, FdrFixture, TeamFDRDataModel } from '../../../../models/fixturePlanning/TeamFDRData';
 import { TeamCheckedModel } from '../../../../models/fixturePlanning/TeamChecked';
-import { getApiUrl } from '../../../../lib/api';
-import { API_ENDPOINTS } from '@/lib/api-endpoints';
+import { API_ENDPOINTS } from '@/lib/api/shared/api-endpoints';
 import { FixtureDataParams } from '@/lib/api/fixture-planner/fixture-planner';
+import { getApiUrl } from '@/lib/api/shared/api-url';
 
 interface FixtureESFDataResult {
   fdrData: TeamFDRDataModel[];
@@ -26,7 +26,7 @@ export async function getESFFixtureData(
     teamsToCheck: params.teamsToCheck ?? 0,
     teamsToPlay: params.teamsToPlay ?? 0,
     fplTeams: Array.isArray(params.fplTeams)
-      ? params.fplTeams.join(",")
+      ? params.fplTeams?.join(",")
       : params.fplTeams ?? "",
     teamsInSolution: Array.isArray(params.teamsInSolution)
       ? params.teamsInSolution.join(",")
@@ -83,7 +83,6 @@ export async function getESFFixtureData(
 
   const fdrData: TeamFDRDataModel[] = data.fdr_data.map(
   (team: FDRData[][]) => {
-    console.log( team[0][0], "parsing team data");
     const teamName = team[0][0].teamName;
 
     let fdrTotalScore = 0;
@@ -97,24 +96,10 @@ export async function getESFFixtureData(
       });
     });
 
-    let fontColor = "black";
-    let backgroundColor = "white";
-
-    if (data?.team_name_color?.length > 0) {
-      data.team_name_color.forEach((team: any[]) => {
-        if (teamName === team[0]) {
-          backgroundColor = team[1];
-          fontColor = team[2];
-        }
-      });
-    }
-
     return {
       teamName,
       FDR,
       fdrTotalScore,
-      fontColor,
-      backgroundColor,
       checked: true,
     };
   },

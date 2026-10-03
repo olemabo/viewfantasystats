@@ -1,5 +1,5 @@
 import { getApiUrl } from '@/lib/api';
-import { API_ENDPOINTS } from '@/lib/api-endpoints';
+import { API_ENDPOINTS } from '@/lib/api/shared/api-endpoints';
 import { PlayerModel } from '@/models/fixturePlanning/PlayerModel';
 import { FDRData, FdrFixture, TeamIdFDRModel } from '@/models/fixturePlanning/TeamFDRData';
 

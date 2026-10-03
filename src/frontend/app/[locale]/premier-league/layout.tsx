@@ -1,11 +1,10 @@
 import Footer from "../../../components/layout/footer/footer";
-import { LeaguePaths, LeagueTypes } from "../../../types/league";
-import PageContainer from "../../../components/shared/page-container";
+import { LeagueTypes } from "../../../types/league";
 import TopMenu from "../../../components/layout/top-menu/top-menu";
-import { Locale } from "../../../i18n/routing";
+import { Locale, routing } from "../../../i18n/routing";
 
 export function generateStaticParams() {
-  return Object.values(LeaguePaths).map((leagueName) => ({ leagueName }));
+  return routing.locales.map((locale) => ({ locale }));
 }
 
 export default async function LeagueNameLayout({
@@ -17,9 +16,7 @@ export default async function LeagueNameLayout({
   return (
     <>
       <TopMenu leagueType={LeagueTypes.FPL} language={locale as Locale} />
-      <main className={LeagueTypes.FPL}>
-        <PageContainer>{children}</PageContainer>
-      </main>
+      <main className={LeagueTypes.FPL}>{children}</main>
       <Footer leagueType={LeagueTypes.FPL} />
     </>
   );

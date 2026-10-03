@@ -1,6 +1,3 @@
-import json
-
-
 class PlayerModel:
     def __init__(self, player_team_id, player_position_id, player_web_name):
         ...
@@ -8,6 +5,9 @@ class PlayerModel:
         self.player_position_id = player_position_id
         self.player_web_name = player_web_name
 
-    def toJson(self):
-        return json.dumps(self, default=lambda o: o.__dict__)
- 
+    def to_dict(self):
+        return {
+            "playerTeamId": self.player_team_id,
+            "playerPositionId": self.player_position_id,
+            "playerWebName": self.player_web_name,
+        }

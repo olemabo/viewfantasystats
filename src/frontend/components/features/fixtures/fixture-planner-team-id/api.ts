@@ -4,7 +4,7 @@ import { TeamNamePlayerName } from '../../../../models/fixturePlanning/TeamNameP
 import { LeagueType } from '../../../../types/league';
 import { esf } from '../../../../models/shared/LeagueType';
 import { URLS } from '../../../../constants/urls';
-import { API_ENDPOINTS } from '@/lib/api-endpoints';
+import { API_ENDPOINTS } from '@/lib/api/shared/api-endpoints';
 
 export function useFDRFromTeamId(teamId: number, currentGw: number, leagueType: LeagueType) {
   const [players, setPlayers] = useState<TeamNamePlayerName[][]>([[], [], [], []]);

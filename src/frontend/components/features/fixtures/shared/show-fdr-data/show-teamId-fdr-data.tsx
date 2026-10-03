@@ -4,7 +4,6 @@ import {
   fdrNumber,
   offenceNumber,
 } from "../../../../../constants/fdr";
-import { KickOffTimesModel } from "../../../../../models/fixturePlanning/KickOffTimes";
 import { TeamIdFDRModel } from "../../../../../models/fixturePlanning/TeamFDRData";
 import { FunctionComponent } from "react";
 import FixtureData from "./fixture-data";
@@ -33,6 +32,7 @@ export const ShowTeamIDFDRData: FunctionComponent<ShowTeamIDFDRProps> = ({
   removePlayer,
   allowToggleBorder = true,
 }) => {
+  console.log(fixtureData, "fixtureData - fixtureData");
   const g = useTranslations("General");
 
   const postitionNames = [
@@ -43,9 +43,9 @@ export const ShowTeamIDFDRData: FunctionComponent<ShowTeamIDFDRProps> = ({
   ];
 
   const defaultDefensive =
-    fixtureData[defenceNumber].length === 0 ? fdrNumber : defenceNumber;
+    fixtureData[defenceNumber]?.length === 0 ? fdrNumber : defenceNumber;
   const defaultOffensive =
-    fixtureData[offenceNumber].length === 0 ? fdrNumber : offenceNumber;
+    fixtureData[offenceNumber]?.length === 0 ? fdrNumber : offenceNumber;
   const defaultFdrType = [
     defaultDefensive,
     defaultDefensive,

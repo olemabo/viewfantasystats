@@ -1,7 +1,44 @@
 import { LeagueType } from "@/types/league";
 import { FixtureModel, PlayerModel, BonusModel, StatsModel } from "@/models/liveFixtures/FixtureModel";
-import { getApiUrl } from "@/lib/api";
-import { API_ENDPOINTS } from "@/lib/api-endpoints";
+import { API_ENDPOINTS } from "@/lib/api/shared/api-endpoints";
+import { getApiUrl } from "@/lib/api/shared/api-url";
+
+type LiveFixturePlayerRaw = [
+  name: string,
+  minutes: number,
+  optaIndex: number,
+  totalPoints: number,
+  positionId: number,
+  teamId: number,
+  stats: StatsModel[],
+  eo: number,
+];
+
+export interface LiveFixtureStatDto {
+  identifier: string;
+  a: unknown[];
+  h: unknown[];
+}
+
+
+export interface LiveFixtureDto {
+  finished: boolean;
+  finished_provisional: boolean;
+  id: number;
+  kickoff_time: string;
+  minutes: number;
+  started: boolean;
+  team_a: number;
+  team_a_name: string;
+  team_a_score: number;
+  team_h: number;
+  team_h_name: string;
+  team_h_score: number;
+  is_live: boolean;
+  stats: LiveFixtureStatDto[];
+  players_a: LiveFixturePlayerRaw[];
+  players_h: LiveFixturePlayerRaw[];
+}
 
 export interface GetLiveFixtureDataOptions {
   leagueType: LeagueType;
@@ -17,12 +54,13 @@ export interface LiveFixturePageData {
   fixtureData: [string, FixtureModel[]][];
 }
 
+
 export interface LiveFixtureApiResponse {
   current_gameweek: number;
   previous_gw: number;
   next_gw: number;
   has_ownership_data: boolean;
-  fixture_data: string[];
+  fixture_data: FixtureModel[];
 }
 
 export async function getLiveFixtureData({
@@ -45,29 +83,29 @@ export async function getLiveFixtureData({
 
     let liveMatchId = 0;
 
-    const fixtureDataList: FixtureModel[] = parsed.fixture_data.map((fixtureStr: any) => {
-        const fixtureParsed = fixtureStr;
+    const fixtureDataList: FixtureModel[] = parsed.fixture_data.map((fixture: LiveFixtureApiResponse["fixture_data"][number]) => {
 
-        if (fixtureParsed?.is_live && !liveMatchId) { 
-            liveMatchId = fixtureParsed?.id;
+        if (fixture?.is_live && !liveMatchId) { 
+            liveMatchId = fixture?.id;
         }
 
         return {
-            id: fixtureParsed.id,
-            finished: fixtureParsed.finished,
-            started: fixtureParsed.started,
-            is_live: fixtureParsed.is_live,
-            kickoff_time: fixtureParsed.kickoff_time,
-            team_a_name: fixtureParsed.team_a_name,
-            team_h_name: fixtureParsed.team_h_name,
-            team_a_score: fixtureParsed.team_a_score,
-            team_h_score: fixtureParsed.team_h_score,
-            stats: fixtureParsed.stats,
-            players_h: extractPlayerData(fixtureParsed.players_h),
-            players_a: extractPlayerData(fixtureParsed.players_a),
+            id: fixture.id,
+            finished: fixture.finished,
+            started: fixture.started,
+            is_live: fixture.is_live,
+            kickoff_time: fixture.kickoff_time,
+            team_a_name: fixture.team_a_name,
+            team_h_name: fixture.team_h_name,
+            team_a_score: fixture.team_a_score,
+            team_h_score: fixture.team_h_score,
+            stats: fixture.stats,
+            players_h: extractPlayerData(fixture.players_h as unknown as LiveFixturePlayerRaw[]),
+            players_a: extractPlayerData(fixture.players_a as unknown as LiveFixturePlayerRaw[]),
             bonus_list: [],
         };
     });
+
 
     // Group fixtures by date
     const elementsByDate: Record<string, FixtureModel[]> = {};
@@ -118,8 +156,8 @@ export async function getLiveFixtureData({
   }
 }
 
-function extractPlayerData(playersRaw: any[]): PlayerModel[] {
-  return playersRaw.map((player: any[]) => ({
+function extractPlayerData(playersRaw: LiveFixturePlayerRaw[]): PlayerModel[] {
+  return playersRaw.map((player) => ({
     name: player[0],
     minutes: player[1],
     opta_index: player[2],

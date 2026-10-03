@@ -10,6 +10,8 @@ export function generateStaticParams() {
 export default async function LocaleLayout({
   children,
 }: LayoutProps<"/[locale]">) {
+  "use cache";
+
   const locale = await getLocale();
 
   return (

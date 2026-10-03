@@ -5,29 +5,20 @@ import Popover from "@/components/shared/popover/popover";
 import { Spinner } from "@/components/shared/ui/spinner/Spinner";
 import { getPriceChange } from "@/lib/api/get-price-change";
 import { getTeamData } from "@/lib/api/teamData/getTeamData";
-import {
-  LeaguePath,
-  LeagueType,
-  LeagueTypeByPath,
-  LeagueTypes,
-} from "@/types/league";
+import { LeagueType, LeagueTypes } from "@/types/league";
 import { getTranslations } from "next-intl/server";
 
-type PageProps = {
-  params: Promise<{ leagueName: LeaguePath }>;
-  searchParams: Promise<{ gw?: string }>;
+type SearchProps = {
+  gw?: string;
 };
 
-export default async function Page({ params, searchParams }: PageProps) {
-  const { leagueName } = await params;
-  const leagueType = LeagueTypeByPath[leagueName];
-
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: SearchProps;
+}) {
   const t = await getTranslations("Statistics.PriceChange");
-
-  const description =
-    leagueType === LeagueTypes.FPL
-      ? t("PriceChangeDescription")
-      : t("PriceChangeDescription");
+  const description = t("PriceChangeDescription");
 
   return (
     <DefaultPageContainer pageClassName="player-ownership-container">
@@ -45,7 +36,7 @@ export default async function Page({ params, searchParams }: PageProps) {
 
       <Suspense fallback={<Spinner />}>
         <PriceChangeContent
-          leagueType={leagueType}
+          leagueType={LeagueTypes.ESF}
           searchParams={searchParams}
         />
       </Suspense>
@@ -58,7 +49,7 @@ async function PriceChangeContent({
   searchParams,
 }: {
   leagueType: LeagueType;
-  searchParams: PageProps["searchParams"];
+  searchParams: SearchProps;
 }) {
   const { gw } = await searchParams;
   const currentGw = gw ? parseInt(gw) : -1;

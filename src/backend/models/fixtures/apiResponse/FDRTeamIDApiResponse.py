@@ -14,15 +14,15 @@ class FDRApiResponse:
 
     def to_dict(self):
         return {
-            "fdr_data": self.fdr_data,
-            "fdr_data_defensive": self.fdr_data_defensive,
-            "fdr_data_offensive": self.fdr_data_offensive,
-            "gws_and_dates": self.gws_and_dates,
-            "gw_start": self.gw_start,
-            "gw_end": self.gw_end,
-            "current_gw": self.current_gw,
-            "max_gw": self.max_gw,
-            "player_list": self.player_list,
+            "maxGw": self.max_gw,
+            "currentGw": self.current_gw,
+            "gwStart": self.gw_start,
+            "gwEnd": self.gw_end,
+            "playerList": self.player_list,
+            "fdrData": self.fdr_data,
+            "fdrDataDefensive": self.fdr_data_defensive,
+            "fdrDataOffensive": self.fdr_data_offensive,
+            "gwsAndDates": self.gws_and_dates,
         }
 
 

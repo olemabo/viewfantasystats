@@ -3,29 +3,15 @@ import PlayerOwnership from "../../../../components/pages/player-ownership/playe
 import Popover from "../../../../components/shared/popover/popover";
 import { TOP_X_MANAGERS_DEFAULT } from "../../../../constants/constants";
 import { getTeamData } from "../../../../lib/api/teamData/getTeamData";
-import {
-  LeaguePath,
-  LeagueTypeByPath,
-  LeagueTypes,
-} from "../../../../types/league";
+import { LeagueTypes } from "../../../../types/league";
 import { getTranslations } from "next-intl/server";
 
-export default async function Page({
-  params,
-}: {
-  params: Promise<{ leagueName: LeaguePath }>;
-}) {
-  "use cache";
-  const { leagueName } = await params;
-  const leagueType = LeagueTypeByPath[leagueName];
+export default async function Page() {
   const t = await getTranslations("Statistics.PlayerOwnership");
 
-  const teamData = await getTeamData(leagueType);
+  const teamData = await getTeamData(LeagueTypes.ESF);
 
-  const ownershipDescription =
-    leagueType === LeagueTypes.FPL
-      ? t("OwnershiptDescriptionFPL")
-      : t("OwnershiptDescription");
+  const ownershipDescription = t("OwnershiptDescription");
 
   return (
     <DefaultPageContainer pageClassName="player-ownership-container">
@@ -41,9 +27,9 @@ export default async function Page({
         </Popover>
       </h1>
       <PlayerOwnership
-        leagueType={leagueType}
+        leagueType={LeagueTypes.ESF}
         teamData={teamData}
-        topXManagersDefault={TOP_X_MANAGERS_DEFAULT[leagueType]}
+        topXManagersDefault={TOP_X_MANAGERS_DEFAULT[LeagueTypes.ESF]}
       />
     </DefaultPageContainer>
   );

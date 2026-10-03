@@ -7,8 +7,8 @@ import { FixturePlanningTypes } from "@/types/fixturePlanningType";
 import { LeagueTypes } from "@/types/league";
 import { maxGwEsf } from "@/constants/gws";
 import FixturePlannerHeader from "@/components/features/fixtures/utils/header-and-popover";
-import { getKickoffTimesESF } from "@/lib/api/kickoff-times/kickoff-times";
-import { getFixturePlannerESF } from "@/lib/api/fixture-planner/esf-fixture-planner";
+import { getFixturePlannerESF } from "@/lib/api/fixture-planner/fdr/get-fdr";
+import { getKickoffTimes } from "@/lib/api/fixture-planner/kickoff-times/get-kickoff-times";
 
 type FdrSearchParams = {
   startGw?: string;
@@ -17,7 +17,7 @@ type FdrSearchParams = {
   fdrType?: string;
 };
 
-export default async function Page({
+export default function Page({
   searchParams,
 }: PageProps<"/[locale]/eliteserien/fdr-planner">) {
   return (
@@ -52,7 +52,7 @@ async function FixturePlannerContent({
 
   const [fixtureData, kickOffTimes] = await Promise.all([
     getFixturePlannerESF(form),
-    getKickoffTimesESF(),
+    getKickoffTimes(LeagueTypes.ESF),
   ]);
 
   const finalForm = {

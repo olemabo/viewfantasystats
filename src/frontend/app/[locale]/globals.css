@@ -160,3 +160,24 @@ h2 {
     font-weight: 600;
     font-size: 20px;
 }
+
+.team-id-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    text-align: center;
+
+    .team-id-container {
+        width: 100%;
+    }
+}
+
+main {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 0 auto;
+    text-align: center;
+}

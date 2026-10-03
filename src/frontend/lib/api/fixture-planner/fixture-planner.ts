@@ -1,4 +1,4 @@
-import { API_ENDPOINTS } from '../../api-endpoints';
+import { API_ENDPOINTS } from '../shared/api-endpoints';
 import { getApiUrl } from '../../api';
 import { TeamFDRDataModel, FDRData, FDR_GW_i } from '../../../models/fixturePlanning/TeamFDRData';
 import { RotationPlannerTeamModel } from '../../../models/fixturePlanning/RotationPlannerTeam';
@@ -38,7 +38,7 @@ export async function getFixtureDataFPLServerFPL(
     teamsToCheck: params.teamsToCheck ?? 0,
     teamsToPlay: params.teamsToPlay ?? 0,
     fplTeams: Array.isArray(params.fplTeams)
-      ? params.fplTeams.join(",")
+      ? params.fplTeams?.join(",")
       : params.fplTeams ?? "",
     teamsInSolution: Array.isArray(params.teamsInSolution)
       ? params.teamsInSolution.join(",")
@@ -55,7 +55,6 @@ export async function getFixtureDataFPLServerFPL(
 
   const parsed = await res.json();
 
-  
   const { gw_start, gw_end, fdr_data } = parsed;
 
   if (params.fixturePlanningType === 'rotation') {

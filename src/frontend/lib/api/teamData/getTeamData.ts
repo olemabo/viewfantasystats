@@ -1,8 +1,8 @@
 import { cacheLife } from "next/cache";
 import { LeagueType } from "@/types/league";
 import { TeamModel } from "./teamData";
-import { getApiUrl } from "@/lib/api";
-import { API_ENDPOINTS } from "@/lib/api-endpoints";
+import { API_ENDPOINTS } from "@/lib/api/shared/api-endpoints";
+import { getApiUrl } from "../shared/api-url";
 
 /**
  * Fetches team names and IDs for the given league.

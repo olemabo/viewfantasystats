@@ -9,8 +9,8 @@ import {
 } from "../models/shared/errorLoading";
 import { info, warning } from "../components/shared/messages/messages";
 import { useTranslations } from "next-intl";
-import { getApiUrl } from "../lib/api";
-import { API_ENDPOINTS } from "../lib/api-endpoints";
+import { API_ENDPOINTS } from "../lib/api/shared/api-endpoints";
+import { getApiUrl } from "@/lib/api/shared/api-url";
 
 interface ChipStats {
   chipUsageRound: number[];

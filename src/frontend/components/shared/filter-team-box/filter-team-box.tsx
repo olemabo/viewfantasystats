@@ -78,8 +78,8 @@ export const FilterTeamBox: FunctionComponent<FilterTeamBoxProps> = ({
           <FilterButton
             onclick={toggleAll}
             buttonText={hasToggledOffAll ? addAllText : removeAllText}
-            labelClassName={"toggle-all"}
-            checked={true}
+            labelClassName="toggle-all"
+            checked
           />
         )}
       </div>

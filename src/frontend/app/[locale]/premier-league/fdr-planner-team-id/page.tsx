@@ -6,8 +6,7 @@ import { getFixturePlannerData } from "./api";
 import FixturePlannerTeamIdPage from "@/components/features/fixtures/fixture-planner-team-id/fixture-planner-team-id";
 import Popover from "@/components/shared/popover/popover";
 import { Spinner } from "@/components/shared/ui/spinner/Spinner";
-import { getKickoffTimesESF } from "@/lib/api/kickoff-times/kickoff-times";
-import { getPlayersFromTeamIdESF } from "@/lib/api/fixture-planner/players-from-team-id";
+import { getPlayersFromTeamIdESF } from "@/lib/api/fixture-planner/team-planner/get-players-from-team-id";
 
 type SearchParams = {
   team_id?: string;
@@ -70,7 +69,6 @@ async function TeamIdContent({
   const players =
     teamId > 0 ? await getPlayersFromTeamIdESF(teamId) : [[], [], [], []];
 
-  console.log(players, "players");
   return (
     <FixturePlannerTeamIdPage
       leagueType={leagueType}

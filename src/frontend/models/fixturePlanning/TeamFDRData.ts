@@ -1,23 +1,30 @@
 export interface TeamFDRDataModel {
     teamName: string;
-    background_color: string;
-    font_color: string;
     checked: boolean;
     FDR: FdrFixture[];
-    fdr_total_score: number;
+    fdrTotalScore: number;
+}
+
+export type FDRModel = {
+    H_A?: string;
+    UseNotUse?: string;
+    difficultyScore?: string;
+    message?: string;
+    opponentTeamName?: string;
+    doubleBlank?: string;
 }
 
 export interface TeamIdFDRModel {
-    team_name_short: string;
-    team_id: number;
-    FDR: FdrFixture[];
+    teamNameShort: string;
+    teamId: number;
+    fdr: FDRModel[][];
 }
 
 export interface SimpleTeamFDRDataModel {
     teamName: string;
     checked: boolean;
     FDR: FdrFixture[];
-    fdr_total_score: number;
+    fdrTotalScore: number;
 }
 
 export interface FdrFixture {

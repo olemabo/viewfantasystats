@@ -2,7 +2,7 @@
 
 import { TeamNamePlayerName } from "../../../../models/fixturePlanning/TeamNamePlayerName";
 import ShowTeamIDFDRData from "../shared/show-fdr-data/show-teamId-fdr-data";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { esf } from "../../../../models/shared/PageProps";
 import TextInput from "../../../shared/ui/text-input/TextInput";
 import Button from "../../../shared/ui/button/button";
@@ -13,8 +13,8 @@ import { LeagueType } from "../../../../types/league";
 import { useTranslations } from "next-intl";
 import "../fixture-planner/fixture-planner.css";
 import { KickOffTime } from "../types/kickoff-times.types";
-import { FixturePlannerResult } from "@/app/[locale]/eliteserien/fdr-planner-team-id/api";
 import { useRouter } from "next/dist/client/components/navigation";
+import { FixturePlannerResult } from "@/lib/api/fixture-planner/fdr-and-player/get-fdr-and-player";
 
 type FixturePlannerTeamIdProps = {
   leagueType: LeagueType;
@@ -24,14 +24,22 @@ type FixturePlannerTeamIdProps = {
   initialPlayers: TeamNamePlayerName[][];
 };
 
-export function FixturePlannerTeamIdPage({
+export default function FixturePlannerTeamIdPage({
   leagueType,
   data,
   teamIdFromSearch,
   kickoffTimes,
   initialPlayers,
 }: FixturePlannerTeamIdProps) {
-  const { maxGw, playerList, fixtureData } = data;
+  const { maxGw, playerList, fdrData, fdrDataDefensive, fdrDataOffensive } =
+    data;
+
+  const fixtureDataAll = [
+    fdrData ?? [],
+    fdrDataDefensive ?? [],
+    fdrDataOffensive ?? [],
+  ];
+
   const g = useTranslations("General");
   const f = useTranslations("Fixture");
   const router = useRouter();
@@ -41,29 +49,37 @@ export function FixturePlannerTeamIdPage({
   const [teamID, setTeamId] = useState(
     teamIdFromSearch ? parseInt(teamIdFromSearch) : 0,
   );
-  const [teamIDCorrect, setTeamIdCorrect] = useState(
-    teamIdFromSearch ? parseInt(teamIdFromSearch) : 0,
-  );
   const [openModal, setOpenModal] = useState(false);
-  const [newPlayerName, setNewPlayerName] = useState("");
   const [newPlayerTeam, setNewPlayerTeam] = useState("");
   const [newPlayerPositionNumber, setNewPlayerPositionNumber] = useState(0);
-  const [goalKeepers, setGoalkeepers] = useState<TeamNamePlayerName[]>(
-    initialPlayers ? initialPlayers[0] : [],
+  const [playerData, setPlayerData] = useState<TeamNamePlayerName[][]>(
+    initialPlayers ?? [[], [], [], []],
   );
-  const [defenders, setDefenders] = useState<TeamNamePlayerName[]>(
-    initialPlayers ? initialPlayers[1] : [],
-  );
-  const [midfielders, setMidfielders] = useState<TeamNamePlayerName[]>(
-    initialPlayers ? initialPlayers[2] : [],
-  );
-  const [forwards, setForwards] = useState<TeamNamePlayerName[]>(
-    initialPlayers ? initialPlayers[3] : [],
-  );
+
+  useEffect(() => {
+    const nextTeamId = teamIdFromSearch ? parseInt(teamIdFromSearch) : 0;
+
+    setTeamId(nextTeamId);
+    setPlayerData(initialPlayers ?? [[], [], [], []]);
+    setOpenModal(false);
+    setNewPlayerTeam("");
+    setNewPlayerPositionNumber(0);
+  }, [initialPlayers, teamIdFromSearch]);
 
   function toggleModal(postionNumber: number) {
     setNewPlayerPositionNumber(postionNumber);
     setOpenModal(true);
+  }
+
+  function updatePlayersAtPosition(
+    position: number,
+    updater: (players: TeamNamePlayerName[]) => TeamNamePlayerName[],
+  ) {
+    setPlayerData((currentPlayerData) =>
+      currentPlayerData.map((players, index) =>
+        index === position ? updater(players) : players,
+      ),
+    );
   }
 
   const handleAddPlayer = () => {
@@ -73,36 +89,20 @@ export function FixturePlannerTeamIdPage({
     const [player, team_id] = selector.value.split(",");
     const newPlayer = { team_id, player_name: player };
 
-    if (newPlayerPositionNumber === 0)
-      setGoalkeepers([...goalKeepers, newPlayer]);
-    if (newPlayerPositionNumber === 1) setDefenders([...defenders, newPlayer]);
-    if (newPlayerPositionNumber === 2)
-      setMidfielders([...midfielders, newPlayer]);
-    if (newPlayerPositionNumber === 3) setForwards([...forwards, newPlayer]);
+    updatePlayersAtPosition(newPlayerPositionNumber, (players) => [
+      ...players,
+      newPlayer,
+    ]);
 
-    setNewPlayerName("");
     setNewPlayerTeam("");
     setNewPlayerPositionNumber(0);
     setOpenModal(false);
   };
 
   const handleRemovePlayer = (position: number, playerName: string) => {
-    if (position === 0)
-      setGoalkeepers(
-        goalKeepers.filter((player) => player.player_name !== playerName),
-      );
-    if (position === 1)
-      setDefenders(
-        defenders.filter((player) => player.player_name !== playerName),
-      );
-    if (position === 2)
-      setMidfielders(
-        midfielders.filter((player) => player.player_name !== playerName),
-      );
-    if (position === 3)
-      setForwards(
-        forwards.filter((player) => player.player_name !== playerName),
-      );
+    updatePlayersAtPosition(position, (players) =>
+      players.filter((player) => player.player_name !== playerName),
+    );
   };
 
   const handleUpdateFDRData = (e: React.FormEvent<HTMLFormElement>) => {
@@ -184,43 +184,36 @@ export function FixturePlannerTeamIdPage({
                 defaultValue={newPlayerTeam}
               >
                 <option value="">{g("all_teams")}</option>
-                {fixtureData[0]?.map((x) => (
-                  <option key={x.team_id} value={x.team_id}>
-                    {x.team_name_short}
+                {fixtureDataAll[0]?.map((x) => (
+                  <option key={x.teamId} value={x.teamId}>
+                    {x.teamNameShort}
                   </option>
                 ))}
               </select>
             </div>
             <div className="text-input-container border">
               <label htmlFor="player_dropdown">{g("player")}</label>
-              <select
-                onChange={(e) => {
-                  setNewPlayerName(e.target.value);
-                }}
-                id="player_dropdown"
-                name="player_dropdown"
-              >
+              <select id="player_dropdown" name="player_dropdown">
                 {playerList.length > 0 &&
                   playerList
                     .filter(
                       (player) =>
-                        player.player_position_id - 1 ===
-                        newPlayerPositionNumber,
+                        player.playerPositionId - 1 === newPlayerPositionNumber,
                     )
                     .filter(
                       (player) =>
-                        player.player_team_id.toString() === newPlayerTeam ||
+                        player.playerTeamId.toString() === newPlayerTeam ||
                         newPlayerTeam === "",
                     )
                     .map((player) => (
                       <option
-                        key={`${player.player_web_name}-${player.player_team_id}`}
+                        key={`${player.playerWebName}-${player.playerTeamId}`}
                         value={[
-                          player.player_web_name,
-                          player.player_team_id.toString(),
+                          player.playerWebName,
+                          player.playerTeamId.toString(),
                         ]}
                       >
-                        {player.player_web_name}
+                        {player.playerWebName}
                       </option>
                     ))}
               </select>
@@ -233,10 +226,10 @@ export function FixturePlannerTeamIdPage({
           </Modal>
         }
 
-        {fixtureData.length > 0 && kickoffTimes.length > 0 && (
+        {fixtureDataAll.length > 0 && kickoffTimes.length > 0 && (
           <ShowTeamIDFDRData
-            playerData={[goalKeepers, defenders, midfielders, forwards]}
-            fixtureData={fixtureData}
+            playerData={playerData}
+            fixtureData={fixtureDataAll}
             gwStart={gwStart}
             gwEnd={gwEnd}
             kickOffTimes={kickoffTimes}
@@ -251,5 +244,3 @@ export function FixturePlannerTeamIdPage({
     </div>
   );
 }
-
-export default FixturePlannerTeamIdPage;

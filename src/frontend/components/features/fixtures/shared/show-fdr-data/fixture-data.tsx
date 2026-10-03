@@ -1,19 +1,12 @@
 import { TeamNamePlayerName } from "../../../../../models/fixturePlanning/TeamNamePlayerName";
-import {
-  FDR_GW_i,
-  TeamIdFDRModel,
-} from "../../../../../models/fixturePlanning/TeamFDRData";
-import {
-  defenceNumber,
-  fdrNumber,
-  offenceNumber,
-} from "../../../../../constants/fdr";
-import React, { FunctionComponent, useState } from "react";
+import { fdrNumber } from "../../../../../constants/fdr";
+import React, { FunctionComponent } from "react";
 import Popover from "../../../../shared/popover/popover";
 import Button from "../../../../shared/ui/button/button";
 
 import "./show-fdr-data.css";
 import { useTranslations } from "next-intl";
+import { TeamIdFDRModel } from "@/models/fixturePlanning/TeamFDRData";
 
 type FixtureDataProps = {
   playerData: TeamNamePlayerName[];
@@ -45,15 +38,13 @@ export const FixtureData: FunctionComponent<FixtureDataProps> = ({
   const g = useTranslations("General");
   const f = useTranslations("Fixture");
 
-  const [fdrType, SetFdrType] = useState(defaultFdrType);
-
   function toggleBorderLine(
     e: React.MouseEvent<HTMLTableCellElement, MouseEvent>,
   ) {
     if (!allowToggleBorder) {
       return;
     }
-    let classList = e.currentTarget.classList;
+    const classList = e.currentTarget.classList;
 
     const temp: any = e.target;
     if (temp?.tagName == "svg" || temp?.tagName == "path") return;
@@ -67,18 +58,16 @@ export const FixtureData: FunctionComponent<FixtureDataProps> = ({
     }
   }
 
-  function getFixtureData(team_id: string): FDR_GW_i[] {
-    for (let i = 0; i < fixtureData[fdrType].length; i++) {
-      if (fixtureData[fdrType][i].team_id.toString() === team_id.toString())
-        return fixtureData[fdrType][i].FDR;
+  function getFixtureData(team_id: string): TeamIdFDRModel["fdr"] {
+    for (let i = 0; i < fixtureData[defaultFdrType].length; i++) {
+      if (
+        fixtureData[defaultFdrType][i].teamId.toString() === team_id.toString()
+      )
+        return fixtureData[defaultFdrType][i].fdr;
     }
 
-    return fixtureData[fdrType][fdrNumber].FDR;
+    return fixtureData[defaultFdrType][fdrNumber].fdr;
   }
-
-  const hasOnlyOneFdrType =
-    fixtureData[defenceNumber].length === 0 &&
-    fixtureData[offenceNumber].length === 0;
 
   return (
     <>
@@ -86,16 +75,6 @@ export const FixtureData: FunctionComponent<FixtureDataProps> = ({
         <div className="postition-container">
           <span className="text">{postionName}</span>
           <div className="button-group">
-            {/* { !hasOnlyOneFdrType && 
-                        <ToggleButton 
-                            small={true}
-                            onclick={(fdrType: string) => SetFdrType(parseInt(fdrType))} 
-                            toggleButtonName="FDR-toggle"
-                            defaultToggleList={[ 
-                                { name: content.General.defence, value: defence_number.toString(), checked: fdrType===defence_number, classname: "defensiv" },
-                                { name: "FDR", value: fdrNumber.toString(), checked: fdrType===fdrNumber, classname: "fdr" },
-                                { name: content.General.offence, value: ofence_number.toString(), checked: fdrType===ofence_number, classname: "offensiv"}
-                            ]} /> } */}
             <div>
               <Button
                 buttonText={g("add_player")}
@@ -129,30 +108,30 @@ export const FixtureData: FunctionComponent<FixtureDataProps> = ({
               .slice(gwStart - 1, gwEnd)
               .map((team, idx) => (
                 <td
-                  key={`td-fixture-${idx}-${player.player_name}-${team.fdr_gw_i.length}`}
+                  key={`td-fixture-${idx}-${player.player_name}-${team.length}`}
                   onClick={(e) => toggleBorderLine(e)}
                   scope="col"
                   className={
                     "" +
-                    (team.fdr_gw_i.length == 1
+                    (team.length == 1
                       ? " color-" +
-                        Number(team.fdr_gw_i[0].difficulty_score).toFixed(0) +
+                        Number(team[0].difficultyScore).toFixed(0) +
                         " "
                       : " multiple no-padding ") +
                     " show-color"
                   }
                 >
-                  {team.fdr_gw_i.map((g) => (
+                  {team.map((g) => (
                     <>
                       <div
                         style={{ position: g.message ? "relative" : "inherit" }}
-                        className={`height-${team.fdr_gw_i.length} color-${Number(g.difficulty_score).toFixed(0)}
-                                ${team.fdr_gw_i.length > 1 ? " multiple-fixtures" : ""} 
-                                ${team.fdr_gw_i[0].double_blank?.includes("-") ? "possible-blank" : ""}`}
+                        className={`height-${team.length} color-${Number(g.difficultyScore).toFixed(0)}
+                                ${team.length > 1 ? " multiple-fixtures" : ""} 
+                                ${team[0].doubleBlank?.includes("-") ? "possible-blank" : ""}`}
                       >
                         {g.message && (
                           <Popover
-                            id={`rotations-planner-id-${g.opponent_team_name}-${g.H_A}-${player.player_name}`}
+                            id={`rotations-planner-id-${g.opponentTeamName}-${g.H_A}-${player.player_name}`}
                             title=""
                             htmlTitle={f("uncertain_match")}
                             alignLeft={false}
@@ -167,9 +146,9 @@ export const FixtureData: FunctionComponent<FixtureDataProps> = ({
                           ></Popover>
                         )}
 
-                        {g.opponent_team_name == "-"
+                        {g.opponentTeamName == "-"
                           ? "Blank"
-                          : `${g.opponent_team_name} (${g.H_A})`}
+                          : `${g.opponentTeamName} (${g.H_A})`}
                       </div>
                     </>
                   ))}

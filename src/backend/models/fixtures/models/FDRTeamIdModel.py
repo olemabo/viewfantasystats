@@ -6,7 +6,7 @@ class FDRTeamIDModel:
 
     def to_dict(self):
         return {
-            "team_name_short": self.team_name_short,
+            "teamNameShort": self.team_name_short,
             "fdr": self.fdr,
-            "team_id": self.team_id,
+            "teamId": self.team_id,
         }

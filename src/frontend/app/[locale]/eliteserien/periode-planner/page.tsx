@@ -1,5 +1,4 @@
 import { Suspense } from "react";
-import { getFixturePlannerESF } from "@/lib/api/fixture-planner/esf-fixture-planner";
 import DefaultPageContainer from "@/components/layout/default-page-container/default-page-container";
 import FixturePlannerPage from "@/components/features/fixtures/fixture-planner/fixture-planner";
 import { Spinner } from "@/components/shared/ui/spinner/Spinner";
@@ -8,7 +7,8 @@ import { FixturePlanningTypes } from "@/types/fixturePlanningType";
 import { LeagueTypes } from "@/types/league";
 import { maxGwEsf } from "@/constants/gws";
 import FixturePlannerHeader from "@/components/features/fixtures/utils/header-and-popover";
-import { getKickoffTimesESF } from "@/lib/api/kickoff-times/kickoff-times";
+import { getKickoffTimes } from "@/lib/api/fixture-planner/kickoff-times/get-kickoff-times";
+import { getFixturePlannerESF } from "@/lib/api/fixture-planner/fdr/get-fdr";
 
 type SearchParams = {
   startGw?: string;
@@ -52,7 +52,7 @@ async function PeriodePlannerContent({
 
   const [fixtureData, kickOffTimes] = await Promise.all([
     getFixturePlannerESF(form),
-    getKickoffTimesESF(),
+    getKickoffTimes(LeagueTypes.ESF),
   ]);
 
   const finalForm: FDRFormInput = {

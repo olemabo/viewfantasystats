@@ -1,6 +1,6 @@
 import { LeagueType } from "../../types/league";
-import { getApiUrl } from "../api";
-import { API_ENDPOINTS } from "../api-endpoints";
+import { API_ENDPOINTS } from "./shared/api-endpoints";
+import { getApiUrl } from "./shared/api-url";
 
 export type PriceChangeRaw = {
     cost_change_event: number;
@@ -28,15 +28,13 @@ export async function getPriceChange(leagueType: LeagueType, gw: number): Promis
     gw
   });
 
-  
   const response = await fetch(apiUrl, { next: { revalidate: 3600 } });
   
   if (!response.ok) {
-      throw new Error("Failed to fetch price change data");
-    }
+    throw new Error("Failed to fetch price change data");
+  }
     
-    const data = await response.json();
-    console.log(apiUrl, "api", data)
+  const data = await response.json();
 
   const priceChange = data.player_transfers.map((t: string) => JSON.parse(t));
 

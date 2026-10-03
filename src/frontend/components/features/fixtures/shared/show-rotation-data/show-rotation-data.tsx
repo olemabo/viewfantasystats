@@ -17,7 +17,6 @@ export const ShowRotationData: FunctionComponent<ShowRotationProps> = ({
   fdrData,
   kickOffTimes,
 }) => {
-  console.log(fdrData, "fdrData");
   const t = useTranslations("General");
   const f = useTranslations("Fixture.RotationPlanner");
 
@@ -47,8 +46,6 @@ export const ShowRotationData: FunctionComponent<ShowRotationProps> = ({
     );
   }
 
-  console.log("kickOffTimes", fdrData);
-
   return (
     <>
       <div id="data-box" className="text-center mt-3">
@@ -75,7 +72,7 @@ export const ShowRotationData: FunctionComponent<ShowRotationProps> = ({
                             </th>
                           ))}
                         </tr>
-                        {row.fixture_list.map(
+                        {row.fixtureList.map(
                           (fixtureCombination: FDRData[][]) => (
                             <tr
                               key={fixtureCombination
@@ -127,7 +124,7 @@ export const ShowRotationData: FunctionComponent<ShowRotationProps> = ({
                     </table>
                     <caption>
                       {f("avg_fdr_score")}
-                      <b> {row.avg_Score.toFixed(2)} </b>
+                      <b> {row.avgScore.toFixed(2)} </b>
                     </caption>
                   </>
                 ))}

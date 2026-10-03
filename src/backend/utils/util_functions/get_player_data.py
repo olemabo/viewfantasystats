@@ -3,7 +3,6 @@ from player_statistics.db_models.eliteserien.player_statistics_model import Elit
 from models.fixtures.models.PlayerModel import PlayerModel
 from constants import esf
 
-
 def getPlayerData(league_type = esf):
     temp_player_list = []
         
@@ -17,6 +16,6 @@ def getPlayerData(league_type = esf):
             player_team_id=player_team_id,
             player_position_id=player_position_id,
             player_web_name=player_web_name,
-        ).toJson())
+        ).to_dict())
 
     return temp_player_list

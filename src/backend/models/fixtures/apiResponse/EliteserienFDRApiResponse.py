@@ -9,10 +9,10 @@ class EliteserienFDRApiResponse:
 
     def to_dict(self):
         return {
-            "fdr_data": self.fdr_data,
-            "fdr_to_colors_dict": self.fdr_to_colors_dict,
-            "team_name_color": self.team_name_color,
-            "gw_start": self.gw_start,
-            "gw_end": self.gw_end,
-            "max_gw": self.max_gw
+            "fdrData": self.fdr_data,
+            "fdrToColorsDict": self.fdr_to_colors_dict,
+            "teamNameColor": self.team_name_color,
+            "startGw": self.gw_start,
+            "endGw": self.gw_end,
+            "maxGw": self.max_gw
         }

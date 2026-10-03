@@ -1,10 +1,14 @@
 import { PriceChangeRaw } from "../../../lib/api/get-price-change";
-import { PriceChangeModel } from "../../../models/priceChange/PriceChangeModel";
 import { propComparatorPriceChangeModel } from "../../../utils/compareFunctions";
 
-export function sortAndFilterPriceChange(priceChange: PriceChangeRaw[], query: string, teamId: string, positionId: string, sortType: string, decreasing: boolean) {
-    const temp: PriceChangeModel[] = [];
-    
+export function sortAndFilterPriceChange(
+    priceChange: PriceChangeRaw[], 
+    query: string, 
+    teamId: string, 
+    positionId: string, 
+    sortType: string, 
+    decreasing: boolean
+) {
     let queryFilteredList: PriceChangeRaw[] = [];
         
     priceChange.map(x => {
@@ -42,7 +46,6 @@ export function sortAndFilterPriceChange(priceChange: PriceChangeRaw[], query: s
             return el.team_code.toString() == teamId;
         });
     }
-
 
     const sorted = queryFilteredList.sort(propComparatorPriceChangeModel(sortType, decreasing));
 

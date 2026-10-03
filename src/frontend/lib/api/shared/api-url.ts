@@ -1,5 +1,3 @@
-// import "server-only";
-
 /**
  * Builds an absolute API URL from a relative endpoint path and optional query parameters.
  *

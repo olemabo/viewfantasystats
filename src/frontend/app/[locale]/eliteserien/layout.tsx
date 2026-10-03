@@ -1,25 +1,22 @@
 import Footer from "@/components/layout/footer/footer";
-import { LeaguePaths, LeagueTypes } from "@/types/league";
-import PageContainer from "@/components/shared/page-container";
+import { LeagueTypes } from "@/types/league";
 import TopMenu from "@/components/layout/top-menu/top-menu";
-import { Locale } from "@/i18n/routing";
+import { Locale, routing } from "@/i18n/routing";
+import { getLocale } from "next-intl/server";
 
 export function generateStaticParams() {
-  return Object.values(LeaguePaths).map((leagueName) => ({ leagueName }));
+  return routing.locales.map((locale) => ({ locale }));
 }
 
 export default async function LeagueNameLayout({
   children,
-  params,
 }: LayoutProps<"/[locale]/eliteserien">) {
-  const { locale } = await params;
+  const locale = await getLocale();
 
   return (
     <>
       <TopMenu leagueType={LeagueTypes.ESF} language={locale as Locale} />
-      <main className={LeagueTypes.ESF}>
-        <PageContainer>{children}</PageContainer>
-      </main>
+      <main className={LeagueTypes.ESF}>{children}</main>
       <Footer leagueType={LeagueTypes.ESF} />
     </>
   );

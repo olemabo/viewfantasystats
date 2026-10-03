@@ -7,9 +7,9 @@ import { maxGwEsf } from "@/constants/gws";
 import { FDRFormInput } from "@/models/fixturePlanning/FDRFormInput";
 import { FixturePlanningTypes } from "@/types/fixturePlanningType";
 import { LeagueTypes } from "@/types/league";
-import { getKickoffTimesESF } from "@/lib/api/kickoff-times/kickoff-times";
-import { getFixturePlannerESF } from "@/lib/api/fixture-planner/esf-fixture-planner";
-import { getTeamDataESF } from "@/lib/api/fixture-planner/team-info";
+import { getFixturePlannerTeams } from "@/lib/api/fixture-planner/teams/team-info";
+import { getKickoffTimes } from "@/lib/api/fixture-planner/kickoff-times/get-kickoff-times";
+import { getFixturePlannerESF } from "@/lib/api/fixture-planner/fdr/get-fdr";
 
 type SearchParams = {
   startGw?: string;
@@ -69,8 +69,8 @@ async function RotationPlannerContent({
 
   const [fixtureData, kickOffTimes, teamData] = await Promise.all([
     getFixturePlannerESF(form),
-    getKickoffTimesESF(),
-    getTeamDataESF(),
+    getKickoffTimes(LeagueTypes.ESF),
+    getFixturePlannerTeams(LeagueTypes.ESF),
   ]);
 
   const finalForm = {

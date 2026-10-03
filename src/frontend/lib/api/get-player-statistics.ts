@@ -1,8 +1,8 @@
 import { TeamNameAndIdModel } from '../../models/playerOwnership/TeamNameAndIdModel';
 import { PlayerStatisticsModel } from '../../models/playerStatistics/PlayerStatisticsModel';
-import { API_ENDPOINTS } from '../api-endpoints';
-import { getApiUrl } from '../api';
+import { API_ENDPOINTS } from './shared/api-endpoints';
 import { LeagueType } from '../../types/league';
+import { getApiUrl } from './shared/api-url';
 
 export interface GetPlayerStatsOptions {
   leagueType: LeagueType;
@@ -35,7 +35,6 @@ export async function getPlayerStatistics({
     }
     
     const parsed = JSON.parse(await response.text());
-    console.log(parsed.total_number_of_gws, "parsed", url)
 
     return {
       categories: parsed.categories ?? [],

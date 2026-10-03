@@ -17,10 +17,10 @@ class RotationPlannerTeamInfoModel:
 
     def to_dict(self):
         return {
-            "avg_Score": self.avg_Score,
-            "id_list": self.id_list,
-            "team_name_list": self.team_name_list,
-            "extra_fixtures": self.extra_fixtures,
-            "home_games": self.home_games,
-            "fixture_list": self.fixture_list,
+            "avgScore": self.avg_Score,
+            "idList": self.id_list,
+            "teamNameList": self.team_name_list,
+            "extraFixtures": self.extra_fixtures,
+            "homeGames": self.home_games,
+            "fixtureList": self.fixture_list,
         }

@@ -93,7 +93,9 @@ export function PriceChange({
         <div className="box-1">
           <label>{g("view")}</label>
           <select
-            onChange={(e) => setSortingPositionId(e.target.value)}
+            onChange={(e) => {
+              setSortingPositionId(e.target.value);
+            }}
             className="input-box"
             id="sort_players_dropdown"
             name="sort_players"

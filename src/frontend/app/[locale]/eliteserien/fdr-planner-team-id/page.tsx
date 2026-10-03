@@ -2,12 +2,13 @@ import { Suspense } from "react";
 import DefaultPageContainer from "@/components/layout/default-page-container/default-page-container";
 import { LeagueType, LeagueTypes } from "@/types/league";
 import { getTranslations } from "next-intl/server";
-import { getFixturePlannerData } from "./api";
+// import { getFixturePlannerData } from "./api";
 import FixturePlannerTeamIdPage from "@/components/features/fixtures/fixture-planner-team-id/fixture-planner-team-id";
 import Popover from "@/components/shared/popover/popover";
 import { Spinner } from "@/components/shared/ui/spinner/Spinner";
-import { getKickoffTimesESF } from "@/lib/api/kickoff-times/kickoff-times";
-import { getPlayersFromTeamIdESF } from "@/lib/api/fixture-planner/players-from-team-id";
+import { getPlayersFromTeamIdESF } from "@/lib/api/fixture-planner/team-planner/get-players-from-team-id";
+import { getKickoffTimes } from "@/lib/api/fixture-planner/kickoff-times/get-kickoff-times";
+import { getFixturePlannerData } from "@/lib/api/fixture-planner/fdr-and-player/get-fdr-and-player";
 
 type SearchParams = {
   team_id?: string;
@@ -58,7 +59,7 @@ async function TeamIdContent({
 
   const [fixtureData, kickoffTimes, initialPlayers] = await Promise.all([
     getFixturePlannerData(leagueType),
-    getKickoffTimesESF(),
+    getKickoffTimes(LeagueTypes.ESF),
     team_id
       ? getPlayersFromTeamIdESF(Number(team_id))
       : Promise.resolve([[], [], [], []]),
@@ -67,8 +68,6 @@ async function TeamIdContent({
   if (!fixtureData || !kickoffTimes) {
     return null;
   }
-
-  console.log(initialPlayers);
 
   return (
     <FixturePlannerTeamIdPage
